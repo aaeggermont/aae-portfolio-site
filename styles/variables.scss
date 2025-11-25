@@ -1,3 +1,23 @@
+
+/**
+ * Variables for responsive design breakpoints
+ */
+
+
+// Desired responsive breakpoint range
+
+$container-min: 1024px;
+$container-max: 1920px;
+
+// Desired responsive breakpoint range for laptop and desktop screens
+$desktop-min: 1024px;
+$desktop-max: 3800px;
+
+
+
+
+/*
+
 $font1: 'Poppins', sans-serif;
 $font2: 'Montserrat', sans-serif;
 $defaultFont: 'Poppins', sans-serif;
@@ -173,3 +193,5 @@ $header1-font-color: #011114;
     font-size: 1.7rem;
     color: #07435F;
 }
+
+*/

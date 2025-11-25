@@ -1,0 +1,30 @@
+@import "./variables";
+@import "./mixins";
+
+html, body {
+  font-family: var(--font-poppins), sans-serif;
+  font-weight: 400;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+/** Helper Font Utilities **/
+
+.font-poppins {
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat), sans-serif;
+}
+
+.font-figtree {
+  font-family: var(--font-figtree), sans-serif;
+}
+
+
+.global-container {
+  @include global-container;
+}
+
