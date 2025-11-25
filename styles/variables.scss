@@ -1,0 +1,175 @@
+$font1: 'Poppins', sans-serif;
+$font2: 'Montserrat', sans-serif;
+$defaultFont: 'Poppins', sans-serif;
+$base-font-family: 'Poppins';
+$sidebar_text_color: #fff;
+$sidebar_font-size: 24px;
+$sidebar_font-weight: 600;
+$white: #fff;
+$text: #7a808d;
+$title: #011a3e;
+$mobile_hamburger_color: #fff;
+$theme_color: #feb000;
+
+// Responsive Variables
+$xs: 'only screen and (max-width: 767px)';
+$sm: 'only screen and (max-width: 767px)';
+$md:'only screen and (min-width: 768px) and (max-width: 991px)';
+$lg : 'only screen and (min-width: 992px)';
+$laptop: 'only screen and (min-width: 992px)';
+$desktop: 'only screen and (min-width: 992px)';
+
+// Global Fonts
+
+$header1-font-color: #011114;
+
+.seccion-header {
+    color: #011114;
+    font-size: 24px;
+    font-family: $font1;
+}
+
+.sm-pageheader-typography {
+    color: #011114;
+    font-size: 24px;
+    font-family: $font1;
+}
+
+.md-pageheader-typography {
+    color: #011114;
+    font-size: 24px;
+    font-family: $font1;
+}
+
+.lg-pageheader-typography {
+    color: #011114;
+    font-size: 24px;
+    font-family: $font1;
+}
+
+.laptop-pageheader-typography {
+    color: #011114;
+    font-size: 24px;
+    font-family: $font1;
+}
+
+@mixin desktop-section-text {
+    font-family: 'Poppins';
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #07435F;
+
+}
+
+@mixin lgmd-section-text {
+    font-family: $base-font-family;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #07435F;
+
+}
+
+.lgmd-section-text {
+    font-family: $base-font-family;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #07435F;
+
+}
+
+.smxs-section-text {
+    font-family: $base-font-family;
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #07435F;
+}
+
+@mixin desktop-max-width {
+    max-width: 1130px;
+    margin-left: 5rem;
+    margin-bottom: 6rem;
+}
+
+@mixin lgmd-max-width {
+    max-width: 950px;
+    margin-bottom: 6rem;
+    margin-left: 4%;
+    margin-right: 4%;
+}
+
+@mixin smxs-max-width {
+    margin-top: 10rem;
+
+    margin-left: 5%;
+    margin-right: 5%;
+    //background-color: green;
+    margin-bottom: 30px;
+}
+
+@mixin desktop-section-title {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1.8rem;
+    color: #07435F;
+}
+
+@mixin desktop-page-title {
+    font-family: 'Poppins';
+    font-size: 2.2rem;
+    color: #07435F;
+    font-weight: 500;
+    line-height: 1;
+}
+
+@mixin lgmd-section-title {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #07435F;
+}
+
+@mixin lgmd-page-title {
+    font-family: 'Poppins';
+    font-size: 2.2rem;
+    color: #07435F;
+    font-weight: 500;
+    line-height: 1;
+}
+
+.lgmd-section-title {
+    font-family: $base-font-family;
+    font-family: $base-font-family;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #07435F;
+}
+
+.smxs-section-title {
+    font-family: $base-font-family;
+    font-weight: 500;
+    font-size: 1.25rem;
+    color: #07435F;
+}
+
+
+@mixin desktop-footer-title {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1rem;
+    color: #07435F;
+}
+
+@mixin desktop-footer-nav-links {
+    font-family: 'Poppins';
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: #07435F;
+    padding-left: 1rem;
+}
+
+@mixin smxs-section-title {
+    font-family: 'Poppins';
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: #07435F;
+}
