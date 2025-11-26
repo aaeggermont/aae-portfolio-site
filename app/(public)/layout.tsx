@@ -2,6 +2,9 @@
 import type { ReactNode } from "react";
 import Header from "@/components/Header"; // your migrated header component
 import MainBanner from "@/app/home/main-banner";
+import MyBackground from "@/app/home/my-background";
+import LatestProjects from "@/app/home/latest-projects";
+import ContactMe from "@/app/home/contact-me";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
@@ -9,6 +12,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       
       <main className="global-container flex-1">
         <MainBanner />
+        <MyBackground />
+        <LatestProjects />
+        <ContactMe />
         {children}
       </main>
     </div>
