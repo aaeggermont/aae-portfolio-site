@@ -1,0 +1,70 @@
+// styles/mixins.scss
+@import "./variables";
+
+@mixin global-container {
+  margin-left: auto;
+  margin-right: auto;
+  //width: 100%;
+  //max-width: 100%;
+
+  // --- DEBUG COLORS (optional) ---
+  // Mobile: 360px – 767px
+  @media screen and (min-width: $mobile-min) and (max-width: $mobile-max) {
+    // For production, remove background-color
+    //background-color: rgb(204, 90, 222); // purple (debug)
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  // Tablet: 768px – 1023px
+  @media screen and (min-width: $tablet-min) and (max-width: $tablet-max) {
+    // Still full-width but different color if you want
+    //background-color: rgb(211, 223, 50); // yellow (debug)
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  // Desktop: 1024px – 3800px
+  @media screen and (min-width: $desktop-min) and (max-width: $desktop-max) {
+    max-width: $container-max; // cap at 1920px
+    // ⚠️ optional: only if you *really* want a min width on large screens:
+    // min-width: $container-min; // 1024px
+    //background-color: aqua; // debug
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+
+// MAIN MIXIN: mobile → desktop → large desktop
+// usage: @include fluid-type(24px, 32px, 40px);
+// - $mobile-size: base size on small screens
+// - $desktop-size: size around ~1024px
+// - $large-size: size at very large screens (e.g. 1920–3800px); optional
+@mixin fluid-type($mobile-size, $desktop-size, $large-size: null) {
+  // Base (mobile-first)
+  font-size: $mobile-size;
+
+  // Mobile → Desktop-min (360px → 1024px)
+  @include fluid-type-range($mobile-min, $desktop-min, $mobile-size, $desktop-size);
+
+  // Desktop-min → Desktop-max (optional further growth)
+  @if $large-size != null {
+    @include fluid-type-range($desktop-min, $desktop-max, $desktop-size, $large-size);
+  }
+}
+
+// Helper: fluid type between two breakpoints
+// Example: @include fluid-type-range($mobile-min, $desktop-min, 24px, 32px);
+@mixin fluid-type-range($min-breakpoint, $max-breakpoint, $min-size, $max-size) {
+  @media screen and (min-width: $min-breakpoint) and (max-width: $max-breakpoint) {
+    font-size: clamp(
+      $min-size,
+      calc(
+        #{$min-size} + (#{$max-size} - #{$min-size}) *
+        ((100vw - $min-breakpoint) / ($max-breakpoint - $min-breakpoint))
+      ),
+      $max-size
+    );
+  }
+}
