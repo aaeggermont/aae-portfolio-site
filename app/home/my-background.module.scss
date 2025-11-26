@@ -1,26 +1,32 @@
+/* app/home/my-background.module.scss */
+
 @import "@/styles/variables";
 @import "@/styles/mixins";
 
 .myBackgroundSection {
-  padding: 4rem 0;
-  background-color: #f5f7ff; // soft bluish
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f5f7ff;
+  display: flex;
+  align-items: center;
+}
 
-  .content {
-    @include global-container;
-  }
+.content {
+  @include global-container;
+  //padding: 4rem 0;
+}
 
-  .heading {
-    @include fluid-type(22px, 28px, 36px);
-    font-family: var(--font-montserrat);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: $font-color-bold;
-  }
+.heading {
+  @include fluid-type(22px, 28px, 36px);
+  font-family: var(--font-montserrat);
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: $font-color-bold;
+}
 
-  .placeholder {
-    @include fluid-type(16px, 18px, 20px);
-    font-family: var(--font-figtree);
-    color: $font-color-bold;
-    opacity: 0.75;
-  }
+.placeholder {
+  @include fluid-type(16px, 18px, 20px);
+  font-family: var(--font-figtree);
+  color: $font-color-bold;
+  opacity: 0.75;
 }
