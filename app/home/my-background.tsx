@@ -1,3 +1,4 @@
+// app/home/my-background.tsx
 "use client";
 
 import React from "react";
