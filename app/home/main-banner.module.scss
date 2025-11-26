@@ -11,18 +11,44 @@
   justify-content: center;
   gap: 5%;
 
+  // 📱 Mobile layout: stack vertically, photo first
+  @media screen and #{$mobile} {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem; // a bit tighter for mobile
+  }
+
   .bannerTexContent {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
     width: 40vw;
+
+    @media screen and #{$mobile} {
+      order: 2;            // text after photo
+      align-items: center; // center text block
+      width: 100%;
+      max-width: 32rem;    // keep it readable
+    }
   }
 
   .bannerPhoto {
     position: relative;
-    width: clamp(250px, 25vw, 550px);
-    height: clamp(250px, 25vw, 550px);
+
+    width: clamp(250px, 26vw, 550px);
+    height: clamp(250px, 26vw, 550px);
+    
+    @media screen and #{$tablet} {
+      width: clamp(250px, 35vw, 550px);
+      height: clamp(250px, 35vw, 550px);
+    }
+
+    @media screen and #{$mobile} {
+      order: 1;        // photo first on mobile
+      margin-bottom: 1rem;
+    }
   }
 
   .blobMask {
@@ -49,6 +75,12 @@
     @include fluid-type(18px, 22px, 34px);
     font-weight: 500;
     margin-bottom: 1rem;
+
+    @media screen and #{$mobile} {
+      // little breathing room on mobile
+      padding: 0 1.5rem;
+    }
+  
     span {
       color: $font-color-bold;
       font-weight: 800;
@@ -56,44 +88,42 @@
   }
 
   .backgroundText {
-    @include fluid-type(24px, 32px, 45px);
+    @include fluid-type(24px, 30px, 45px);
     max-width: 48rem;
     font-family: var(--font-poppins);
     font-weight: 500;
     color: $font-color-bold;
     margin-bottom: 1.5rem;
 
-    @media screen and #{$mobile} {
+   @media screen and #{$mobile} {
       text-align: center;
-      margin-left: 4rem;
-      margin-right: 4rem;
+      margin-left: 1.5rem;
+      margin-right: 1.5rem;
+      max-width: 32rem;
     }
 
     @media screen and #{$tablet} {
-      max-width: 500px;
+      max-width: 700px;
+      min-width: 500px;
     }
 
     @media screen and #{$desktop-device} {
       max-width: 700px;
       min-width: 500px;
-      //background-color: aqua;
-    }
-
-    .bannerPhoto {
-
     }
   }
 
   .description {
-    @include fluid-type(16px, 20px, 34px);
+    @include fluid-type(16px, 22px, 34px);
     max-width: 48rem;
     font-family: var(--font-figtree);
     color: $font-color-bold;
     line-height: 1.5;
     margin-bottom: 2rem;
   
-    @media screen and #{$tablet} {
-      max-width: 40px;
+    @media screen and #{$mobile} {
+      max-width: 32rem;
+      padding: 0 1.5rem;
     }
   }
 
