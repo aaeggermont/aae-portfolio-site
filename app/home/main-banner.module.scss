@@ -46,7 +46,7 @@
 
   .helloText {
     font-family: var(--font-poppins);
-    @include fluid-type(18px, 24px, 34px);
+    @include fluid-type(18px, 22px, 34px);
     font-weight: 500;
     margin-bottom: 1rem;
     span {
@@ -56,7 +56,7 @@
   }
 
   .backgroundText {
-    @include fluid-type(24px, 36px, 45px);
+    @include fluid-type(24px, 32px, 45px);
     max-width: 48rem;
     font-family: var(--font-poppins);
     font-weight: 500;
@@ -85,7 +85,7 @@
   }
 
   .description {
-    @include fluid-type(16px, 18px, 34px);
+    @include fluid-type(16px, 20px, 34px);
     max-width: 48rem;
     font-family: var(--font-figtree);
     color: $font-color-bold;
