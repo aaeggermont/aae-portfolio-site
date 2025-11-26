@@ -1,30 +1,28 @@
+/* app/home/main-banner.module.scss */
+
 @import "@/styles/variables";
 @import "@/styles/mixins";
-/* app/home/main-banner.module.scss */
 
 .mainBanner {
   padding: 4rem 0;
-  text-align: left;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 10%;
-  //background-color: aqua;
+  gap: 5%;
 
   .bannerTexContent {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    //background-color: azure;
+    width: 40vw;
   }
 
   .bannerPhoto {
     position: relative;
-    width: clamp(250px, 40vw, 550px);
-    height: clamp(250px, 40vw, 550px);
-    //background-color: cadetblue;
+    width: clamp(250px, 25vw, 550px);
+    height: clamp(250px, 25vw, 550px);
   }
 
   .blobMask {
