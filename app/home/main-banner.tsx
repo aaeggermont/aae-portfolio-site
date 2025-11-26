@@ -9,9 +9,6 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 
-
-
-
 function MainBanner() {
 
   useEffect(() => {
