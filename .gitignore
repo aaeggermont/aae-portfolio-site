@@ -43,3 +43,6 @@ next-env.d.ts
 # firebase
 .firebase/
 .firebaserc
+
+#media assets
+media-assets/*
