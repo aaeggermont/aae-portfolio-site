@@ -6,22 +6,23 @@
 .myBackgroundSection {
   min-height: 100vh;
   width: 100%;
-  background-color: #f5f7ff;
+  background-color: #f4f8fb;
   display: flex;
   align-items: center;
 }
 
 .content {
   @include global-container;
-  //padding: 4rem 0;
+  text-align: center;
+  width: 100%;
 }
 
 .heading {
-  @include fluid-type(22px, 28px, 36px);
-  font-family: var(--font-montserrat);
+  font-family: var(--font-poppins);
+  font-size: clamp(1.6rem, 2vw, 2.4rem);
   font-weight: 600;
-  margin-bottom: 1rem;
-  color: $font-color-bold;
+  color: #074C5F;
+  margin-bottom: 2.5rem;
 }
 
 .placeholder {
@@ -29,4 +30,65 @@
   font-family: var(--font-figtree);
   color: $font-color-bold;
   opacity: 0.75;
+}
+
+.backgroundsContainer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background-color: aqua;
+    gap: 5%;
+    //flex-wrap: wrap;
+}
+
+.cardsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+
+  /* Desktop */
+  @media screen and #{$desktop-device} {
+    justify-content: center;
+  }
+
+  /* Tablet — two per row naturally */
+  @media screen and #{$tablet} {
+    gap: 1.75rem;
+  }
+
+  /* Mobile */
+  @media screen and #{$mobile} {
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+}
+
+.cardWrapper {
+  flex: 1 1 calc(33.33% - 2rem); // 3 per row on wide screens
+  max-width: 340px;
+
+  @media screen and #{$tablet} {
+    flex: 1 1 calc(50% - 1.75rem); // 2 per row
+  }
+
+  @media screen and #{$mobile} {
+    flex: 1 1 100%; // full width or stack
+  }
+
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+  opacity 0.6s ease-out,
+  transform 0.6s ease-out;
+}
+
+.cardInView {
+  opacity: 1;
+  transform: translateY(0);
 }
