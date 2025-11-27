@@ -1,0 +1,40 @@
+@import "@/styles/variables";
+
+
+@media screen and #{$mobile} {
+    .backgroundTitle {
+        text-align: center;   
+        .backgroundTitleLabel {
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #074C5F;
+            font-family: var(--font-montserrat);
+        }
+    }
+}
+ @media screen and #{$tablet} {
+    .backgroundTitle {
+        text-align: center;   
+        .backgroundTitleLabel {
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #074C5F;
+            font-family: var(--font-montserrat);
+        }
+    }
+}
+
+@media screen and #{$desktop-device} {
+    .backgroundTitle {
+        text-align: center;   
+        .backgroundTitleLabel {
+            margin-bottom: 2rem;
+            font-weight: 500;
+            font-size: 1rem;
+            color: #074C5F;
+            font-family: var(--font-montserrat);
+        }
+    }
+}
