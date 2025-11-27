@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 import { useMediaQuery } from "react-responsive";
 
 type ResponsiveContextValue = {
@@ -9,15 +9,11 @@ type ResponsiveContextValue = {
   isMobile: boolean;
   isPortrait: boolean;
   isRetina: boolean;
-  xs: boolean;
-  sm: boolean;
-  md: boolean;
-  lg: boolean;
-  laptop: boolean;
-  desktop: boolean;
 };
 
-const ResponsiveContext = createContext<ResponsiveContextValue | undefined>(undefined);
+const ResponsiveContext = createContext<ResponsiveContextValue | undefined>(
+  undefined
+);
 
 export function useResponsive() {
   const ctx = useContext(ResponsiveContext);
@@ -27,27 +23,35 @@ export function useResponsive() {
   return ctx;
 }
 
-export function ResponsiveQueryProvider({ children }: { children: React.ReactNode }) {
+export function ResponsiveQueryProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Keep these in sync with your SCSS breakpoints in variables.scss
+  const desktopMin = 1024;
+  const desktopMax = 3800;
+
+  const mobileMin = 360;
+  const mobileMax = 767;
+
+  const tabletMin = 768;
+  const tabletMax = 1023;
+
   const isDesktopOrLaptop = useMediaQuery({
-    query: "(min-width: 1224px) and (max-width: 4600px)",
+    query: `(min-width: ${desktopMin}px) and (max-width: ${desktopMax}px)`,
   });
+
   const isTablet = useMediaQuery({
-    query: "(min-width: 1024px) and (max-width: 1366px)",
+    query: `(min-width: ${tabletMin}px) and (max-width: ${tabletMax}px)`,
   });
+
   const isMobile = useMediaQuery({
-    query: "(min-width: 360px) and (max-width: 428px)",
+    query: `(min-width: ${mobileMin}px) and (max-width: ${mobileMax}px)`,
   });
+
   const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
   const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
-
-  const xs = useMediaQuery({ query: "(max-width: 767px)" });
-  const sm = useMediaQuery({ query: "only screen and (max-width: 767px)" });
-  const md = useMediaQuery({
-    query: "only screen and (min-width: 768px) and (max-width: 991px)",
-  });
-  const lg = useMediaQuery({ query: "only screen and (min-width: 992px)" });
-  const laptop = useMediaQuery({ query: "only screen and (min-width: 992px)" });
-  const desktop = useMediaQuery({ query: "only screen and (min-width: 992px)" });
 
   const screenDevice: ResponsiveContextValue = {
     isDesktopOrLaptop,
@@ -55,12 +59,6 @@ export function ResponsiveQueryProvider({ children }: { children: React.ReactNod
     isMobile,
     isPortrait,
     isRetina,
-    xs,
-    sm,
-    md,
-    lg,
-    laptop,
-    desktop,
   };
 
   return (
