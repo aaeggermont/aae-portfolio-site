@@ -25,7 +25,7 @@ function HomePanels() {
       if (!panels.length) return;
 
       const totalPanels = panels.length;
-      const segments = totalPanels - 1; // number of transitions
+      const segments = totalPanels - 1;
 
       // Stack panels and set initial positions
       panels.forEach((panel, i) => {
@@ -45,8 +45,9 @@ function HomePanels() {
           scrub: 0.7,
           pin: true,
           snap: {
-            // 👇 snap to nearest "segment" (0, 1/3, 2/3, 1 for 4 panels)
+            // snap to nearest section (0, 1/3, 2/3, 1 for 4 panels)
             snapTo: (value) => {
+              if (segments <= 0) return 0;
               const raw = value * segments;
               const snappedIndex = Math.round(raw);
               return snappedIndex / segments;
@@ -58,19 +59,41 @@ function HomePanels() {
         },
       });
 
-      // Initial label (optional, but nice if we later want label-based logic)
-      tl.addLabel("panel-0");
-
-      // For each panel after the first, slide it over the previous one
+      // Panels slide + MyBackground cards anim
       panels.forEach((panel, i) => {
-        if (i === 0) return;
+        if (i === 0) {
+          // First panel (MainBanner) stays at yPercent 0;
+          // its internal animation is handled by MainBanner itself.
+          return;
+        }
 
+        // Slide this panel up over the previous one
         tl.to(panel, {
           yPercent: 0,
           ease: "power2.out",
+          duration: 1, // relative; scrub controls real feel
         });
 
-        tl.addLabel(`panel-${i}`); // label after panel is fully in place
+        // MyBackground (index 1) → animate its cards when the panel comes in
+        if (i === 1) {
+          const cards = panel.querySelectorAll(".js-bg-card");
+
+          if (cards.length) {
+            tl.from(
+              cards,
+              {
+                opacity: 0,
+                y: 24,
+                stagger: 0.12,
+                duration: 0.6,
+                ease: "power2.out",
+              },
+              "<0.1" // just after panel slide starts
+            );
+          }
+        }
+
+        // You can add similar blocks later for LatestProjects, ContactMe
       });
     }, containerRef);
 

@@ -1,22 +1,49 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import IconButton from "@mui/material/IconButton";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import gsap from "gsap";
+
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 
 function MainBanner() {
-  useEffect(() => {
-    AOS.init({
-      duration: 900,          // animation duration (ms)
-      easing: "ease-out-cubic",
-      once: true,             // animate only once
-      offset: 80,             // trigger offset from bottom
+  const textRef = useRef<HTMLDivElement | null>(null);
+  const photoRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+
+      if (textRef.current) {
+        tl.from(
+          textRef.current,
+          {
+            opacity: 0,
+            x: -40,
+            duration: 0.7,
+            ease: "power2.out",
+          },
+          0
+        );
+      }
+
+      if (photoRef.current) {
+        tl.from(
+          photoRef.current,
+          {
+            opacity: 0,
+            x: 40,
+            duration: 0.7,
+            ease: "power2.out",
+          },
+          0.05 // small offset so the photo lags slightly behind the text
+        );
+      }
     });
+
+    return () => ctx.revert();
   }, []);
 
   const handleLinkedIn = () => {
@@ -31,9 +58,8 @@ function MainBanner() {
     <section className={styles.mainBanner}>
       {/* Text side */}
       <div
+        ref={textRef}
         className={styles.bannerTexContent}
-        data-aos="fade-right"
-        data-aos-delay="100"
       >
         <h1 className={styles.helloText}>
           Hello, my name is <span>Antonio</span>
@@ -52,8 +78,6 @@ function MainBanner() {
         {/* LinkedIn button – last row in the text block */}
         <div className={styles.linkedinWrapper}>
           <IconButton
-            data-aos="fade-up"
-            data-aos-delay="300"
             aria-label="Visit my LinkedIn profile"
             onClick={handleLinkedIn}
             className={styles.linkedinButton}
@@ -65,7 +89,15 @@ function MainBanner() {
                 focusable="false"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <rect x="0" y="0" width="24" height="24" rx="4" ry="4" fill="none" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="24"
+                  height="24"
+                  rx="4"
+                  ry="4"
+                  fill="none"
+                />
                 <path
                   fill="#ffffff"
                   d="M6.5 7.5C5.67 7.5 5 6.83 5 6s.67-1.5 1.5-1.5S8 5.17 8 6s-.67 1.5-1.5 1.5zM6 9h3v9H6zM10.5 9h2.8v1.23h.04c.39-.74 1.35-1.52 2.78-1.52 2.97 0 3.52 1.96 3.52 4.51V18h-3v-4.04c0-.96-.02-2.19-1.34-2.19-1.34 0-1.55 1.05-1.55 2.12V18h-3z"
@@ -79,12 +111,10 @@ function MainBanner() {
         </div>
       </div>
 
-
       {/* Photo side */}
       <div
+        ref={photoRef}
         className={styles.bannerPhoto}
-        data-aos="fade-left"
-        data-aos-delay="200"
       >
         <div className={styles.blobMask}>
           <Image
