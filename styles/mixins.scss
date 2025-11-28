@@ -68,3 +68,8 @@
     );
   }
 }
+
+@mixin fluid-card-size($minWidth, $maxWidth, $minHeight, $maxHeight) {
+  width: clamp($minWidth, 16vw, $maxWidth);
+  height: clamp($minHeight, 26vw, $maxHeight);
+}

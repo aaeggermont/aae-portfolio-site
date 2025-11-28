@@ -36,51 +36,42 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    background-color: aqua;
     gap: 5%;
-    //flex-wrap: wrap;
 }
 
 .cardsGrid {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 2rem;
-
   width: 100%;
-  max-width: 1500px;
+  //max-width: 1600px;
   margin: 0 auto;
-
+  
   /* Desktop */
   @media screen and #{$desktop-device} {
     justify-content: center;
-  }
+    flex-wrap: nowrap;
+    gap: 1rem;
+}
 
   /* Tablet — two per row naturally */
   @media screen and #{$tablet} {
-    gap: 1.75rem;
+    gap: 1rem;
+    background-color: lightgreen;
+    justify-content: center;
+    align-items: center;
   }
 
   /* Mobile */
   @media screen and #{$mobile} {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 1.5rem;
-    padding: 0 1rem;
   }
 }
 
 .cardWrapper {
-  flex: 1 1 calc(33.33% - 2rem); // 3 per row on wide screens
   max-width: 340px;
-
-  @media screen and #{$tablet} {
-    flex: 1 1 calc(50% - 1.75rem); // 2 per row
-  }
-
-  @media screen and #{$mobile} {
-    flex: 1 1 100%; // full width or stack
-  }
-
   opacity: 0;
   transform: translateY(24px);
   transition:
