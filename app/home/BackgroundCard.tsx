@@ -13,14 +13,20 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import type { BackgroundItem } from "@/app/home/data/background-data";
 import styles from "./background.module.scss";
+
+// Local type for the data shape coming from background-data.tsx
+type BackgroundItem = {
+  title: string;
+  img: any;            // string | StaticImageData (from imported PNGs)
+  description: string[];
+};
 
 type BackgroundCardProps = {
   info: BackgroundItem;
 };
 
-const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
+export default function BackgroundCard({ info }: BackgroundCardProps) {
   const [open, setOpen] = useState(false);
 
   const { title, img, description } = info;
@@ -39,6 +45,7 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
         aria-labelledby="background-dialog-title"
         aria-describedby="background-dialog-description"
       >
+        {/* Header: icon + title */}
         <div
           style={{
             display: "flex",
@@ -49,7 +56,6 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
             gap: "1.5rem",
           }}
         >
-          {/* Icon in the dialog header */}
           <div
             style={{
               position: "relative",
@@ -69,7 +75,12 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
           <DialogTitle
             id="background-dialog-title"
             sx={{
-              fontSize: { xs: "1.2rem", sm: "1.5rem", md: "1.6rem", lg: "1.7rem" },
+              fontSize: {
+                xs: "1.2rem",
+                sm: "1.5rem",
+                md: "1.6rem",
+                lg: "1.7rem",
+              },
               fontWeight: 500,
               fontFamily: "Poppins, sans-serif",
               color: "#011114",
@@ -79,12 +90,18 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
           </DialogTitle>
         </div>
 
+        {/* Body: paragraphs */}
         <DialogContent dividers id="background-dialog-description">
           {description.map((paragraph, index) => (
             <DialogContentText
               key={index}
               sx={{
-                fontSize: { xs: "1rem", sm: "1.1rem", md: "1.1rem", lg: "1.1rem" },
+                fontSize: {
+                  xs: "1rem",
+                  sm: "1.1rem",
+                  md: "1.1rem",
+                  lg: "1.1rem",
+                },
                 fontWeight: 400,
                 fontFamily: "Poppins, sans-serif",
                 margin: {
@@ -118,26 +135,16 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
         </DialogActions>
       </Dialog>
 
-      {/* Card (click to open dialog) */}
+      {/* Card */}
       <Card
         onClick={handleClickOpen}
         className={styles.fullHeightCard}
         sx={{
-          // Width: take the width from the flex wrapper (.cardWrapper)
-          width: "100%",
-
-          // 🔹 Fluid height: grows a bit with viewport width
-          // min: 220px, preferred: 28vw, max: 280px
-          height: "clamp(220px, 28vw, 280px)",
-
+          // width/height are controlled by SCSS via fluid-card-size mixin
           cursor: "pointer",
           borderRadius: 3,
           boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",
           backgroundColor: "#ffffff",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-
           transition:
             "transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, opacity 0.22s ease",
           "&:hover": {
@@ -149,6 +156,7 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
         raised
       >
         <CardActionArea sx={{ height: "100%" }}>
+          {/* Icon */}
           <div
             style={{
               display: "flex",
@@ -156,12 +164,11 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
               paddingTop: "1rem",
             }}
           >
-            {/* 🔹 Icon scales a bit by breakpoint */}
             <div
               style={{
                 position: "relative",
-                width: "clamp(64px, 7vw, 96px)",
-                height: "clamp(64px, 7vw, 96px)",
+                width: 120,
+                height: 120,
               }}
             >
               <Image
@@ -173,15 +180,8 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
             </div>
           </div>
 
-          <CardContent
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              paddingBottom: "1.25rem !important",
-              paddingTop: "0.75rem",
-            }}
-          >
+          {/* Title */}
+          <CardContent>
             <div className={styles.backgroundTitle}>
               <span className={styles.backgroundTitleLabel}>{title}</span>
             </div>
@@ -190,7 +190,5 @@ const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
       </Card>
     </>
   );
-};
-
-export default BackgroundCard;
+}
 
