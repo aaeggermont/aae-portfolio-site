@@ -14,20 +14,13 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import type { BackgroundItem } from "@/app/home/data/background-data";
-
 import styles from "./background.module.scss";
-
-type CardDimensions = {
-  width: number | string;
-  height: number | string;
-};
 
 type BackgroundCardProps = {
   info: BackgroundItem;
-  dimensions?: CardDimensions;
 };
 
-export default function BackgroundCard({ info, dimensions }: BackgroundCardProps) {
+const BackgroundCard: React.FC<BackgroundCardProps> = ({ info }) => {
   const [open, setOpen] = useState(false);
 
   const { title, img, description } = info;
@@ -37,7 +30,7 @@ export default function BackgroundCard({ info, dimensions }: BackgroundCardProps
 
   return (
     <>
-      {/* Dialog */}
+      {/* Dialog with full description */}
       <Dialog
         fullWidth
         maxWidth="lg"
@@ -56,6 +49,7 @@ export default function BackgroundCard({ info, dimensions }: BackgroundCardProps
             gap: "1.5rem",
           }}
         >
+          {/* Icon in the dialog header */}
           <div
             style={{
               position: "relative",
@@ -124,17 +118,26 @@ export default function BackgroundCard({ info, dimensions }: BackgroundCardProps
         </DialogActions>
       </Dialog>
 
-      {/* Card */}
+      {/* Card (click to open dialog) */}
       <Card
         onClick={handleClickOpen}
         className={styles.fullHeightCard}
         sx={{
-          width: dimensions?.width ?? 280,
-          height: dimensions?.height ?? 260,
+          // Width: take the width from the flex wrapper (.cardWrapper)
+          width: "100%",
+
+          // 🔹 Fluid height: grows a bit with viewport width
+          // min: 220px, preferred: 28vw, max: 280px
+          height: "clamp(220px, 28vw, 280px)",
+
           cursor: "pointer",
           borderRadius: 3,
           boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",
           backgroundColor: "#ffffff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+
           transition:
             "transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, opacity 0.22s ease",
           "&:hover": {
@@ -153,11 +156,12 @@ export default function BackgroundCard({ info, dimensions }: BackgroundCardProps
               paddingTop: "1rem",
             }}
           >
+            {/* 🔹 Icon scales a bit by breakpoint */}
             <div
               style={{
                 position: "relative",
-                width: 120,
-                height: 120,
+                width: "clamp(64px, 7vw, 96px)",
+                height: "clamp(64px, 7vw, 96px)",
               }}
             >
               <Image
@@ -169,7 +173,15 @@ export default function BackgroundCard({ info, dimensions }: BackgroundCardProps
             </div>
           </div>
 
-          <CardContent>
+          <CardContent
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingBottom: "1.25rem !important",
+              paddingTop: "0.75rem",
+            }}
+          >
             <div className={styles.backgroundTitle}>
               <span className={styles.backgroundTitleLabel}>{title}</span>
             </div>
@@ -178,4 +190,7 @@ export default function BackgroundCard({ info, dimensions }: BackgroundCardProps
       </Card>
     </>
   );
-}
+};
+
+export default BackgroundCard;
+
