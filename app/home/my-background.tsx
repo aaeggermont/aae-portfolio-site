@@ -15,11 +15,6 @@ function MyBackground() {
         <p className={styles.placeholder}>
           This is a placeholder section for your background. Content coming soon.
         </p>
-        <p className={styles.placeholder}>
-          {isMobile && "Viewing on mobile – show condensed layout here."}
-          {isTablet && !isMobile && "Viewing on tablet – maybe adjust columns."}
-          {isDesktopOrLaptop && "Viewing on desktop/laptop – full layout."}
-        </p>
       </div>
     </section>
   );
