@@ -24,6 +24,10 @@ type BackgroundItem = {
 
 type BackgroundCardProps = {
   info: BackgroundItem;
+  dimensions?: {
+    width: string | number;
+    height: string | number;
+  };
 };
 
 export default function BackgroundCard({ info }: BackgroundCardProps) {
