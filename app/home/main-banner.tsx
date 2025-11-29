@@ -56,6 +56,7 @@ function MainBanner() {
 
   return (
     <section className={styles.mainBanner}>
+      <div className={styles.bgGradientOrb}></div>
       {/* Text side */}
       <div
         ref={textRef}
