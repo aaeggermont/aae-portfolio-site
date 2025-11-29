@@ -126,7 +126,7 @@ export default function MyBackground() {
                 info={item}
                 dimensions={{
                   width: "100%",
-                  height: 260,
+                  height: "260px",
                 }}
               />
             </AnimatedCardWrapper>
