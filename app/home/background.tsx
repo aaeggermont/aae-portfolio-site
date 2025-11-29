@@ -4,16 +4,26 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { Button, CardActionArea, CardActions } from '@mui/material';
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
 import styles from "./background.module.scss";
 
-export default function Background(props) {
+interface BackgroundProps {
+  info: {
+    title: string;
+    img: string;
+    description: string[];
+  };
+  dimensions: {
+    width: string | number;
+    height: string | number;
+  };
+}
+
+export default function Background(props: BackgroundProps) {
   const [open, setOpen] = React.useState(false);
   const title = props.info.title;
   const img = props.info.img;
@@ -44,7 +54,7 @@ export default function Background(props) {
    return (
         <div >       
             <Dialog
-                fullWidth="true"
+                fullWidth={true}
                 maxWidth="lg"        
                 open={open}
                 onClose={handleClose}
@@ -112,7 +122,7 @@ export default function Background(props) {
                         opacity: [0.9, 0.8, 0.7],
                     }, 
                 }}
-                raised='true'
+                raised={true}
                 boxshadow={1}
                 >
                
