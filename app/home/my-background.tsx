@@ -119,7 +119,6 @@ export default function MyBackground() {
 
       <div className={styles.content}>
         <h2 className={styles.heading}>My Background</h2>
-
         <div className={styles.cardsGrid}>
           {backgroundItems.map((item, index) => (
             <AnimatedCardWrapper key={item.title} index={index}>
