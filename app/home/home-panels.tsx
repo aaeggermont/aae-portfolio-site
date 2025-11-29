@@ -29,6 +29,7 @@ function HomePanels() {
 
       // Stack panels and set initial positions
       panels.forEach((panel, i) => {
+        const bg = panel.getAttribute("data-bg") || "#ffffff";
         gsap.set(panel, { zIndex: i + 1 });
 
         if (i > 0) {
