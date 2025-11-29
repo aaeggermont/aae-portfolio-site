@@ -25,7 +25,15 @@ function HomePanels() {
       if (!panels.length) return;
 
       const totalPanels = panels.length;
-      const segments = totalPanels - 1; // number of transitions
+      const segments = totalPanels - 1;
+
+      // Collect panel background colors from data-bg
+      const panelBgs = panels.map(
+        (panel) => panel.getAttribute("data-bg") || "#ffffff"
+      );
+
+      // Set initial body background to first panel color
+      gsap.set("body", { backgroundColor: panelBgs[0] });
 
       // Stack panels and set initial positions
       panels.forEach((panel, i) => {
@@ -37,6 +45,8 @@ function HomePanels() {
         }
       });
 
+      let currentIndex = 0;
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
@@ -45,8 +55,9 @@ function HomePanels() {
           scrub: 0.7,
           pin: true,
           snap: {
-            // 👇 snap to nearest "segment" (0, 1/3, 2/3, 1 for 4 panels)
+            // snap to nearest section (0, 1/3, 2/3, 1 for 4 panels)
             snapTo: (value) => {
+              if (segments <= 0) return 0;
               const raw = value * segments;
               const snappedIndex = Math.round(raw);
               return snappedIndex / segments;
@@ -54,23 +65,62 @@ function HomePanels() {
             duration: 0.25,
             ease: "power1.out",
           },
+          // This is the key bit: drive body bg from ScrollTrigger progress
+          onUpdate: (self) => {
+            if (segments <= 0) return;
+
+            const progress = self.progress; // 0 → 1
+            const idx = Math.round(progress * segments);
+
+            if (idx !== currentIndex && panelBgs[idx]) {
+              currentIndex = idx;
+              gsap.to("body", {
+                backgroundColor: panelBgs[idx],
+                duration: 0.5,
+                ease: "power1.out",
+                overwrite: "auto",
+              });
+            }
+          },
           // markers: true,
         },
       });
 
-      // Initial label (optional, but nice if we later want label-based logic)
-      tl.addLabel("panel-0");
-
-      // For each panel after the first, slide it over the previous one
+      // Panels slide + MyBackground cards anim
       panels.forEach((panel, i) => {
-        if (i === 0) return;
+        if (i === 0) {
+          // First panel (MainBanner) stays at yPercent 0;
+          // its internal animation is handled by MainBanner itself.
+          return;
+        }
 
+        // Slide this panel up over the previous one
         tl.to(panel, {
           yPercent: 0,
           ease: "power2.out",
+          duration: 1, // relative; scrub controls real feel
         });
 
-        tl.addLabel(`panel-${i}`); // label after panel is fully in place
+        // MyBackground (index 1) → animate its cards when the panel comes in
+        if (i === 1) {
+          const cards = panel.querySelectorAll(".js-bg-card");
+
+          if (cards.length) {
+            tl.from(
+              cards,
+              {
+                opacity: 0,
+                y: 24,
+                stagger: 0.12,
+                duration: 0.6,
+                ease: "power2.out",
+              },
+              "<0.1" // just after panel slide starts
+            );
+          }
+        }
+
+        // You can add similar blocks later for LatestProjects, ContactMe
       });
     }, containerRef);
 
@@ -79,19 +129,32 @@ function HomePanels() {
 
   return (
     <div ref={containerRef} className={styles.panelsContainer}>
-      <section className={styles.panel}>
+      {/* Make sure these data-bg values match the section backgrounds */}
+      <section
+        className={styles.panel}
+        data-bg="#f4f8fb"   // MainBanner bg
+      >
         <MainBanner />
       </section>
 
-      <section className={styles.panel}>
+      <section
+        className={styles.panel}
+        data-bg="#f4f8fb"   // MyBackground bg
+      >
         <MyBackground />
       </section>
 
-      <section className={styles.panel}>
+      <section
+        className={styles.panel}
+        data-bg="#f4f8fb"   // LatestProjects bg
+      >
         <LatestProjects />
       </section>
 
-      <section className={styles.panel}>
+      <section
+        className={styles.panel}
+        data-bg="#fff7ec"   // ContactMe bg
+      >
         <ContactMe />
       </section>
     </div>
