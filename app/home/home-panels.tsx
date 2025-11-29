@@ -27,9 +27,16 @@ function HomePanels() {
       const totalPanels = panels.length;
       const segments = totalPanels - 1;
 
+      // Collect panel background colors from data-bg
+      const panelBgs = panels.map(
+        (panel) => panel.getAttribute("data-bg") || "#ffffff"
+      );
+
+      // Set initial body background to first panel color
+      gsap.set("body", { backgroundColor: panelBgs[0] });
+
       // Stack panels and set initial positions
       panels.forEach((panel, i) => {
-        const bg = panel.getAttribute("data-bg") || "#ffffff";
         gsap.set(panel, { zIndex: i + 1 });
 
         if (i > 0) {
@@ -37,6 +44,8 @@ function HomePanels() {
           gsap.set(panel, { yPercent: 100 });
         }
       });
+
+      let currentIndex = 0;
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -55,6 +64,23 @@ function HomePanels() {
             },
             duration: 0.25,
             ease: "power1.out",
+          },
+          // This is the key bit: drive body bg from ScrollTrigger progress
+          onUpdate: (self) => {
+            if (segments <= 0) return;
+
+            const progress = self.progress; // 0 → 1
+            const idx = Math.round(progress * segments);
+
+            if (idx !== currentIndex && panelBgs[idx]) {
+              currentIndex = idx;
+              gsap.to("body", {
+                backgroundColor: panelBgs[idx],
+                duration: 0.5,
+                ease: "power1.out",
+                overwrite: "auto",
+              });
+            }
           },
           // markers: true,
         },
@@ -103,19 +129,32 @@ function HomePanels() {
 
   return (
     <div ref={containerRef} className={styles.panelsContainer}>
-      <section className={styles.panel}>
+      {/* Make sure these data-bg values match the section backgrounds */}
+      <section
+        className={styles.panel}
+        data-bg="#f4f8fb"   // MainBanner bg
+      >
         <MainBanner />
       </section>
 
-      <section className={styles.panel}>
+      <section
+        className={styles.panel}
+        data-bg="#f4f8fb"   // MyBackground bg
+      >
         <MyBackground />
       </section>
 
-      <section className={styles.panel}>
+      <section
+        className={styles.panel}
+        data-bg="#f4f8fb"   // LatestProjects bg
+      >
         <LatestProjects />
       </section>
 
-      <section className={styles.panel}>
+      <section
+        className={styles.panel}
+        data-bg="#fff7ec"   // ContactMe bg
+      >
         <ContactMe />
       </section>
     </div>
