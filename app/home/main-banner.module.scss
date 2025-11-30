@@ -140,6 +140,7 @@
     position: relative;
     width: clamp(250px, 26vw, 550px);
     height: clamp(250px, 26vw, 550px);
+    z-index: 2; 
 
     @media screen and #{$tablet} {
       width: clamp(250px, 35vw, 550px);
