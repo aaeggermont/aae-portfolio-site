@@ -116,9 +116,6 @@ function LatestProjects() {
       </div>
       <div className={styles.content}>
         <h2 className={styles.heading}>Latest Projects</h2>
-        <p className={styles.placeholder}>
-          This is a placeholder section for your latest projects. Content coming soon.
-        </p>
       </div>
     </section>
   );
