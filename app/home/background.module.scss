@@ -2,7 +2,7 @@
 @import "@/styles/mixins";
 
 .fullHeightCard {
-  @include fluid-card-size(190px, 260px, 220px, 280px); // example values
+  @include fluid-card-size(190px, 260px, 220px, 260px); // example values
   //max-width: 100%;
   display: flex;
   flex-direction: column;

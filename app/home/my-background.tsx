@@ -118,7 +118,16 @@ export default function MyBackground() {
       </div>
 
       <div className={styles.content}>
-        <h2 className={styles.heading}>My Background</h2>
+        <h2 className={styles.heading}>What I do</h2>
+        <div className={styles.summarySection}>
+          <p className={styles.summarySectionText}>
+            I transform user insights into meaningful, well-crafted digital experiences that balance
+            clarity, creativity, and usability. By combining UX design, frontend engineering,
+            AI-driven application development, and system integration, I build seamless, intelligent
+            products that feel intuitive and human from end to end.
+          </p>
+        </div>
+
         <div className={styles.cardsGrid}>
           {backgroundItems.map((item, index) => (
             <AnimatedCardWrapper key={item.title} index={index}>
@@ -132,6 +141,7 @@ export default function MyBackground() {
             </AnimatedCardWrapper>
           ))}
         </div>
+       
       </div>
     </section>
   );
