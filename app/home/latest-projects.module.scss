@@ -1,30 +1,130 @@
+/* app/home/latest-projects.module.scss */
+
 @import "@/styles/variables";
 @import "@/styles/mixins";
 
 .latestProjectsSection {
   min-height: 100vh;
   width: 100%;
-  background-color: #f2fff7; // soft greenish
+  background-color: #f4f8fb;
   display: flex;
   align-items: center;
-  justify-content: center; // if you want content centered vertically too
+  justify-content: center;
+  position: relative;
+  overflow: visible;
 
   .content {
     @include global-container;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    padding-bottom: 10%;
   }
 
   .heading {
-    @include fluid-type(22px, 28px, 36px);
-    font-family: var(--font-montserrat);
+    font-family: var(--font-poppins);
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: 600;
-    margin-bottom: 1rem;
-    color: $font-color-bold;
+    color: #074c5f;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1vh;
+
+    @media screen and #{$tablet} {
+      margin-left: 1vw;
+      display: flex;
+      justify-content: flex-start;
+    }
+
+    @media screen and #{$desktop-device} {
+      margin-left: 3vw;
+      display: flex;
+      justify-content: flex-start;
+    }
   }
 
-  .placeholder {
-    @include fluid-type(16px, 18px, 20px);
-    font-family: var(--font-figtree);
-    color: $font-color-bold;
-    opacity: 0.75;
+  .summarySection {
+    width: 100%;
+    margin: 0 auto 2.5rem;
+    display: flex;
+    justify-content: center;
+
+    .summarySectionText {
+      max-width: 1000px;
+
+      @media screen and #{$mobile} {
+        max-width: 420px;
+      }
+
+      @include fluid-type(16px, 18px, 20px);
+      font-family: var(--font-figtree);
+      color: $font-color-bold;
+      line-height: 1.6;
+      opacity: 0.9;
+      text-align: left;
+    }
+  }
+
+  .projectsSwiper {
+    
+    margin: 0 auto 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and #{$mobile} {
+      height: 500px;
+      max-width: 300px;
+      background-color: lightgreen;
+    }
+
+    @media screen and #{$tablet} {
+      background-color: turquoise;
+      height: 500px;
+      max-width: 800px;
+    }
+
+    @media screen and (min-width: 1024px) and (max-width: 3800px) {
+      height: 500px;
+      //width: 100%; 
+      max-width: 1100;
+
+    }
+
+    .swiper-wrapper {
+      align-items: stretch;
+    }
+
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+    }
+  }
+}
+
+/* Floating background images (same pattern as MyBackground) */
+.floatLayer {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floatImg {
+  position: absolute;
+  opacity: 1;
+  animation: slowFloat 12s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+@keyframes slowFloat {
+  0% {
+    transform: translate(-10px, 240px) scale(0.5);
+  }
+  100% {
+    transform: translate(10px, -28px) scale(1.06);
   }
 }
