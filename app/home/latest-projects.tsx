@@ -91,15 +91,31 @@ function LatestProjects() {
 
         <Swiper
           className={styles.projectsSwiper}
-          modules={[Pagination, Navigation]}
-          pagination={{ clickable: true }}
-          navigation
-          spaceBetween={24}
-          breakpoints={{
-            360: { slidesPerView: 1 },
-            768: { slidesPerView: 2 },
-            1024: { slidesPerView: 3 },
+          centeredSlides={false}
+          slidesPerView={1}
+          spaceBetween={10}
+          pagination={{
+            clickable: true,
           }}
+        modules={[Pagination]}
+        // Breakpoints configuration
+        breakpoints={{
+        // when window width is >= 640px
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 0,
+        },
+        // when window width is >= 768px
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 10,
+        },
+        // when window width is >= 1024px
+        1274: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+      }}
         >
           {latestProjectsItems.map((item) => (
             <SwiperSlide key={item.title}>
