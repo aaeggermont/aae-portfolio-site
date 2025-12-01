@@ -64,6 +64,90 @@
     }
   }
 
+  
+.contactFormContainer {
+  // ...everything you already have...
+
+  .formActions {
+    margin-top: 0.5rem;
+  }
+
+  .submitButton {
+    border: none;
+    outline: none;
+
+    height: 36px;                  // fixed height
+    min-width: 120px;
+    padding: 0 1.3rem;             // horizontal padding only
+    border-radius: 12px;
+
+    display: inline-flex;          // ✅ flex centering
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    text-transform: none;
+    line-height: 1;                // avoid tall line box
+    background: radial-gradient(
+      circle at top left,
+      #fff5da 0%,
+      #fde9c8 35%,
+      #f9daba 100%
+    );
+    border: 1px solid rgba(7, 76, 95, 0.12);
+
+    box-shadow:
+      0 4px 10px rgba(0, 0, 0, 0.10),
+      0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+
+    color: #074C5F;
+
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.2s ease,
+      background 0.2s ease,
+      filter 0.2s ease;
+
+    &:hover {
+      background: radial-gradient(
+        circle at top left,
+        #fff1c8 0%,
+        #fddcb2 35%,
+        #f8cfa2 100%
+      );
+      transform: translateY(-1px);
+      box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.16),
+        0 0 0 1px rgba(255, 255, 255, 0.55) inset;
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.14),
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+    }
+
+    @media screen and #{$mobile} {
+      height: 34px;
+      min-width: 110px;
+      padding: 0 1rem;
+    }
+  }
+
+  .submitLabel {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    @include fluid-type(13px, 14px, 15px);
+    color: #074C5F;
+    line-height: 1;       // so it sits dead center
+  }
+}
+
 
   .contactFormContainer {
     width: 100%;
@@ -104,7 +188,7 @@
           font-weight: 400;
           color: #074C5F;
           @include fluid-type(16px, 18px, 20px);
-          margin-bottom: 2rem;             
+          //margin-bottom: 2rem;             
         }
 
         form {

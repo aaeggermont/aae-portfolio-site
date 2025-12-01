@@ -222,8 +222,13 @@ function ContactMe() {
                         onChange={e => setMessage(e.target.value)}
                       />
                     </div>
-                    <div className='form-field-submit'>
-                      <Button type="submit" >Submit</Button>
+                    <div className={styles.formActions}>
+                      <button
+                        type="submit"
+                        className={styles.submitButton}
+                      >
+                        <span className={styles.submitLabel}>Send message</span>
+                      </button>
                     </div>
                 </form>
             </div>
