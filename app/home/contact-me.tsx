@@ -187,7 +187,7 @@ function ContactMe() {
                     <div className={styles.formField}>
                       <TextField
                         sx={{
-                            width: '32rem',
+                            width: { xs: "300px", sm: "300px", md: "300px", lg: "300px" },
                         }}
                         required
                         type="text"
@@ -201,7 +201,7 @@ function ContactMe() {
                     <TextField
                       required
                       sx={{
-                          width: '32rem',
+                          width: { xs: "300px", sm: "300px", md: "300px", lg: "300px" },
                       }}
                       id="outlined-required"
                       label="Your email"
@@ -218,7 +218,7 @@ function ContactMe() {
                         multiline
                         rows={4}
                         sx={{
-                            width: '32rem',
+                             width: { xs: "300px", sm: "300px", md: "300px", lg: "300px" },
                         }}
                         id="outlined-required"
                         label="Your message"
