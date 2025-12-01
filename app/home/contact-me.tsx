@@ -170,17 +170,11 @@ function ContactMe() {
           <span className={styles.summarySectionText}> I´m always open to discussing exploring new projects, developments, and partnerships. </span>
         </div>
 
-        {/*
-
-         
-        <div className={styles.contactFormContainer}>
-          <h1> One</h1>
-          <h1> Two</h1>
-          <h1> Three</h1>
-        </div>     */}
         {/* Contact form and contact details */}
        
         <div className={styles.contactFormContainer}>
+            <div>
+
             <div className={styles.writeMeContainer}>
                 <span> Write Me </span>
                 <form ref={form} onSubmit={handleSubmit}>
@@ -232,6 +226,7 @@ function ContactMe() {
                       <Button type="submit" >Submit</Button>
                     </div>
                 </form>
+            </div>
             </div>
           <div className={styles.contactmeContainer}>
             <span>Contact Me</span>
