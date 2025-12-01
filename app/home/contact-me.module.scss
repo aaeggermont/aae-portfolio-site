@@ -16,7 +16,7 @@
   .content {
     @include global-container;
     text-align: center;
-    //width: 100%;
+    width: 100%;
     position: relative;            // ✅ participate in stacking
     z-index: 1;
     padding-bottom: 10%;
@@ -71,7 +71,7 @@
     justify-content: center;
     align-items: flex-start;
     padding-top: 5vh;
-
+  
     .writeMeContainer {
         width: 60%;
         display: flex;
