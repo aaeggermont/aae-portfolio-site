@@ -19,8 +19,8 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
   return (
     <Card
       sx={{
-        width: { xs: "17.5rem", sm: "18rem", md: "21rem", lg: "22rem" },
-        height: "auto",
+        width: { xs: "294px", sm: "294px", md: "317px", lg: "352px" },
+        height:  { xs: "420px", sm: "420px", md: "440px", lg: "440px" },
         borderRadius: 3,
         boxShadow: "0 4px 14px rgba(0, 0, 0, 0.08)",
         transition: "transform 0.35s ease, box-shadow 0.35s ease, opacity 0.3s ease",
