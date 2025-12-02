@@ -153,7 +153,7 @@ function HomePanels() {
 
       <section
         className={styles.panel}
-        data-bg="#fff7ec"   // ContactMe bg
+        data-bg="#f4f8fb"   // ContactMe bg
       >
         <ContactMe />
       </section>
