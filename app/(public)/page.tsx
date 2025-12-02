@@ -1,7 +1,6 @@
-export default function HomePage() {
-  return (
-    <section className="px-6 py-10">
+// app/(public)/page.tsx
+import HomePanels from "@/app/home/home-panels";
 
-    </section>
-  );
+export default function HomePage() {
+  return <HomePanels />;
 }
