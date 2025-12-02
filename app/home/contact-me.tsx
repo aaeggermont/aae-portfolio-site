@@ -87,27 +87,6 @@ function ContactMe() {
     type: "success" | "error";
   } | null>(null);
 
-
-  /*
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    emailjs
-        .sendForm('service_9vnb61i', 'template_4jckt0n', form.current, {
-            publicKey: '3kQLMi8QAvKoYTabS',
-        })
-        .then(
-            () => {
-                alert('A contact request was submitted!');
-                event.target.reset();
-            },
-            (error) => {
-                alert('A contact request was FAILED!');
-                console.log('FAILED...', error.text);
-            },
-        );
-  };*/
-
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (isSending) return; // guard for double-clicks
