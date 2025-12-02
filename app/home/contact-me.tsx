@@ -75,7 +75,7 @@ function AnimatedCardWrapper({
 
 function ContactMe() {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
-  const form = useRef();
+  const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
