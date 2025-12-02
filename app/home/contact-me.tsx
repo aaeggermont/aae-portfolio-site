@@ -81,6 +81,14 @@ function ContactMe() {
   const [message, setMessage] = useState("");
   const [emailError, setEmailError] = useState(false);
 
+  const [isSending, setIsSending] = useState(false);
+  const [toast, setToast] = useState<{
+    message: string;
+    type: "success" | "error";
+  } | null>(null);
+
+
+  /*
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -98,17 +106,47 @@ function ContactMe() {
                 console.log('FAILED...', error.text);
             },
         );
-    /*
-    setEmailError(false)
-    if (email == '') {
-        setEmailError(true)
-    }
-    if (email ) {
-        console.log(email)
-    }*/
+  };*/
 
-    
-  };
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (isSending) return; // guard for double-clicks
+
+      if (!form.current) return;
+
+      try {
+        setIsSending(true);
+        setToast(null);
+
+        await emailjs.sendForm(
+          "service_9vnb61i",
+          "template_4jckt0n",
+          form.current,
+          { publicKey: "vF8vNTkUpDVRI5ITP" }
+        );
+
+        setToast({
+          message: "Thanks! Your message was sent successfully.",
+          type: "success",
+        });
+
+        // reset form + local state
+        form.current.reset();
+        setName("");
+        setEmail("");
+        setMessage("");
+      } catch (error: any) {
+        console.error("FAILED…", error?.text || error);
+        setToast({
+          message:
+            "Oops, something went wrong. Please try again in a moment.",
+          type: "error",
+        });
+      } finally {
+        setIsSending(false);
+      }
+    };
+
 
   useEffect(() => {
     // This runs ONLY in the browser, after hydration ✅
@@ -132,6 +170,17 @@ function ContactMe() {
 
     setFloaters(generated);
   }, []);
+
+
+  useEffect(() => {
+    if (!toast) return;
+
+    const timer = setTimeout(() => {
+      setToast(null);
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [toast]);
 
 
   const handleLinkedIn = () => {
@@ -225,9 +274,17 @@ function ContactMe() {
                     <div className={styles.formActions}>
                       <button
                         type="submit"
+                         disabled={isSending}
                         className={styles.submitButton}
                       >
-                        <span className={styles.submitLabel}>Send message</span>
+
+                      {isSending && (
+                        <span className={styles.spinner} aria-hidden="true" />
+                      )}
+
+                        <span className={styles.submitLabel}>
+                         {isSending ? "Sending…" : "Send message"}
+                        </span>
                       </button>
                     </div>
                 </form>
@@ -256,6 +313,19 @@ function ContactMe() {
         
       </div>
   
+      {toast && (
+        <div
+          className={`${styles.toast} ${
+            toast.type === "success"
+              ? styles.toastSuccess
+              : styles.toastError
+          } ${styles.toastVisible}`}
+          role="status"
+          aria-live="polite"
+        >
+          {toast.message}
+        </div>
+      )}
     </section>
   );
 }
