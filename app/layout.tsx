@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { AppProviders } from "./providers"; // your provider wrapper
 import "../styles/globals.scss";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
+import Header from '@/components/Header';
 
 // Primary UI font
 const poppins = Poppins({
@@ -36,12 +37,13 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html 
+    <html
         lang="en"
           className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
         >
       <body>
         <AppProviders>
+          <Header />
           {children}
         </AppProviders>
       </body>
