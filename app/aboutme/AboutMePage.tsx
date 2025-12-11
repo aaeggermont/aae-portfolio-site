@@ -5,6 +5,12 @@ import React, { useEffect, useState } from "react";
 import styles from "./aboutme.module.scss";
 import { useResponsive } from "@/app/lib/responsive/ResponsiveQueryProvider";
 
+// Views
+
+import { ProfileMdLgDesktopView } from "@/app/aboutme/components/ProfileMdLgDesktopView";
+import { ProfileSmSxView } from "@/app/aboutme/components/ProfileSmSxView";
+
+
 export default function AboutMePage() {
   const screen = useResponsive();
 
@@ -15,40 +21,33 @@ export default function AboutMePage() {
     setMounted(true);
   }, []);
 
-  if ( screen.isDesktopOrLaptop ) {
-    console.log("Rendering for Desktop or Laptop");
+  if ( screen.isMobile ) {
+    console.log("Rendering for Mobile");
     return (
       <>
         {mounted && (
           <div className={styles.aboutMePage}>
             <section className={styles.content}>
-              <p> Desktop Device: {screen.isDesktopOrLaptop.toString()} </p>
+              <p> Mobile Device: {screen.isMobile.toString()} </p>
+              <ProfileSmSxView />
             </section>
           </div>
          
            )}
       </>
     );
-  } else if ( screen.isTablet ) {
-    console.log("Rendering for Tablet");
+  } else if ( screen.isTablet ||  screen.isDesktopOrLaptop) {
+    console.log("Rendering for Tablet or laptop");
       return (
         <>
           {mounted && (
-            <section className={styles.content}>
-              <p> Tablet Device: {screen.isTablet.toString()} </p>
-            </section>
+            <div className={styles.aboutMePage}>
+              <section className={styles.content}>
+                <p> Desktop/Tablet Device: {screen.isTablet.toString()} </p>
+                <ProfileMdLgDesktopView />
+              </section>
+             </div>
            )}
         </>);
-  } else if ( screen.isMobile ) {
-    console.log("Rendering for Mobile");
-    return (
-      <>
-        {mounted && (
-          <section className={styles.content}>
-            <p> Mobile Device: {screen.isMobile.toString()} </p>
-          </section>
-        )}
-      </>
-    );
   }
 }

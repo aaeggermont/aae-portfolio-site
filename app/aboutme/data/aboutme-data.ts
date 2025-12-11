@@ -1,3 +1,5 @@
+import type { StaticImageData } from "next/image";
+
 import AkamaiLogo from '../images/akamai_technologies_logo.jpeg';
 import CBSLogo from '../images/cbs_interactive_logo.jpeg';
 import DisneyLogo from '../images/the_walt_disney_company_logo.jpeg';
@@ -6,14 +8,13 @@ import SonyLogo from '../images/sony_pictures_imageworks_logo.jpeg';
 import EmersonLogo from '../images/emerson_college_logo.jpeg';
 import UWLogo from '../images/university_of_washington_logo.jpeg';
 import MITLogo from '../images/mit-logo.jpg';
-import AAEPhoto from '../images/AAEPhoto.jpeg';
+import AAEPhoto from '../images/AAEPhoto.png';
 
-export const aboutData  =  {
+export const AboutMeData  =  {
   pageTitle: "Hello, I'm Antonio",
   profilePhoto: AAEPhoto,
   pageParagraphs: [
    "As a software developer and UX engineer with a  multidisciplinary background, I design and engineer experiences from inception to completion, and adopt emerging technologies through Human - Centered Design methodologies. In collaboration with diverse teams, I harness emerging technologies to push the boundaries of what’s possible, aiming to create immersive and intelligent solutions that resonate with users.",
-   "My professional experience has been in working in the technology, entertainment industries, and  higher education industries. My portfolio of work includes design and development of interactive applications for business intelligence and Web publishing, augmented reality, AI/ML data driven applications, and automation of processes with interactive applications.",
    "I have a passion for learning new trends in innovative design and emerging technologies for the building of human empathetic applications."
   ],
   skills: {
@@ -87,11 +88,6 @@ export const aboutData  =  {
       },
     ]
   },
-
-
-
-
-
   experience: [
     {
       logo: DisneyLogo,
