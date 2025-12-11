@@ -7,6 +7,23 @@ import gsap from "gsap";
 
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
+import Typewriter from 'typewriter-effect';
+
+function TypewriterComponent() {
+  return (
+    <Typewriter
+      options={{
+        strings: "Hello, my name is Antonio",
+        autoStart: true,
+        loop: false,
+        pauseFor: 2500,
+        deleteSpeed: 50,
+      }}
+    />
+  );
+}
+
+
 
 function MainBanner() {
   const textRef = useRef<HTMLDivElement | null>(null);
@@ -63,7 +80,7 @@ function MainBanner() {
         className={styles.bannerTexContent}
       >
         <h1 className={styles.helloText}>
-          Hello, my name is <span>Antonio</span>
+          <TypewriterComponent />
         </h1>
 
         <h2 className={styles.backgroundText}>
