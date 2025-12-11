@@ -1,0 +1,43 @@
+.progress_inner {
+    width: 100%;
+    margin-bottom: 31px;
+
+    .label {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 10px;
+        display: inline-block;
+
+        }
+
+    .background {
+        width: 100%;
+        min-width: 100%;
+        position: relative;
+        height: 16px;
+        border: 1px solid #7e7e7e;
+        padding: 2px;
+        padding-left: 0rem;
+    }
+
+    .background .bar_in {
+        height: 100%;
+        background: #074C5F;
+        overflow: hidden;
+
+
+    }
+
+    .background .bar {
+        height: 100%;
+
+    }
+
+    .background .bar.open {
+        -webkit-animation: wow 2s cubic-bezier(0.165, 0.84, 0.44, 1); /* Safari 4+ */
+        -moz-animation: wow 2s cubic-bezier(0.165, 0.84, 0.44, 1); /* Fx 5+ */
+        animation: wow 2s cubic-bezier(0.165, 0.84, 0.44, 1); /* IE 10+ */
+        width: 100%;
+    }
+}
