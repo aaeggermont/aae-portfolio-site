@@ -1,42 +1,53 @@
 // app/aboutme/AboutMePage.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./aboutme.module.scss";
+import { useResponsive } from "@/app/lib/responsive/ResponsiveQueryProvider";
+
+// Views
+
+import { ProfileMdLgDesktopView } from "@/app/aboutme/components/ProfileMdLgDesktopView";
+import { ProfileSmSxView } from "@/app/aboutme/components/ProfileSmSxView";
+
 
 export default function AboutMePage() {
-  return (
-    <div className={styles.aboutMePage}>
-      <section id="overview" className={styles.section}>
-        <h1 className={styles.sectionTitle}>Overview</h1>
-        <p className={styles.sectionBody}>
-          {/* Your overview text here */}
-        </p>
-      </section>
+  const screen = useResponsive();
 
-      <section id="engineering-skills" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Engineering Skills</h2>
-      </section>
+  // Avoid hydration mismatch by only rendering
+  // responsive-dependent UI after mount
+  const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+    setMounted(true);
+  }, []);
 
-      <section id="design-skills" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Design Skills</h2>
-      </section>
-
-      <section id="professional-experience" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Professional Experience</h2>
-      </section>
-
-      <section id="education" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Education</h2>
-      </section>
-
-      <section id="certifications" className={styles.section}>
-        <h2 className={styles.sectionTitle}>Certifications</h2>
-      </section>
-
-      <section id="when-im-not-working" className={styles.section}>
-        <h2 className={styles.sectionTitle}>When I’m Not Working</h2>
-      </section>
-    </div>
-  );
+  if ( screen.isMobile ) {
+    console.log("Rendering for Mobile");
+    return (
+      <>
+        {mounted && (
+          <div className={styles.aboutMePage}>
+            <section className={styles.content}>
+              <p> Mobile Device: {screen.isMobile.toString()} </p>
+              <ProfileSmSxView />
+            </section>
+          </div>
+         
+           )}
+      </>
+    );
+  } else if ( screen.isTablet ||  screen.isDesktopOrLaptop) {
+    console.log("Rendering for Tablet or laptop");
+      return (
+        <>
+          {mounted && (
+            <div className={styles.aboutMePage}>
+              <section className={styles.content}>
+                <p> Desktop/Tablet Device: {screen.isTablet.toString()} </p>
+                <ProfileMdLgDesktopView />
+              </section>
+             </div>
+           )}
+        </>);
+  }
 }
