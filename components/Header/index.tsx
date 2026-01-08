@@ -1,6 +1,5 @@
 "use client";
 // Import your SCSS so classNames still work
-import "./header.scss";
 import { HeaderMobile } from './HeaderMobile';
 import { HeaderDesktop } from './HeaderDesktop';
 
@@ -26,7 +25,7 @@ export default function Header({
 
   return (
     <header className="header_area">
-      <div className="container">
+      <div className="global-container">
         {/* Mobile header */}
         <HeaderMobile
           isDark={isDark}

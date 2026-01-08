@@ -51,11 +51,13 @@ export function HeaderMobile({
     <div className={styles.mobile_wrapper}>
       <div className={styles.mobile_header}>
         <div className={styles.brand_logo}>
-          <HeaderLogo
-            width='120'
-            height='20'
-            color={logoFontColor}
-          />
+          <Link href='/'>
+            <HeaderLogo
+              width='120'
+              height='20'
+              color={logoFontColor}
+            />
+          </Link>
         </div>
         <div
           className={styles.menu_button}
