@@ -1,7 +1,3 @@
-$sidebar_text_color: #fff;
-$sidebar_font-size: 24px;
-$sidebar_font-weight: 600;
-
 @keyframes slide-in-menu {
 	from {
 		width: 0px;
@@ -24,34 +20,9 @@ $sidebar_font-weight: 600;
 	}
 }
 
-// Header area css
-.header_area{
-	position: relative;
-	width: 100%;
-	z-index: 337;
-	display: flex;
-	justify-content: center;
-
-	.container {
-		@media #{$md, $desktop} {
-			max-width: 1200px;
-			width: 100%;
-		}
-
-		@media #{$sm, xs} {
-			max-width: 930px;
-			width: 100%;
-		}
-	}
-}
-
 .site_menu {
 	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	padding: 0 15px;
-	box-sizing: border-box;
+	justify-content: center;
 
 	@media #{$xs}{
 		display: none;
@@ -62,6 +33,14 @@ $sidebar_font-weight: 600;
 	@media #{$md}{
 		display: none;
 	}
+}
+
+.menu_wrapper {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	box-sizing: border-box;
+	width: calc(70vw + 1.75rem);
 }
 
 .brand_logo {
@@ -84,7 +63,7 @@ $sidebar_font-weight: 600;
       text-decoration: initial;
 
       @media #{$desktop}{
-        font-size: 0.9rem;
+				@include fluid-type(16px, 16px, 18px);
       }
 
       &.active_link{
@@ -204,7 +183,7 @@ $sidebar_font-weight: 600;
 		p {
 			color: $white;
 			font-weight: bold;
-			font-size: 1rem;
+			@include fluid-type(16px, 18px, 18px);
 		}
 	}
 
@@ -253,9 +232,9 @@ $sidebar_font-weight: 600;
 				display: flex;
 				align-items: center;
 				text-transform: capitalize;
-				color: $sidebar_text_color;
-				font-size: $sidebar_font-size;
-				font-weight: $sidebar_font-weight;
+				color: #fff;
+				@include fluid-type(18px, 22px, 24px);
+				font-weight: 600;
 				text-decoration: none;
 
 				&.active_link {
