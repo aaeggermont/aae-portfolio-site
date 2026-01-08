@@ -201,15 +201,13 @@ function ContactMe() {
         {/* Contact form and contact details */}
        
         <div className={styles.contactFormContainer}>
-            <div>
-
             <div className={styles.writeMeContainer}>
                 <span> Write Me </span>
                 <form ref={form} onSubmit={handleSubmit}>
                     <div className={styles.formField}>
                       <TextField
                         sx={{
-                            width: { xs: "300px", sm: "300px", md: "300px", lg: "300px" },
+                            width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
                         }}
                         required
                         type="text"
@@ -223,7 +221,7 @@ function ContactMe() {
                     <TextField
                       required
                       sx={{
-                          width: { xs: "300px", sm: "300px", md: "300px", lg: "300px" },
+                          width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
                       }}
                       id="outlined-required"
                       label="Your email"
@@ -240,7 +238,7 @@ function ContactMe() {
                         multiline
                         rows={4}
                         sx={{
-                             width: { xs: "300px", sm: "300px", md: "300px", lg: "300px" },
+                             width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
                         }}
                         id="outlined-required"
                         label="Your message"
@@ -267,10 +265,9 @@ function ContactMe() {
                       </button>
                     </div>
                 </form>
-            </div>
-            </div>
-          <div className={styles.contactmeContainer}>
-            <span>Contact Me</span>
+          </div>
+          <div className={styles.contacMeContainer}>
+            <div className={styles.contactMeSectionTitle}>Contact Me</div>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
                <div><span> USA: +206 556 8918</span></div>    
