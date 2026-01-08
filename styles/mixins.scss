@@ -12,16 +12,16 @@
   @media screen and (min-width: $mobile-min) and (max-width: $mobile-max) {
     // For production, remove background-color
     //background-color: rgb(204, 90, 222); // purple (debug)
-    padding-left: 1rem;
-    padding-right: 1rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
   }
 
   // Tablet: 768px – 1023px
   @media screen and (min-width: $tablet-min) and (max-width: $tablet-max) {
     // Still full-width but different color if you want
     //background-color: rgb(211, 223, 50); // yellow (debug)
-    padding-left: 2rem;
-    padding-right: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
   }
 
   // Desktop: 1024px – 3800px
@@ -30,8 +30,10 @@
     // ⚠️ optional: only if you *really* want a min width on large screens:
     // min-width: $container-min; // 1024px
     //background-color: aqua; // debug
-    padding-left: 5rem;
-    padding-right: 5rem;
+    //padding-left: 5rem;
+    //padding-right: 5rem;
+    margin-left: 5rem;
+    margin-right: 5rem;
   }
 }
 
