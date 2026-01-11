@@ -1,25 +1,18 @@
-/* app/home/latest-projects.module.scss */
-
 @import "@/styles/variables";
 @import "@/styles/mixins";
 
-.latestProjectsSection {
+.myWorkSection {
   min-height: 100vh;
   width: 100%;
   background-color: #f4f8fb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: visible;
 
   .content {
     @include global-container;
-    text-align: center;
-    width: 100%;
-    position: relative;
+    //text-align: center;
+    //width: 100%;
+    //position: relative;
     z-index: 1;
-    //padding-bottom: 10%;
+    //background-color: violet;
   }
 
   .heading {
@@ -29,18 +22,7 @@
     color: #074c5f;
     margin-bottom: 1.5rem;
     padding-bottom: 1vh;
-
-    @media screen and #{$tablet} {
-      margin-left: 1vw;
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    @media screen and #{$desktop-device} {
-      margin-left: 3vw;
-      display: flex;
-      justify-content: flex-start;
-    }
+    text-align: center;
   }
 
   .summarySection {
@@ -62,44 +44,6 @@
       line-height: 1.6;
       opacity: 0.9;
       text-align: left;
-    }
-  }
-
-  .projectsSwiper {
-    
-    margin: 0 auto 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    @media screen and #{$mobile} {
-      height: 500px;
-      max-width: 300px;
-      background-color: lightgreen;
-    }
-
-    @media screen and #{$tablet} {
-      background-color: turquoise;
-      height: 500px;
-      max-width: 800px;
-    }
-
-    @media screen and (min-width: 1024px) and (max-width: 3800px) {
-      height: 500px;
-      //width: 100%; 
-      max-width: 1100;
-
-    }
-
-    .swiper-wrapper {
-      align-items: stretch;
-    }
-
-    .swiper-slide {
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
     }
   }
 }
