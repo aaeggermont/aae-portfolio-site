@@ -4,6 +4,7 @@
 import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ResponsiveQueryProvider } from "./lib/responsive/ResponsiveQueryProvider";
 
 const theme = createTheme({
@@ -13,17 +14,18 @@ const theme = createTheme({
       sm: 360,  // mobile-min
       md: 768,  // tablet-min
       lg: 1024, // desktop-min
-      xl: 1440, // large desktop start (you can raise this if you want)
+      xl: 1440, // large desktop start
     },
   },
 });
 
-
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <ResponsiveQueryProvider>{children}</ResponsiveQueryProvider>
-    </ThemeProvider>
+    <AppRouterCacheProvider options={{ key: "mui" }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <ResponsiveQueryProvider>{children}</ResponsiveQueryProvider>
+      </ThemeProvider>
+    </AppRouterCacheProvider>
   );
 }
