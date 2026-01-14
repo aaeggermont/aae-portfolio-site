@@ -8,11 +8,7 @@
 
   .content {
     @include global-container;
-    //text-align: center;
-    //width: 100%;
-    //position: relative;
     z-index: 1;
-    //background-color: violet;
   }
 
   .heading {
@@ -46,6 +42,36 @@
       text-align: left;
     }
   }
+}
+
+.portfolioProjectsContainer{  
+    display: flex;
+    flex-wrap: wrap;
+    background-color: turquoise;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+
+    @media screen and #{$mobile} {
+      gap: 2rem;
+    }
+
+    @media screen and #{$tablet} {
+      //gap: 3rem;
+      row-gap: 2.5rem;
+      column-gap: 2.5rem;
+    }
+
+
+    @media screen and #{$desktop-device} {
+      gap: 5rem;
+    }
+    
+    //height: fit-content;
+    
+
+    //background-color: aqua;
+
 }
 
 /* Floating background images (same pattern as MyBackground) */
