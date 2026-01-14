@@ -1,176 +1,47 @@
 @import "@/styles/variables";
 @import "@/styles/mixins";
 
+/* The wrapper should NOT hardcode width/height.
+   Let the MUI Card define the size via sx.
+*/
 .flip-card-container {
-  width: 276px;
-  height: 177px;
+  display: inline-block;
+  perspective: 1000px;
 }
-      
+
+/* Keep both sides in the same 3D space */
 .flip-card-inner {
   position: relative;
-  text-align: center;
-  transition: transform 0.6s;
   transform-style: preserve-3d;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-}
-      
-    .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-    }
-     
-    .flip-card-front, .flip-card-back {
-        background-color: yellow;
-        //position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-    }
-      
-    .flip-card-front {
-        background-color: #bbb;
-        color: black;
-    }
-      
-    .flip-card-back {
-        color: white;
-        transform: rotateY(180deg);
-        //width: 280px;
-        height: 0px;
-    }
-
-/*
-@media screen and #{$mobile} {
-    .flip-card-container {
-       background-color: transparent;
-       width: 280px;
-       height: 180x;
-    }
-      
-    .flip-card-inner {
-        position: relative;
-        text-align: center;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    }
-      
-    .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-    }
-     
-    .flip-card-front, .flip-card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-    }
-      
-    .flip-card-front {
-        background-color: #bbb;
-        color: black;
-    }
-      
-    .flip-card-back {
-        color: white;
-        transform: rotateY(180deg);
-    }
+  transition: transform 0.6s;
 }
 
- @media screen and #{$tablet}  {
-    .flip-card-container{
-        //background-color: transparent;
-        background-color: red;
-        //width: 100%;
-        //height: 100%;
-        //width: 345px;
-        //height: 221px;
-        //perspective: 1000px;
-        //display: flex;
-        //flex-direction: row;
-        // align-items: flex-start;
-        //justify-content: flex-end;
-    }
-      
-    .flip-card-inner {
-        position: relative;
-        //width: 100%;
-        //height: 100%;
-        text-align: center;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    }
-      
-    .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-    }
-     
-    .flip-card-front, .flip-card-back {
-        background-color: yellow;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-    }
-      
-    .flip-card-front {
-        background-color: #bbb;
-        color: black;
-    }
-      
-    .flip-card-back {
-        color: white;
-        transform: rotateY(180deg);
-    }
+/* Trigger flip on hover (desktop) */
+.flip-card-container:hover .flip-card-inner {
+  transform: rotateY(180deg);
 }
 
-
-
- @media screen and #{$desktop-device}  {
-    .flip-card-container {
-        background-color: transparent;
-        background-color: red;
-        //width: 345px;
-        //height: 221px;
-        //perspective: 1000px;
-    }
-      
-    .flip-card-inner {
-        position: relative;
-        //width: 100%;
-        //height: 100%;
-        text-align: center;
-        transition: transform 0.6s;
-        transform-style: preserve-3d;
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    }
-      
-    .flip-card:hover .flip-card-inner {
-        transform: rotateY(180deg);
-    }
-     
-    .flip-card-front, .flip-card-back {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-    }
-      
-    .flip-card-front {
-        background-color: #bbb;
-        color: black;
-    }
-      
-    .flip-card-back {
-        color: white;
-        transform: rotateY(180deg);
-    }
+/* Front and back must be stacked on top of each other */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
+/* Back side flipped */
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/* IMPORTANT:
+   Give the inner element a size by inheriting from the front card.
+   Since the front Card defines its own width/height, we just need this
+   to “fit” the content.
 */
-
- 
+.flip-card-front {
+  position: relative; /* creates height for the container */
+}
