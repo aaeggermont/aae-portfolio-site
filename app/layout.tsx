@@ -1,8 +1,9 @@
 // app/layout.tsx
 import type { ReactNode } from "react";
-import { AppProviders } from "./providers"; // your provider wrapper
+import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 
 // Primary UI font
 const poppins = Poppins({
@@ -28,7 +29,6 @@ const figtree = Figtree({
   display: "swap",
 });
 
-
 export const metadata = {
   title: "Antonio Eggermont – Portfolio",
   description: "Full-stack UX Engineer & AI/ML Specialist",
@@ -36,14 +36,14 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html 
-        lang="en"
-          className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
-        >
+    <html
+      lang="en"
+      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
+    >
       <body>
-        <AppProviders>
-          {children}
-        </AppProviders>
+        <AppRouterCacheProvider options={{ key: "mui" }}>
+          <AppProviders>{children}</AppProviders>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );

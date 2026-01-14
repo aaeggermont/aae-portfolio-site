@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 type ResponsiveContextValue = {
@@ -11,9 +11,7 @@ type ResponsiveContextValue = {
   isRetina: boolean;
 };
 
-const ResponsiveContext = createContext<ResponsiveContextValue | undefined>(
-  undefined
-);
+const ResponsiveContext = createContext<ResponsiveContextValue | undefined>(undefined);
 
 export function useResponsive() {
   const ctx = useContext(ResponsiveContext);
@@ -23,11 +21,13 @@ export function useResponsive() {
   return ctx;
 }
 
-export function ResponsiveQueryProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function ResponsiveQueryProvider({ children }: { children: React.ReactNode }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Keep these in sync with your SCSS breakpoints in variables.scss
   const desktopMin = 1024;
   const desktopMax = 3800;
@@ -38,32 +38,43 @@ export function ResponsiveQueryProvider({
   const tabletMin = 768;
   const tabletMax = 1023;
 
-  const isDesktopOrLaptop = useMediaQuery({
+  // ✅ ALWAYS call hooks (no conditional hooks)
+  const mqDesktopOrLaptop = useMediaQuery({
     query: `(min-width: ${desktopMin}px) and (max-width: ${desktopMax}px)`,
   });
 
-  const isTablet = useMediaQuery({
+  const mqTablet = useMediaQuery({
     query: `(min-width: ${tabletMin}px) and (max-width: ${tabletMax}px)`,
   });
 
-  const isMobile = useMediaQuery({
+  const mqMobile = useMediaQuery({
     query: `(min-width: ${mobileMin}px) and (max-width: ${mobileMax}px)`,
   });
 
-  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
-  const isRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
+  const mqPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  const mqRetina = useMediaQuery({ query: "(min-resolution: 2dppx)" });
 
-  const screenDevice: ResponsiveContextValue = {
-    isDesktopOrLaptop,
-    isTablet,
-    isMobile,
-    isPortrait,
-    isRetina,
-  };
+  // ✅ During SSR + hydration, force stable values.
+  // After mount, use the real media query results.
+  const screenDevice = useMemo<ResponsiveContextValue>(() => {
+    if (!mounted) {
+      return {
+        isDesktopOrLaptop: false,
+        isTablet: false,
+        isMobile: false,
+        isPortrait: false,
+        isRetina: false,
+      };
+    }
 
-  return (
-    <ResponsiveContext.Provider value={screenDevice}>
-      {children}
-    </ResponsiveContext.Provider>
-  );
+    return {
+      isDesktopOrLaptop: mqDesktopOrLaptop,
+      isTablet: mqTablet,
+      isMobile: mqMobile,
+      isPortrait: mqPortrait,
+      isRetina: mqRetina,
+    };
+  }, [mounted, mqDesktopOrLaptop, mqTablet, mqMobile, mqPortrait, mqRetina]);
+
+  return <ResponsiveContext.Provider value={screenDevice}>{children}</ResponsiveContext.Provider>;
 }
