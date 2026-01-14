@@ -40,20 +40,20 @@ export default function Project ({ data }: Props ) {
     }; */
     
     return (
-        <div className="flip-card">
+        <div className="flip-card-container">
                 <div className="flip-card-inner">
                     <div className="flip-card-front">
                         <Card 
                             sx={{ 
-                                width: { xs: 280, sm: 320, md: 345 },
-                                height: { xs: 180, sm: 205, md: 221 },
+                                width: { xs: 280, sm: 280, md: 276, lg: 345 },
+                                height: { xs: 180, sm: 180, md: 177, lg: 221 },
                                 '--Card-padding': '0px', 
                             }}> 
                                 <CardMedia
                                     sx={{
                                        //objectFit: 'cover',
-                                       width: { xs: 280, sm: 320, md: 345 },
-                                       height: { xs: 180, sm: 205, md: 221 },
+                                       width: { xs: 280, sm: 280, md: 276, lg: 345 },
+                                       height: { xs: 180, sm: 180, md: 177, lg: 221 },
                                     }}
                                     component="img"
                                     image={thumbnailImg}
@@ -81,8 +81,8 @@ export default function Project ({ data }: Props ) {
                                         <Typography 
                                              sx={{
                                             //objectFit: 'cover',
-                                            width: { xs: 280, sm: 320, md: 345 },
-                                            height: { xs: 180, sm: 205, md: 221 },
+                                            width: { xs: 280, sm: 280, md: 276, lg: 345 },
+                                            height: { xs: 180, sm: 180, md: 177, lg: 221 },
                                             fontFamily: "'Montserrat', sans-serif",
                                             display: 'flex',
                                             flexWrap: 'wrap',
@@ -104,8 +104,8 @@ export default function Project ({ data }: Props ) {
                     <div className="flip-card-back">
                         <Card
                             sx={{ 
-                                width: { xs: 280, sm: 320, md: 345 },
-                                height: { xs: 180, sm: 205, md: 221 },
+                                width: { xs: 280, sm: 320, md: 345, lg: 345 },
+                                height: { xs: 180, sm: 205, md: 221, lg: 221 },
                                 backgroundColor:  'rgba(0, 0, 0, 0.05)',
                                 '--Card-padding': '0px',
                             }}>

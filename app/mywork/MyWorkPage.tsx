@@ -104,18 +104,14 @@ export default function MyWorkPageView() {
             I build and contribute to end-to-end applications using technologies such as Angular, React, Node.js, and iOS, bridging UX design and engineering to deliver polished, scalable user experiences. I apply user-centered design methodologies—including Design Thinking, Human-Centered Design, and Human-Computer Interaction—while also leveraging AI/ML product development practices to create intelligent interfaces, improve decision-making workflows, and introduce meaningful automation.
             </span>
           </div>
-
-          <div className='portfolio-projects-area'>
-              <div className='portfolio-projects-container' >
-                {projects.map((docSnap) => (
-                  <div key={docSnap.id} className="project" data-aos="fade-up" data-aos-delay="50" data-aos-duration="600">
-                    <Project data={docSnap.data() as ProjectProps} />
-                  </div>
-                ))}
-              </div>
+          <div className={styles.portfolioProjectsContainer}>
+           {projects.map((docSnap) => (
+            <div key={docSnap.id}>
+              <Project data={docSnap.data() as ProjectProps} />
+            </div>
+          ))}
           </div>
         </div>
-
       </div>
     </section>
   );
