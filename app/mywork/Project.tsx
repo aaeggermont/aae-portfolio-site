@@ -20,13 +20,6 @@ export type ProjectProps = {
 
 type Props = { data: ProjectProps };
 
-/**
- * Shared responsive card sizing token.
- * Uses your global theme breakpoints:
- * sm >= 360
- * md >= 768
- * lg >= 1024
- */
 const cardSize = {
   width: { xs: 280, sm: 280, md: 276, lg: 345 },
   height: { xs: 180, sm: 180, md: 177, lg: 221 },
@@ -35,8 +28,28 @@ const cardSize = {
 export default function Project({ data }: Props) {
   const { title, thumbnailImg, description, skills } = data;
 
+  const [isFlipped, setIsFlipped] = React.useState(false);
+
+  const handleToggleFlip = () => setIsFlipped((v) => !v);
+  const handleUnflip = () => setIsFlipped(false);
+
   return (
-    <div className="flip-card-container">
+    <div
+      className={`flip-card-container ${isFlipped ? "isFlipped" : ""}`}
+      onClick={handleToggleFlip}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isFlipped}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleToggleFlip();
+        }
+        if (e.key === "Escape") {
+          handleUnflip();
+        }
+      }}
+    >
       <div className="flip-card-inner">
         {/* FRONT */}
         <div className="flip-card-front">
@@ -93,14 +106,18 @@ export default function Project({ data }: Props) {
         <div className="flip-card-back">
           <Card
             sx={{
-              ...cardSize, // must match front dimensions
+              ...cardSize,
               p: 0,
               backgroundColor: "rgba(0, 0, 0, 0.05)",
               borderRadius: 2,
               overflow: "hidden",
             }}
           >
-            <CardActionArea sx={{ width: "100%", height: "100%" }}>
+            {/* Stop click from bubbling if you later add a link/button inside */}
+            <CardActionArea
+              sx={{ width: "100%", height: "100%" }}
+              onClick={(e) => e.stopPropagation()}
+            >
               <CardContent sx={{ p: 2, height: "100%" }}>
                 <Typography
                   sx={{
