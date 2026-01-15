@@ -21,8 +21,8 @@ export type ProjectProps = {
 type Props = { data: ProjectProps };
 
 const cardSize = {
-  width: { xs: 280, sm: 280, md: 276, lg: 345 },
-  height: { xs: 180, sm: 180, md: 177, lg: 221 },
+  width: { xs: 280, sm: 280, md: 276, lg: 276, xl: 345},
+  height: { xs: 180, sm: 180, md: 177, lg: 177, xl: 221 },
 } as const;
 
 export default function Project({ data }: Props) {
