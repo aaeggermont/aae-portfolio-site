@@ -1,0 +1,98 @@
+@import "@/styles/variables";
+@import "@/styles/mixins";
+
+/**
+ * FLIP CARD
+ * - MUI Card controls width/height responsively through sx
+ * - CSS handles the flip (3D transform)
+ * - Touch devices flip via `.isFlipped` class (set from React state)
+ * - Desktop devices flip via :hover
+ */
+
+.flip-card-container {
+  display: inline-block;
+  perspective: 1000px;
+  cursor: pointer;
+
+  // optional: smooth UX
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Flip inner wrapper */
+.flip-card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+/* ✅ Touch/click flip (controlled by React state) */
+.flip-card-container.isFlipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* ✅ Desktop hover flip (only when hover is real) */
+@media (hover: hover) and (pointer: fine) {
+  .flip-card-container:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Front and Back: stacked perfectly */
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  // Prevents tiny white “edge flickers” on some browsers
+  transform: translateZ(0);
+}
+
+/**
+ * IMPORTANT:
+ * Front must participate in layout so the container has dimensions.
+ * That’s why front is relative, while back stays absolute.
+ */
+.flip-card-front {
+  position: relative;
+}
+
+/* Back side rotated */
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+/**
+ * Optional improvements:
+ * - If you want a subtle shadow around the whole card (not just MUI card)
+ * - Helps make the flip effect feel more “card-like”
+ */
+.flip-card-container {
+  // uncomment if you want extra depth
+  // filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+}
+
+/**
+ * Accessibility:
+ * When the container is keyboard focused, show outline.
+ * (You already added role/button + tabIndex in TSX.)
+ */
+.flip-card-container:focus-visible {
+  outline: 2px solid rgba(7, 76, 95, 0.6);
+  outline-offset: 6px;
+  border-radius: 14px;
+}
+
+/**
+ * Optional: Respect reduced motion user setting
+ */
+@media (prefers-reduced-motion: reduce) {
+  .flip-card-inner {
+    transition: none;
+  }
+}
