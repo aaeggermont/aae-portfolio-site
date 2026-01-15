@@ -12,7 +12,6 @@
   
     margin-left: clamp(1rem, 5vw, 6rem);
     margin-right: clamp(1rem, 5vw, 6rem);
-    background-color: violet;
   }
 
   @media screen and (min-width: $desktop-min) and (max-width: $desktop-max) {
@@ -20,9 +19,6 @@
     margin-left: clamp(1rem, 5vw, 6rem);
     margin-right: clamp(1rem, 5vw, 6rem);
   }
-
-
-
 }
 
 
