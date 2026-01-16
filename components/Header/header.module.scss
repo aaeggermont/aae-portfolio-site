@@ -8,18 +8,6 @@
 	}
 }
 
-.main_menu {
-	ul {
-		li {
-			a {
-				&:hover {
-					text-decoration: none;
-				}
-			}
-		}
-	}
-}
-
 .site_menu {
 	display: flex;
 	justify-content: center;
@@ -57,10 +45,10 @@
       display: block;
       margin: 14px 0;
       padding-bottom: 4px;
-      color: #496A8A;
+      color: $font-color-bold;
       font-weight: 400;
       position: relative;
-      text-decoration: initial;
+      text-decoration: none;
 
       @media #{$desktop}{
 				@include fluid-type(16px, 16px, 18px);
@@ -120,7 +108,7 @@
 		align-items: center;
 		padding: 5px;
 		border-radius: 100%;
-		background: #496A8A;
+		background: $font-color-bold;
     cursor: pointer;
 
 		.menu_icon{
@@ -168,7 +156,7 @@
 	left: 0;
 	padding: 40px 30px;
 	z-index: 9999;
-	background: #496A8A;
+	background: $font-color-bold;
 	transform: translateX(-110%);
 	transition: .5s;
 
@@ -232,7 +220,7 @@
 				display: flex;
 				align-items: center;
 				text-transform: capitalize;
-				color: #fff;
+				color: $white;
 				@include fluid-type(18px, 22px, 24px);
 				font-weight: 600;
 				text-decoration: none;
