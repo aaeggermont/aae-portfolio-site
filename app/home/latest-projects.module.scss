@@ -9,17 +9,16 @@
   background-color: #f4f8fb;
   display: flex;
   align-items: center;
-  justify-content: center;
+  
+  //justify-content: center;
   position: relative;
-  overflow: visible;
+  overflow: visible !important;
 
   .content {
-    @include global-container;
     text-align: center;
     width: 100%;
     position: relative;
     z-index: 1;
-    //padding-bottom: 10%;
   }
 
   .heading {
@@ -28,7 +27,7 @@
     font-weight: 600;
     color: #074c5f;
     margin-bottom: 1.5rem;
-    padding-bottom: 1vh;
+    padding-bottom: 2vh;
 
     @media screen and #{$tablet} {
       margin-left: 1vw;
@@ -48,14 +47,10 @@
     margin: 0 auto 2.5rem;
     display: flex;
     justify-content: center;
-
+  
     .summarySectionText {
-      max-width: 1000px;
-
-      @media screen and #{$mobile} {
-        max-width: 420px;
-      }
-
+      @include global-container;
+  
       @include fluid-type(16px, 18px, 20px);
       font-family: var(--font-figtree);
       color: $font-color-bold;
@@ -66,32 +61,25 @@
   }
 
   .projectsSwiper {
-    
-    margin: 0 auto 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+     
     @media screen and #{$mobile} {
-      height: 500px;
-      max-width: 300px;
-      background-color: lightgreen;
+      height: 440px;      
     }
 
     @media screen and #{$tablet} {
-      background-color: turquoise;
-      height: 500px;
-      max-width: 800px;
+      height: 440px;
+      @include global-container;
     }
 
-    @media screen and (min-width: 1024px) and (max-width: 3800px) {
-      height: 500px;
-      //width: 100%; 
-      max-width: 1100;
-
+    @media screen and #{$desktop-device} {
+      height: 440px;
+      @include global-container;
     }
-
+   
     .swiper-wrapper {
       align-items: stretch;
     }
@@ -99,7 +87,7 @@
     .swiper-slide {
       display: flex;
       justify-content: center;
-      align-items: stretch;
+      //align-items: stretch;
     }
   }
 }
