@@ -11,7 +11,7 @@
 
 
   .content {
-    @include global-container;
+    //@include global-container;
     text-align: center;
     width: 100%;
     position: relative;            // ✅ participate in stacking
