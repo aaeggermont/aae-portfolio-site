@@ -11,7 +11,7 @@
 }
 
 .content {
-  @include global-container;
+  //@include global-container;
   text-align: center;
   width: 100%;
   position: relative;            // ✅ participate in stacking
@@ -132,19 +132,13 @@
   margin: 0 auto 2.5rem;
   display: flex;
   justify-content: center;  // center the text block horizontally
-
-  .summarySectionText{
-    max-width: 1000px;
-    /* Mobile */
-    @media screen and #{$mobile} {
-       max-width: 420px;
-    }
-
+  .summarySectionText {
+    @include global-container;
     @include fluid-type(16px, 18px, 20px);
-      font-family: var(--font-figtree);
-      color: $font-color-bold;
-      line-height: 1.6;
-      opacity: 0.9;
-      text-align: left;
-    }
+    font-family: var(--font-figtree);
+    color: $font-color-bold;
+    line-height: 1.6;
+    opacity: 0.9;
+    text-align: left;
+  }
 }
