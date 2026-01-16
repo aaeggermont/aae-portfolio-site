@@ -43,7 +43,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
       <body>
         <AppRouterCacheProvider options={{ key: "mui" }}>
-          <AppProviders>{children}</AppProviders>
+          <AppProviders>
+            <Header />
+            {children}
+          </AppProviders>
         </AppRouterCacheProvider>
       </body>
     </html>
