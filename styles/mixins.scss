@@ -1,5 +1,5 @@
 // styles/mixins.scss
-@import "./variables";
+@use 'variables' as *;
 
 @mixin global-container {
 
@@ -9,7 +9,6 @@
   }
 
   @media screen and (min-width: $tablet-min) and (max-width: $tablet-max) {
-  
     margin-left: clamp(1rem, 5vw, 6rem);
     margin-right: clamp(1rem, 5vw, 6rem);
   }
