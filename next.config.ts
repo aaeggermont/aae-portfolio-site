@@ -4,9 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   sassOptions: {
     additionalData: `
-      @import "@/styles/variables";
-      @import "@/styles/colors";
-      @import "@/styles/mixins";
+      @use "@/styles/variables" as *;
+      @use "@/styles/colors" as *;
+      @use "@/styles/mixins" as *;
     `,
   },
 };
