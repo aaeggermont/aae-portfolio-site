@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
+import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 
 // Primary UI font
@@ -37,12 +38,15 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
-      lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
-    >
+        lang="en"
+          className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
+        >
       <body>
         <AppRouterCacheProvider options={{ key: "mui" }}>
-          <AppProviders>{children}</AppProviders>
+          <AppProviders>
+            <Header />
+            {children}
+          </AppProviders>
         </AppRouterCacheProvider>
       </body>
     </html>
