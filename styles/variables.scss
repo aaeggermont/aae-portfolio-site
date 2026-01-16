@@ -4,12 +4,9 @@
  */
 
 // Container sizes
-$container-min: 1024px;
+$container-min: 360px;
 $container-max: 1920px;
 
-// Desktop ranges
-$desktop-min: 1024px;
-$desktop-max: 3800px;
 
 // Mobile ranges
 $mobile-min: 360px;
@@ -19,6 +16,17 @@ $mobile-max: 767px;
 $tablet-min: 768px;
 $tablet-max: 1023px;
 
+// Desktop ranges
+$desktop-min: 1024px;
+$desktop-max: 3800px;
+
+
+// Updated Responsive breakpoints for updated components
+$mobile: "(min-width: #{$mobile-min}) and (max-width: #{$mobile-max})";
+$tablet: "(min-width: #{$tablet-min}) and (max-width: #{$tablet-max})";
+$desktop-device: "(min-width: #{$desktop-min}) and (max-width: #{$desktop-max})";
+
+
 // Responsive Variables currnently used in components
 $xs: 'only screen and (min-width: #{$mobile-min}) and (max-width: #{$mobile-max}) ';
 $sm: 'only screen and (min-width: #{$mobile-min}) and (max-width: #{$mobile-max}) ';
@@ -26,12 +34,6 @@ $md:'only screen and (min-width: #{$tablet-min}) and (max-width: #{$tablet-max})
 $lg : 'only screen and (min-width: #{$desktop-min}) and (max-width: #{$desktop-max})';
 $laptop: 'only screen and (min-width: #{$desktop-min}) and (max-width: #{$desktop-max})';
 $desktop: 'only screen and (min-width: #{$desktop-min}) and (max-width: #{$desktop-max})';
-
-// Updated Responsive breakpoints for updated components
-$mobile: "(min-width: #{$mobile-min}) and (max-width: #{$mobile-max})";
-$tablet: "(min-width: #{$tablet-min}) and (max-width: #{$tablet-max})";
-$desktop-device: "(min-width: #{$desktop-min}) and (max-width: #{$desktop-max})";
-
 
 // Font Colors
 $font-color-bold: #074C5F;
