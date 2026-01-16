@@ -92,30 +92,37 @@ function LatestProjects() {
         <Swiper
           className={styles.projectsSwiper}
           centeredSlides={false}
-          slidesPerView={1}
+          slidesPerView={3}
           spaceBetween={10}
-          pagination={{
-            clickable: true,
-          }}
-        modules={[Pagination]}
-        // Breakpoints configuration
-        breakpoints={{
-        // when window width is >= 640px
-        640: {
-          slidesPerView: 1,
-          spaceBetween: 0,
-        },
-        // when window width is >= 768px
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 10,
-        },
-        // when window width is >= 1024px
-        1274: {
-          slidesPerView: 3,
-          spaceBetween: 20,
-        },
-      }}
+          pagination={{ clickable: true, dynamicBullets: true }}
+          modules={[Pagination]}
+          // Breakpoints configuration
+          breakpoints={{
+            // when window width is >= 640px
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+              centeredSlides: false
+            },
+            // when window width is >= 768px
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+              centeredSlides: false
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+              centeredSlides: true
+            },
+            // when window width is >= 1280px
+            1280: {
+              slidesPerView: 3,
+              spaceBetween: 5,
+              centeredSlides: false
+            },
+        }}
         >
           {latestProjectsItems.map((item) => (
             <SwiperSlide key={item.title}>

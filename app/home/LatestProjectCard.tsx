@@ -19,9 +19,9 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
   return (
     <Card
       sx={{
-        width: { xs: "294px", sm: "294px", md: "317px", lg: "352px" },
-        height:  { xs: "420px", sm: "420px", md: "440px", lg: "440px" },
-        borderRadius: 3,
+        width: { xs: "294px", sm: "294px", md: "294px", lg: "294px", xl: "294px" },
+        height:  { xs: "390px", sm: "390px", md: "390px", lg: "390px", xl: "390px" },
+        borderRadius: 1.5,
         boxShadow: "0 4px 14px rgba(0, 0, 0, 0.08)",
         transition: "transform 0.35s ease, box-shadow 0.35s ease, opacity 0.3s ease",
 
@@ -40,33 +40,38 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
         {/* ⭐ Full width image with hover fade handled by parent */}
         <CardMedia
           component="img"
-          className="project-media"
+          //className="project-media"
           image={typeof thumbnailImg === "string" ? thumbnailImg : thumbnailImg.src}
           alt={title}
           sx={{
             display: "block",
-            width: "100%",
-            height: "auto",
+            ///width: "fit-content",
+            //width: { xs: "294px", sm: "294px", md: "317px", lg: "352px" },
+            //width: { xs: "294px", sm: "294px", md: "317px", lg: "352px" },
+            //height: "100%",
+            //maxWidth: { xs: 280, sm: 280, md: 300, lg: 320 },
+            //maxHeight: "fit-content",
+            margin: "0 auto",
             objectFit: "contain",
             transition: "opacity 0.3s ease",  // smooth fade on hover
           }}
         />
 
-        <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
+        <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1, height: "100%", padding: 2.5 }}>
           {/* Title */}
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-start",
               justifyContent: "center",
               textAlign: "center",
-              minHeight: { xs: "3.2rem", sm: "3.6rem", md: "3.6rem" },
+              // DminHeight: { xs: "3.2rem", sm: "3.6rem", md: "4rem", lg: "4.2rem", xl: "4.5rem" },
             }}
           >
             <Typography
               component="h3"
               sx={{
-                fontSize: { xs: "1.05rem", sm: "1.15rem", md: "1.1rem" },
+                fontSize: { xs: "1rem", sm: "1rem", md: "1rem", lg: "1rem", xl: "1rem" },
                 fontWeight: 500,
                 fontFamily: "Poppins, sans-serif",
                 color: "#011114",
@@ -82,7 +87,7 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
               <Typography
                 key={idx}
                 sx={{
-                  fontSize: { xs: "0.95rem", sm: "1rem", md: "0.98rem" },
+                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.9rem", lg: "0.9rem", xl: "0.9rem" },
                   fontWeight: 400,
                   fontFamily: "Poppins, sans-serif",
                   color: "#011114",
