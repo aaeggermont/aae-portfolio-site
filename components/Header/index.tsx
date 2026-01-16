@@ -14,8 +14,8 @@ export default function Header({
   fontColor: fontColorProp,
   logoFontColor: logoFontColorProp,
 }: HeaderProps) {
-  let fontColor = fontColorProp || "#496A8A";
-  const logoFontColor = logoFontColorProp || "#496A8A";
+  let fontColor = fontColorProp || "#074c5f";
+  const logoFontColor = logoFontColorProp || "#074c5f";
 
   if (isDark) {
     fontColor = "#ffffff";
