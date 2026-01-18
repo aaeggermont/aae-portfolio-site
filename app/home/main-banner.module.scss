@@ -1,9 +1,5 @@
 /* app/home/main-banner.module.scss */
 
-@import "@/styles/variables";
-@import "@/styles/mixins";
-
-
 /* Gradient orb from your MUI Box */
 .bgGradientOrb {
   position: absolute;
@@ -140,7 +136,7 @@
     position: relative;
     width: clamp(250px, 26vw, 550px);
     height: clamp(250px, 26vw, 550px);
-    z-index: 2; 
+    z-index: 2;
 
     @media screen and #{$tablet} {
       width: clamp(250px, 35vw, 550px);
