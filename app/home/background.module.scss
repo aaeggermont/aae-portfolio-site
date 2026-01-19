@@ -1,6 +1,3 @@
-@import "@/styles/variables";
-@import "@/styles/mixins";
-
 .fullHeightCard {
   @include fluid-card-size(190px, 260px, 220px, 260px); // example values
   //max-width: 100%;
