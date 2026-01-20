@@ -5,14 +5,10 @@ import React, { useEffect, useState } from "react";
 import styles from "./mywork.module.scss";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Project, { type ProjectProps } from "./Project";
 import fsReference from "../../firebase";
+import PdfModal from "@/app/lib/pdf/PdfModal";
 
 const FLOAT_COUNT = 14;
 
@@ -37,25 +33,38 @@ export default function MyWorkPageView() {
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  // ✅ PDF viewer modal state
+  const [pdfOpen, setPdfOpen] = useState(false);
+  const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
+  const [activePdfTitle, setActivePdfTitle] = useState<string | undefined>(undefined);
+
+  const openPdf = (url: string, title?: string) => {
+    setActivePdfUrl(url);
+    setActivePdfTitle(title);
+    setPdfOpen(true);
+  };
+
+  const closePdf = () => {
+    setPdfOpen(false);
+    setActivePdfUrl(null);
+    setActivePdfTitle(undefined);
+  };
+
   // floating bg images
   useEffect(() => {
-    const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
-      () => {
-        const img =
-          backgroundFloatImages[
-            Math.floor(Math.random() * backgroundFloatImages.length)
-          ];
+    const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(() => {
+      const img =
+        backgroundFloatImages[Math.floor(Math.random() * backgroundFloatImages.length)];
 
-        return {
-          img,
-          top: `${Math.random() * 90}%`,
-          left: `${Math.random() * 90}%`,
-          size: `${40 + Math.random() * 120}px`,
-          delay: `${Math.random() * 5}s`,
-          duration: `${10 + Math.random() * 10}s`,
-        };
-      }
-    );
+      return {
+        img,
+        top: `${Math.random() * 90}%`,
+        left: `${Math.random() * 90}%`,
+        size: `${40 + Math.random() * 120}px`,
+        delay: `${Math.random() * 5}s`,
+        duration: `${10 + Math.random() * 10}s`,
+      };
+    });
 
     setFloaters(generated);
   }, []);
@@ -79,6 +88,7 @@ export default function MyWorkPageView() {
         setIsLoading(false);
         setHasError(false);
         setError(null);
+        console.log("------- Fetched projects:", mapped);
       },
       (err) => {
         console.error(err);
@@ -122,14 +132,13 @@ export default function MyWorkPageView() {
 
           <div className={styles.summarySection}>
             <span className={styles.summarySectionText}>
-              I build and contribute to end-to-end applications using technologies
-              such as Angular, React, Node.js, and iOS, bridging UX design and
-              engineering to deliver polished, scalable user experiences. I apply
-              user-centered design methodologies—including Design Thinking,
-              Human-Centered Design, and Human-Computer Interaction—while also
-              leveraging AI/ML product development practices to create intelligent
-              interfaces, improve decision-making workflows, and introduce
-              meaningful automation.
+              I build and contribute to end-to-end applications using technologies such as
+              Angular, React, Node.js, and iOS, bridging UX design and engineering to
+              deliver polished, scalable user experiences. I apply user-centered design
+              methodologies—including Design Thinking, Human-Centered Design, and Human-
+              Computer Interaction—while also leveraging AI/ML product development practices
+              to create intelligent interfaces, improve decision-making workflows, and
+              introduce meaningful automation.
             </span>
           </div>
 
@@ -139,6 +148,7 @@ export default function MyWorkPageView() {
               Something went wrong loading projects. Please try again later.
             </p>
           )}
+
           {isLoading && !hasError && (
             <p className={styles.loadingText}>Loading projects…</p>
           )}
@@ -147,11 +157,22 @@ export default function MyWorkPageView() {
             <div className={styles.portfolioProjectsContainer}>
               {projects.map((project) => (
                 <div key={project.id}>
-                  <Project data={project.data} />
+                  <Project
+                    data={project.data}
+                    onOpenPdf={(url, title) => openPdf(url, title)}
+                  />
                 </div>
               ))}
             </div>
           )}
+
+          {/* ✅ Render the modal once (outside the list) */}
+          <PdfModal
+            open={pdfOpen}
+            onClose={closePdf}
+            fileUrl={activePdfUrl}
+            title={activePdfTitle}
+          />
         </div>
       </div>
     </section>
