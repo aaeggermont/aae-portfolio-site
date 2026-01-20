@@ -5,33 +5,62 @@ import Typography from "@mui/material/Typography";
 import CardMedia from "@mui/material/CardMedia";
 import Box from "@mui/material/Box";
 import { CardActionArea } from "@mui/material";
+import { useRouter } from "next/navigation";
 import "./Project.scss";
 
 export type ProjectProps = {
   index: number;
   projectId: number;
   projectLink: string;
-  similarProjects: Record<string, unknown>;
+  projectType?: "pdf" | "page" | "external" | string;
+  similarProjects: string[] | Record<string, unknown>;
   skills: string;
   title: string;
   description: string;
   thumbnailImg: string;
+  latestProject?: boolean;
 };
 
-type Props = { data: ProjectProps };
+type Props = {
+  data: ProjectProps;
+  onOpenPdf?: (url: string, title?: string) => void;
+};
 
 const cardSize = {
-  width: { xs: 280, sm: 280, md: 276, lg: 276, xl: 345},
+  width: { xs: 280, sm: 280, md: 276, lg: 276, xl: 345 },
   height: { xs: 180, sm: 180, md: 177, lg: 177, xl: 221 },
 } as const;
 
-export default function Project({ data }: Props) {
-  const { title, thumbnailImg, description, skills } = data;
+export default function Project({ data, onOpenPdf }: Props) {
+  const { title, thumbnailImg, description, skills, projectType, projectLink } = data;
 
+  const router = useRouter();
   const [isFlipped, setIsFlipped] = React.useState(false);
 
   const handleToggleFlip = () => setIsFlipped((v) => !v);
   const handleUnflip = () => setIsFlipped(false);
+
+  const isExternal = (href: string) => /^https?:\/\//i.test(href);
+
+  const handleAction = (e: React.MouseEvent) => {
+    e.stopPropagation(); // don’t flip when activating
+
+    // Decide behavior from Firestore
+    if (projectType === "pdf") {
+      // Open PDF modal using projectLink (e.g. "/pdfs/SpotifyMusicGroupsSession.pdf")
+      onOpenPdf?.(projectLink, title);
+      return;
+    }
+
+    // Otherwise: navigate
+    if (isExternal(projectLink)) {
+      window.open(projectLink, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    // Internal Next route (e.g. "/work/xyz" or "/case-studies/...")
+    router.push(projectLink);
+  };
 
   return (
     <div
@@ -45,9 +74,7 @@ export default function Project({ data }: Props) {
           e.preventDefault();
           handleToggleFlip();
         }
-        if (e.key === "Escape") {
-          handleUnflip();
-        }
+        if (e.key === "Escape") handleUnflip();
       }}
     >
       <div className="flip-card-inner">
@@ -81,7 +108,7 @@ export default function Project({ data }: Props) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                bgcolor: "rgba(0, 0, 0, 0.20)",
+                bgcolor: "rgba(0, 0, 0, 0.2)",
                 color: "white",
                 p: 1.25,
               }}
@@ -113,11 +140,7 @@ export default function Project({ data }: Props) {
               overflow: "hidden",
             }}
           >
-            {/* Stop click from bubbling if you later add a link/button inside */}
-            <CardActionArea
-              sx={{ width: "100%", height: "100%" }}
-              onClick={(e) => e.stopPropagation()}
-            >
+            <CardActionArea sx={{ width: "100%", height: "100%" }} onClick={handleAction}>
               <CardContent sx={{ p: 2, height: "100%" }}>
                 <Typography
                   sx={{
@@ -156,6 +179,10 @@ export default function Project({ data }: Props) {
                   color="text.secondary"
                 >
                   {skills}
+                </Typography>
+
+                <Typography sx={{ mt: 1 }} variant="caption" color="text.secondary">
+                  {projectType === "pdf" ? "Open PDF" : "Open project"}
                 </Typography>
               </CardContent>
             </CardActionArea>
