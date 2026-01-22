@@ -211,7 +211,7 @@ function ContactMePage() {
             </div>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <div><span> Mexico: +52 55 36 71 57 12</span></div>
+              <div><span> Mexico: +55 36 71 57 12</span></div>
             </div>
             <div className={styles.contactRow}>
               <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }}/>
@@ -233,7 +233,7 @@ function ContactMePage() {
 
         {/* Contact Form */}
         <div className={styles.contactFormContainer}>
-            <span> Write Me </span>
+            <span> Send me a Message </span>
             <form ref={form} onSubmit={handleSubmit}>
                 <div className={styles.formFields}>
                   <TextField

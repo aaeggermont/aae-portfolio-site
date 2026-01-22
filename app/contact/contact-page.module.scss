@@ -33,26 +33,19 @@
     display: flex;
     justify-content: center;
   
-
 }
 
   .summarySection {
     width: 100%;
-    margin: 0 auto 2.5rem;
-    //display: flex;
-    //justify-content: center;
-    //align-items: center;
-    
+    margin: 0 auto 2.5rem;    
     text-align: center;
    
     @media screen and #{$mobile} {
         max-width: 420px;
-        //background-color: coral;
       }
 
       @media screen and #{$tablet, $desktop-device} {
         max-width: 520px;
-        //background-color: turquoise;
       }
 
     .summarySectionText {
@@ -68,18 +61,23 @@
 
 // Styles for Form Fields
 .contactFormContainer {
-    margin-top: 2rem;
+    
+    @media screen and #{$tablet, $desktop-device} {
+       margin-top: 2rem;
+    }
+   
+    @media screen and #{$mobile} {
+       margin-top: 3rem;
+    }
+
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
-    //background-color: turquoise;
-
+   
     .formFields{
         display: flex;
         flex-direction: column;
         align-items: center;
-        //background-color: lightcoral;
-        //background-color: #f8cfa2;
         gap: 0.5rem;
     }
 
@@ -171,33 +169,21 @@
   }
 }
 
-
-
-
-
-  .contactInfoContainer {
-    //width: 100%;
+.contactInfoContainer {
     display: flex;
-    //width: 80%;
-    
-
     @media screen and #{$desktop-device, $tablet} {
       flex-direction: row;
       justify-content: center;
       align-items: center;
       margin-top: 5vh;
-      //background-color: lightseagreen;
       gap: 5rem;
-
     }
 
     @media screen and #{$mobile} {
       flex-direction:column-reverse;
       align-items: center;
       justify-content: center;
-      
-      //padding-top: 1vh;
-      row-gap: 3rem;
+      row-gap: 1rem;
     }
 
     .writeMeContainer {
@@ -213,7 +199,6 @@
           flex-direction: column;
           align-items: center;
           align-content: center;
-        //gap: 5rem;
         }
 
         span {
@@ -222,7 +207,6 @@
           @include fluid-type(18px, 20px, 22px);
           color: #074C5F;
           padding-bottom: 1rem;
-
         }
 
         form {
@@ -242,19 +226,12 @@
         }
     }
 
-    .writemeContainer .form-field {
-        //padding: 1rem;
-        //padding-left: 2rem;
-    }
-
     .writemeContainer .formFieldSubmit {
         text-align: center;
     }
 
     .contacMeContainer {
-        display: flex;
-        //background-color: yellow;
-       
+        display: flex;       
         @media screen and #{$desktop-device, $tablet} {
           width: 30%;
           flex-direction: column;
@@ -272,8 +249,7 @@
           justify-content: center;
           gap: 1rem;
         }
-
-
+        
         .contactMeSectionTitle {
           width: 100%;
           font-family: var(--font-poppins);
