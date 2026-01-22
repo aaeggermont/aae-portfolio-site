@@ -58,34 +58,35 @@
   }
 
   .projectsSwiper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-     
-    @media screen and #{$mobile} {
-      height: 440px;      
-    }
+   height: 440px;
+   @include global-container;    
 
-    @media screen and #{$tablet} {
-      height: 440px;
-      @include global-container;
-    }
-
-    @media screen and #{$desktop-device} {
-      height: 440px;
-      @include global-container;
-    }
-   
-    .swiper-wrapper {
+    :global(.swiper-wrapper) {
       align-items: stretch;
     }
 
-    .swiper-slide {
+    :global(.swiper-slide) {
       display: flex;
       justify-content: center;
-      //align-items: stretch;
     }
+  }
+}
+
+.projectSlide {
+  // Your design card width
+  width: 294px;
+
+  // If you want slightly wider on larger screens, you can do:
+  @media screen and #{$desktop-device} {
+    width: 294px;
+  }
+
+  @media screen and #{$tablet} {
+    width: 294px;
+  }
+
+  @media screen and #{$mobile} {
+    width: 294px; // or 280px if needed
   }
 }
 
