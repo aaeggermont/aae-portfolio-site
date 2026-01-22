@@ -23,7 +23,7 @@ export default function QrFloatingCard({
   href,
 }: Props) {
   const content = (
-    <Paper className={`${styles.card} qrfloatingcard`} elevation={1}>
+    <Paper className={`${styles.card} qrfloatingcard`} elevation={0}>
       {/* Floating accents */}
       <span className={styles.floatA} aria-hidden="true" />
       <span className={styles.floatB} aria-hidden="true" />

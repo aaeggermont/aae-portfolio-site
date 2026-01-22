@@ -68,9 +68,31 @@
 
 // Styles for Form Fields
 .contactFormContainer {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+    //background-color: turquoise;
+
+    .formFields{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        //background-color: lightcoral;
+        //background-color: #f8cfa2;
+        gap: 0.5rem;
+    }
+
+    span {
+        font-family: var(--font-poppins);
+        font-weight: 500;
+        @include fluid-type(18px, 20px, 32px);
+        color: #074C5F;
+        padding-bottom: 0.5rem;
+    }
 
   .formActions {
-    margin-top: 0.5rem;
+    margin-top: 1.5rem;
   }
 
   .submitButton {
@@ -145,7 +167,7 @@
     font-weight: 600;
     @include fluid-type(13px, 14px, 15px);
     color: #074C5F;
-    line-height: 1;       // so it sits dead center
+    line-height: 2; 
   }
 }
 
