@@ -23,14 +23,14 @@ export default function QrFloatingCard({
   href,
 }: Props) {
   const content = (
-    <Paper className={`${styles.card} qrfloatingcard`} elevation={2}>
+    <Paper className={`${styles.card} qrfloatingcard`} elevation={1}>
       {/* Floating accents */}
       <span className={styles.floatA} aria-hidden="true" />
       <span className={styles.floatB} aria-hidden="true" />
       <span className={styles.floatC} aria-hidden="true" />
 
       {/* QR container */}
-      <Box className={styles.qrFrame} sx={{ width: size + 28 }}>
+      <Box className={styles.qrFrame} sx={{ width: size  }}>
         <Box
           className={styles.qrInner}
           sx={{

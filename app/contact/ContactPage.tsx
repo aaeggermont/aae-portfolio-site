@@ -196,14 +196,14 @@ function ContactMePage() {
       </div>
 
       <div className={styles.content}>
-        <h2 className={styles.heading}>Contact Me</h2>
+        <h2 className={styles.heading}>Get in Touch</h2>
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}> I´m always open to discussing exploring new projects, developments, and partnerships. </span>
         </div>
 
         {/* Contact form and contact details */}
        
-        <div className={styles.contactFormContainer}>
+        <div className={styles.contactInfoContainer}>
 
 
             {/* Contact Form 
@@ -292,10 +292,14 @@ function ContactMePage() {
             </div>
           </div>
 
-          <QrFloatingCard
-            src="/images/qr/AAEQRImage.png"
-            title="Scan me"
-            subtitle="Open my portfolio on mobile" />
+<QrFloatingCard
+  src="/images/qr/AAEQRImage.png"
+  title="Scan me"
+  subtitle="Open my portfolio on mobile"
+ 
+  magnify={1.3}
+/>
+
         </div>
         
       </div>
