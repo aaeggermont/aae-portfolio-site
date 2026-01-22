@@ -19,6 +19,7 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
   return (
     <Card
       sx={{
+        //width: "100%",
         width: { xs: "294px", sm: "294px", md: "294px", lg: "294px", xl: "294px" },
         height:  { xs: "390px", sm: "390px", md: "390px", lg: "390px", xl: "390px" },
         borderRadius: 1.5,
@@ -40,17 +41,11 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
         {/* ⭐ Full width image with hover fade handled by parent */}
         <CardMedia
           component="img"
-          //className="project-media"
+          className="project-media"
           image={typeof thumbnailImg === "string" ? thumbnailImg : thumbnailImg.src}
           alt={title}
           sx={{
             display: "block",
-            ///width: "fit-content",
-            //width: { xs: "294px", sm: "294px", md: "317px", lg: "352px" },
-            //width: { xs: "294px", sm: "294px", md: "317px", lg: "352px" },
-            //height: "100%",
-            //maxWidth: { xs: 280, sm: 280, md: 300, lg: 320 },
-            //maxHeight: "fit-content",
             margin: "0 auto",
             objectFit: "contain",
             transition: "opacity 0.3s ease",  // smooth fade on hover
@@ -65,7 +60,6 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
               alignItems: "flex-start",
               justifyContent: "center",
               textAlign: "center",
-              // DminHeight: { xs: "3.2rem", sm: "3.6rem", md: "4rem", lg: "4.2rem", xl: "4.5rem" },
             }}
           >
             <Typography
