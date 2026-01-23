@@ -1,9 +1,9 @@
 'use client'
 import Typewriter from 'typewriter-effect';
-import styles from './aboutme_profile.module.scss'
+import styles from './aboutme_intro.module.scss'
 import { AboutMeData } from '../../data/aboutme-data';
-import { AboutMeMobileImg } from './AboutMeMobileImg';
-import { AboutMeDesktopTabletImg } from './AboutMeDesktopTabletImg';
+import { AboutMeMobileImg } from './AboutMeIntroMobileImg';
+import { AboutMeDesktopTabletImg } from './AboutMeIntroDesktopTabletImg';
 
 function TypewriterComponent() {
   return (

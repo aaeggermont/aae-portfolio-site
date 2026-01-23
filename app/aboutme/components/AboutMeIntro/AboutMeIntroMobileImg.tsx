@@ -1,5 +1,5 @@
 import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
-import styles from './aboutme_profile.module.scss';
+import styles from './aboutme_intro.module.scss';
 import { AboutMeData } from '../../data/aboutme-data';
 import Image from 'next/image';
 
