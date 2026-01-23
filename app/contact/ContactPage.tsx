@@ -4,17 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./contact-page.module.scss";
 import Image from "next/image";
 import { backgroundFloatImages } from "../home/background-float-images";
-import TextField from '@mui/material/TextField';
-import FormControl, { useFormControl } from '@mui/material/FormControl';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import emailjs from '@emailjs/browser';
 import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
-
-//import QrFloatingCard from "@/app/";
+import ContactInfo from "@/components/ContactInfo/ContactInfo";
+import SendMessage from "@/components/SendMessage/SendMessage";
 
 const FLOAT_COUNT = 14;
 
@@ -203,100 +196,15 @@ function ContactMePage() {
 
         {/* Contact form and contact details */}
        
-        <div className={styles.contactInfoContainer}>
-          <div className={styles.contacMeContainer}>
-            <div className={styles.contactRow}>
-              <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-               <div><span> USA: +206 556 8918</span></div>    
-            </div>
-            <div className={styles.contactRow}>
-              <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <div><span> Mexico: +55 36 71 57 12</span></div>
-            </div>
-            <div className={styles.contactRow}>
-              <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }}/>
-              <div><span> aaeggermont@outlook.com</span></div>
-            </div>
-            <div className={styles.contactRow}>
-              <LinkedInIcon onClick={handleLinkedIn} sx={{ color: '#02232c' }} style={{ fontSize: 40 }} /> 
-              <div><span onClick={handleLinkedIn}> LinkedIn</span></div>
-            </div>
-          </div>
-
+        <div className={styles.contactInfoContainer}>          
+          <ContactInfo />
           <QrFloatingCard
             src="/images/qr/AAEQRImage.png"
             title="Scan me"
             subtitle="Open my portfolio on mobile"
           />
-
         </div>
-
-        {/* Contact Form */}
-        <div className={styles.contactFormContainer}>
-            <span> Send me a Message </span>
-            <form ref={form} onSubmit={handleSubmit}>
-                <div className={styles.formFields}>
-                  <TextField
-                    sx={{
-                        width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
-                    }}
-                    required
-                    type="text"
-                    name="from_name"
-                    label="Your name"
-                    variant="filled"
-                    onChange={e => setName(e.target.value)}
-                  />
-                
-                  <TextField
-                    required
-                    sx={{
-                        width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
-                    }}
-                    id="outlined-required"
-                    label="Your email"
-                    type="email"
-                    name="user_email"
-                    defaultValue=""
-                    variant="filled"
-                    onChange={e => setEmail(e.target.value)}
-                      />
-            
-                  <TextField
-                    required
-                    multiline
-                    rows={4}
-                    sx={{
-                          width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
-                    }}
-                    id="outlined-required"
-                    label="Your message"
-                    name="message"
-                    defaultValue=""
-                    variant="filled"
-                    onChange={e => setMessage(e.target.value)}
-                  />
-                </div>
-                <div className={styles.formActions}>
-                  <button
-                    type="submit"
-                      disabled={isSending}
-                    className={styles.submitButton}
-                  >
-
-                  {isSending && (
-                    <span className={styles.spinner} aria-hidden="true" />
-                  )}
-
-                    <span className={styles.submitLabel}>
-                      {isSending ? "Sending…" : "Send message"}
-                    </span>
-                  </button>
-                </div>
-            </form>
-      </div>
-
-        
+        <SendMessage />        
       </div>
       {toast && (
         <div
