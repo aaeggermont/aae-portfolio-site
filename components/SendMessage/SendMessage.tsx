@@ -4,9 +4,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./send-message.module.scss"
 import TextField from '@mui/material/TextField';
+import emailjs from '@emailjs/browser';
 
 export default function SendMessage() {
-  const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
