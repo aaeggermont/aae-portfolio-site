@@ -5,6 +5,7 @@ import styles from "./aboutme.module.scss";
 // Views
 import { AboutMeIntro } from './components/AboutMeIntro';
 import { AboutMeLocation } from './components/AboutMeLocation';
+import { AboutMeEngineeringSkills } from './components/AboutMeEngineeringSkills';
 
 export default function AboutMePage() {
   return <>
@@ -12,6 +13,7 @@ export default function AboutMePage() {
       <section className={styles.content}>
         <AboutMeIntro />
         <AboutMeLocation />
+        <AboutMeEngineeringSkills />
       </section>
     </div>
   </>
