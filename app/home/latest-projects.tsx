@@ -92,7 +92,7 @@ function LatestProjects() {
         <Swiper
           className={styles.projectsSwiper}
           centeredSlides={false}
-          slidesPerView={3}
+          slidesPerView={"auto"}
           spaceBetween={10}
           pagination={{ clickable: true, dynamicBullets: true }}
           modules={[Pagination]}
