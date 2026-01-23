@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import MapImg from './maps.png';
 
 export function MaspMdLg() {
@@ -5,7 +6,7 @@ export function MaspMdLg() {
     <div className="maps">
       <h3 className='maps-title'>I´m from 2 different worlds ...</h3>
       <div className="maps-img">
-        <img src={MapImg} alt="map" />
+        <Image src={MapImg} alt="map" />
       </div>
       <div className="maps-info">
         <div>

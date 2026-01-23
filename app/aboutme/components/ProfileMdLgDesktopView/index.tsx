@@ -7,11 +7,11 @@ import { ProfileIntroMdLg } from './ProfileIntro'
 
 export function ProfileMdLgDesktopView() {
   return <>
- 
-      <ProfileIntroMdLg />
-    {/*
-      <MaspMdLg />
 
+      <ProfileIntroMdLg />
+
+      <MaspMdLg />
+    {/*
       <div className="qualifications">
         <h3 className="qualifications-title">Engineering Skills</h3>
         <div className="qualifications-wrapper">
