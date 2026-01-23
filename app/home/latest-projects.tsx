@@ -102,19 +102,19 @@ function LatestProjects() {
             640: {
               slidesPerView: 1,
               spaceBetween: 0,
-              centeredSlides: false
+              centeredSlides: true
             },
             // when window width is >= 768px
             768: {
               slidesPerView: 2,
               spaceBetween: 10,
-              centeredSlides: false
+              centeredSlides: true
             },
             // when window width is >= 1024px
             1024: {
-              slidesPerView: 2,
+              slidesPerView: 3,
               spaceBetween: 10,
-              centeredSlides: true
+              centeredSlides: false
             },
             // when window width is >= 1280px
             1280: {
