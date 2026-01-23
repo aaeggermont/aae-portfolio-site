@@ -12,6 +12,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import emailjs from '@emailjs/browser';
+import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
 
 const FLOAT_COUNT = 14;
 
@@ -193,7 +194,7 @@ function ContactMe() {
       </div>
 
       <div className={styles.content}>
-        <h2 className={styles.heading}>Contact Me</h2>
+        <h2 className={styles.heading}>Get in Touch</h2>
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}> I´m always open to discussing exploring new projects, developments, and partnerships. </span>
         </div>
@@ -201,73 +202,10 @@ function ContactMe() {
         {/* Contact form and contact details */}
        
         <div className={styles.contactFormContainer}>
-            <div className={styles.writeMeContainer}>
-                <span> Write Me </span>
-                <form ref={form} onSubmit={handleSubmit}>
-                    <div className={styles.formField}>
-                      <TextField
-                        sx={{
-                            width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
-                        }}
-                        required
-                        type="text"
-                        name="from_name"
-                        label="Your name"
-                        variant="filled"
-                        onChange={e => setName(e.target.value)}
-                      />
-                    </div>
-                    <div className='form-field'>
-                    <TextField
-                      required
-                      sx={{
-                          width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
-                      }}
-                      id="outlined-required"
-                      label="Your email"
-                      type="email"
-                      name="user_email"
-                      defaultValue=""
-                      variant="filled"
-                      onChange={e => setEmail(e.target.value)}
-                        />
-                    </div>
-                    <div className='form-field'>
-                      <TextField
-                        required
-                        multiline
-                        rows={4}
-                        sx={{
-                             width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
-                        }}
-                        id="outlined-required"
-                        label="Your message"
-                        name="message"
-                        defaultValue=""
-                        variant="filled"
-                        onChange={e => setMessage(e.target.value)}
-                      />
-                    </div>
-                    <div className={styles.formActions}>
-                      <button
-                        type="submit"
-                         disabled={isSending}
-                        className={styles.submitButton}
-                      >
-
-                      {isSending && (
-                        <span className={styles.spinner} aria-hidden="true" />
-                      )}
-
-                        <span className={styles.submitLabel}>
-                         {isSending ? "Sending…" : "Send message"}
-                        </span>
-                      </button>
-                    </div>
-                </form>
-          </div>
+          <QrFloatingCard
+              src="/images/qr/AAEQRImage.png"
+              title="Scan me"/>
           <div className={styles.contacMeContainer}>
-            <div className={styles.contactMeSectionTitle}>Contact Me</div>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
                <div><span> USA: +206 556 8918</span></div>    
@@ -286,7 +224,6 @@ function ContactMe() {
             </div>
           </div>
         </div>
-        
       </div>
   
       {toast && (

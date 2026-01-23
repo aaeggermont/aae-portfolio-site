@@ -88,50 +88,52 @@ function LatestProjects() {
             AI-driven thinking.
           </span>
         </div>
-          <Swiper
-            className={styles.projectsSwiper}
-            modules={[Pagination]}
-            pagination={{ clickable: true, dynamicBullets: true }}
-            watchOverflow
-            //slidesPerView="auto"
-            spaceBetween={16}
-            centeredSlides={false}
-            centeredSlidesBounds
-            centerInsufficientSlides
-            breakpoints={{
-              0: {
-                slidesPerView: 1,
-                spaceBetween: 12,
-                centeredSlides: false,
-              },
-              768: {
-                slidesPerView: 2,
-                spaceBetween: 10,
-                centeredSlides: false,
-              },
-              1024: {
-                slidesPerView: 3,
-                spaceBetween: 16,
-                centeredSlides: false,
-              },
-              1280: {
-                slidesPerView: 3,
-                spaceBetween: 20,
-                centeredSlides: true,
-              },
-            }}
-          >
-            {latestProjectsItems.map((item) => (
-              <SwiperSlide key={item.title}  style={{ width: 294 }}   className={styles.projectSlide}>
-                <LatestProjectCard
-                  title={item.title}
-                  description={item.description}
-                  
-                  thumbnailImg={item.img}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
+
+        <Swiper
+          className={styles.projectsSwiper}
+          centeredSlides={false}
+          slidesPerView={"auto"}
+          spaceBetween={10}
+          pagination={{ clickable: true, dynamicBullets: true }}
+          modules={[Pagination]}
+          // Breakpoints configuration
+          breakpoints={{
+            // when window width is >= 640px
+            640: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+              centeredSlides: true
+            },
+            // when window width is >= 768px
+            768: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+              centeredSlides: true
+            },
+            // when window width is >= 1024px
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 10,
+              centeredSlides: false
+            },
+            // when window width is >= 1280px
+            1280: {
+              slidesPerView: 3,
+              spaceBetween: 5,
+              centeredSlides: false
+            },
+        }}
+        >
+          {latestProjectsItems.map((item) => (
+            <SwiperSlide key={item.title}>
+              <LatestProjectCard
+                title={item.title}
+                description={item.description}
+                thumbnailImg={item.img}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </section>
   );
