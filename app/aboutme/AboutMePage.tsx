@@ -6,6 +6,7 @@ import styles from "./aboutme.module.scss";
 import { AboutMeIntro } from './components/AboutMeIntro';
 import { AboutMeLocation } from './components/AboutMeLocation';
 import { AboutMeEngineeringSkills } from './components/AboutMeEngineeringSkills';
+import { AboutMeDesignSkills } from './components/AboutMeDesignSkills';
 
 export default function AboutMePage() {
   return <>
@@ -14,6 +15,7 @@ export default function AboutMePage() {
         <AboutMeIntro />
         <AboutMeLocation />
         <AboutMeEngineeringSkills />
+        <AboutMeDesignSkills />
       </section>
     </div>
   </>
