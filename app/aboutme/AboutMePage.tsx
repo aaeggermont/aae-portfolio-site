@@ -7,15 +7,17 @@ import { AboutMeIntro } from './components/AboutMeIntro';
 import { AboutMeLocation } from './components/AboutMeLocation';
 import { AboutMeEngineeringSkills } from './components/AboutMeEngineeringSkills';
 import { AboutMeDesignSkills } from './components/AboutMeDesignSkills';
+import { AboutMeMore } from './components/AboutMeMore';
 
 export default function AboutMePage() {
   return <>
     <div className={styles.aboutMePage}>
-      <section className={styles.content}>
+      <section className={styles.aboutMePageContent}>
         <AboutMeIntro />
         <AboutMeLocation />
         <AboutMeEngineeringSkills />
         <AboutMeDesignSkills />
+        <AboutMeMore />
       </section>
     </div>
   </>
