@@ -25,9 +25,9 @@
   font-weight: 600;
   color: #074C5F;
   margin-bottom: 2rem;
-
+  display: inline-block;
   //background-color: aqua;
-  padding-bottom: 2vh;
+  //padding-bottom: 2vh;
 
   @media screen and #{$tablet} {
     margin-left: 1vw;
@@ -141,4 +141,18 @@
     opacity: 0.9;
     text-align: left;
   }
+}
+
+/* Style the built-in cursor */
+:global(.Typewriter__cursor) {
+  display: inline-block;
+  margin-left: 0.08em;
+  font-size: 1em;
+  color: #074C5F;
+  animation: twBlink 1s steps(2, start) infinite;
+}
+
+@keyframes twBlink {
+  0%, 49%   { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }

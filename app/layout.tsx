@@ -5,6 +5,7 @@ import "../styles/globals.scss";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import { Aos } from '@/aos';
 
 // Primary UI font
 const poppins = Poppins({
@@ -38,9 +39,10 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
-        lang="en"
-          className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
-        >
+      lang="en"
+        className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
+      >
+      <Aos/>
       <body>
         <AppRouterCacheProvider options={{ key: "mui" }}>
           <AppProviders>

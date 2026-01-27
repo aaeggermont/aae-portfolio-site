@@ -1,0 +1,138 @@
+.timeline {
+  &Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  &Info {
+    display: grid;
+    grid-template-columns: 1fr 140px 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  }
+
+  &Image {
+    margin-bottom: 20px;
+  }
+
+  &Company {
+    padding: 20px 0;
+
+    &Position {
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      padding-bottom: 10px;
+    }
+
+    &Name {
+      font-size: 18px;
+      line-height: 100%;
+      letter-spacing: 0%;
+      padding-bottom: 10px;
+    }
+
+    &Location {
+      font-size: 18px;
+      line-height: 100%;
+      letter-spacing: 0%;
+    }
+  }
+
+  &Details {
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0%;
+    padding: 20px 0;
+  }
+
+  &Period {
+    width: 140px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &_startDot,
+    &_endDot{
+      width: 16px;
+      height: 16px;
+      background: #4D8390;
+      border-radius: 16px;
+    }
+
+    &_line {
+      height: calc(100% - 32px);
+      width: 2px;
+      background: #4D8390;
+    }
+
+    &Mobile {
+      display: none;
+    }
+  }
+
+  @media #{$sm} {
+    &Info {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    &Company {
+      order: 1;
+    }
+
+    &Details {
+      order: 2;
+    }
+
+    &Timeline {
+      display: none;
+
+      &Mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: 62px;
+        flex-shrink: 0;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
+.personal-time {
+  &-content {
+    display: flex;
+    gap: 100px;
+  }
+
+  &-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &-img {
+    margin-bottom: 50px;
+  }
+
+  &-title {
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+  }
+
+  @media #{$sm} {
+    &-content {
+      flex-direction: column;
+    }
+  }
+}

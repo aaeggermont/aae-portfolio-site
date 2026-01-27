@@ -1,0 +1,27 @@
+.aboutmeMore{
+  display: flex;
+  flex-direction: column;
+
+  &Cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 32px;
+    grid-row-gap: 0px;
+  }
+
+  &Section {
+    margin-top: 100px;
+  }
+
+  @media #{$sm} {
+    align-items: center;
+
+    &Cards {
+      width: 295px;
+      grid-template-columns: repeat(2, 1fr);
+      grid-column-gap: 15px;
+      grid-row-gap: 15px;
+    }
+  }
+}
