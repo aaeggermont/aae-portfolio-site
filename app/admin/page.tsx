@@ -27,6 +27,7 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { signOut } from "firebase/auth";
 
 type AccessRequest = {
   id: string; // doc id
@@ -139,6 +140,12 @@ export default function AdminAccessPage() {
       unsubApproved();
     };
   }, []);
+
+  const onLogout = async () => {
+    await signOut(auth);
+    // optional: hard redirect so auth state fully resets in UI
+    window.location.href = "/";
+};
 
   const approveRequest = async (req: AccessRequest) => {
     console.info(
@@ -296,11 +303,18 @@ export default function AdminAccessPage() {
       <Stack spacing={2}>
         <Typography variant="h4" sx={{ fontWeight: 800 }}>
           Admin · Project Access
+
+                  <Button variant="outlined" color="inherit" onClick={onLogout}>
+            Sign out
+        </Button>
         </Typography>
+
+
 
         <Typography variant="body2" color="text.secondary">
           Approve/revoke reviewers and control per-project allowlists.
         </Typography>
+
 
         <Divider />
 
