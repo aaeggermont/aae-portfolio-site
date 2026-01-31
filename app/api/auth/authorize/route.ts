@@ -5,10 +5,11 @@ import { getAdmin } from "@/app/lib/firebase/admin";
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const slug = url.searchParams.get("slug");
+  const cookieStore = await cookies();
 
   if (!slug) return NextResponse.json({ ok: false, reason: "missing_slug" }, { status: 400 });
 
-  const session = cookies().get("session")?.value;
+  const session = cookieStore.get("session")?.value;
   if (!session) return NextResponse.json({ ok: false, reason: "no_session" }, { status: 401 });
 
   const { auth, db } = getAdmin();

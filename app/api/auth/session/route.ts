@@ -13,8 +13,9 @@ export async function POST(req: Request) {
 
   try {
     const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+    const cookieStore = await cookies();
 
-    cookies().set("session", sessionCookie, {
+    cookieStore.set("session", sessionCookie, {
       httpOnly: true,
       secure: true,
       sameSite: "lax",
@@ -29,7 +30,8 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE() {
-  cookies().set("session", "", {
+  const cookieStore = await cookies();
+  cookieStore.set("session", "", {
     httpOnly: true,
     secure: true,
     sameSite: "lax",
