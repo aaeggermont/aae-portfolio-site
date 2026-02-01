@@ -7,7 +7,7 @@ import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Project, { type ProjectProps } from "./Project";
-import fsReference from "../../firebase";
+import { db } from "@/firebase";
 import PdfModal from "@/app/lib/pdf/PdfModal";
 
 const FLOAT_COUNT = 14;
@@ -72,7 +72,7 @@ export default function MyWorkPageView() {
   // Firestore subscription
   useEffect(() => {
     const entriesQuery = query(
-      collection(fsReference, "projects_data"),
+      collection(db, "projects_data"),
       orderBy("index", "asc")
     );
 
@@ -88,7 +88,6 @@ export default function MyWorkPageView() {
         setIsLoading(false);
         setHasError(false);
         setError(null);
-        console.log("------- Fetched projects:", mapped);
       },
       (err) => {
         console.error(err);

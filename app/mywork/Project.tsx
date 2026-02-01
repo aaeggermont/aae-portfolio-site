@@ -11,8 +11,15 @@ import "./Project.scss";
 export type ProjectProps = {
   index: number;
   projectId: number;
+
+  // legacy (old React app)
   projectLink: string;
   projectType?: "pdf" | "page" | "external" | string;
+
+  // new Next app routing
+  projectLinkV2?: string;
+  projectTypeV2?: "pdf" | "page" | "external" | string;
+
   similarProjects: string[] | Record<string, unknown>;
   skills: string;
   title: string;
@@ -42,25 +49,31 @@ export default function Project({ data, onOpenPdf }: Props) {
 
   const isExternal = (href: string) => /^https?:\/\//i.test(href);
 
-  const handleAction = (e: React.MouseEvent) => {
+   const handleAction = (e: React.MouseEvent) => {
     e.stopPropagation(); // don’t flip when activating
 
-    // Decide behavior from Firestore
-    if (projectType === "pdf") {
-      // Open PDF modal using projectLink (e.g. "/pdfs/SpotifyMusicGroupsSession.pdf")
-      onOpenPdf?.(projectLink, title);
+    // ✅ Prefer V2 fields for the new Next SSR site
+    const type = data.projectTypeV2 ?? data.projectType ?? "page";
+    const link = data.projectLinkV2 ?? data.projectLink;
+
+    if (!link) return;
+
+    // ✅ PDF opens modal
+    if (type === "pdf") {
+      onOpenPdf?.(link, title);
       return;
     }
 
-    // Otherwise: navigate
-    if (isExternal(projectLink)) {
-      window.open(projectLink, "_blank", "noopener,noreferrer");
+    // ✅ External opens new tab
+    if (type === "external" || isExternal(link)) {
+      window.open(link, "_blank", "noopener,noreferrer");
       return;
     }
 
-    // Internal Next route (e.g. "/work/xyz" or "/case-studies/...")
-    router.push(projectLink);
+    // ✅ Internal Next route (this will push "/work/automatic-seater-assignments")
+    router.push(link);
   };
+
 
   return (
     <div
