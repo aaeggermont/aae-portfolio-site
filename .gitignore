@@ -49,4 +49,4 @@ next-env.d.ts
 media-assets/*
 
 # scripts
-# /scripts
+/scripts
