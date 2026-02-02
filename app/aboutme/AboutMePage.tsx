@@ -11,43 +11,23 @@ import { ProfileMdLgDesktopView } from "@/app/aboutme/components/ProfileMdLgDesk
 import { ProfileSmSxView } from "@/app/aboutme/components/ProfileSmSxView";
 
 
+// Views
+import { AboutMeIntro } from './components/AboutMeIntro';
+import { AboutMeLocation } from './components/AboutMeLocation';
+import { AboutMeEngineeringSkills } from './components/AboutMeEngineeringSkills';
+import { AboutMeDesignSkills } from './components/AboutMeDesignSkills';
+import { AboutMeMore } from './components/AboutMeMore';
+
 export default function AboutMePage() {
-  const screen = useResponsive();
-
-  // Avoid hydration mismatch by only rendering
-  // responsive-dependent UI after mount
-  const [mounted, setMounted] = useState(false);
-    useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if ( screen.isMobile ) {
-    console.log("Rendering for Mobile");
-    return (
-      <>
-        {mounted && (
-          <div className={styles.aboutMePage}>
-            <section className={styles.content}>
-              <p> Mobile Device: {screen.isMobile.toString()} </p>
-              <ProfileSmSxView />
-            </section>
-          </div>
-         
-           )}
-      </>
-    );
-  } else if ( screen.isTablet ||  screen.isDesktopOrLaptop) {
-    console.log("Rendering for Tablet or laptop");
-      return (
-        <>
-          {mounted && (
-            <div className={styles.aboutMePage}>
-              <section className={styles.content}>
-                <p> Desktop/Tablet Device: {screen.isTablet.toString()} </p>
-                <ProfileMdLgDesktopView />
-              </section>
-             </div>
-           )}
-        </>);
-  }
+  return <>
+    <div className={styles.aboutMePage}>
+      <section className={styles.aboutMePageContent}>
+        <AboutMeIntro />
+        <AboutMeLocation />
+        <AboutMeEngineeringSkills />
+        <AboutMeDesignSkills />
+        <AboutMeMore />
+      </section>
+    </div>
+  </>
 }

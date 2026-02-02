@@ -1,0 +1,75 @@
+.aboutme {
+  &Intro {
+    margin-bottom: 80px;
+
+    &Container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding-top: 26px;
+      gap: 3rem;
+
+      @media #{$xs}, #{$sm} {
+        flex-direction: column-reverse;
+      }
+    }
+
+    &Info {
+      width: 60%;
+
+      @media #{$xs}, #{$sm} {
+        width: 100%;
+      }
+    }
+
+    &Title {
+      font-family: var(--font-montserrat);
+      @include fluid-type(20px, 26px, 26px);
+      font-weight: bold;
+      color: $font-color-bold;
+      margin-bottom: 1rem;
+    }
+
+    &Desc {
+      p {
+        color: $font-color-bold;
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+
+    &Img {
+      width: 40%;
+      display: flex;
+      justify-content: center;
+      align-items:flex-start;
+
+      @media #{$tablet} {
+        width: 40%;
+      }
+
+      @media #{$xs}, #{$sm} {
+        align-items: center;
+        width: 70%;
+      }
+    }
+
+    &BannerPhoto {
+        position: relative;
+        width: clamp(240px, 20vw, 300px);
+        aspect-ratio: 3 / 4; // portrait ratio
+        z-index: 2;
+
+
+        @media screen and #{$tablet} {
+          width: clamp(140px, 30vw, 240px);
+        }
+    }
+
+    &ProfilePhoto {
+      object-fit: cover;      // crop nicely, no stretching
+      border-radius: 18px;    // optional: soften corners
+    }
+  }
+}

@@ -1,5 +1,3 @@
-import type { StaticImageData } from "next/image";
-
 import AkamaiLogo from '../images/akamai_technologies_logo.jpeg';
 import CBSLogo from '../images/cbs_interactive_logo.jpeg';
 import DisneyLogo from '../images/the_walt_disney_company_logo.jpeg';
@@ -9,6 +7,7 @@ import EmersonLogo from '../images/emerson_college_logo.jpeg';
 import UWLogo from '../images/university_of_washington_logo.jpeg';
 import MITLogo from '../images/mit-logo.jpg';
 import AAEPhoto from '../images/AAEPhoto.png';
+import { TimelinePeriodProps } from '@/components/Timeline';
 
 export const AboutMeData  =  {
   pageTitle: "Hello, I'm Antonio",
@@ -88,10 +87,17 @@ export const AboutMeData  =  {
       },
     ]
   },
+};
+
+export const TimelineData: {
+  experience: TimelinePeriodProps[];
+  education: TimelinePeriodProps[];
+  certification: TimelinePeriodProps[];
+} = {
   experience: [
     {
       logo: DisneyLogo,
-      compnayName: "The Walt Disney Company",
+      companyName: "The Walt Disney Company",
       positions: [
         {
           year: "2017 - Present",
@@ -116,7 +122,7 @@ export const AboutMeData  =  {
     },
     {
       logo: AkamaiLogo,
-      compnayName: "Akamai Technologies",
+      companyName: "Akamai Technologies",
       year: "2013 - 2013",
       positions: [
         {
@@ -131,7 +137,7 @@ export const AboutMeData  =  {
     },
     {
       logo: CBSLogo,
-      compnayName: "CBS Corporation",
+      companyName: "CBS Corporation",
       positions: [
         {
           year: "2011 - 2012",
@@ -146,7 +152,7 @@ export const AboutMeData  =  {
     },
     {
       logo: DisneyLogo,
-      compnayName: "The Walt Disney Company",
+      companyName: "The Walt Disney Company",
       positions: [
         {
           year: "2008 - 2010",
@@ -162,7 +168,7 @@ export const AboutMeData  =  {
     },
     {
       logo: SonyLogo,
-      compnayName: "Sony Pictures Imageworks",
+      companyName: "Sony Pictures Imageworks",
       positions: [
         {
           year: "2008 - 2008",
@@ -178,7 +184,7 @@ export const AboutMeData  =  {
 
     {
       logo: HarvardLogo,
-      compnayName: "Harvard University",
+      companyName: "Harvard University",
       positions: [
         {
           year: "1999 - 2006",
@@ -266,5 +272,4 @@ export const AboutMeData  =  {
                 and traditional cinematography. `,
     },
   ]
-
-};
+} as const;
