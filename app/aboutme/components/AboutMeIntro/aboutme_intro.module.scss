@@ -1,17 +1,19 @@
 .aboutme {
   &Intro {
-    margin-bottom: 80px;
-
     &Container {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
-      padding-top: 26px;
       gap: 3rem;
 
       @media #{$xs}, #{$sm} {
         flex-direction: column-reverse;
+        padding-top: 26px;
+      }
+
+      @media #{$desktop-device} {
+        margin-bottom: 1rem;
       }
     }
 
@@ -29,6 +31,12 @@
       font-weight: bold;
       color: $font-color-bold;
       margin-bottom: 1rem;
+
+      @media #{$xs}, #{$sm} {
+        text-align: center;
+      }
+      
+     
     }
 
     &Desc {
@@ -51,13 +59,13 @@
 
       @media #{$xs}, #{$sm} {
         align-items: center;
-        width: 70%;
+        width: 100%;
       }
     }
 
     &BannerPhoto {
         position: relative;
-        width: clamp(240px, 20vw, 300px);
+        width: clamp(240px, 20vw, 280px);
         aspect-ratio: 3 / 4; // portrait ratio
         z-index: 2;
 

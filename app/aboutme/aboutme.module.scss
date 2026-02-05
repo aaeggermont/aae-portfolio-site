@@ -1,6 +1,6 @@
 .aboutMePage {
   @include global-container;
-  background-color: bisque;
+  //background-color: bisque;
 
   &Content {
     width: 100%;
@@ -9,7 +9,7 @@
 
     @media screen and #{$desktop-device} {
       padding-bottom: 1rem;
-      margin-top: 1rem;
+      margin-top: 2rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -17,11 +17,11 @@
     }
 
     @media screen and #{$tablet} {
-      margin-top: 9rem;
+      margin-top: 2rem;
     }
 
     @media screen and #{$mobile} {
-      margin-top: 8rem;
+      margin-top: 1rem;
     }
   }
 }
