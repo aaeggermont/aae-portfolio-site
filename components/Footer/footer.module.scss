@@ -58,12 +58,8 @@
     span {
       font-family: var(--font-poppins), sans-serif;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: clamp(1rem, 4vw, 1.2rem);
       color: #07435F;
-
-      @media #{$sm}, #{$xs} {
-        font-size: 0.8rem;
-      }
     }
   }
 
@@ -87,11 +83,10 @@
     .navigation-title {
       font-family: var(--font-poppins), sans-serif;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: clamp(1rem, 4vw, 1.2rem);
       color: #07435F;
 
       @media #{$sm}, #{$xs} {
-        font-size: 1.2rem;
         font-weight: 800;
       }
     }
@@ -114,12 +109,11 @@
     span {
       position: relative;
       font-family: var(--font-poppins), sans-serif;
-      font-size: 0.75rem;
+      font-size: clamp(0.75rem, 4vw, 1rem);
       font-weight: 500;
       padding-left: 0rem;
 
       @media #{$sm}, #{$xs} {
-        font-size: 1rem;
         font-weight: normal;
       }
 
