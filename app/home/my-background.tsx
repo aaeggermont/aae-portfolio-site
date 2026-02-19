@@ -6,6 +6,7 @@ import backgroundItems from "@/app/home/data/background-data";
 import BackgroundCard from "@/app/home/BackgroundCard";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
+import Typewriter from 'typewriter-effect';
 
 const FLOAT_COUNT = 14;
 
@@ -17,6 +18,21 @@ type FloaterConfig = {
   delay: string;
   duration: string;
 };
+
+function ViewTypewriterComponent() {
+  return (
+    <Typewriter
+      options={{
+        strings: [`<span class="${styles.heading}">What I do</span>`],
+        autoStart: true,
+        loop: false,
+        deleteSpeed: 50,
+        html: true,
+        cursor: "|", 
+      }}
+    />
+  );
+}
 
 function AnimatedCardWrapper({
   children,
@@ -118,7 +134,10 @@ export default function MyBackground() {
       </div>
 
       <div className={styles.content}>
-        <h2 className={styles.heading}>What I do</h2>
+
+        <ViewTypewriterComponent />
+        <span className={styles.heading}>What I do</span>
+        
         <div className={styles.summarySection}>
           <p className={styles.summarySectionText}>
             I transform user insights into meaningful, well-crafted digital experiences that balance

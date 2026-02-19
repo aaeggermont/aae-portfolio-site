@@ -1,0 +1,36 @@
+.skillsChart {
+  &ProgressInner {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  &Label {
+    //font-size: 1rem;
+    font-size: clamp(0.7rem, 3.5vw, 1rem);
+    font-family: var(--font-poppins);
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+    display: inline-block;
+  }
+
+  &Background {
+    width: 100%;
+    min-width: 100%;
+    position: relative;
+    height: 16px;
+    border: 1px solid #7e7e7e;
+    padding: 2px;
+    padding-left: 0rem;
+  }
+
+  &BarIn {
+    height: 100%;
+    background: #074C5F;
+    overflow: hidden;
+  }
+
+  &Bar {
+    height: 100%;
+  }
+}
