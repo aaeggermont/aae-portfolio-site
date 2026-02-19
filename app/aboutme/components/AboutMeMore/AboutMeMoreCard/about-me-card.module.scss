@@ -1,41 +1,51 @@
+@import "@/styles/variables";
+@import "@/styles/mixins";
+
 .aboutmeCard {
-  padding: 25px 20px 40px;
+  padding: 1.56rem 1.25rem 2.5rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
   align-items: center;
+
   box-shadow: 2px 8px 20px 0px #00000040;
-  border: 1px solid #EBE6E6;
+  border: 1px solid #ebe6e6;
   border-radius: 16px;
-  max-width: 250px;
-  min-height: 275px;
+
   transition: all ease-in-out 0.3s;
   cursor: pointer;
 
+  /* IMPORTANT: MUI CardActionArea adds its own border radius; enforce clipping */
+  overflow: hidden;
+
   &:hover,
   &.selected {
-    background: #3A728999;
+    background: #3a728999;
   }
 
   &:hover &Title,
-  &.selected &Title{
+  &.selected &Title {
     color: white;
   }
 
   &Image {
-    max-width: 150px;
-    height: 162px;
+    max-width: 9.37rem;
+    height: 10.12rem;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 1.56rem;
 
     img {
       width: 100%;
+      height: auto;
     }
+
     @media #{$sm}, #{$xs} {
-      max-width: 85px;
-      height: 80px;
-      margin-bottom: 15px;
+      max-width: 5.31rem;
+      height: 5rem;
+      margin-bottom: 0.93rem;
 
       img {
         width: auto;
@@ -45,18 +55,16 @@
   }
 
   &Title {
-    font-size: 23px;
-    color: #074C5F;
+    font-size: 1.44rem;
+    color: #074c5f;
     text-align: center;
 
     @media #{$sm}, #{$xs} {
-      font-size: 16px;
+      font-size: 1rem !important;
     }
   }
 
   @media #{$sm}, #{$xs} {
-    max-width: 140px;
-    min-height: 178px;
-    padding: 15px 10px;
+    padding: 0.93rem 0.63rem 1.56rem;
   }
 }

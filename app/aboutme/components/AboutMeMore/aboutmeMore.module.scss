@@ -1,7 +1,28 @@
+@import "@/styles/variables";
+@import "@/styles/mixins";
+
 .aboutmeMore{
   display: flex;
   flex-direction: column;
 
+  .aboutmeMoreCards {
+    display: flex;
+    flex-wrap: wrap;
+    //gap: 32px;
+
+    @media #{$md} {
+      gap: 1rem;  
+    }
+
+    @media #{$sm, $xs} {
+      gap: 0.5rem;  
+    }
+
+    justify-content: center;
+    margin-top: 32px;
+  }
+
+ 
   &Cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
