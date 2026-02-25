@@ -1,0 +1,86 @@
+@import "../StoryTeller.scss";
+@import "../../../../scss/variables.scss";
+
+@media #{$desktop} {
+    .mockup-container {
+        @include desktop-width;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        width: 45%;
+        padding-top: 5rem;
+
+        span {
+            @include stdesktop-mockup-title;
+            text-align: center;
+            margin-bottom: 1rem;
+            //background-color: green;
+        }
+
+        p {
+            @include stdesktop-mockup-desc;
+            padding-top: 2rem;
+            padding-left: 15%;
+            padding-right: 15%;
+            //background-color: gray
+        }
+    }
+}
+
+@media  #{$lg}, #{$md} {
+    .mockup-container {
+        @include lgmd-width;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        width: 55%;
+
+        span {
+            @include stlgmd-mockup-title;
+            padding-top: 6rem;
+            text-align: center;
+        }
+
+        p {
+            @include stlgmd-mockup-desc;
+            padding-top: 3rem;
+            padding-left: 15%;
+            padding-right: 15%;
+        }
+    }
+}
+
+@media #{$sm}, #{$xs} {
+    .mockup-container {
+        @include smxs-width;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .title {
+            text-align: center;
+            font-family: poppins;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #102764;
+            padding-top: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .description {
+            font-family: poppins;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #102764;
+            text-align: center;
+            padding-top: 1.5rem;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+    }
+}

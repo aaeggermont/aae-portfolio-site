@@ -1,0 +1,117 @@
+.desktop-illlustration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    max-width: 2600px;
+    background-color: #F4F4F4;
+    margin-top: 6rem;
+    padding-bottom: 4rem;
+
+    span {
+        font-family: poppins;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .illustration-title {
+        padding-top: 2rem;
+
+        font-family: poppins;
+        font-size: 2rem;
+        font-weight: 500;
+        color: #000000;
+    }
+
+    .image-container {
+        width: 90%;
+        text-align: center;
+        padding-bottom: 2rem;
+        padding-top: -2rem;
+    }
+
+    .text-description {
+        width: 50%;
+        padding-top: 1rem;
+        font-family: poppins;
+        font-size: 1.5rem;
+        font-weight: 400;
+        color: #000000;
+    }    
+}
+
+.mobile-illlustration-container {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #F4F4F4;
+    margin-top: 3rem;
+  
+    .image-container {
+        width: 80%;
+        text-align: center;
+    }
+
+    .illustration-title {
+        // padding-top: 1rem;
+        font-family: poppins;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #000000;
+    }
+
+    .text-description {
+        padding-top: 1rem;
+        padding-bottom: 1.5rem;
+        width: 80%;
+        font-family: poppins;
+        font-size: .8rem;
+        font-weight: 400;
+        color: #000000;
+    }    
+
+}
+
+.tablet-illlustration-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .image-container {
+        width: 100%;
+        text-align: center;
+        padding-bottom: 2rem;
+    }
+
+
+    .illustration-title {
+        font-family: poppins;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #040B35;
+    }
+
+    .text-description {
+        width: 80%;
+        padding-top: 1rem;
+        font-family: poppins;
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: #102764;
+    }    
+}
+
+.object-fit_fill {
+    object-fit: fill   
+}
+
+
+button {
+    border: none;
+    cursor: pointer;
+    appearance: none;
+    background-color: inherit;
+  }

@@ -1,0 +1,32 @@
+@media #{$desktop} {
+    .block-title {
+        @include desktop-width;
+        padding-top: 5rem;
+        padding-bottom: 3rem;
+        text-align: center;
+        @include stdesktop-block-title;
+    }
+}
+
+@media #{$lg}, #{$md} {
+    .block-title {
+        @include lgmd-width;
+        text-align: center;
+        padding-top: 5rem;
+        padding-bottom: 3rem;
+        @include stlgmd-block-title;
+    }
+}
+
+
+@media #{$sm}, #{$xs} {
+    .block-title {
+        @include desktop-width;
+        text-align: center;
+        // padding-top: 10rem;
+        // padding-bottom: 20px;
+        // width: 80%;
+        @include stsmsx-block-title;
+    }
+}
+

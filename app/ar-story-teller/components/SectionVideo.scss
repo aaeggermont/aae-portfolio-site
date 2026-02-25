@@ -1,0 +1,116 @@
+.storyteller-DesktopParagraphVideo {
+    margin: auto;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+
+    .iframeContainer {
+        text-align: center;
+    }
+
+    .title {
+        font-family: poppins;
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #010A24;
+        padding-top: 6rem;
+        text-align: center;
+   
+    }
+
+    .description {
+        font-family: poppins;
+        font-size: 1.7rem;
+        font-weight: 400;
+        color: #010A24;
+        text-align: center;
+        padding-top: 3rem;
+    }
+
+
+
+    .text-paragraph {
+        font-family: poppins;
+        font-size: 22px;
+        font-weight: 400;
+        color: #102764;
+        background-color: green;
+    }    
+}
+
+.storyteller-lgmdParagraphVideo {
+    margin: auto;
+    width: 70%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+
+    .title {
+        text-align: center;
+        font-family: poppins;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #102764;
+        padding-top: 2rem;
+        padding-bottom: 1rem;
+        
+    }
+
+    .description {
+    
+        font-family: poppins;
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: #102764;
+        text-align: center;
+    }
+
+    .text-paragraph {
+        padding-top: 400px;
+        font-family: poppins;
+        font-size: 48px;
+        font-weight: 400;
+        color: #102764;
+    }
+    
+}
+
+.storyteller-xssmParagraphVideo {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+
+    .title {
+        text-align: center;
+        font-family: poppins;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #102764;
+        padding-top: 2rem;
+        padding-bottom: 1rem;
+   
+    }
+
+    .description {
+        font-family: poppins;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #102764;
+        text-align: center;
+        padding-top: 1.5rem;
+       
+    }
+
+    .text-paragraph {
+        font-family: poppins;
+        font-size: 16px;
+        font-weight: 400;
+        color: #102764;
+    }
+    
+}   

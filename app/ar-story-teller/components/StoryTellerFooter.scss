@@ -1,0 +1,167 @@
+@import "../../../../scss/variables.scss";
+
+
+@media #{$xs}, #{$sm} {
+    .st-footer-container {
+        width: 100%;
+        height: 21.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 1rem;
+        position: relative;
+        bottom: 0px;
+        border-top: solid;
+        border-top-style: solid;
+        border-top-color: rgb(7, 76, 95, .15);
+        border-top-width: 0.3rem;
+        .logo-section {
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .copyright-section {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            padding-top: 1rem;
+            padding-bottom: 3rem;
+            span {
+                font-size: 0.8rem;
+                font-weight: 500;
+                font-family:  $defaultFont;;
+            }
+        }
+
+        .navigation-section {
+            width: 50%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            padding-left: 0%;
+            gap: 0.3rem;
+
+            .navigation-title {
+                font-family:  $defaultFont;
+                font-size: 1.2rem;
+                font-weight: 800;
+
+                .active_link{
+                    text-decoration: none;
+                    &:after{
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        bottom: 20px;
+                        width: 100%;
+                        height: 3px;
+                        background: $theme_color;
+                    }
+                }
+            }
+            span {
+                font-family:  $defaultFont;
+                font-size: 1.1rem;
+                font-weight: 500;
+                padding-left: 0rem;
+
+            }
+        }
+    }
+}
+
+@media #{$md}, #{$lg}, #{$desktop} {
+    .st-footer-container {
+        width: 100%;
+        height: 13.5rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 5rem;
+        position: relative;
+        bottom: 0px;
+        border-top: solid;
+        border-top-style: solid;
+        border-top-color: rgb(7, 76, 95, .15);
+        border-top-width: 0.3rem;
+        background-color: #03133C;
+        .logo-section {
+            width: 20%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 2rem;
+            padding-left: 8%;
+        }
+
+        .copyright-section {
+            width: 55%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+
+            span {
+                @include desktop-footer-title;
+                color: #fff;
+            }
+        }
+
+        .navigation-section {
+            width: 25%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: flex-start;
+            justify-content: center;
+            padding-left: 5%;
+            gap: 0.3rem;
+
+            .navigation-title {
+                @include desktop-footer-title;
+                color: #fff;
+                margin-bottom: 10px;
+            }
+
+            .footer_link {
+                text-decoration: none;
+                color: #fff;
+                position: relative;
+            }
+
+            .active_link{
+                &:after{
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    bottom: -4px;
+                    width: 100%;
+                    height: 3px;
+                    background: #fff;
+                }
+            }
+            span {
+                @include desktop-footer-nav-links;
+                color: #fff;
+                margin-bottom: 3px;
+            }
+        }
+    }
+}
+

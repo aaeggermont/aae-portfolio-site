@@ -1,0 +1,54 @@
+@import "../StoryTeller.scss";
+@import "../../../../scss/variables.scss";
+
+@media #{$desktop} {
+    .storyteller-laptop-paragraph-title {
+      
+        @include desktop-width;
+        padding-top: 8rem;
+        padding-bottom: 1.25rem;
+        width: 80%;
+    
+        .title-paragraph {
+            @include stdesktop-section-title;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+    
+    }
+}
+
+@media #{$lg}, #{$md} { 
+    .storyteller-lgmd-paragraph-title {
+        margin: auto;
+        width: 60%;
+        padding-top: 3rem;
+        
+        .title-paragraph {
+            @include stlgmd-section-title;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+    }
+}
+
+
+@media #{$sm}, #{$xs} { 
+    .storyteller-xsxm-paragraph-title {
+        margin: auto;
+        width: 80%;
+    
+        .title-paragraph {
+            font-family: poppins;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #040B35;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+    }
+}
+

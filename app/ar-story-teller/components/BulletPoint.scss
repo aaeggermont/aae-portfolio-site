@@ -1,0 +1,59 @@
+@media #{$desktop} {
+    .st-bulletPoint {
+        margin: auto;
+        width: 60%;
+        display: flex;
+        flex-direction: row;
+        padding-top: 1rem;
+        align-items: top;
+        justify-content: left;
+
+        .bullet-point {
+            padding-top: 0.3rem;
+        }
+
+        .text-paragraph {
+            padding-left: 2rem;
+            @include stdesktop-paragraph-text;
+        }
+    }
+}
+
+@media #{$lg}, #{$md} {
+    .st-bulletPoint {
+        margin: auto;
+        width: 70%;
+        padding-top: .8rem;
+        display: flex;
+        flex-direction: row;
+        align-items: top;
+
+        .text-paragraph {
+            padding-left: 1rem;
+            @include stlgmd-paragraph-text;
+
+        }
+    }
+}
+
+@media #{$sm}, #{$xs} {
+    .st-bulletPoint {
+
+        margin: auto;
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        padding-top: 1rem;
+        align-items: top;
+        justify-content: left;
+
+        .bullet-point {
+            padding-top: .3rem;
+        }
+
+        .text-paragraph {
+            padding-left: 1rem;
+            @include stsmsx-paragraph-text;
+        }
+    }
+}

@@ -1,0 +1,124 @@
+@media #{$desktop} {
+    .storyteller-paragraphimg {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        width: 80%;
+
+        .title {
+            font-family: poppins;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #010A24;
+            padding-top: 6rem;
+            text-align: center;
+
+        }
+
+        .description {
+
+            padding-top: 3rem;
+            width: 100%;
+            padding-right: 10%;
+            padding-left: 10%;
+
+            p {
+                text-align: center;
+            }
+        }
+
+
+
+        .text-paragraph {
+            font-family: poppins;
+            font-size: 22px;
+            font-weight: 400;
+            color: #102764;
+            background-color: green;
+        }
+    }
+}
+
+
+@media  #{$lg}, #{$md} {
+    .storyteller-paragraphimg {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        .title {
+            font-family: poppins;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #010A24;
+            padding-top: 6rem;
+            text-align: center;
+
+        }
+
+        .description {
+            text-align: center;
+            padding-top: 3rem;
+            padding-right: 15%;
+            padding-left: 15%;
+        }
+
+
+
+        .text-paragraph {
+            font-family: poppins;
+            font-size: 22px;
+            font-weight: 400;
+            color: #102764;
+            background-color: green;
+        }
+    }
+}
+
+@media #{$sm}, #{$xs} {
+    .storyteller-paragraphimg  {
+        margin: auto;
+        padding: 0 5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        box-sizing: border-box;
+
+        .title {
+            text-align: center;
+            font-family: poppins;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #102764;
+            padding-top: 2rem;
+            padding-bottom: 1rem;
+
+        }
+
+        .description {
+            font-family: poppins;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #102764;
+            text-align: center;
+            padding-top: 1.5rem;
+
+        }
+
+        .text-paragraph {
+            font-family: poppins;
+            font-size: 16px;
+            font-weight: 400;
+            color: #102764;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,243 @@
+@import "../StoryTeller.scss";
+@import "../../../../scss/variables.scss";
+
+@mixin member-title-desktop {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin member-name-desktop {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+
+@mixin member-name-mdlg {
+    font-family: poppins;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin member-title-mdlg {
+    font-family: poppins;
+    font-size: 1rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+@mixin member-name-smsx {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+@mixin member-title-smsx {
+    font-family: poppins;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+
+@media #{$desktop} {
+    .storyteller-team-container-desktop  {
+        @include desktop-width;
+        margin: auto;
+        width: 80%;
+        padding-top: 6rem;
+        padding-bottom: 8rem;
+        
+        .team-title {
+            @include stdesktop-section-title;
+            text-align: center;
+            padding-bottom: 1rem;
+        }
+
+        .row_team {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: top;
+
+            .column-content {
+                width: 40%;
+                .member-name-left {
+                    padding-right: 1rem;
+                    text-align: right;
+                    padding-top: 1rem;
+                    @include member-title-desktop;
+                }
+                .member-title-left {
+                    padding-right: 1rem;
+                    text-align: right;
+                    @include member-name-desktop;
+                }
+
+                .member-name-right {
+                    padding-left: 1rem;
+                    text-align: left;
+                    padding-top: 1rem;
+                    @include member-title-desktop;
+                }
+
+                .member-title-right {
+                    padding-left: 1rem;
+                    text-align: left;
+                    @include member-name-desktop;
+                }
+            }
+        }
+    }
+}
+
+@media #{$lg}, #{$md} {
+    .storyteller-team-container-mdlg  {
+        margin: auto;
+        width: 80%;
+        padding-bottom: 5rem;
+        .team-title {
+            @include stlgmd-section-title;
+            text-align: center;
+            padding-bottom: 1rem;
+        }
+
+        .row_team {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: top;
+
+            .column-content {
+                width: 40%;
+                .member-name-left {
+                    padding-right: 1rem;
+                    text-align: right;
+                    padding-top: 1.1rem;
+                    @include member-name-mdlg;
+                    // font-family: poppins;
+                    // font-size: 1rem;
+                    // font-weight: 600;
+                    // color: $project-font-color;
+                }
+                .member-title-left {
+                    padding-right: 1rem;
+                    text-align: right;
+                    // font-family: poppins;
+                    // font-size: 1rem;
+                    // font-weight: 400;
+                    // color: $project-font-color;
+                    @include member-title-mdlg ;
+                }
+
+                .member-name-right {
+                    padding-left: 1rem;
+                    text-align: left;
+                    padding-top: 1rem;
+                    @include member-name-mdlg;
+                    // font-family: poppins;
+                    /// font-size: 1.1rem;
+                    // font-weight: 600;
+                    // color: $project-font-color;
+                }
+
+                .member-title-right {
+                    padding-left: 1rem;
+                    text-align: left;
+                    @include member-title-mdlg;
+                    // font-family: poppins;
+                    // font-size: 1rem;
+                    // font-weight: 400;
+                    // color: $project-font-color;
+                }
+            }
+        }
+
+        .team-content {      
+            margin: auto;
+            .row_team {
+                display: flex;
+                flex-direction: row;
+                justify-content: start;
+                align-items: top;
+                
+                .column-content {
+                    width: 50%;
+                    .member-name {
+                        font-family: poppins;
+                        font-size: 1rem;
+                        font-weight: 400;
+                        color: $project-font-color;
+                        text-align: left;
+                    }
+        
+                    .member-role { 
+                        font-family: poppins;
+                        font-size: 1rem;
+                        font-weight: 400;
+                        color: $project-font-color;
+                        text-align: left;
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media #{$sm}, #{$xs} {
+    .storyteller-team-container-mobile  {
+        max-width: 428px;
+        margin: auto;
+        //background-color: red;
+
+        .team-title {
+            font-family: poppins;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: $project-font-color;
+            text-align: center;
+            padding-top: 2rem;
+            padding-bottom: 1rem;
+        }
+        
+        .team-content {      
+            margin: auto;
+            width: 90%;
+
+            .team-member {
+                display: flex;
+                flex-direction: row;
+                align-content: start;
+                justify-content: space-between;
+                
+                margin: auto;
+            
+                .member-name {
+                    font-family: poppins;
+                    font-size: .8rem;
+                    font-weight: 600;
+                    color: $project-font-color;
+                    text-align: left;
+                }
+
+                .member-role {
+                
+                    font-family: poppins;
+                    font-size: .8rem;
+                    font-weight: 400;
+                    color: $project-font-color;
+                    text-align: left;
+                    
+                }
+            }
+        }
+    }
+}

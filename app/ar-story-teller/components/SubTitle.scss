@@ -1,0 +1,46 @@
+.desktop-subtitle-container {
+    max-width: 2500px;
+    margin: auto;
+
+    .subtitle-paragraph {
+        font-family: poppins;
+        font-size: 2.5rem;
+        font-weight: 00;
+        color: #040B35;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+
+}
+
+.lgmd-subtitle-container {
+    max-width: 1366px;
+    margin: auto;
+
+    .subtitle-paragraph {
+        font-family: poppins;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #040B35;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+}
+
+.xssm-subtitle-container {
+    max-width: 428px;
+    margin: auto;
+
+
+    .subtitle-paragraph {
+        font-family: poppins;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #040B35;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+}

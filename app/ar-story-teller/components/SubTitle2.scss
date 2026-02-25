@@ -1,0 +1,46 @@
+@import "../StoryTeller.scss";
+@import "../../../../scss/variables.scss";
+
+@media #{$desktop} {
+    .st-subtitle2-container {
+        padding-top: 3rem;
+        padding-bottom: 1.5rem;
+        @include desktop-width;
+        .subtitle-paragraph {
+            @include stdesktop-section-subtitle2;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+    }
+}
+
+@media #{$lg}, #{$md} { 
+    .st-subtitle2-container {
+        @include lgmd-width;
+        padding-top: 3rem;
+        // padding-bottom: 1.5rem;
+        .subtitle-paragraph {
+            @include stlgmd-section-subtitle2;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+    }
+}
+
+@media #{$sm}, #{$xs} { 
+    .st-subtitle2-container {
+
+        margin: auto;
+        padding-top: 2rem;
+
+        .subtitle-paragraph {
+            @include stsmsx-section-subtitle2;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+    }
+}

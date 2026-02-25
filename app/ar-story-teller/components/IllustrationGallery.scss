@@ -1,0 +1,262 @@
+@import "../StoryTeller.scss";
+@import "../../../../scss/variables.scss";
+
+@media #{$desktop} {
+    .storyboard-title {
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+        text-align: center;
+        @include stdesktop-section-subtitle2;
+    }
+
+
+    .storyteller-carouselgallery {
+        //margin: auto;
+        @include desktop-width;
+        margin-top: 5rem;
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .board-title {
+            font-size: 1.5rem;
+            text-align: center;
+        }
+    }
+
+    .storyteller-carouselgallery .board-title {
+        @include stdesktop-section-subtitle2;
+        // font-size: 2rem;
+        // text-align: center;
+        // font-weight: 600;
+        padding: 4rem;
+    }
+
+
+    .storyteller-carouselgallery .carousel .slide .legend {
+        position: absolute;
+        // bottom: 5px;
+        top: 80%;
+        left: 50%;
+        margin-left: -45%;
+        width: 90%;
+        border-radius: 10px;
+        background: #000;
+        padding: 10px;
+        opacity: 0.60;
+        transition: opacity .35s ease-in-out;
+        font-size: 1.5rem;
+        text-align: center;
+        color: #ffffff;
+        height: 8rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .storyteller-carouselgallery .carousel .carousel-status {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 5px;
+        font-size: 1.5rem;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.9);
+        color: #000;
+    }
+}
+
+@media  #{$lg}, #{$md} {
+
+    .storyteller-carouselgallery {
+
+        @include lgmd-width;
+        padding-top: 4rem;
+        padding-bottom: 3rem;
+
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .board-title {
+            @include stlgmd-section-subtitle2;
+            // font-size: 1.5rem;
+            text-align: center;
+            padding: 3rem;
+        }
+    }
+
+
+    .storyteller-carouselgallery .carousel .slide .legend {
+        position: absolute;
+        top: 75%;
+        left: 50%;
+        margin-left: -45%;
+        width: 90%;
+        border-radius: 10px;
+        background: #000;
+        padding: 10px;
+        opacity: 0.60;
+        transition: opacity .35s ease-in-out;
+        font-size: 1.0rem;
+        text-align: center;
+        color: #ffffff;
+        height: 6.5rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .storyteller-carouselgallery .carousel .carousel-status {
+        position: absolute;
+        top: -10px;
+        right: 0;
+        padding: 5px;
+        font-size: 1.3rem;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.9);
+        color: #000;
+    }
+
+}
+
+
+@media #{$sm}, #{$xs} {
+    .storyboard-title {
+        @include stsmsx-section-subtitle2;
+        padding-top: 3rem;
+        padding-bottom: 2rem;
+    }
+
+    // Override Carousel styles
+    .storyteller-carouselgallery-smxs {
+        .carousel{
+            .slide {
+                .legend {
+                    position: relative;
+                    height: initial;
+                    bottom: initial;
+                    left: initial;
+                    margin-left: 0;
+                    width: 95%;
+                    border-radius: 10px;
+                    background: #000;
+                    padding: 10px;
+                    opacity: 0.60;
+                    transition: opacity .35s ease-in-out;
+                    font-size: 0.8rem;
+                    text-align: center;
+                    color: #ffffff;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+
+            &.carousel-slider {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .control-dots {
+                position: relative;
+                order: 5;
+
+                .dot {
+                    &.selected {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.images {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.images img {
+    flex-basis: 33%;
+    padding: 2px;
+}
+
+.storyteller-carousel-gallery {
+    margin: auto;
+    width: 75%;
+    border-color: #000;
+}
+
+
+
+
+
+
+.carousel .control-dots .dot {
+    transition: opacity .25s ease-in;
+    opacity: .3;
+    filter: alpha(opacity=30);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+    background: #343a40;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 8px;
+}
+
+
+
+
+.storyteller-carouselgallery-smxs {
+    margin: auto;
+    width: 82%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .board-title {
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+    }
+}
+
+.storyteller-carouselgallery-smxs .carousel .carousel-status {
+    position: absolute;
+    top: -10px;
+    right: 0;
+    padding: 5px;
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.9);
+    color: #000;
+}
+
+.storyteller-carouselgallery-smxs .carousel .control-dots .dot {
+    transition: opacity .25s ease-in;
+    opacity: .3;
+    filter: alpha(opacity=30);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.9);
+    background: #343a40;
+    border-radius: 50%;
+    width: 4px;
+    height: 4px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 8px;
+}
+
+.carousel .thumbs-wrapper {
+    margin: 20px;
+    overflow: hidden;
+    //background-color: gray;
+    padding-top: 20px;
+}
+
+.carousel-root {
+    outline: none;
+    border: 1px solid #969696;
+    padding: 1rem;
+}
+
+
