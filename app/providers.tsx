@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { ResponsiveQueryProvider } from "./lib/responsive/ResponsiveQueryProvider";
+import { ParallaxProvider } from "react-scroll-parallax";
 
 const theme = createTheme({
   breakpoints: {
@@ -24,7 +25,11 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
     <AppRouterCacheProvider options={{ key: "mui" }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <ResponsiveQueryProvider>{children}</ResponsiveQueryProvider>
+        <ResponsiveQueryProvider>
+          <ParallaxProvider>
+            {children}
+          </ParallaxProvider>
+        </ResponsiveQueryProvider>
       </ThemeProvider>
     </AppRouterCacheProvider>
   );
