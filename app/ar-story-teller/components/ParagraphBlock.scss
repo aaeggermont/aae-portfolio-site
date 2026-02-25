@@ -1,9 +1,5 @@
-@import "../StoryTeller.scss";
-@import "../../../../scss/variables.scss";
-
 @media #{$desktop} {
     .st-paragraph-block {
-        @include desktop-width;
         margin: auto;
         width: 85%;
     }
@@ -12,7 +8,6 @@
 
 @media #{$lg}, #{$md} {
     .st-paragraph-block {
-        @include lgmd-width;
         margin: auto;
         width: 85%;
     }
@@ -20,7 +15,6 @@
 
 @media #{$sm}, #{$xs} {
     .storyteller-xsxm-paragraph-block {
-        @include smxs-width;
         margin: auto;
         width: 100%;
         padding: 0 5%;

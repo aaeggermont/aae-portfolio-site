@@ -7,7 +7,7 @@ import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
 import Image from 'next/image';
 
 interface ProjectOverviewProps {
-  title: string;
+  title?: string;
   [key: string]: unknown;
 }
 
@@ -17,7 +17,7 @@ export function ProjectOverview({ title, ...props}: ProjectOverviewProps) {
     if ( screenDevice.isDesktopOrLaptop ) {
         return (
             <div {...props} className='overview-container'>
-                <div className='overview-title'> Project Overview</div>
+                <div className='overview-title'>Project Overview</div>
                 <div className='overview-columns'>
                     <div className="column-tier">
                         <div className='overview-row-icon'>

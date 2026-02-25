@@ -1,16 +1,11 @@
-@import "../StoryTeller.scss";
-@import "../../../../scss/variables.scss";
-
 @media #{$desktop} {
     .sectionimg-container {
-        @include desktop-width;
         margin: auto;
     }
 }
 
 @media #{$lg}, #{$md} {
     .sectionimg-container {
-        @include lgmd-width;
         margin: auto;
     }
 }

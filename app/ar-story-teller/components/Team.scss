@@ -1,18 +1,15 @@
-@import "../StoryTeller.scss";
-@import "../../../../scss/variables.scss";
-
 @mixin member-title-desktop {
     font-family: poppins;
     font-size: 1.2rem;
     font-weight: 600;
-    color: $project-font-color;
+    color: $font-color-bold;
 }
 
 @mixin member-name-desktop {
     font-family: poppins;
     font-size: 1.2rem;
     font-weight: 400;
-    color: $project-font-color;
+    color: $font-color-bold;
 }
 
 
@@ -20,7 +17,7 @@
     font-family: poppins;
     font-size: 1rem;
     font-weight: 600;
-    color: $project-font-color;
+    color: $font-color-bold;
 }
 
 
@@ -28,35 +25,33 @@
     font-family: poppins;
     font-size: 1rem;
     font-weight: 400;
-    color: $project-font-color;
+    color: $font-color-bold;
 }
 
 @mixin member-name-smsx {
     font-family: poppins;
     font-size: 1.2rem;
     font-weight: 400;
-    color: $project-font-color;
+    color: $font-color-bold;
 }
 
 @mixin member-title-smsx {
     font-family: poppins;
     font-size: 1.4rem;
     font-weight: 600;
-    color: $project-font-color;
+    color: $font-color-bold;
 }
 
 
 
 @media #{$desktop} {
     .storyteller-team-container-desktop  {
-        @include desktop-width;
         margin: auto;
         width: 80%;
         padding-top: 6rem;
         padding-bottom: 8rem;
-        
+
         .team-title {
-            @include stdesktop-section-title;
             text-align: center;
             padding-bottom: 1rem;
         }
@@ -104,7 +99,6 @@
         width: 80%;
         padding-bottom: 5rem;
         .team-title {
-            @include stlgmd-section-title;
             text-align: center;
             padding-bottom: 1rem;
         }
@@ -160,31 +154,31 @@
             }
         }
 
-        .team-content {      
+        .team-content {
             margin: auto;
             .row_team {
                 display: flex;
                 flex-direction: row;
                 justify-content: start;
                 align-items: top;
-                
+
                 .column-content {
                     width: 50%;
                     .member-name {
                         font-family: poppins;
                         font-size: 1rem;
                         font-weight: 400;
-                        color: $project-font-color;
+                        color: $font-color-bold;
                         text-align: left;
                     }
-        
-                    .member-role { 
+
+                    .member-role {
                         font-family: poppins;
                         font-size: 1rem;
                         font-weight: 400;
-                        color: $project-font-color;
+                        color: $font-color-bold;
                         text-align: left;
-                        
+
                     }
                 }
             }
@@ -202,13 +196,13 @@
             font-family: poppins;
             font-size: 1.5rem;
             font-weight: 600;
-            color: $project-font-color;
+            color: $font-color-bold;
             text-align: center;
             padding-top: 2rem;
             padding-bottom: 1rem;
         }
-        
-        .team-content {      
+
+        .team-content {
             margin: auto;
             width: 90%;
 
@@ -217,25 +211,25 @@
                 flex-direction: row;
                 align-content: start;
                 justify-content: space-between;
-                
+
                 margin: auto;
-            
+
                 .member-name {
                     font-family: poppins;
                     font-size: .8rem;
                     font-weight: 600;
-                    color: $project-font-color;
+                    color: $font-color-bold;
                     text-align: left;
                 }
 
                 .member-role {
-                
+
                     font-family: poppins;
                     font-size: .8rem;
                     font-weight: 400;
-                    color: $project-font-color;
+                    color: $font-color-bold;
                     text-align: left;
-                    
+
                 }
             }
         }

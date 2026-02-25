@@ -1,48 +1,38 @@
-@import "../StoryTeller.scss";
-@import "../../../../scss/variables.scss";
-
 @media #{$desktop} {
     .st-subtitle1-container {
-        @include desktop-width;
-    
         padding-top: 5rem;
         padding-bottom: 1.5rem;
-        
-    
+
+
         .subtitle-paragraph {
-            @include stdesktop-section-subtitle1;
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
         }
-    
+
     }
 }
 
-@media #{$lg}, #{$md} { 
+@media #{$lg}, #{$md} {
     .st-subtitle1-container {
-        @include lgmd-width;
         margin: auto;
         padding-top: 3rem;
-        
+
         .subtitle-paragraph {
-            @include stlgmd-section-subtitle1;
             padding-top: 1.25rem;
             padding-bottom: 0.62rem;
             text-align: center;
         }
     }
-    
+
 }
 
-@media #{$sm}, #{$xs} { 
+@media #{$sm}, #{$xs} {
     .st-subtitle1-container {
-        //max-width: 428px;
         margin: auto;
-    
+
         padding-top: 1rem;
         .subtitle-paragraph {
-            @include stsmsx-section-subtitle1;
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;

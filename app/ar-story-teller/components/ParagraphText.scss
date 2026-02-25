@@ -1,14 +1,9 @@
-@import "../StoryTeller.scss";
-@import "../../../../scss/variables.scss";
-
 @media #{$desktop} {
     .st-paragraph-text {
-        @include desktop-width;
         margin: auto;
         width: 85%;
         padding-top: 1rem;
         .text-paragraph {
-            @include stdesktop-paragraph-text;
         }
     }
 
@@ -16,12 +11,10 @@
 
 @media #{$lg}, #{$md} {
     .st-paragraph-text {
-        @include lgmd-width;
         margin: auto;
         width: 85%;
         padding-top: 1rem;
         .text-paragraph {
-            @include stlgmd-paragraph-text;
         }
 
     }
@@ -29,13 +22,11 @@
 
 @media #{$sm}, #{$xs} {
     .storyteller-xsxm-paragraph-text {
-        @include smxs-width;
         margin: auto;
         width: 100%;
         padding: 0 5%;
         padding-top: 2rem;
         .text-paragraph {
-            @include stsmsx-paragraph-text;
         }
 
     }
