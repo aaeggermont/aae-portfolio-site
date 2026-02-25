@@ -3,6 +3,8 @@ import OverviewParagraphBlock from '../OverviewParagraphBlock';
 import ParagraphImg from '../ParagraphImg';
 import { StaticImageData } from 'next/image';
 import styles from '../../ArStoryTeller.module.scss';
+import { SolutionDemo } from '../SolutionDemo';
+import { ProjectOverview } from '../ProjectOverview';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -43,15 +45,17 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                 paragraph3={solution.paragraphs}
             />
 
-            {solution.images && (
-                <ParagraphImg
-                    imagesSrc={solution.images}
-                    alt={solution.alt}
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                    data-aos-anchor-placement="top-center"
-                />
-            )}
+            <SolutionDemo
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-anchor-placement="top-center"
+            />
+
+            <ProjectOverview
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-anchor-placement="top-center"
+            />
         </section>
     );
 }
