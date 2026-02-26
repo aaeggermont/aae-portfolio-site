@@ -1,18 +1,13 @@
-@import "../StoryTeller.scss";
-@import "../../../../scss/variables.scss";
-
 @media #{$desktop} {
     .storyboard-title {
         padding-top: 4rem;
         padding-bottom: 3rem;
         text-align: center;
-        @include stdesktop-section-subtitle2;
     }
 
 
     .storyteller-carouselgallery {
         //margin: auto;
-        @include desktop-width;
         margin-top: 5rem;
         width: 70%;
         display: flex;
@@ -26,7 +21,6 @@
     }
 
     .storyteller-carouselgallery .board-title {
-        @include stdesktop-section-subtitle2;
         // font-size: 2rem;
         // text-align: center;
         // font-weight: 600;
@@ -68,8 +62,6 @@
 @media  #{$lg}, #{$md} {
 
     .storyteller-carouselgallery {
-
-        @include lgmd-width;
         padding-top: 4rem;
         padding-bottom: 3rem;
 
@@ -79,7 +71,6 @@
         justify-content: center;
 
         .board-title {
-            @include stlgmd-section-subtitle2;
             // font-size: 1.5rem;
             text-align: center;
             padding: 3rem;
@@ -121,7 +112,6 @@
 
 @media #{$sm}, #{$xs} {
     .storyboard-title {
-        @include stsmsx-section-subtitle2;
         padding-top: 3rem;
         padding-bottom: 2rem;
     }

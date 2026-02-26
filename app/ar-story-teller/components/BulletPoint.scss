@@ -14,7 +14,6 @@
 
         .text-paragraph {
             padding-left: 2rem;
-            @include stdesktop-paragraph-text;
         }
     }
 }
@@ -30,8 +29,6 @@
 
         .text-paragraph {
             padding-left: 1rem;
-            @include stlgmd-paragraph-text;
-
         }
     }
 }
@@ -53,7 +50,6 @@
 
         .text-paragraph {
             padding-left: 1rem;
-            @include stsmsx-paragraph-text;
         }
     }
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+'use client';
 import './BulletPoint.scss';
 import Image, { StaticImageData } from 'next/image';
 import BulletPointDesktop from '../Images/BulletPoint-Desktop.svg';

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+'use client';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Carousel } from 'react-responsive-carousel';
 import './IllustrationGallery.scss';
@@ -21,6 +21,7 @@ import StoryBoard15 from '../Images/Storyboard/StoryBoard_15.jpg';
 import StoryBoard16 from '../Images/Storyboard/StoryBoard_16.jpg';
 import StoryBoard17 from '../Images/Storyboard/StoryBoard_17.jpg';
 import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import Image from 'next/image';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -63,7 +64,17 @@ export function IlllustrationGallery({ title, ...props }: IlllustrationGalleryPr
                 <Carousel emulateTouch centerMode={false} useKeyboardArrows showThumbs={false}>
                     {SLIDES.map((slide, i) => (
                         <div key={i}>
-                            <img src={slide.src} style={{ paddingTop: '120px', paddingBottom: '80px', width: '80%' }} />
+                            <Image
+                                src={slide.src}
+                                alt={slide.legend}
+                                style={{
+                                    paddingTop: '120px',
+                                    paddingBottom: '80px',
+                                    width: '80%',
+                                    height: 'auto',
+                                    objectFit: 'contain'
+                                }}
+                            />
                             <p className="legend">{slide.legend}</p>
                         </div>
                     ))}
@@ -77,7 +88,17 @@ export function IlllustrationGallery({ title, ...props }: IlllustrationGalleryPr
                 <Carousel emulateTouch centerMode={false} useKeyboardArrows showThumbs={false}>
                     {SLIDES.map((slide, i) => (
                         <div key={i}>
-                            <img src={slide.src} style={{ paddingTop: '80px', paddingBottom: '80px', width: '80%' }} />
+                            <Image
+                                src={slide.src}
+                                alt={slide.legend}
+                                style={{
+                                    paddingTop: '80px',
+                                    paddingBottom: '80px',
+                                    width: '80%',
+                                    height: 'auto',
+                                    objectFit: 'contain'
+                                }}
+                            />
                             <p className="legend">{slide.legend}</p>
                         </div>
                     ))}
@@ -91,9 +112,16 @@ export function IlllustrationGallery({ title, ...props }: IlllustrationGalleryPr
                 <Carousel emulateTouch centerMode={false} useKeyboardArrows showThumbs={false} showIndicators showArrows={false}>
                     {SLIDES.map((slide, i) => (
                         <div key={i}>
-                            <img
+                            <Image
                                 src={slide.src}
-                                style={{ paddingTop: '40px', paddingBottom: '40px', height: '300px', width: '100%', objectFit: 'contain' }}
+                                alt={slide.legend}
+                                style={{
+                                    paddingTop: '40px',
+                                    paddingBottom: '40px',
+                                    height: '300px',
+                                    width: '100%',
+                                    objectFit: 'contain'
+                                }}
                             />
                             <p className="legend">{slide.legend}</p>
                         </div>

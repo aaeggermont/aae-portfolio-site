@@ -8,7 +8,7 @@ import Image, { StaticImageData } from 'next/image';
 interface ParagraphImgProps {
     alt?: string;
     width?: string;
-    imagesSrc: StaticImageData[];
+    imagesSrc?: StaticImageData[];
     description?: string;
     title?: string;
     [key: string]: unknown;
@@ -16,7 +16,7 @@ interface ParagraphImgProps {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function ParagraphImg({ alt = '', width, imagesSrc, description, title, ...props }: ParagraphImgProps) {
+export function ParagraphImg({ alt = '', width, imagesSrc = [], description, title, ...props }: ParagraphImgProps) {
     const screenDevice = useResponsive();
 
     if (screenDevice.isDesktopOrLaptop) {
