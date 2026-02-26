@@ -1,6 +1,6 @@
 import React from 'react';
 import './MockupIllustration.scss';
-import { StaticImageData } from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -23,13 +23,14 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
         alignSelf: 'center',
         paddingTop: '2rem',
         width: '50%',
+        height: 'auto',
     };
 
     if (screenDevice.isDesktopOrLaptop) {
         return (
             <div {...props} className="mockup-container">
                 <span>{title}</span>
-                <img src={imagesSrc[0] as unknown as string} alt={alt} style={imgStyle} />
+                <Image src={imagesSrc[0] as unknown as string} alt={alt} style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
         );
@@ -37,7 +38,7 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
         return (
             <div {...props} className="mockup-container">
                 <span>{title}</span>
-                <img src={imagesSrc[1] as unknown as string} alt={alt} style={imgStyle} />
+                <Image src={imagesSrc[1] as unknown as string} alt={alt} style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
         );
@@ -45,7 +46,7 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
         return (
             <div {...props} className="mockup-container">
                 <span className="title">{title}</span>
-                <img src={imagesSrc[2] as unknown as string} alt={alt} style={imgStyle} />
+                <Image src={imagesSrc[2] as unknown as string} alt={alt} style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
         );
