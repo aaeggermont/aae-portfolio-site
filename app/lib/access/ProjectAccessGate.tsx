@@ -7,6 +7,11 @@ import {
   onSnapshot,
   serverTimestamp,
   setDoc,
+  collection,
+  query,
+  where,
+  limit,
+  getDocs,
 } from "firebase/firestore";
 import {
   GoogleAuthProvider,
@@ -79,6 +84,11 @@ export default function ProjectAccessGate({
     AccessRequestDoc["status"] | null
   >(null);
 
+  const [visibility, setVisibility] = React.useState<"public" | "restricted">(
+    "restricted"
+  );
+  const [visibilityLoading, setVisibilityLoading] = React.useState(true);
+
   // email/password UI
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -96,8 +106,50 @@ export default function ProjectAccessGate({
     return () => unsub();
   }, []);
 
-  // 2) allowlist listener (only when logged in)
+  // 1.5) load visibility from projects_data by projectKey
   React.useEffect(() => {
+    let alive = true;
+    setVisibilityLoading(true);
+
+    async function loadVisibility() {
+      const q = query(
+        collection(db, "projects_data"),
+        where("projectKey", "==", projectKey),
+        limit(1)
+      );
+
+      const snap = await getDocs(q);
+      const v = (snap.docs[0]?.data() as any)?.visibility;
+
+      if (!alive) return;
+
+      setVisibility(v === "public" ? "public" : "restricted");
+      setVisibilityLoading(false);
+    }
+
+    loadVisibility()
+      .catch(() => {
+        if (!alive) return;
+        setVisibility("restricted");
+        setVisibilityLoading(false);
+      });
+
+    return () => {
+      alive = false;
+    };
+  }, [projectKey]);
+
+  // 2) allowlist listener (only when logged in AND project is restricted)
+  React.useEffect(() => {
+    if (visibilityLoading) return;
+
+    // public projects don't need allowlist checks
+    if (visibility === "public") {
+      setAllow(null);
+      setAllowed(true); // treat as allowed
+      return;
+    }
+
     if (!user) {
       setAllow(null);
       setAllowed(false);
@@ -113,7 +165,10 @@ export default function ProjectAccessGate({
 
         const enabled = data.enabled !== false; // default true
         const uidOk = (data.allowedUids ?? []).includes(user.uid);
-        const emailOk = (data.allowedEmails ?? []).map(normalizeEmail).includes(normalizeEmail(user.email));
+        const emailOk = (data.allowedEmails ?? [])
+          .map(normalizeEmail)
+          .includes(normalizeEmail(user.email));
+
         setAllowed(enabled && (uidOk || emailOk));
       },
       () => {
@@ -123,10 +178,13 @@ export default function ProjectAccessGate({
     );
 
     return () => unsub();
-  }, [user, projectKey]);
+  }, [user, projectKey, visibility, visibilityLoading]);
 
-  // 3) request doc listener (only when logged in + not allowed)
+  // 3) request doc listener (only when logged in + project restricted + not allowed)
   React.useEffect(() => {
+    if (visibilityLoading) return;
+    if (visibility === "public") return;
+
     if (!user || allowed) return;
 
     const reqRef = doc(db, "access_requests", requestId(projectKey, user.uid));
@@ -140,7 +198,7 @@ export default function ProjectAccessGate({
     });
 
     return () => unsub();
-  }, [user, allowed, projectKey]);
+  }, [user, allowed, projectKey, visibility, visibilityLoading]);
 
   // ---- actions ----
   const handleGoogle = async () => {
@@ -199,7 +257,6 @@ export default function ProjectAccessGate({
 
     const reqRef = doc(db, "access_requests", requestId(projectKey, user.uid));
 
-    // if it already exists, don't overwrite status if reviewer was rejected/approved
     const snap = await getDoc(reqRef);
     if (snap.exists()) return;
 
@@ -221,7 +278,7 @@ export default function ProjectAccessGate({
   };
 
   // ---- render ----
-  if (loading) {
+  if (loading || visibilityLoading) {
     return (
       <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center" }}>
         <Stack spacing={2} alignItems="center">
@@ -234,6 +291,12 @@ export default function ProjectAccessGate({
     );
   }
 
+  // ✅ THIS is where the public bypass goes
+  if (visibility === "public") {
+    return <>{children}</>;
+  }
+
+  // restricted: normal logic
   if (user && allowed) {
     return <>{children}</>;
   }
@@ -246,20 +309,13 @@ export default function ProjectAccessGate({
             {title}
           </Typography>
 
-          <Typography color="text.secondary">
-            This page is restricted.
-          </Typography>
+          <Typography color="text.secondary">This page is restricted.</Typography>
 
           <Divider />
 
-          {/* Not signed in */}
           {!user ? (
             <Stack spacing={2}>
-              <Button
-                variant="contained"
-                onClick={handleGoogle}
-                disabled={authBusy}
-              >
+              <Button variant="contained" onClick={handleGoogle} disabled={authBusy}>
                 Sign in with Google
               </Button>
 
@@ -281,27 +337,15 @@ export default function ProjectAccessGate({
                 />
 
                 <Stack direction="row" spacing={1} flexWrap="wrap">
-                  <Button
-                    variant="contained"
-                    onClick={handleEmailSignIn}
-                    disabled={authBusy}
-                  >
+                  <Button variant="contained" onClick={handleEmailSignIn} disabled={authBusy}>
                     Sign in
                   </Button>
 
-                  <Button
-                    variant="outlined"
-                    onClick={handleEmailCreate}
-                    disabled={authBusy}
-                  >
+                  <Button variant="outlined" onClick={handleEmailCreate} disabled={authBusy}>
                     Create account
                   </Button>
 
-                  <Button
-                    variant="text"
-                    onClick={handleReset}
-                    disabled={authBusy || !email.trim()}
-                  >
+                  <Button variant="text" onClick={handleReset} disabled={authBusy || !email.trim()}>
                     Forgot password
                   </Button>
                 </Stack>
@@ -314,7 +358,6 @@ export default function ProjectAccessGate({
               )}
             </Stack>
           ) : (
-            // Signed in but not allowed
             <Stack spacing={1.5}>
               <Typography variant="body2" color="text.secondary">
                 Signed in as <strong>{user.email ?? user.uid}</strong>
@@ -352,7 +395,6 @@ export default function ProjectAccessGate({
                 </Typography>
               )}
 
-              {/* Helpful debug */}
               <Typography variant="caption" color="text.secondary">
                 Allowlist enabled: {String(allow?.enabled !== false)} · projectKey: {projectKey}
               </Typography>
