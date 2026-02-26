@@ -1,0 +1,191 @@
+.project-container {
+    max-width: 108rem;
+    margin: auto;
+    //background-color: aqua;
+}
+
+$project-font-color: #03133C;
+$project-font-family: poppins;
+
+@mixin desktop-width {
+    max-width: 1230px;
+    margin: auto;
+    // margin-left: 5rem;
+    // margin-bottom: 6rem;
+}
+
+@mixin lgmd-width {
+    max-width: 950px;
+    // margin-bottom: 6rem;
+    margin: auto;
+    // margin-left: 4%;
+    // margin-right: 4%;
+}
+
+@mixin smxs-width {
+    margin-top: 2rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 30px;
+}
+
+/* Desktop/Tablet Global Styles */
+
+@mixin stdesktop-block-title {
+    font-family: poppins;
+    font-size: 2rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-section-title {
+    font-family: poppins;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-section-subtitle1 {
+    font-family: poppins;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-section-subtitle2 {
+    font-family: poppins;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-paragraph-text {
+    font-family: poppins;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-mockup-title {
+    font-family: poppins;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-mockup-desc {
+    font-family: poppins;
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+@mixin stdesktop-image-annotation {
+    font-family: poppins;
+    font-size: 1rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+
+
+/* Tablet Global Styles */
+
+@mixin stlgmd-block-title {
+    font-family: poppins;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin stlgmd-section-title {
+    font-family: poppins;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin stlgmd-section-subtitle1 {
+    font-family: poppins;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin stlgmd-section-subtitle2 {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin stlgmd-paragraph-text {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+@mixin stlgmd-mockup-title {
+    font-family: poppins;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: $project-font-color;
+}
+
+@mixin stlgmd-mockup-desc {
+    font-family: poppins;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+@mixin stmdlg-image-annotation {
+    font-family: poppins;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
+
+/* Mobile Global Styles */
+
+@mixin stsmsx-block-title {
+    font-family: poppins;
+    font-size: 2rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin stsmsx-section-title {
+    font-family: poppins;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin stsmsx-section-subtitle1 {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+
+@mixin stsmsx-section-subtitle2 {
+    font-family: poppins;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: $project-font-color;
+}
+
+@mixin stsmsx-paragraph-text {
+    font-family: poppins;
+    font-size: 1rem;
+    font-weight: 400;
+    color: $project-font-color;
+}
