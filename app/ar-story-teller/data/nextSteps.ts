@@ -15,7 +15,7 @@ interface NextStepsData {
 
 const nextSteps: NextStepsData = {
   title: "Next Steps",
-  sectionSeparatorImages: [NextSteps, NextSteps, NextSteps],
+  sectionSeparatorImages: [NextSteps],
   bulletpoints: [
     {
       icon: BulletPoint,

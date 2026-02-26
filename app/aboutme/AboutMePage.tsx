@@ -1,15 +1,7 @@
 // app/aboutme/AboutMePage.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
 import styles from "./aboutme.module.scss";
-import { useResponsive } from "@/app/lib/responsive/ResponsiveQueryProvider";
-
-// Views
-
-import { ProfileMdLgDesktopView } from "@/app/aboutme/components/ProfileMdLgDesktopView";
-import { ProfileSmSxView } from "@/app/aboutme/components/ProfileSmSxView";
-
 
 // Views
 import { AboutMeIntro } from './components/AboutMeIntro';
