@@ -2,15 +2,19 @@
 
 import React from "react";
 import styles from "./ar-story-teller.module.scss";
-import ProjectAccessGate from "@/app/lib/access/ProjectAccessGate";
+import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
+import Image from "next/image";
+import { GatedImage } from "./components/GatedImage";
+import TestSignOutButton from "./components/Signout";
 
 const PROJECT_ID = 4;
+const PROJECT_KEY = "project_4";
 
 export default function AutomaticSeaterAssignmentsPage() {
   return (
     <ProjectAccessGate
       projectId={4}
-      projectKey="project_1"
+      projectKey="project_4"
       title="AR Magic Tours"
     >
       <main className={styles.page}>
@@ -18,7 +22,15 @@ export default function AutomaticSeaterAssignmentsPage() {
           <header className={styles.hero}>
             <h1 className={styles.title}>AR Magic Tours</h1>
             <p>hello world</p>
+            <GatedImage
+              projectKey={PROJECT_KEY}
+              objectPath="projects/project_4/GenericTaskFlow.png"
+              alt="Generic Task Flow"
+              width={1400}
+              height={800}
+            />
           </header>
+          <TestSignOutButton />
         </div>
       </main>
     </ProjectAccessGate>
