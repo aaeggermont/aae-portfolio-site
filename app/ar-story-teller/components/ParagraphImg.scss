@@ -42,7 +42,7 @@
 }
 
 
-@media  #{$lg}, #{$md} {
+@media  #{$tablet} {
     .storyteller-paragraphimg {
         margin: auto;
         display: flex;
@@ -78,7 +78,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyteller-paragraphimg  {
         margin: auto;
         padding: 0 5%;

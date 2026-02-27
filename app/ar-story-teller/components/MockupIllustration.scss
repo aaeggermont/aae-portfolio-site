@@ -21,7 +21,7 @@
     }
 }
 
-@media  #{$lg}, #{$md} {
+@media  #{$tablet} {
     .mockup-container {
         margin: auto;
         display: flex;
@@ -43,7 +43,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .mockup-container {
         margin: auto;
         display: flex;

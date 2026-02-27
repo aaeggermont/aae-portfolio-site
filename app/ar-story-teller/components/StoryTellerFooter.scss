@@ -1,7 +1,4 @@
-@import "../../../../scss/variables.scss";
-
-
-@media #{$xs}, #{$sm} {
+@media #{$mobile} {
     .st-footer-container {
         width: 100%;
         height: 21.5rem;
@@ -80,7 +77,7 @@
     }
 }
 
-@media #{$md}, #{$lg}, #{$desktop} {
+@media #{$tablet}, #{$desktop} {
     .st-footer-container {
         width: 100%;
         height: 13.5rem;

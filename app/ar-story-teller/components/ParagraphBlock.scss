@@ -6,14 +6,14 @@
 
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .st-paragraph-block {
         margin: auto;
         width: 85%;
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyteller-xsxm-paragraph-block {
         margin: auto;
         width: 100%;

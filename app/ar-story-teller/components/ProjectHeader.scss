@@ -45,7 +45,7 @@
     }
 }
 
-@media  #{$lg}, #{$md} {
+@media  #{$tablet} {
     .storyteller-banner {
         padding-top: 200px;
         background-color: #153077;
@@ -89,7 +89,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyteller-banner {
         padding-top: 100px;
         background-color: #153077;

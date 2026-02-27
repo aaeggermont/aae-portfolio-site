@@ -13,7 +13,7 @@
     }
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .storyteller-lgmd-paragraph-title {
         margin: auto;
         width: 60%;
@@ -28,7 +28,7 @@
 }
 
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyteller-xsxm-paragraph-title {
         margin: auto;
         width: 80%;

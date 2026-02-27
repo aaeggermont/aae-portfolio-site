@@ -18,7 +18,7 @@
     }
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .st-bulletPoint {
         margin: auto;
         width: 70%;
@@ -33,7 +33,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .st-bulletPoint {
 
         margin: auto;

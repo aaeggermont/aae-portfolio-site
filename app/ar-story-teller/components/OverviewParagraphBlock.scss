@@ -73,7 +73,7 @@
     }
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .project-summary-container {
         padding-top: 4rem;
         margin: auto;
@@ -95,7 +95,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
 
 }
 

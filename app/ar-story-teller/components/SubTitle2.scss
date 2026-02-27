@@ -11,7 +11,7 @@
     }
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .st-subtitle2-container {
         padding-top: 3rem;
         .subtitle-paragraph {
@@ -22,7 +22,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .st-subtitle2-container {
 
         margin: auto;

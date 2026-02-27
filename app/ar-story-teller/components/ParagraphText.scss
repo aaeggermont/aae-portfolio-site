@@ -9,7 +9,7 @@
 
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .st-paragraph-text {
         margin: auto;
         width: 85%;
@@ -20,7 +20,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyteller-xsxm-paragraph-text {
         margin: auto;
         width: 100%;

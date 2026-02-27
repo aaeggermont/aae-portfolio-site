@@ -93,7 +93,7 @@
     }
 }
 
-@media #{$lg}, #{$md} {
+@media #{$tablet} {
     .storyteller-team-container-mdlg  {
         margin: auto;
         width: 80%;
@@ -186,7 +186,7 @@
     }
 }
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyteller-team-container-mobile  {
         max-width: 428px;
         margin: auto;

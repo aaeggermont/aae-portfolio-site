@@ -59,7 +59,7 @@
     }
 }
 
-@media  #{$lg}, #{$md} {
+@media  #{$tablet} {
 
     .storyteller-carouselgallery {
         padding-top: 4rem;
@@ -110,7 +110,7 @@
 }
 
 
-@media #{$sm}, #{$xs} {
+@media #{$mobile} {
     .storyboard-title {
         padding-top: 3rem;
         padding-bottom: 2rem;
