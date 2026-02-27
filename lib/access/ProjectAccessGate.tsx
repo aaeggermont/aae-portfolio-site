@@ -205,7 +205,8 @@ export default function ProjectAccessGate({
     setAuthBusy(true);
     setMsg(null);
     try {
-      await signInWithPopup(auth, new GoogleAuthProvider());
+      const cred = await signInWithPopup(auth, new GoogleAuthProvider());
+      await mintSessionCookie(cred.user);
     } catch (e: any) {
       setMsg(e?.message ?? "Google sign-in failed.");
     } finally {
@@ -217,7 +218,8 @@ export default function ProjectAccessGate({
     setAuthBusy(true);
     setMsg(null);
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
+      await mintSessionCookie(cred.user);
     } catch (e: any) {
       setMsg(e?.message ?? "Email sign-in failed.");
     } finally {
@@ -229,7 +231,8 @@ export default function ProjectAccessGate({
     setAuthBusy(true);
     setMsg(null);
     try {
-      await createUserWithEmailAndPassword(auth, email.trim(), password);
+      const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
+      await mintSessionCookie(cred.user);
     } catch (e: any) {
       setMsg(e?.message ?? "Account creation failed.");
     } finally {
@@ -273,9 +276,55 @@ export default function ProjectAccessGate({
     await setDoc(reqRef, payload, { merge: true });
   };
 
+  
   const handleSignOut = async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch {}
+
     await signOut(auth);
+
+    // Optional hard refresh to reset everything
+    window.location.reload();
   };
+
+  async function mintSessionCookie(user: User) {
+    const idToken = await user.getIdToken(true);
+
+    const res = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+      credentials: "include", // ✅ important
+    });
+
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      throw new Error(`Failed to create session (${res.status}): ${txt}`);
+    }
+  }
+
+
+  /*
+  async function mintSessionCookie(user: User) {
+    const idToken = await user.getIdToken(true);
+
+    const res = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+    });
+
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      throw new Error(`Failed to create session (${res.status}): ${txt}`);
+    }
+  }*/
+
+
 
   // ---- render ----
   if (loading || visibilityLoading) {
