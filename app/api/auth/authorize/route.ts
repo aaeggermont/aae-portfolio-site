@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getAdmin } from "@/app/lib/firebase/admin";
+import { getAdmin } from "@/lib/firebase/admin";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
