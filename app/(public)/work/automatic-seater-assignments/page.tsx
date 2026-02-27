@@ -3,7 +3,7 @@
 
 import React from "react";
 import styles from "./automatic-seater-assignments.module.scss";
-import ProjectAccessGate from "@/app/lib/access/ProjectAccessGate";
+import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 
 const PROJECT_ID = 4;
 
