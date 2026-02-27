@@ -2,13 +2,41 @@
 "use client";
 
 import React from "react";
+import { useEffect, useState } from 'react';
 import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
-
+import fsReference from '../../../../firebase';
+import { collection, where, getDoc, onSnapshot, orderBy, query, deleteDoc, doc } from "firebase/firestore";
+  
 const PROJECT_ID = 1;
 const PROJECT_KEY = "project_1";
 
 export default function ArStoryTellerPage() {
+  const [projectData, setProjectData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  /* Firebase data fetching */
+  useEffect(() => {
+    const docRef = doc(fsReference, 'projects_content', 'project_1');
+    getDoc(docRef)
+      .then((doc) => {
+        console.log("Document data:", doc.data());
+        setProjectData(doc.data());
+        setIsLoading(false);
+      })
+      .catch(() => setHasError(true));
+    },[]);
+
+    if (isLoading) {
+        return <p>loading...</p>
+    }
+
+    if (hasError) {
+        return <p>Has error!</p>
+    }
+
+
   return (
     <ProjectAccessGate
       projectId={4}
