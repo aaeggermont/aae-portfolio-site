@@ -1,36 +1,26 @@
+// app/(public)/work/automatic-seater-assignments/page.tsx
 "use client";
 
 import React from "react";
-import styles from "./ar-story-teller.module.scss";
+import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
-import Image from "next/image";
-import { GatedImage } from "./components/GatedImage";
-import TestSignOutButton from "./components/Signout";
 
-const PROJECT_ID = 4;
-const PROJECT_KEY = "project_4";
+const PROJECT_ID = 1;
+const PROJECT_KEY = "project_1";
 
-export default function AutomaticSeaterAssignmentsPage() {
+export default function ArStoryTellerPage() {
   return (
     <ProjectAccessGate
       projectId={4}
-      projectKey="project_4"
-      title="AR Magic Tours"
+      projectKey="project_1"
+      title="AR Story Teller"
     >
       <main className={styles.page}>
         <div className={styles.container}>
           <header className={styles.hero}>
-            <h1 className={styles.title}>AR Magic Tours</h1>
+            <h1 className={styles.title}>AR Story Teller</h1>
             <p>hello world</p>
-            <GatedImage
-              projectKey={PROJECT_KEY}
-              objectPath="projects/project_4/GenericTaskFlow.png"
-              alt="Generic Task Flow"
-              width={1400}
-              height={800}
-            />
           </header>
-          <TestSignOutButton />
         </div>
       </main>
     </ProjectAccessGate>
