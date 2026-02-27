@@ -1,42 +1,44 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { getAdmin } from "@/app/lib/firebase/admin";
+import { getAdmin } from "@/lib/firebase/admin";
+
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
-  const { idToken } = (await req.json()) as { idToken?: string };
-  if (!idToken) return NextResponse.json({ error: "Missing idToken" }, { status: 400 });
-
-  const { auth } = getAdmin();
-
-  // 5 days (adjust as you like)
-  const expiresIn = 5 * 24 * 60 * 60 * 1000;
+  console.log("SESSION ROUTE HIT"); // 👈 ADD HERE
+  console.log("admin projectId =", process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID, process.env.GOOGLE_CLOUD_PROJECT);
 
   try {
-    const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
-    const cookieStore = await cookies();
+    const { idToken } = (await req.json()) as { idToken?: string };
 
-    cookieStore.set("session", sessionCookie, {
+    if (!idToken) {
+      console.log("No idToken received");
+      return NextResponse.json({ ok: false }, { status: 400 });
+    }
+
+    const { auth } = getAdmin();
+
+    await auth.verifyIdToken(idToken, true);
+
+    const expiresIn = 5 * 24 * 60 * 60 * 1000;
+    const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+
+    const res = NextResponse.json({ ok: true });
+
+    res.cookies.set({
+      name: "session",
+      value: sessionCookie,
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
       maxAge: Math.floor(expiresIn / 1000),
     });
 
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
-  }
-}
+    console.log("Session cookie set"); // 👈 Optional second log
 
-export async function DELETE() {
-  const cookieStore = await cookies();
-  cookieStore.set("session", "", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-  return NextResponse.json({ ok: true });
+    return res;
+  } catch (err) {
+    console.error("Session creation error:", err);
+    return NextResponse.json({ ok: false }, { status: 401 });
+  }
 }
