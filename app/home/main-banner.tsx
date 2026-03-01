@@ -16,13 +16,14 @@ function TypewriterComponent() {
         strings: "Hello, my name is Antonio",
         autoStart: true,
         loop: false,
-        pauseFor: 2500,
         deleteSpeed: 50,
+      }}
+      onInit={(typewriter) => {
+        typewriter.typeString("Hello, my name is Antonio").pauseFor(2500).start();
       }}
     />
   );
 }
-
 
 
 function MainBanner() {

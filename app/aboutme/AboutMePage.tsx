@@ -3,12 +3,12 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./aboutme.module.scss";
-import { useResponsive } from "@/app/lib/responsive/ResponsiveQueryProvider";
+import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 
 // Views
 
-import { ProfileMdLgDesktopView } from "@/app/aboutme/components/ProfileMdLgDesktopView";
-import { ProfileSmSxView } from "@/app/aboutme/components/ProfileSmSxView";
+//import { ProfileMdLgDesktopView } from "@/app/aboutme/components/ProfileMdLgDesktopView";
+//import { ProfileSmSxView } from "@/app/aboutme/components/ProfileSmSxView";
 
 
 // Views

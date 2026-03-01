@@ -8,7 +8,7 @@ import { backgroundFloatImages } from "./background-float-images";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Project, { type ProjectProps } from "./Project";
 import { db } from "@/firebase";
-import PdfModal from "@/app/lib/pdf/PdfModal";
+import PdfModal from "@/lib/pdf/PdfModal";
 
 const FLOAT_COUNT = 14;
 
