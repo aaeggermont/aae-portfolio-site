@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   console.log("SESSION ROUTE HIT"); // 👈 ADD HERE
-  console.log("admin projectId =", process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID, process.env.GOOGLE_CLOUD_PROJECT);
+  console.log("admin projectId =", process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID, process.env.AAE_GOOGLE_CLOUD_PROJECT);
 
   try {
     const { idToken } = (await req.json()) as { idToken?: string };
