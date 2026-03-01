@@ -6,13 +6,14 @@ import { useEffect, useState } from 'react';
 import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import fsReference from '../../../../firebase';
-import { collection, where, getDoc, onSnapshot, orderBy, query, deleteDoc, doc } from "firebase/firestore";
+import { collection, where, getDoc, onSnapshot, orderBy, query, deleteDoc, doc, DocumentData } from "firebase/firestore";
   
 const PROJECT_ID = 1;
 const PROJECT_KEY = "project_1";
+type ProjectDoc = DocumentData;
 
 export default function ArStoryTellerPage() {
-  const [projectData, setProjectData] = useState([]);
+  const [projectData, setProjectData] = useState<ProjectDoc | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
@@ -21,6 +22,10 @@ export default function ArStoryTellerPage() {
     const docRef = doc(fsReference, 'projects_content', 'project_1');
     getDoc(docRef)
       .then((doc) => {
+        if (!doc.exists()) {
+          setHasError(true);
+          return;
+        }
         console.log("Document data:", doc.data());
         setProjectData(doc.data());
         setIsLoading(false);

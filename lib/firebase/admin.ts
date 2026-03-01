@@ -29,5 +29,6 @@ export function getAdmin() {
     auth: getAuth(),
     db: getFirestore(),
     bucket,
+    storage
   };
 }

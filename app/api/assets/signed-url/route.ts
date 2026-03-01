@@ -119,7 +119,7 @@ export async function POST(req: Request) {
   const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
 
   // ✅ Set cookie (IMPORTANT FLAGS)
-  cookies().set("session", sessionCookie, {
+  (await cookies()).set("session", sessionCookie, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // ✅ false on localhost
     sameSite: "lax",
