@@ -110,11 +110,6 @@ interface NotificationsAttrac {
   images: StaticImageData[];
   description: string;
   paragraphs: string[];
-  sampleNotifications1SmSX: ImageGroup;
-  sampleNotifications2SmSX: ImageGroup;
-  sampleNotifications3SmSX: ImageGroup;
-  sampleNotificationsMdLg: ImageGroup;
-  sampleNotificationsDesktop: ImageGroup;
 }
 
 interface MagicExperience {
@@ -344,42 +339,6 @@ const caseStudy: CaseStudy = {
     paragraphs: [
       "The following are sample notifications that are sent once the guest has entered the waiting queue area.",
     ],
-    sampleNotifications1SmSX: {
-      images: [
-        NotificationsIllustration1SmSx,
-        NotificationsIllustration1SmSx,
-        NotificationsIllustration1SmSx,
-      ],
-      alt: "Sample Notification",
-    },
-    sampleNotifications2SmSX: {
-      images: [
-        NotificationsIllustration2SmSx,
-        NotificationsIllustration2SmSx,
-        NotificationsIllustration2SmSx,
-      ],
-      alt: "Sample Notification",
-    },
-    sampleNotifications3SmSX: {
-      images: [
-        NotificationsIllustration3SmSx,
-        NotificationsIllustration3SmSx,
-        NotificationsIllustration3SmSx,
-      ],
-      alt: "Sample Notification",
-    },
-    sampleNotificationsMdLg: {
-      images: [
-        SampleNotificationsIllustrationMdLg,
-        SampleNotificationsIllustrationMdLg,
-        SampleNotificationsIllustrationMdLg,
-      ],
-      alt: "Sample Notification",
-    },
-    sampleNotificationsDesktop: {
-      images: [SampleNotificationsIllustrationDesktop],
-      alt: "Sample Notification",
-    },
   },
   magicExperiences: {
     title: "Magic Experiences Using Augmented Reality",

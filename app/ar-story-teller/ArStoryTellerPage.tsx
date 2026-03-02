@@ -14,18 +14,39 @@ import { MagicExperiencesSection } from './components/sections/MagicExperiencesS
 import { DesignSystemSection } from './components/sections/DesignSystemSection';
 import { NextStepsSection } from './components/sections/NextStepsSection';
 import nextSteps from './data/nextSteps';
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
+import { layoutState } from "@/app/(public)/layout-state";
+import { headerState } from '@/components/Header/HeaderState';
 
 export function ArStoryTellerPage() {
+  const setLayoutState = useSetAtom(layoutState);
+  const setHeaderState = useSetAtom(headerState);
+
+  useEffect(() => {
+    // 1. Al entrar a la ruta, establecemos los valores específicos de la página
+    setLayoutState({ isFullWidth: true });
+    setHeaderState({ position: 'absolute', isDark: true });
+
+    // 2. Al salir de la ruta (unmount), reseteamos los valores a los por defecto
+    return () => {
+      setLayoutState({ isFullWidth: false });
+      setHeaderState({ position: 'relative', isDark: false });
+    };
+  }, [setLayoutState, setHeaderState]);
+
     return (
         <div style={{ paddingBottom: '200px' }}>
             <ProjectHeader />
-            <OverviewSection data={{ designChallenge, theProblem, solution }} />
-            <TeamSection data={{ team }} />
-            <CaseStudyOverviewSection data={{ caseStudy }} />
-            <NotificationsSection data={{ caseStudy }} />
-            <MagicExperiencesSection data={{ caseStudy }} />
-            <DesignSystemSection data={{ caseStudy }} />
-            <NextStepsSection data={{ nextSteps, caseStudy }} />
+            <div className='global-container'>
+              <OverviewSection data={{ designChallenge, theProblem, solution }} />
+              <TeamSection data={{ team }} />
+              <CaseStudyOverviewSection data={{ caseStudy }} />
+              <NotificationsSection data={{ caseStudy }} />
+              <MagicExperiencesSection data={{ caseStudy }} />
+              <DesignSystemSection data={{ caseStudy }} />
+              <NextStepsSection data={{ nextSteps, caseStudy }} />
+            </div>
         </div>
     )
 }
