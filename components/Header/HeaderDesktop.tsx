@@ -14,7 +14,13 @@ export function HeaderDesktop({
 
   const isActive = (href: string) => {
     // adjust if you want "startsWith" instead of exact match
-    return pathname === href;
+    if (href === "/") {
+      return pathname === href;
+    }
+    if (pathname.startsWith('/work') && href === '/mywork') {
+      return true;
+    }
+    return pathname.startsWith(href);
   };
 
   return <>
