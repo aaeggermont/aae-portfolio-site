@@ -2,12 +2,15 @@
     .storyteller-laptop-paragraph-title {
         padding-top: 8rem;
         padding-bottom: 1.25rem;
-        width: 80%;
+        text-align: center;
 
         .title-paragraph {
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.8rem;
+            font-weight: 600;
         }
 
     }
@@ -16,13 +19,15 @@
 @media #{$tablet} {
     .storyteller-lgmd-paragraph-title {
         margin: auto;
-        width: 60%;
         padding-top: 3rem;
 
         .title-paragraph {
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.8rem;
+            font-weight: 600;
         }
     }
 }
@@ -31,7 +36,7 @@
 @media #{$mobile} {
     .storyteller-xsxm-paragraph-title {
         margin: auto;
-        width: 80%;
+        text-align: center;
 
         .title-paragraph {
             font-family: poppins;
@@ -41,6 +46,9 @@
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.5rem;
+            font-weight: 600;
         }
     }
 }

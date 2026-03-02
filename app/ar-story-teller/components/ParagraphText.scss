@@ -4,6 +4,10 @@
         width: 85%;
         padding-top: 1rem;
         .text-paragraph {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: $font-color-normal;
         }
     }
 
@@ -15,6 +19,10 @@
         width: 85%;
         padding-top: 1rem;
         .text-paragraph {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: $font-color-normal;
         }
 
     }
@@ -27,6 +35,10 @@
         padding: 0 5%;
         padding-top: 2rem;
         .text-paragraph {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: $font-color-normal;
         }
 
     }

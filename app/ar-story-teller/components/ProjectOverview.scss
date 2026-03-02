@@ -4,8 +4,12 @@
         padding-top: 8rem;
 
         .overview-title {
+            font-family: var(--font-poppins);
+            font-size: 2rem;
+            font-weight: 600;
+            color: #1D2D92;
             padding-top: 20px;
-            padding-bottom: 30px;
+            padding-bottom: 10px;
             text-align: center;
         }
 
@@ -28,7 +32,7 @@
                 .myroles-text {
                     padding-top: 0.5rem;
                     span {
-                        font-family: poppins;
+                        font-family: var(--font-poppins);
                         font-size: 1.2rem;
                         font-weight: 600;
                         color: $font-color-bold;
@@ -43,7 +47,7 @@
                     align-items: center;
                     width: 100%;
                     span {
-                        font-family: poppins;
+                        font-family: var(--font-poppins);
                         font-size: 1.1rem;
                         font-weight: 400;
                         color: #000000;
@@ -81,14 +85,14 @@
             .myroles-title {
                 text-align: center;
                 padding-top: 1rem;
-                font-family: poppins;
+                font-family: var(--font-poppins);
                 font-size: 1.2rem;
                 font-weight: 600;
                 color: $font-color-bold;
             }
             .myroles-text {
                 padding-top: 0.3rem;
-                font-family: poppins;
+                font-family: var(--font-poppins);
                 font-size: 1rem;
                 font-weight: 400;
                 color: #000000;
@@ -118,14 +122,14 @@
                 .myroles-text {
                     text-align: center;
                     padding-top: 1rem;
-                    font-family: poppins;
+                    font-family: var(--font-poppins);
                     font-size: 1.5rem;
                     font-weight: 400;
                     color: $font-color-bold;
                 }
 
                 .overview-row-text {
-                    font-family: poppins;
+                    font-family: var(--font-poppins);
                     font-size: 16px;
                     font-weight: 400;
                     color: $font-color-bold;
@@ -143,7 +147,7 @@
     padding-top: 4rem;
 
     .overview-title {
-        font-family: poppins;
+        font-family: var(--font-poppins);
         font-size: 22px;
         font-weight: 600;
         color: #1D2D92;
@@ -170,7 +174,7 @@
 
         .overview-row-text {
             width: 70%;
-            font-family: poppins;
+            font-family: var(--font-poppins);
             font-size: 16px;
             font-weight: 400;
             color: #000000;

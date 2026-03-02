@@ -2,7 +2,7 @@
     font-family: poppins;
     font-size: 1.2rem;
     font-weight: 600;
-    color: $font-color-bold;
+    color: $font-color-normal;
 }
 
 @mixin member-name-desktop {
@@ -25,7 +25,7 @@
     font-family: poppins;
     font-size: 1rem;
     font-weight: 400;
-    color: $font-color-bold;
+    color: $font-color-normal;
 }
 
 @mixin member-name-smsx {
@@ -39,7 +39,7 @@
     font-family: poppins;
     font-size: 1.4rem;
     font-weight: 600;
-    color: $font-color-bold;
+    color: $font-color-normal;
 }
 
 
@@ -54,6 +54,10 @@
         .team-title {
             text-align: center;
             padding-bottom: 1rem;
+            font-family: var(--font-poppins);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: $font-color-normal;
         }
 
         .row_team {
@@ -68,25 +72,25 @@
                     padding-right: 1rem;
                     text-align: right;
                     padding-top: 1rem;
-                    @include member-title-desktop;
+                    @include member-name-desktop;
                 }
                 .member-title-left {
                     padding-right: 1rem;
                     text-align: right;
-                    @include member-name-desktop;
+                    @include member-title-desktop;
                 }
 
                 .member-name-right {
                     padding-left: 1rem;
                     text-align: left;
                     padding-top: 1rem;
-                    @include member-title-desktop;
+                    @include member-name-desktop;
                 }
 
                 .member-title-right {
                     padding-left: 1rem;
                     text-align: left;
-                    @include member-name-desktop;
+                    @include member-title-desktop;
                 }
             }
         }
