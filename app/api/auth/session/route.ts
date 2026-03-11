@@ -12,7 +12,8 @@ export async function POST(req: Request) {
 
     if (!idToken) {
       console.log("No idToken received");
-      return NextResponse.json({ ok: false }, { status: 400 });
+      // return NextResponse.json({ ok: false }, { status: 400 });
+      return NextResponse.json({ ok: false, reason: "missing_idToken" }, { status: 400 });
     }
 
     const { auth } = getAdmin();
@@ -39,6 +40,11 @@ export async function POST(req: Request) {
     return res;
   } catch (err) {
     console.error("Session creation error:", err);
-    return NextResponse.json({ ok: false }, { status: 401 });
+    // return NextResponse.json({ ok: false }, { status: 401 });
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    return NextResponse.json(
+      { ok: false, reason: "session_create_failed", message: errorMessage },
+      { status: 401 }
+    );
   }
 }
