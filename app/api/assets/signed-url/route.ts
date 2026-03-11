@@ -74,8 +74,13 @@ export async function GET(req: Request) {
     let decoded: { uid: string; email?: string };
     try {
       decoded = await auth.verifySessionCookie(session, true) as any;
-    } catch {
-      return NextResponse.json({ ok: false, error: "bad_session" }, { status: 401 });
+    } catch (e) {
+      //return NextResponse.json({ ok: false, error: "bad_session" }, { status: 401 });
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      return NextResponse.json(
+        { ok: false, reason: "signed_url_failed", message: errorMessage },
+        { status: 500 }
+      );
     }
 
     const ok = await isAllowedForProject({
