@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Typewriter from "typewriter-effect";
 import styles from "./my-background.module.scss";
 import backgroundItems from "@/app/home/data/background-data";
 import BackgroundCard from "@/app/home/BackgroundCard";
@@ -8,6 +9,53 @@ import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
 
 const FLOAT_COUNT = 14;
+
+function HeadingTypewriter() {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const typewriterRef = useRef<{ typeString: (s: string) => { pauseFor: (n: number) => { start: () => void } } } | null>(null);
+  const hasStarted = useRef(false);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { root: null, threshold: 0.2, rootMargin: "0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || hasStarted.current || !typewriterRef.current) return;
+    hasStarted.current = true;
+    typewriterRef.current.typeString("What I do").pauseFor(2500).start();
+  }, [inView]);
+
+  return (
+    <div ref={wrapperRef} className={styles.heading}>
+      <Typewriter
+        options={{
+          autoStart: false,
+          loop: false,
+          deleteSpeed: 50,
+        }}
+        onInit={(tw) => {
+          typewriterRef.current = tw;
+        }}
+      />
+    </div>
+  );
+}
 
 type FloaterConfig = {
   img: any;
@@ -119,7 +167,7 @@ export default function MyBackground() {
 
       <div className={styles.content}>
 
-        <span className={styles.heading}>What I do</span>
+        <HeadingTypewriter />
 
         <div className={styles.summarySection}>
           <p className={styles.summarySectionText}>
