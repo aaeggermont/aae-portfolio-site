@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import ClientProviders from "@/app/lib/ClientProviders";
+import ClientProviders from "@/lib/ClientProviders";
 import Header from "@/components/Header"; // optional, if you want a shared header
 import { LayoutMainComponent } from './layout-main-component';
 

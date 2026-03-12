@@ -27,9 +27,8 @@ function ViewTypewriterComponent() {
         autoStart: true,
         loop: false,
         deleteSpeed: 50,
-        html: true,
         cursor: "|", 
-      }}
+      } as any}
     />
   );
 }
@@ -135,7 +134,10 @@ export default function MyBackground() {
 
       <div className={styles.content}>
 
-        <ViewTypewriterComponent />
+        {/* Typewriter heading 
+          <ViewTypewriterComponent />
+        */}
+        
         <span className={styles.heading}>What I do</span>
         
         <div className={styles.summarySection}>

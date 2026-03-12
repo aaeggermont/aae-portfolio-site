@@ -2,7 +2,7 @@ import Image from 'next/image';
 import MapDesktopImg from './mapDesktop.png';
 import MapMobileImg from './mapMobile.png';
 import styles from './aboutme_location.module.scss';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import { useMemo } from 'react';
 
 export function AboutMeLocation() {
