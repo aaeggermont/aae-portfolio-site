@@ -15,14 +15,14 @@ function TypewriterComponent() {
   return (
     <Typewriter
       options={{
-        autoStart: true,
+        autoStart: false,
         loop: false,
         deleteSpeed: 50,
       }}
       onInit={(typewriter) => {
         if (hasStarted.current) return;
         hasStarted.current = true;
-        typewriter.typeString("What I do").pauseFor(2500).start();
+        typewriter.typeString("Hello, my name is Antonio").pauseFor(2500).start();
       }}
     />
   );
