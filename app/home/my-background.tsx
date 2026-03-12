@@ -171,10 +171,13 @@ export default function MyBackground() {
 
         <div className={styles.summarySection}>
           <p className={styles.summarySectionText}>
-            I transform user insights into meaningful, well-crafted digital experiences that balance
-            clarity, creativity, and usability. By combining UX design, frontend engineering,
-            AI-driven application development, and system integration, I build seamless, intelligent
-            products that feel intuitive and human from end to end.
+            I transform user insights into meaningful, well-crafted digital
+            experiences that balance clarity, creativity, and usability. By
+            combining UX design, frontend engineering, AI-driven application
+            development, and system integration, I build seamless, intelligent
+            products that feel intuitive and human from end to end. I've applied
+            this across theme parks, revenue systems, and operational tools at
+            scale.
           </p>
         </div>
 

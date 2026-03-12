@@ -88,13 +88,13 @@ function MainBanner() {
         </h1>
 
         <h2 className={styles.backgroundText}>
-          UX Engineer, Applications Developer &amp; Technologist
+          UX Engineer · Full-stack applications · AI-powered products
         </h2>
 
         <p className={styles.description}>
-          I build modern, performant web applications and AI-powered interfaces
-          and adopt emerging technologies through Human-Centered Design and
-          Design Thinking.
+          I ship modern web applications and AI-powered experiences—from
+          discovery to production—using human-centered design and design
+          thinking. I focus on clarity, performance, and impact.
         </p>
 
         {/* LinkedIn button – last row in the text block */}

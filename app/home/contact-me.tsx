@@ -192,7 +192,8 @@ function ContactMe() {
         <HeadingTypewriter />
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}>
-            I'm always open to discussing new projects, developments, and partnerships.
+            I'm open to full-time roles, consulting, and partnerships—especially
+            in product design, frontend, and AI-driven experiences.
           </span>
         </div>
 

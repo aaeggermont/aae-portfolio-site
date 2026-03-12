@@ -13,24 +13,24 @@ export type LatestProjectItem = {
 
 export const latestProjectsItems: LatestProjectItem[] = [
   {
-    title: "Disney A.R Magic Tours",
+    title: "Disney AR Magic Tours",
     img: ARMagicToursThumb,
     description: [
-      "Enhancing the guest experience in Disney World theme parks by turning the environment into an attraction itself using Augmented Reality."
+      "Enhanced the guest experience in Disney World theme parks by turning the environment into an attraction itself using augmented reality."
     ],
   },
   {
     title: "Disney Cruise Line Revenue Management",
     img: DCLImageThumb,
     description: [
-      "Modernizing a web app for revenue management to streamline revenue data ingestion, data visualization, and real-time notifications."
+      "Modernized a web app for revenue management to streamline data ingestion, visualization, and real-time notifications."
     ],
   },
   {
     title: "R-3X – Automatic Seating Assignments",
     img: R3XAutomaticSeaterThumb,
     description: [
-      "Optimizing throughput in seating guests at rides and attractions in Disney World theme parks."
+      "Optimized throughput for seating guests at rides and attractions in Disney World theme parks."
     ],
   },
 ];

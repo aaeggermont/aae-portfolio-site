@@ -47,7 +47,7 @@ function HeadingTypewriter() {
   useEffect(() => {
     if (!inView || hasStarted.current || !typewriterRef.current) return;
     hasStarted.current = true;
-    typewriterRef.current.typeString("Latest Projects").pauseFor(2500).start();
+    typewriterRef.current.typeString("Selected Work").pauseFor(2500).start();
   }, [inView]);
 
   return (
@@ -131,9 +131,10 @@ function LatestProjects() {
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}>
             A selection of recent work across AR experiences, revenue
-            management modernization, and intelligent operational tools —
+            management modernization, and intelligent operational tools—
             projects that blend UX design, frontend engineering, and
-            AI-driven thinking.
+            AI-driven thinking, used by millions of guests and internal
+            operators.
           </span>
         </div>
 
