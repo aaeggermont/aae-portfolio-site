@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Typewriter from "typewriter-effect";
 import styles from "./contact-me.module.scss";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
@@ -11,6 +12,53 @@ import emailjs from '@emailjs/browser';
 import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
 
 const FLOAT_COUNT = 14;
+
+function HeadingTypewriter() {
+  const wrapperRef = useRef<HTMLHeadingElement | null>(null);
+  const typewriterRef = useRef<{ typeString: (s: string) => { pauseFor: (n: number) => { start: () => void } } } | null>(null);
+  const hasStarted = useRef(false);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setInView(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { root: null, threshold: 0.2, rootMargin: "0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView || hasStarted.current || !typewriterRef.current) return;
+    hasStarted.current = true;
+    typewriterRef.current.typeString("Get in Touch").pauseFor(2500).start();
+  }, [inView]);
+
+  return (
+    <h2 ref={wrapperRef} className={styles.heading}>
+      <Typewriter
+        options={{
+          autoStart: false,
+          loop: false,
+          deleteSpeed: 50,
+        }}
+        onInit={(tw) => {
+          typewriterRef.current = tw;
+        }}
+      />
+    </h2>
+  );
+}
 
 type FloaterConfig = {
   img: any;
@@ -141,7 +189,7 @@ function ContactMe() {
       </div>
 
       <div className={styles.content}>
-        <h2 className={styles.heading}>Get in Touch</h2>
+        <HeadingTypewriter />
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}>
             I'm always open to discussing new projects, developments, and partnerships.
