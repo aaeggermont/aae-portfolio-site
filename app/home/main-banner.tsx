@@ -10,16 +10,19 @@ import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from 'typewriter-effect';
 
 function TypewriterComponent() {
+  const hasStarted = useRef(false);
+
   return (
     <Typewriter
       options={{
-        strings: "Hello, my name is Antonio",
         autoStart: true,
         loop: false,
         deleteSpeed: 50,
       }}
       onInit={(typewriter) => {
-        typewriter.typeString("Hello, my name is Antonio").pauseFor(2500).start();
+        if (hasStarted.current) return;
+        hasStarted.current = true;
+        typewriter.typeString("What I do").pauseFor(2500).start();
       }}
     />
   );

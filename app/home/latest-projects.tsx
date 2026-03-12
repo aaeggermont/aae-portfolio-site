@@ -6,7 +6,7 @@ import styles from "./latest-projects.module.scss";
 import Image from "next/image";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -58,7 +58,7 @@ function LatestProjects() {
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
           <Image
-            key={i}
+            key={`float-${i}-${f.top}-${f.left}`}
             src={f.img}
             alt=""
             aria-hidden="true"

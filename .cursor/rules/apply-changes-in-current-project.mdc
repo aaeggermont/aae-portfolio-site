@@ -1,0 +1,10 @@
+---
+description: Apply all edits in the current Cursor workspace so the user sees changes
+alwaysApply: true
+---
+
+# Apply Changes in Current Project
+
+- **Workspace = current project**: The folder you have open in Cursor is the user's "current project." All code edits must be made **within the workspace root** so the user sees changes in their file tree and open files.
+- **Do not edit only in another path** (e.g. a different worktree or repo clone) unless the user explicitly asks to edit that path. If the repo uses Git worktrees, assume the user wants edits in the **open** folder, not the other worktree.
+- **Single source of truth**: When making changes, edit the files at the workspace path. Do not assume edits should go to a different directory; the user expects to see updates in the project they have open.

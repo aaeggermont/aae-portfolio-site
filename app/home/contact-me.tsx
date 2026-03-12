@@ -21,55 +21,6 @@ type FloaterConfig = {
   duration: string;
 };
 
-function AnimatedCardWrapper({
-  children,
-  index,
-}: {
-  children: React.ReactNode;
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInView(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        root: null,
-        threshold: 0.15,
-        rootMargin: "0px 0px -10% 0px",
-      }
-    );
-
-    observer.observe(el);
-
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={ref}
-      className={`${styles.cardWrapper} ${inView ? styles.cardInView : ""}`}
-      style={{
-        transitionDelay: inView ? `${index * 90}ms` : "0ms",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-
 function ContactMe() {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const form = useRef<HTMLFormElement | null>(null);
@@ -170,7 +121,7 @@ function ContactMe() {
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
           <Image
-            key={i}
+            key={`float-${i}-${f.top}-${f.left}`}
             src={f.img}
             alt=""
             aria-hidden="true"
@@ -192,7 +143,9 @@ function ContactMe() {
       <div className={styles.content}>
         <h2 className={styles.heading}>Get in Touch</h2>
         <div className={styles.summarySection}>
-          <span className={styles.summarySectionText}> I´m always open to discussing exploring new projects, developments, and partnerships. </span>
+          <span className={styles.summarySectionText}>
+            I'm always open to discussing new projects, developments, and partnerships.
+          </span>
         </div>
 
         {/* Contact form and contact details */}
@@ -204,19 +157,19 @@ function ContactMe() {
           <div className={styles.contacMeContainer}>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-               <div><span> USA: +206 556 8918</span></div>    
+              <span> USA: +206 556 8918</span>
             </div>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <div><span> Mexico: +52 55 36 71 57 12</span></div>
+              <span> Mexico: +52 55 36 71 57 12</span>
             </div>
             <div className={styles.contactRow}>
-              <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }}/>
-              <div><span> aaeggermont@outlook.com</span></div>
+              <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
+              <span> aaeggermont@outlook.com</span>
             </div>
             <div className={styles.contactRow}>
-              <LinkedInIcon onClick={handleLinkedIn} sx={{ color: '#02232c' }} style={{ fontSize: 40 }} /> 
-              <div><span onClick={handleLinkedIn}> LinkedIn</span></div>
+              <LinkedInIcon onClick={handleLinkedIn} sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
+              <span onClick={handleLinkedIn}> LinkedIn</span>
             </div>
           </div>
         </div>
