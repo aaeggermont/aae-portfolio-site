@@ -47,7 +47,9 @@
     display: flex;
     justify-content: center;
 
-    .summarySectionText {     
+    .summarySectionText {
+      @include global-container;
+
       @media screen and #{$mobile} {
         max-width: 420px;
       }
