@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import IconButton from "@mui/material/IconButton";
 import gsap from "gsap";
 
@@ -10,8 +11,6 @@ import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from 'typewriter-effect';
 
 function TypewriterComponent() {
-  const hasStarted = useRef(false);
-
   return (
     <Typewriter
       options={{
@@ -20,8 +19,6 @@ function TypewriterComponent() {
         deleteSpeed: 50,
       }}
       onInit={(typewriter) => {
-        if (hasStarted.current) return;
-        hasStarted.current = true;
         typewriter.typeString("Hello, my name is Antonio").pauseFor(2500).start();
       }}
     />
@@ -32,6 +29,16 @@ function TypewriterComponent() {
 function MainBanner() {
   const textRef = useRef<HTMLDivElement | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname();
+  const [typewriterKey, setTypewriterKey] = useState(() => 0);
+  const prevPathRef = useRef<string | null>(null);
+
+  useLayoutEffect(() => {
+    if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
+      setTypewriterKey((k) => k + 1);
+    }
+    prevPathRef.current = pathname;
+  }, [pathname]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -84,7 +91,7 @@ function MainBanner() {
         className={styles.bannerTexContent}
       >
         <h1 className={styles.helloText}>
-          <TypewriterComponent />
+          <TypewriterComponent key={`hero-${typewriterKey}`} />
         </h1>
 
         <h2 className={styles.backgroundText}>
