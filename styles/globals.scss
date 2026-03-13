@@ -6,6 +6,12 @@ html, body {
   padding: 0;
 }
 
+/* Keep header above GSAP-pinned content (e.g. home panels) so nav links stay clickable */
+.header_area {
+  position: relative;
+  z-index: 100;
+}
+
 /** Helper Font Utilities **/
 
 .font-poppins {
