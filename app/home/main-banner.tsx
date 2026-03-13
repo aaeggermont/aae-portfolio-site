@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import IconButton from "@mui/material/IconButton";
 import gsap from "gsap";
 
@@ -13,8 +14,7 @@ function TypewriterComponent() {
   return (
     <Typewriter
       options={{
-        strings: "Hello, my name is Antonio",
-        autoStart: true,
+        autoStart: false,
         loop: false,
         deleteSpeed: 50,
       }}
@@ -29,6 +29,16 @@ function TypewriterComponent() {
 function MainBanner() {
   const textRef = useRef<HTMLDivElement | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname();
+  const [typewriterKey, setTypewriterKey] = useState(() => 0);
+  const prevPathRef = useRef<string | null>(null);
+
+  useLayoutEffect(() => {
+    if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
+      setTypewriterKey((k) => k + 1);
+    }
+    prevPathRef.current = pathname;
+  }, [pathname]);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -81,17 +91,17 @@ function MainBanner() {
         className={styles.bannerTexContent}
       >
         <h1 className={styles.helloText}>
-          <TypewriterComponent />
+          <TypewriterComponent key={`hero-${typewriterKey}`} />
         </h1>
 
         <h2 className={styles.backgroundText}>
-          UX Engineer, Applications Developer &amp; Technologist
+          UX Engineer · Full-stack applications · AI-powered products
         </h2>
 
         <p className={styles.description}>
-          I build modern, performant web applications and AI-powered interfaces
-          and adopt emerging technologies through Human-Centered Design and
-          Design Thinking.
+          I ship modern web applications and AI-powered experiences—from
+          discovery to production—using human-centered design and design
+          thinking. I focus on clarity, performance, and impact.
         </p>
 
         {/* LinkedIn button – last row in the text block */}

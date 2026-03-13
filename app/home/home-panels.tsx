@@ -13,11 +13,15 @@ import ContactMe from "./contact-me";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const SCROLL_SEGMENTS_MULTIPLIER = 1; // one viewport height per panel transition
+
 function HomePanels() {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
+
+    let resizeCleanup: (() => void) | undefined;
 
     const ctx = gsap.context(() => {
       const panels = gsap.utils.toArray<HTMLElement>(`.${styles.panel}`);
@@ -26,6 +30,9 @@ function HomePanels() {
 
       const totalPanels = panels.length;
       const segments = totalPanels - 1;
+
+      const getScrollEnd = () =>
+        (typeof window !== "undefined" ? window.innerHeight : 800) * segments * SCROLL_SEGMENTS_MULTIPLIER;
 
       // Collect panel background colors from data-bg
       const panelBgs = panels.map(
@@ -51,11 +58,10 @@ function HomePanels() {
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
-          end: "+=" + window.innerHeight * segments,
+          end: () => `+=${getScrollEnd()}`,
           scrub: 0.7,
           pin: true,
           snap: {
-            // snap to nearest section (0, 1/3, 2/3, 1 for 4 panels)
             snapTo: (value) => {
               if (segments <= 0) return 0;
               const raw = value * segments;
@@ -65,11 +71,10 @@ function HomePanels() {
             duration: 0.25,
             ease: "power1.out",
           },
-          // This is the key bit: drive body bg from ScrollTrigger progress
           onUpdate: (self) => {
             if (segments <= 0) return;
 
-            const progress = self.progress; // 0 → 1
+            const progress = self.progress;
             const idx = Math.round(progress * segments);
 
             if (idx !== currentIndex && panelBgs[idx]) {
@@ -82,26 +87,21 @@ function HomePanels() {
               });
             }
           },
-          // markers: true,
         },
       });
 
       // Panels slide + MyBackground cards anim
       panels.forEach((panel, i) => {
         if (i === 0) {
-          // First panel (MainBanner) stays at yPercent 0;
-          // its internal animation is handled by MainBanner itself.
           return;
         }
 
-        // Slide this panel up over the previous one
         tl.to(panel, {
           yPercent: 0,
           ease: "power2.out",
-          duration: 1, // relative; scrub controls real feel
+          duration: 1,
         });
 
-        // MyBackground (index 1) → animate its cards when the panel comes in
         if (i === 1) {
           const cards = panel.querySelectorAll(".js-bg-card");
 
@@ -115,16 +115,21 @@ function HomePanels() {
                 duration: 0.6,
                 ease: "power2.out",
               },
-              "<0.1" // just after panel slide starts
+              "<0.1"
             );
           }
         }
-
-        // You can add similar blocks later for LatestProjects, ContactMe
       });
+
+      const onResize = () => ScrollTrigger.refresh();
+      window.addEventListener("resize", onResize);
+      resizeCleanup = () => window.removeEventListener("resize", onResize);
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      resizeCleanup?.();
+      ctx.revert();
+    };
   }, []);
 
   return (

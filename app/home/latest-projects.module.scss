@@ -72,24 +72,6 @@
   }
 }
 
-.projectSlide {
-  // Your design card width
-  width: 294px;
-
-  // If you want slightly wider on larger screens, you can do:
-  @media screen and #{$desktop-device} {
-    width: 294px;
-  }
-
-  @media screen and #{$tablet} {
-    width: 294px;
-  }
-
-  @media screen and #{$mobile} {
-    width: 294px; // or 280px if needed
-  }
-}
-
 /* Floating background images (same pattern as MyBackground) */
 .floatLayer {
   position: absolute;
