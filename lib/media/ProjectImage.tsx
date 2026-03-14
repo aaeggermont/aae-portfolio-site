@@ -61,6 +61,7 @@ export default function ProjectImage({
         style={style}
         sizes={sizes}
         priority={priority}
+        unoptimized
       />
     );
   }
