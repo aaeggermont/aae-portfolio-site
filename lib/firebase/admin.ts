@@ -4,13 +4,13 @@ import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 
-const BUCKET = process.env.AAE_FIREBASE_STORAGE_BUCKET; 
-const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.AAE_GOOGLE_CLOUD_PROJECT  || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+const BUCKET = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET; 
+const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 
 function applyEnvBridge() {
   // Project id
-  if (!process.env.GOOGLE_CLOUD_PROJECT && process.env.AAE_GOOGLE_CLOUD_PROJECT) {
-    process.env.GOOGLE_CLOUD_PROJECT = process.env.AAE_GOOGLE_CLOUD_PROJECT;
+  if (!process.env.GOOGLE_CLOUD_PROJECT && process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+    process.env.GOOGLE_CLOUD_PROJECT = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   }
 
   // Credentials path (LOCAL ONLY usually)
@@ -25,7 +25,7 @@ export function getAdmin() {
     applyEnvBridge();
     if (!PROJECT_ID) {
       throw new Error(
-        "Missing projectId. Set NEXT_PUBLIC_FIREBASE_PROJECT_ID or AAE_GOOGLE_CLOUD_PROJECT in .env.local"
+        "Missing projectId. Set NEXT_PUBLIC_FIREBASE_PROJECT_ID  in .env.local"
       );
     }
 
