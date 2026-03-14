@@ -5,6 +5,7 @@ import React from "react";
 import { useEffect, useState } from 'react';
 import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
+import ProjectImage from "@/lib/media/ProjectImage";
 import fsReference from '../../../../firebase';
 import { collection, where, getDoc, onSnapshot, orderBy, query, deleteDoc, doc, DocumentData } from "firebase/firestore";
   
@@ -53,6 +54,13 @@ export default function ArStoryTellerPage() {
           <header className={styles.hero}>
             <h1 className={styles.title}>AR Story Teller</h1>
             <p>hello world</p>
+            <ProjectImage
+              objectPath="projects/project_1/BannerARDemo-Desktop.png"
+              alt="BannerARDemo-Desktop.png"
+              width={400}
+              height={600}
+              priority
+            />
           </header>
         </div>
       </main>

@@ -6,6 +6,7 @@ import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import Image from "next/image";
 import { GatedImage } from "./components/GatedImage";
 import TestSignOutButton from "./components/Signout";
+import ProjectImage from "@/lib/media/ProjectImage";
 
 const PROJECT_ID = 4;
 const PROJECT_KEY = "project_4";
@@ -22,12 +23,13 @@ export default function AutomaticSeaterAssignmentsPage() {
           <header className={styles.hero}>
             <h1 className={styles.title}>Automatic Seating Assignments</h1>
             <p>hello world</p>
-            <GatedImage
-              projectKey={PROJECT_KEY}
+
+            <ProjectImage
               objectPath="projects/project_4/GenericTaskFlow.png"
-              alt="Generic Task Flow"
-              width={1400}
-              height={800}
+              alt="GenericTaskFlow.png"
+              width={1600}
+              height={900}
+              priority
             />
           </header>
           <TestSignOutButton />
