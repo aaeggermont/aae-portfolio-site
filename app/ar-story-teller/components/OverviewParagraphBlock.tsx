@@ -3,7 +3,7 @@ import './OverviewParagraphBlock.scss';
 import WaitingPeopleDesktop from '../Images/WaitingPeople-DesktopLg.png';
 import WaitingPeopleLgMd from '../Images/WaitingPeople-LgMd.png';
 import WaitingPeopleSMSX from '../Images/WaitingPeople-SMSX.png';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

@@ -1,13 +1,12 @@
 'use client';
 import './ParagraphImg.scss';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image, { StaticImageData } from 'next/image';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface ParagraphImgProps {
     alt?: string;
-    width?: string;
     imagesSrc?: StaticImageData[];
     description?: string;
     title?: string;
@@ -16,11 +15,10 @@ interface ParagraphImgProps {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function ParagraphImg({ alt = '', width, imagesSrc = [], description, title, ...props }: ParagraphImgProps) {
+export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...props }: ParagraphImgProps) {
     const screenDevice = useResponsive();
 
     if (screenDevice.isDesktopOrLaptop) {
-        const resolvedWidth = width ?? '90%';
         return (
             <>
                 <div {...props} className="storyteller-paragraphimg">
@@ -28,7 +26,7 @@ export function ParagraphImg({ alt = '', width, imagesSrc = [], description, tit
                         src={imagesSrc[0]}
                         alt={alt}
                         style={{
-                            width: resolvedWidth,
+                            width: '90%',
                             height: 'auto',
                             alignSelf: 'center',
                             paddingTop: '3rem',
@@ -39,14 +37,13 @@ export function ParagraphImg({ alt = '', width, imagesSrc = [], description, tit
             </>
         );
     } else if (screenDevice.isTablet) {
-        const resolvedWidth = width ?? '100%';
         return (
             <div {...props} className="storyteller-paragraphimg">
                 <Image
                     src={imagesSrc[1]}
                     alt={alt}
                     style={{
-                        width: resolvedWidth,
+                        width: '100%',
                         height: 'auto',
                         alignSelf: 'center',
                         paddingTop: '2.5rem',
@@ -56,14 +53,13 @@ export function ParagraphImg({ alt = '', width, imagesSrc = [], description, tit
             </div>
         );
     } else if (screenDevice.isMobile) {
-        const resolvedWidth = width ?? '90%';
         return (
             <div {...props} className="storyteller-paragraphimg">
                 <Image
                     src={imagesSrc[2]}
                     alt={alt}
                     style={{
-                        width: resolvedWidth,
+                        width: '90%',
                         height: 'auto',
                         paddingTop: '3rem',
                     }}

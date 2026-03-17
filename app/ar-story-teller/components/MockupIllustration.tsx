@@ -1,7 +1,7 @@
 import React from 'react';
 import './MockupIllustration.scss';
 import Image, { StaticImageData } from 'next/image';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

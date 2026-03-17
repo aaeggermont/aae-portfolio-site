@@ -10,7 +10,7 @@ import CloudsLayerMobile3 from '../Images/cloud-mobile-3.png';
 import CloudsLayerMobile4 from '../Images/cloud-mobile-4.png';
 import CrowdsWaitingDesktop from '../Images/CrowdsWaiting-Desktop.png';
 import { ParallaxBanner, ParallaxBannerLayer } from 'react-scroll-parallax';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image from 'next/image';
 
 function ProjectHeaderDesktop() {

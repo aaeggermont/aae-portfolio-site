@@ -1,18 +1,12 @@
 // app/(public)/ar-story-teller/page.tsx
 "use client";
 
-import React from "react";
 import { useEffect, useState } from 'react';
-import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import fsReference from '../../../../firebase';
-import { collection, where, getDoc, onSnapshot, orderBy, query, deleteDoc, doc, DocumentData } from "firebase/firestore";
+import { getDoc, doc, DocumentData } from "firebase/firestore";
 import { ArStoryTellerPage } from "@/app/ar-story-teller/ArStoryTellerPage";
 
-// app/(public)/work/automatic-seater-assignments/page.tsx
-
-const PROJECT_ID = 1;
-const PROJECT_KEY = "project_1";
 type ProjectDoc = DocumentData;
 
 export default function ARStoryTellerRoute() {
@@ -51,15 +45,7 @@ export default function ARStoryTellerRoute() {
       projectKey="project_1"
       title="AR Story Teller"
     >
-      {/* <main className={styles.page}>
-        <div className={styles.container}>
-          <header className={styles.hero}>
-            <h1 className={styles.title}>AR Story Teller</h1>
-            <p>hello world</p>
-          </header>
-        </div>
-      </main> */}
-      <ArStoryTellerPage />
+      <ArStoryTellerPage projectData={projectData?.content} />
     </ProjectAccessGate>
   );
 }

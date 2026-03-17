@@ -18,8 +18,11 @@ import { useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
 import { headerState } from '@/components/Header/HeaderState';
+import { DocumentData } from 'firebase-admin/firestore';
 
-export function ArStoryTellerPage() {
+type ProjectDoc = DocumentData;
+
+export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDoc }) {
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
 
@@ -34,6 +37,8 @@ export function ArStoryTellerPage() {
       setHeaderState({ position: 'relative', isDark: false });
     };
   }, [setLayoutState, setHeaderState]);
+
+  const { designChallenge, theProblem, solution, team, nextSteps } = projectData;
 
     return (
         <div style={{ paddingBottom: '200px' }}>

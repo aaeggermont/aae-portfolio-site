@@ -5,7 +5,7 @@ import ParagraphText from './ParagraphText';
 import SubTitle1 from './SubTitle1';
 import SubTitle2 from './SubTitle2';
 import './ParagraphBlock.scss';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

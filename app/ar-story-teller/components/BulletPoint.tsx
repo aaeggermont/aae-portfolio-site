@@ -4,7 +4,7 @@ import Image, { StaticImageData } from 'next/image';
 import BulletPointDesktop from '../Images/BulletPoint-Desktop.svg';
 import BulletPointLgMd from '../Images/BulletPoint-LgMd.svg';
 import BulletPointSmSx from '../Images/BulletPoint-SmSx.png';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 interface BulletPointProps {
     text: string;

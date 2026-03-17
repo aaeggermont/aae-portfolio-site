@@ -2,7 +2,7 @@
 import {useRef} from 'react';
 import './SolutionDemo.scss';
 import ARTowerofTerrorDemo from '../Images/ARTowerofTerrorDemo.gif';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image from 'next/image';
 
 

@@ -20,7 +20,7 @@ import StoryBoard14 from '../Images/Storyboard/StoryBoard_14.jpg';
 import StoryBoard15 from '../Images/Storyboard/StoryBoard_15.jpg';
 import StoryBoard16 from '../Images/Storyboard/StoryBoard_16.jpg';
 import StoryBoard17 from '../Images/Storyboard/StoryBoard_17.jpg';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image from 'next/image';
 
 // ─── Types ────────────────────────────────────────────────────────────────────

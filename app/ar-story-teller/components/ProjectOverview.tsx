@@ -3,7 +3,7 @@ import './ProjectOverview.scss';
 import MyRolesIcon from '../Images/MyRolesIcon.png';
 import TimelineIcon from '../Images/TimelineIcon.png';
 import CategoryIcon from '../Images/CategoryIcon.png';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image from 'next/image';
 
 interface ProjectOverviewProps {

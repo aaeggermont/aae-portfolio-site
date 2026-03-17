@@ -4,7 +4,7 @@ import './IllustrationDiagram.scss';
 import Lightbox from 'yet-another-react-lightbox';
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import { StaticImageData } from 'next/image';
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
