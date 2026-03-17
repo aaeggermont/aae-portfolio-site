@@ -89,21 +89,27 @@
 
 .mainBanner {
   width: 100%;
+  min-height: 100vh;
   height: 100%;
-  //background-color: aqua;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 5%;
-  width: 100%;
-  position: relative;   /* ← REQUIRED */
-  overflow: visible;    /* allow orb glow */
+  position: relative;
+  overflow: visible;
 
-  // 📱 Mobile: stack vertically, photo first, text second
+  /* Desktop only: shift panel up by header height so content is centered in the viewport */
+  @media screen and #{$desktop-device} {
+    transform: translateY(calc(-1 * var(--header-height, 64px)));
+  }
+
+  // 📱 Mobile: stack vertically, photo first, text second; center block in viewport
   @media screen and #{$mobile} {
-    flex-direction: column-reverse; // DOM: text, photo → Layout: photo, text
+    flex-direction: column-reverse;
     align-items: center;
+    justify-content: center;
     text-align: center;
     gap: 2rem;
   }
@@ -226,6 +232,8 @@
 .linkedinWrapper {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   gap: 0.6rem;
 
   @media screen and #{$mobile} {

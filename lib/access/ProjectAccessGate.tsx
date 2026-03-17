@@ -34,6 +34,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { auth, db } from "@/firebase";
+import { ProjectAccessContext } from "./ProjectAccessContext";
 
 type GateProps = {
   projectId: number;
@@ -89,13 +90,11 @@ export default function ProjectAccessGate({
   );
   const [visibilityLoading, setVisibilityLoading] = React.useState(true);
 
-  // email/password UI
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [authBusy, setAuthBusy] = React.useState(false);
   const [msg, setMsg] = React.useState<string | null>(null);
 
-  // 1) auth listener
   React.useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
@@ -106,7 +105,6 @@ export default function ProjectAccessGate({
     return () => unsub();
   }, []);
 
-  // 1.5) load visibility from projects_data by projectKey
   React.useEffect(() => {
     let alive = true;
     setVisibilityLoading(true);
@@ -139,14 +137,12 @@ export default function ProjectAccessGate({
     };
   }, [projectKey]);
 
-  // 2) allowlist listener (only when logged in AND project is restricted)
   React.useEffect(() => {
     if (visibilityLoading) return;
 
-    // public projects don't need allowlist checks
     if (visibility === "public") {
       setAllow(null);
-      setAllowed(true); // treat as allowed
+      setAllowed(true);
       return;
     }
 
@@ -160,10 +156,13 @@ export default function ProjectAccessGate({
     const unsub = onSnapshot(
       allowRef,
       (snap) => {
-        const data = (snap.exists() ? (snap.data() as AllowlistDoc) : {}) as AllowlistDoc;
+        const data = (snap.exists()
+          ? (snap.data() as AllowlistDoc)
+          : {}) as AllowlistDoc;
+
         setAllow(data);
 
-        const enabled = data.enabled !== false; // default true
+        const enabled = data.enabled !== false;
         const uidOk = (data.allowedUids ?? []).includes(user.uid);
         const emailOk = (data.allowedEmails ?? [])
           .map(normalizeEmail)
@@ -180,11 +179,9 @@ export default function ProjectAccessGate({
     return () => unsub();
   }, [user, projectKey, visibility, visibilityLoading]);
 
-  // 3) request doc listener (only when logged in + project restricted + not allowed)
   React.useEffect(() => {
     if (visibilityLoading) return;
     if (visibility === "public") return;
-
     if (!user || allowed) return;
 
     const reqRef = doc(db, "access_requests", requestId(projectKey, user.uid));
@@ -193,6 +190,7 @@ export default function ProjectAccessGate({
         setReqStatus(null);
         return;
       }
+
       const data = snap.data() as AccessRequestDoc;
       setReqStatus(data.status);
     });
@@ -200,13 +198,32 @@ export default function ProjectAccessGate({
     return () => unsub();
   }, [user, allowed, projectKey, visibility, visibilityLoading]);
 
-  // ---- actions ----
+  async function mintSessionCookie(user: User) {
+    const idToken = await user.getIdToken(true);
+
+    const res = await fetch("/api/auth/session", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken }),
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      throw new Error(`Failed to create session (${res.status}): ${txt}`);
+    }
+  }
+
   const handleGoogle = async () => {
     setAuthBusy(true);
     setMsg(null);
+
     try {
       const cred = await signInWithPopup(auth, new GoogleAuthProvider());
-      await mintSessionCookie(cred.user);
+
+      if (visibility === "restricted") {
+        await mintSessionCookie(cred.user);
+      }
     } catch (e: any) {
       setMsg(e?.message ?? "Google sign-in failed.");
     } finally {
@@ -217,9 +234,13 @@ export default function ProjectAccessGate({
   const handleEmailSignIn = async () => {
     setAuthBusy(true);
     setMsg(null);
+
     try {
       const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
-      await mintSessionCookie(cred.user);
+
+      if (visibility === "restricted") {
+        await mintSessionCookie(cred.user);
+      }
     } catch (e: any) {
       setMsg(e?.message ?? "Email sign-in failed.");
     } finally {
@@ -230,9 +251,13 @@ export default function ProjectAccessGate({
   const handleEmailCreate = async () => {
     setAuthBusy(true);
     setMsg(null);
+
     try {
       const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
-      await mintSessionCookie(cred.user);
+
+      if (visibility === "restricted") {
+        await mintSessionCookie(cred.user);
+      }
     } catch (e: any) {
       setMsg(e?.message ?? "Account creation failed.");
     } finally {
@@ -243,6 +268,7 @@ export default function ProjectAccessGate({
   const handleReset = async () => {
     setAuthBusy(true);
     setMsg(null);
+
     try {
       await sendPasswordResetEmail(auth, email.trim());
       setMsg("Password reset email sent.");
@@ -259,8 +285,8 @@ export default function ProjectAccessGate({
     setMsg(null);
 
     const reqRef = doc(db, "access_requests", requestId(projectKey, user.uid));
-
     const snap = await getDoc(reqRef);
+
     if (snap.exists()) return;
 
     const payload: AccessRequestDoc = {
@@ -276,7 +302,6 @@ export default function ProjectAccessGate({
     await setDoc(reqRef, payload, { merge: true });
   };
 
-  
   const handleSignOut = async () => {
     try {
       await fetch("/api/auth/logout", {
@@ -286,47 +311,9 @@ export default function ProjectAccessGate({
     } catch {}
 
     await signOut(auth);
-
-    // Optional hard refresh to reset everything
     window.location.reload();
   };
 
-  async function mintSessionCookie(user: User) {
-    const idToken = await user.getIdToken(true);
-
-    const res = await fetch("/api/auth/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken }),
-      credentials: "include", // ✅ important
-    });
-
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      throw new Error(`Failed to create session (${res.status}): ${txt}`);
-    }
-  }
-
-
-  /*
-  async function mintSessionCookie(user: User) {
-    const idToken = await user.getIdToken(true);
-
-    const res = await fetch("/api/auth/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken }),
-    });
-
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "");
-      throw new Error(`Failed to create session (${res.status}): ${txt}`);
-    }
-  }*/
-
-
-
-  // ---- render ----
   if (loading || visibilityLoading) {
     return (
       <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center" }}>
@@ -340,14 +327,20 @@ export default function ProjectAccessGate({
     );
   }
 
-  // ✅ THIS is where the public bypass goes
   if (visibility === "public") {
-    return <>{children}</>;
+    return (
+      <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
+        {children}
+      </ProjectAccessContext.Provider>
+    );
   }
 
-  // restricted: normal logic
   if (user && allowed) {
-    return <>{children}</>;
+    return (
+      <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
+        {children}
+      </ProjectAccessContext.Provider>
+    );
   }
 
   return (
@@ -358,13 +351,19 @@ export default function ProjectAccessGate({
             {title}
           </Typography>
 
-          <Typography color="text.secondary">This page is restricted.</Typography>
+          <Typography color="text.secondary">
+            This page is restricted.
+          </Typography>
 
           <Divider />
 
           {!user ? (
             <Stack spacing={2}>
-              <Button variant="contained" onClick={handleGoogle} disabled={authBusy}>
+              <Button
+                variant="contained"
+                onClick={handleGoogle}
+                disabled={authBusy}
+              >
                 Sign in with Google
               </Button>
 
@@ -386,15 +385,27 @@ export default function ProjectAccessGate({
                 />
 
                 <Stack direction="row" spacing={1} flexWrap="wrap">
-                  <Button variant="contained" onClick={handleEmailSignIn} disabled={authBusy}>
+                  <Button
+                    variant="contained"
+                    onClick={handleEmailSignIn}
+                    disabled={authBusy}
+                  >
                     Sign in
                   </Button>
 
-                  <Button variant="outlined" onClick={handleEmailCreate} disabled={authBusy}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleEmailCreate}
+                    disabled={authBusy}
+                  >
                     Create account
                   </Button>
 
-                  <Button variant="text" onClick={handleReset} disabled={authBusy || !email.trim()}>
+                  <Button
+                    variant="text"
+                    onClick={handleReset}
+                    disabled={authBusy || !email.trim()}
+                  >
                     Forgot password
                   </Button>
                 </Stack>
@@ -434,18 +445,21 @@ export default function ProjectAccessGate({
 
               {reqStatus === "pending" && (
                 <Typography variant="body2" color="text.secondary">
-                  Your request is pending approval. Once approved, refresh this page.
+                  Your request is pending approval. Once approved, refresh this
+                  page.
                 </Typography>
               )}
 
               {reqStatus === "rejected" && (
                 <Typography variant="body2" color="error">
-                  Your request was rejected. Contact the site owner if this is a mistake.
+                  Your request was rejected. Contact the site owner if this is a
+                  mistake.
                 </Typography>
               )}
 
               <Typography variant="caption" color="text.secondary">
-                Allowlist enabled: {String(allow?.enabled !== false)} · projectKey: {projectKey}
+                Allowlist enabled: {String(allow?.enabled !== false)} ·
+                projectKey: {projectKey}
               </Typography>
             </Stack>
           )}

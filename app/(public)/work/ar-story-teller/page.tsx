@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
+import ProjectImage from "@/lib/media/ProjectImage";
 import fsReference from '../../../../firebase';
 import { getDoc, doc, DocumentData } from "firebase/firestore";
 import { ArStoryTellerPage } from "@/app/ar-story-teller/ArStoryTellerPage";
