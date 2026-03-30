@@ -40,8 +40,10 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
 
   const { designChallenge, theProblem, solution, team, nextSteps } = projectData;
 
+  console.log('projectData', projectData);
+
     return (
-        <div style={{ paddingBottom: '200px' }}>
+        <div style={{ paddingBottom: '2000px' }}>
             <ProjectHeader />
             <div className='global-container'>
               <OverviewSection data={{ designChallenge, theProblem, solution }} />

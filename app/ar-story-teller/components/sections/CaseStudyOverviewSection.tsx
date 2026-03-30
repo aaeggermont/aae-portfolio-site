@@ -32,6 +32,8 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
     const { caseStudy } = data;
     const { overview, overviewImages, overviewImagesAlt, caseStudySectionImages } = caseStudy;
 
+    console.log(caseStudy, 'caseStudy');
+
     return (
         <section className={styles['project-container']}>
             <SectionImg

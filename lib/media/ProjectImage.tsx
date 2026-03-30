@@ -17,7 +17,7 @@ type ProjectImageProps = {
 };
 
 function stripLeadingSlash(path: string) {
-  return path.startsWith("/") ? path.slice(1) : path;
+  return path?.startsWith("/") ? path.slice(1) : path;
 }
 
 function buildPublicStorageUrl(objectPath: string) {
@@ -36,8 +36,8 @@ function buildPublicStorageUrl(objectPath: string) {
 export default function ProjectImage({
   objectPath,
   alt,
-  width,
-  height,
+  width = 0,
+  height = 0,
   className,
   style,
   sizes,

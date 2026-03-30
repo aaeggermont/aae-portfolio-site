@@ -38,13 +38,12 @@ interface NextStepsSectionProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function NextStepsSection({ data }: NextStepsSectionProps) {
-    const { nextSteps, caseStudy } = data;
-    const separatorAlt = caseStudy?.designSystem?.wireframes?.methods?.[1]?.alt;
+    const { nextSteps } = data;
 
     return (
         <section className={styles['project-container']}>
             <ParagraphImg
-                alt={separatorAlt}
+                alt='Next Steps'
                 imagesSrc={nextSteps.sectionSeparatorImages}
                 width="20%"
                 data-aos="fade-up"

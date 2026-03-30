@@ -1,6 +1,7 @@
 'use client';
 import './SectionImg.scss';
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
+import ProjectImage from '@/lib/media/ProjectImage';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -16,30 +17,38 @@ interface SectionImgProps {
 export function SectionImg({ imagesSrc, alt, ...props }: SectionImgProps) {
     const screenDevice = useResponsive();
 
+    console.log(imagesSrc, 'imagesSrc');
+
     if (screenDevice.isDesktopOrLaptop) {
         return (
             <div {...props} className="sectionimg-container">
-                <Image
-                    src={imagesSrc[0] as unknown as string}
+                <ProjectImage
+                    objectPath={imagesSrc[0]?.src as unknown as string}
                     alt={alt || ''}
+                    width={imagesSrc[0]?.width}
+                    height={imagesSrc[0]?.height}
                     style={{ paddingTop: '3rem', width: '100%' }} />
             </div>
         );
     } else if (screenDevice.isTablet) {
         return (
             <div {...props} className="sectionimg-container">
-                <Image
-                    src={imagesSrc[1] as unknown as string}
+                <ProjectImage
+                    objectPath={imagesSrc[1]?.src as unknown as string}
                     alt={alt || ''}
+                    width={imagesSrc[1]?.width}
+                    height={imagesSrc[1]?.height}
                     style={{ paddingTop: '3rem', width: '100%' }} />
             </div>
         );
     } else if (screenDevice.isMobile) {
         return (
             <div {...props}>
-                <Image
-                    src={imagesSrc[2] as unknown as string}
+                <ProjectImage
+                    objectPath={imagesSrc[2]?.src as unknown as string}
                     alt={alt || ''}
+                    width={imagesSrc[2]?.width}
+                    height={imagesSrc[2]?.height}
                     style={{ paddingTop: '1rem', width: '100%' }} />
             </div>
         );

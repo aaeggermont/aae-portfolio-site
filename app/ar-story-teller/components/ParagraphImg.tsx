@@ -1,13 +1,14 @@
 'use client';
 import './ParagraphImg.scss';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
+import ProjectImage from '@/lib/media/ProjectImage';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface ParagraphImgProps {
     alt?: string;
-    imagesSrc?: StaticImageData[];
+    imagesSrc?: StaticImageData[] | string[];
     description?: string;
     title?: string;
     [key: string]: unknown;
@@ -18,13 +19,23 @@ interface ParagraphImgProps {
 export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...props }: ParagraphImgProps) {
     const screenDevice = useResponsive();
 
+    const getImagePath = (index: number) => {
+        if (typeof imagesSrc[index] === 'string') {
+            return imagesSrc[index];
+        } else {
+            return imagesSrc[index]?.src;
+        }
+    };
+
     if (screenDevice.isDesktopOrLaptop) {
         return (
             <>
                 <div {...props} className="storyteller-paragraphimg">
-                    <Image
-                        src={imagesSrc[0]}
+                    <ProjectImage
+                        objectPath={getImagePath(0)}
                         alt={alt}
+                        width={imagesSrc[0]?.width}
+                        height={imagesSrc[0]?.height}
                         style={{
                             width: '90%',
                             height: 'auto',
@@ -39,9 +50,11 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
     } else if (screenDevice.isTablet) {
         return (
             <div {...props} className="storyteller-paragraphimg">
-                <Image
-                    src={imagesSrc[1]}
+                <ProjectImage
+                    objectPath={getImagePath(1)}
                     alt={alt}
+                    width={imagesSrc[1]?.width}
+                    height={imagesSrc[1]?.height}
                     style={{
                         width: '100%',
                         height: 'auto',
@@ -55,9 +68,11 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
     } else if (screenDevice.isMobile) {
         return (
             <div {...props} className="storyteller-paragraphimg">
-                <Image
-                    src={imagesSrc[2]}
+                <ProjectImage
+                    objectPath={getImagePath(2)}
                     alt={alt}
+                    width={imagesSrc[2]?.width}
+                    height={imagesSrc[2]?.height}
                     style={{
                         width: '90%',
                         height: 'auto',

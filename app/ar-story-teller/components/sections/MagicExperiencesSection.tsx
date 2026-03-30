@@ -52,7 +52,7 @@ export function MagicExperiencesSection({ data }: MagicExperiencesSectionProps) 
                 return (
                     <MockupIllustration
                         key={index}
-                        alt={experience}
+                        alt={experience.alt ?? ''}
                         imagesSrc={experience.images}
                         title={experience.title}
                         description={experience.description}

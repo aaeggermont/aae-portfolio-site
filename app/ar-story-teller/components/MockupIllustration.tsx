@@ -1,6 +1,7 @@
 import React from 'react';
 import './MockupIllustration.scss';
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
+import ProjectImage from '@/lib/media/ProjectImage';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -30,7 +31,12 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
         return (
             <div {...props} className="mockup-container">
                 <span>{title}</span>
-                <Image src={imagesSrc[0] as unknown as string} alt={alt} style={imgStyle} />
+                <ProjectImage
+                    objectPath={imagesSrc[0]?.src as unknown as string}
+                    alt={alt}
+                    width={imagesSrc[0]?.width}
+                    height={imagesSrc[0]?.height}
+                    style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
         );
@@ -38,7 +44,12 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
         return (
             <div {...props} className="mockup-container">
                 <span>{title}</span>
-                <Image src={imagesSrc[1] as unknown as string} alt={alt} style={imgStyle} />
+                <ProjectImage
+                    objectPath={imagesSrc[1]?.src as unknown as string}
+                    alt={alt}
+                    width={imagesSrc[1]?.width}
+                    height={imagesSrc[1]?.height}
+                    style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
         );
@@ -46,7 +57,12 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
         return (
             <div {...props} className="mockup-container">
                 <span className="title">{title}</span>
-                <Image src={imagesSrc[2] as unknown as string} alt={alt} style={imgStyle} />
+                <ProjectImage
+                    objectPath={imagesSrc[2]?.src as unknown as string}
+                    alt={alt}
+                    width={imagesSrc[2]?.width}
+                    height={imagesSrc[2]?.height}
+                    style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
         );
