@@ -1,8 +1,8 @@
 'use client';
 import './BulletPoint.scss';
 import Image, { StaticImageData } from 'next/image';
-import BulletPointDesktop from '../Images/BulletPoint-Desktop.svg';
-import BulletPointLgMd from '../Images/BulletPoint-LgMd.svg';
+import BulletPointDesktop from '../Images/BulletPoint-Desktop.png';
+import BulletPointLgMd from '../Images/BulletPoint-LgMd.png';
 import BulletPointSmSx from '../Images/BulletPoint-SmSx.png';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 

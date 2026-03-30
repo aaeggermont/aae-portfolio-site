@@ -295,12 +295,12 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
-            <IlllustrationGallery
+            {/* <IlllustrationGallery
                 title={scenarioBaseDesign.storyboarding.title}
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
-            />
+            /> */}
 
             {/* Wireframes */}
             <ParagraphBlock

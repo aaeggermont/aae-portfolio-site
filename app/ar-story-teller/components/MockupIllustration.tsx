@@ -8,7 +8,7 @@ import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 interface MockupIllustrationProps {
     alt: string;
-    imagesSrc: StaticImageData[];
+    imagesSrc: string[];
     title?: string;
     width?: string;
     description?: string;
@@ -32,10 +32,10 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
             <div {...props} className="mockup-container">
                 <span>{title}</span>
                 <ProjectImage
-                    objectPath={imagesSrc[0]?.src as unknown as string}
+                    objectPath={imagesSrc[0]}
                     alt={alt}
-                    width={imagesSrc[0]?.width}
-                    height={imagesSrc[0]?.height}
+                    width={300}
+                    height={300}
                     style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
@@ -45,10 +45,10 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
             <div {...props} className="mockup-container">
                 <span>{title}</span>
                 <ProjectImage
-                    objectPath={imagesSrc[1]?.src as unknown as string}
+                    objectPath={imagesSrc[1]}
                     alt={alt}
-                    width={imagesSrc[1]?.width}
-                    height={imagesSrc[1]?.height}
+                    width={300}
+                    height={300}
                     style={imgStyle} />
                 <p className="description">{description}</p>
             </div>
@@ -58,10 +58,10 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
             <div {...props} className="mockup-container">
                 <span className="title">{title}</span>
                 <ProjectImage
-                    objectPath={imagesSrc[2]?.src as unknown as string}
+                    objectPath={imagesSrc[2]}
                     alt={alt}
-                    width={imagesSrc[2]?.width}
-                    height={imagesSrc[2]?.height}
+                    width={300}
+                    height={300}
                     style={imgStyle} />
                 <p className="description">{description}</p>
             </div>

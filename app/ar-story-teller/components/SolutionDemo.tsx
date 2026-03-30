@@ -1,7 +1,7 @@
 'use client';
 import {useRef} from 'react';
 import './SolutionDemo.scss';
-import ARTowerofTerrorDemo from '../Images/ARTowerofTerrorDemo.gif';
+// import ARTowerofTerrorDemo from '../Images/ARTowerofTerrorDemo.gif';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image from 'next/image';
 
@@ -16,7 +16,7 @@ export function SolutionDemo ({...attrs}) {
             <div {...attrs} className='solution-demo-container'>
                 <div ref={ref1} className='laptop-demo-animation'>
                     <div className='mobile-ar-image'>
-                        <Image
+                        {/* <Image
                             src={ARTowerofTerrorDemo}
                             alt={alt}
                             style={{
@@ -24,7 +24,7 @@ export function SolutionDemo ({...attrs}) {
                                 height: '100%',
                                 paddingTop: '100px',
                             }}
-                        />
+                        /> */}
                         {/* <SlideshowLightbox
                             iconColor="silver"
                             theme="lightbox"
@@ -54,14 +54,14 @@ export function SolutionDemo ({...attrs}) {
         return (
             <>
                 <div {...attrs} className='solution-demo-container'>
-                    <Image
+                    {/* <Image
                         alt="AR Test"
                         src = { ARTowerofTerrorDemo }
                         style = {{
                             paddingTop: '3rem',
                             width: '80%'
                         }}
-                    />
+                    /> */}
                 </div>
          </>
         )
@@ -72,7 +72,7 @@ export function SolutionDemo ({...attrs}) {
                 <div {...attrs} className='solutiondemo-smxs-container'>
                         <div ref={ref1} className='mobile-demo-animation'>
                             <div className='mobile-ar-image'>
-                                <Image
+                                {/* <Image
                                     alt="AR Test"
                                     src = { ARTowerofTerrorDemo }
                                     style = {{
@@ -80,7 +80,7 @@ export function SolutionDemo ({...attrs}) {
                                         width: '100%',
                                         height: '100%',
                                     }}
-                                />
+                                /> */}
                                 {/* <SlideshowLightbox
                                     iconColor="silver"
                                     theme="lightbox"

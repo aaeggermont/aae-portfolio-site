@@ -10,7 +10,7 @@ interface MagicExperience {
     title: string;
     alt: string;
     description: string;
-    images: StaticImageData[];
+    images: string[];
 }
 
 interface MagicExperiences {
