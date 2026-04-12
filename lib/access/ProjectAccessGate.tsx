@@ -28,6 +28,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import Divider from "@mui/material/Divider";
+import LinearProgress from "@mui/material/LinearProgress";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -89,6 +90,8 @@ export default function ProjectAccessGate({
     "restricted"
   );
   const [visibilityLoading, setVisibilityLoading] = React.useState(true);
+  /** False until first allowlist snapshot (or error) when restricted + signed in. */
+  const [allowlistReady, setAllowlistReady] = React.useState(false);
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -143,14 +146,18 @@ export default function ProjectAccessGate({
     if (visibility === "public") {
       setAllow(null);
       setAllowed(true);
+      setAllowlistReady(true);
       return;
     }
 
     if (!user) {
       setAllow(null);
       setAllowed(false);
+      setAllowlistReady(true);
       return;
     }
+
+    setAllowlistReady(false);
 
     const allowRef = doc(db, "access_allowlist", projectKey);
     const unsub = onSnapshot(
@@ -169,10 +176,12 @@ export default function ProjectAccessGate({
           .includes(normalizeEmail(user.email));
 
         setAllowed(enabled && (uidOk || emailOk));
+        setAllowlistReady(true);
       },
       () => {
         setAllow(null);
         setAllowed(false);
+        setAllowlistReady(true);
       }
     );
 
@@ -314,14 +323,22 @@ export default function ProjectAccessGate({
     window.location.reload();
   };
 
-  if (loading || visibilityLoading) {
+  const accessPending =
+    visibility === "restricted" && !!user && !allowlistReady;
+
+  if (loading || visibilityLoading || accessPending) {
+    const verifyingOnly = accessPending && !loading && !visibilityLoading;
+
     return (
-      <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center" }}>
-        <Stack spacing={2} alignItems="center">
+      <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center", px: 2 }}>
+        <Stack spacing={2} alignItems="center" sx={{ width: "100%", maxWidth: 360 }}>
           <CircularProgress />
-          <Typography variant="body2" color="text.secondary">
-            Checking access…
+          <Typography variant="body2" color="text.secondary" textAlign="center">
+            {verifyingOnly ? "Verifying access…" : "Checking access…"}
           </Typography>
+          {verifyingOnly ? (
+            <LinearProgress sx={{ width: "100%", borderRadius: 1 }} />
+          ) : null}
         </Stack>
       </Box>
     );

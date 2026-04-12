@@ -1,0 +1,84 @@
+@import "@/styles/variables";
+
+.page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #f4f8fb;
+  padding: 3.5rem 0 5rem;
+}
+
+// Content width band per device — uses only $mobile-*, $tablet-*, $desktop-* from variables.scss
+.container {
+  width: 100%;
+  margin-inline: auto;
+  box-sizing: border-box;
+
+  // Viewports below $mobile-min: same width band as mobile
+  @media (max-width: #{$mobile-min - 1}) {
+    min-width: $mobile-min;
+    max-width: $mobile-max;
+    background-color: green;
+  }
+
+  // Mobile: $mobile-min – $mobile-max
+  @media (min-width: $mobile-min) and (max-width: $mobile-max) {
+    min-width: $mobile-min;
+    max-width: $mobile-max;
+    background-color: green;
+  }
+
+  // Tablet: $tablet-min – $tablet-max
+  @media (min-width: $tablet-min) and (max-width: $tablet-max) {
+    min-width: $tablet-min;
+    max-width: $tablet-max;
+    background-color: yellow;
+  }
+
+  // Desktop: $desktop-min – $desktop-max
+  @media (min-width: $desktop-min) and (max-width: $desktop-max) {
+    min-width: $desktop-min;
+    max-width: $desktop-max;
+    background-color: blue;
+  }
+
+  // Wider than $desktop-max: centered; width never exceeds $desktop-max
+  @media (min-width: #{$desktop-max + 1}) {
+    max-width: $desktop-max;
+    background-color: blue;
+  }
+}
+
+.banner {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.hero {
+  text-align: left;
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-family: var(--font-poppins);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: #074c5f;
+  margin-bottom: 0.75rem;
+}
+
+.kicker {
+  font-family: var(--font-figtree);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(7, 76, 95, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-family: var(--font-figtree);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(1, 17, 20, 0.8);
+  max-width: 720px;
+}
