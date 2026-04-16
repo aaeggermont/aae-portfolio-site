@@ -6,7 +6,7 @@ import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import TestSignOutButton from "./components/Signout";
 import ImageBanner from "./components/ImageBanner";
-
+import OverviewSection from "./components/OverviewSection";
 const PROJECT_ID = 4;
 const PROJECT_KEY = "project_4";
 
@@ -26,6 +26,7 @@ export default function AutomaticSeaterAssignmentsPage() {
         <div className={`${styles.banner} ${styles.bannerFullBleed}`}>
           <ImageBanner />
         </div>
+        <OverviewSection />
         <div className={styles.container}>
           <TestSignOutButton />
         </div>
