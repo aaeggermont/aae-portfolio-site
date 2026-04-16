@@ -20,6 +20,8 @@ $tablet-max: 1023px;
 $desktop-min: 1024px;
 $desktop-max: 3800px;
 
+// JS mirror (media queries, MUI): `lib/responsive/breakpoints.ts` → `breakpointPx`
+// — keep these px values in sync when editing either file.
 
 // Updated Responsive breakpoints for updated components
 $mobile: "(min-width: #{$mobile-min}) and (max-width: #{$mobile-max})";
