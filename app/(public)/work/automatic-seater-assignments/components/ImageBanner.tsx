@@ -2,6 +2,7 @@
 
 import { Box, Typography } from "@mui/material";
 import GatedImage from "@/lib/media/GatedImage";
+import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 type ImageBannerProps = {
   objectPath?: string;
@@ -11,8 +12,8 @@ type ImageBannerProps = {
 const DEFAULT_OBJECT_PATH = "projects/project_4/STBannerDesktop.png";
 
 // Align with styles/variables.scss — $tablet-min, $desktop-min
-const TABLET_MIN_PX = 768;
-const DESKTOP_MIN_PX = 1024;
+//const TABLET_MIN_PX = 768;
+//const DESKTOP_MIN_PX = 1024;
 
 const PROJECT_KEY = "project_4";
 
@@ -33,10 +34,10 @@ export default function ImageBanner({
         aspectRatio: "4 / 5",
         overflow: "hidden",
         backgroundColor: "#000",
-        [`@media (min-width: ${TABLET_MIN_PX}px)`]: {
+        [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
           aspectRatio: "16 / 9",
         },
-        [`@media (min-width: ${DESKTOP_MIN_PX}px)`]: {
+        [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
           aspectRatio: "1.62 / 1",
         },
       }}
@@ -54,7 +55,7 @@ export default function ImageBanner({
         }}
       >
         <GatedImage
-          hero
+          fullViewportLoading
           priority
           mode="fill"
           projectKey={PROJECT_KEY}
@@ -70,7 +71,7 @@ export default function ImageBanner({
           position: "absolute",
           bottom: "8%",
           left: 0,
-          width: { xs: "100%", md: "60%" },
+          width: { xs: "100%", md: "100%" },
           px: { xs: 2, md: 4 },
           display: "flex",
           flexDirection: "column",
@@ -82,9 +83,9 @@ export default function ImageBanner({
           component="h1"
           sx={{
             fontFamily: "'Poppins', Helvetica, sans-serif",
-            fontWeight: 700,
+            fontWeight: 600,
             color: "white",
-            fontSize: { xs: "1.5rem", md: "2rem" },
+            fontSize: { xs: "1.5rem", md: "2.5rem" },
             textAlign: "center",
             lineHeight: "normal",
             letterSpacing: 0,
@@ -98,16 +99,16 @@ export default function ImageBanner({
           component="p"
           sx={{
             fontFamily: "'Poppins', Helvetica, sans-serif",
-            fontWeight: 500,
+            fontWeight: 600,
             color: "white",
-            fontSize: { xs: "1rem", md: "1.125rem" },
+            fontSize: { xs: "1rem", md: "1.125rem", lg: "1.5rem" },
             textAlign: "center",
             lineHeight: "normal",
             letterSpacing: 0,
           }}
         >
           Serving as many Guests as possible
-          <br />
+         
           as quickly as possible
         </Typography>
       </Box>

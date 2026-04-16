@@ -60,7 +60,7 @@
 /**
  * Break out of `global-container` (and any full-width parent) to viewport width.
  * `overflow-x` on `.page` must stay visible or this is clipped.
- * Avoid `transform` here — it breaks `position: fixed` inside `GatedImage` hero overlay.
+ * Avoid `transform` here — it breaks `position: fixed` inside `GatedImage` full-viewport loading overlay.
  */
 .bannerFullBleed {
   position: relative;

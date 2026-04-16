@@ -20,8 +20,8 @@ type GatedImageProps = {
   priority?: boolean;
   /** `intrinsic` uses width/height; `fill` fills the parent box. */
   mode?: "intrinsic" | "fill";
-  /** Full-viewport loading overlay until signed URL + image decode (above-the-fold hero only). */
-  hero?: boolean;
+  /** Full-viewport loading overlay until signed URL + image decode. */
+  fullViewportLoading?: boolean;
 };
 
 export default function GatedImage({
@@ -35,7 +35,7 @@ export default function GatedImage({
   sizes,
   priority = false,
   mode = "intrinsic",
-  hero = false,
+  fullViewportLoading = false,
 }: GatedImageProps) {
   const [url, setUrl] = React.useState<string | null>(null);
   const [err, setErr] = React.useState<string | null>(null);
@@ -78,18 +78,19 @@ export default function GatedImage({
   }, [projectKey, objectPath]);
 
   React.useEffect(() => {
-    if (!hero) return;
+    if (!fullViewportLoading) return;
     setImageReady(false);
-  }, [hero, url]);
+  }, [fullViewportLoading, url]);
 
   const isFill = mode === "fill";
   const missingIntrinsicSize = !isFill && (!width || !height);
-  const showHeroOverlay = hero && !err && (!url || !imageReady);
+  const showFullViewportLoadingOverlay =
+    fullViewportLoading && !err && (!url || !imageReady);
 
   const mergedImageStyle: React.CSSProperties = {
     objectFit: "contain",
     ...style,
-    ...(hero && url && !imageReady ? { opacity: 0 } : {}),
+    ...(fullViewportLoading && url && !imageReady ? { opacity: 0 } : {}),
   };
 
   const inner =
@@ -98,7 +99,7 @@ export default function GatedImage({
     ) : missingIntrinsicSize ? (
       <div>Image failed: width/height required when mode is intrinsic.</div>
     ) : !url ? (
-      hero ? null : (
+      fullViewportLoading ? null : (
         <Typography variant="body2" color="text.secondary" component="div">
           Loading image…
         </Typography>
@@ -114,7 +115,7 @@ export default function GatedImage({
         priority={priority}
         unoptimized
         onLoadingComplete={() => {
-          if (hero) setImageReady(true);
+          if (fullViewportLoading) setImageReady(true);
         }}
       />
     );
@@ -127,7 +128,7 @@ export default function GatedImage({
         height: isFill ? "100%" : undefined,
       }}
     >
-      {showHeroOverlay ? (
+      {showFullViewportLoadingOverlay ? (
         <Box
           aria-busy="true"
           aria-live="polite"
