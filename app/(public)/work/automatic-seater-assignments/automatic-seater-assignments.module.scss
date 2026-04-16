@@ -3,8 +3,12 @@
 .page {
   min-height: 100vh;
   width: 100%;
+  max-width: 100%;
+  margin: 0;
   background-color: #f4f8fb;
-  padding: 3.5rem 0 5rem;
+  /* Do not clip — full-bleed banner extends past this box via transform. */
+  overflow-x: visible;
+  //padding: 3.5rem 0 5rem;
 }
 
 // Content width band per device — uses only $mobile-*, $tablet-*, $desktop-* from variables.scss
@@ -51,6 +55,19 @@
 .banner {
   width: 100%;
   margin-bottom: 2rem;
+}
+
+/**
+ * Break out of `global-container` (and any full-width parent) to viewport width.
+ * `overflow-x` on `.page` must stay visible or this is clipped.
+ * Avoid `transform` here — it breaks `position: fixed` inside `GatedImage` hero overlay.
+ */
+.bannerFullBleed {
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .hero {

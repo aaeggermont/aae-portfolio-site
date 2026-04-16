@@ -1,25 +1,27 @@
 "use client";
 
 import { Box, Typography } from "@mui/material";
-import ProjectImage from "@/lib/media/ProjectImage";
-import STD from '../images/STBannerDesktop.png'
+import GatedImage from "@/lib/media/GatedImage";
+
 type ImageBannerProps = {
   objectPath?: string;
   alt?: string;
 };
 
-const DEFAULT_OBJECT_PATH = '../images/STBannerDesktop.png';
+const DEFAULT_OBJECT_PATH = "projects/project_4/STBannerDesktop.png";
 
 // Align with styles/variables.scss — $tablet-min, $desktop-min
 const TABLET_MIN_PX = 768;
 const DESKTOP_MIN_PX = 1024;
 
-/** Matches container max widths: $mobile-max, $tablet-max, $desktop-max */
-const BANNER_SIZES = `(max-width: 767px) min(100vw, 767px), (max-width: 1023px) min(100vw, 1023px), min(100vw, 3800px)`;
+const PROJECT_KEY = "project_4";
+
+/** Parent handles full-bleed width; image always spans viewport width. */
+const BANNER_SIZES = "100vw";
 
 export default function ImageBanner({
   objectPath = DEFAULT_OBJECT_PATH,
-  alt = "Automatic seating assignments — banner",
+  alt = "Automatic seating assignments banner",
 }: ImageBannerProps) {
   return (
     <Box
@@ -51,14 +53,15 @@ export default function ImageBanner({
           },
         }}
       >
-        <ProjectImage
-          objectPath="projects/project_4/STBannerDesktop.png"
-          alt={alt}
-          width={2400}
-          height={1480}
+        <GatedImage
+          hero
           priority
+          mode="fill"
+          projectKey={PROJECT_KEY}
+          objectPath={objectPath}
+          alt={alt}
           sizes={BANNER_SIZES}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          style={{ objectFit: "cover" }}
         />
       </Box>
 
