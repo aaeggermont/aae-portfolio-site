@@ -29,6 +29,8 @@ html, body {
 
 .global-container {
   @include global-container;
+  /* Allow full-bleed children (e.g. hero banners) to extend to the viewport edges. */
+  overflow-x: visible;
 }
 
 
