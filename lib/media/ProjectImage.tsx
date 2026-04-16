@@ -14,6 +14,8 @@ type ProjectImageProps = {
   style?: React.CSSProperties;
   sizes?: string;
   priority?: boolean;
+  /** When restricted, passes through to GatedImage: full-screen overlay until hero image is ready. */
+  hero?: boolean;
 };
 
 function stripLeadingSlash(path: string) {
@@ -42,6 +44,7 @@ export default function ProjectImage({
   style,
   sizes,
   priority = false,
+  hero = false,
 }: ProjectImageProps) {
   const { projectKey, visibility } = useProjectAccess();
   console.log("Project Access Context:", { projectKey, visibility });
@@ -77,6 +80,7 @@ export default function ProjectImage({
       style={style}
       sizes={sizes}
       priority={priority}
+      hero={hero}
     />
   );
 }
