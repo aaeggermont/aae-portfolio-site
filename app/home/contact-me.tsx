@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Typewriter from "typewriter-effect";
 import styles from "./contact-me.module.scss";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
@@ -12,27 +13,14 @@ import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
 
 const FLOAT_COUNT = 14;
 
-type FloaterConfig = {
-  img: any;
-  top: string;
-  left: string;
-  size: string;
-  delay: string;
-  duration: string;
-};
-
-function AnimatedCardWrapper({
-  children,
-  index,
-}: {
-  children: React.ReactNode;
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement | null>(null);
+function HeadingTypewriter() {
+  const wrapperRef = useRef<HTMLHeadingElement | null>(null);
+  const typewriterRef = useRef<{ typeString: (s: string) => { pauseFor: (n: number) => { start: () => void } } } | null>(null);
+  const hasStarted = useRef(false);
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
-    const el = ref.current;
+    const el = wrapperRef.current;
     if (!el) return;
 
     const observer = new IntersectionObserver(
@@ -44,31 +32,42 @@ function AnimatedCardWrapper({
           }
         });
       },
-      {
-        root: null,
-        threshold: 0.15,
-        rootMargin: "0px 0px -10% 0px",
-      }
+      { root: null, threshold: 0.2, rootMargin: "0px" }
     );
-
     observer.observe(el);
-
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!inView || hasStarted.current || !typewriterRef.current) return;
+    hasStarted.current = true;
+    typewriterRef.current.typeString("Get in Touch").pauseFor(2500).start();
+  }, [inView]);
+
   return (
-    <div
-      ref={ref}
-      className={`${styles.cardWrapper} ${inView ? styles.cardInView : ""}`}
-      style={{
-        transitionDelay: inView ? `${index * 90}ms` : "0ms",
-      }}
-    >
-      {children}
-    </div>
+    <h2 ref={wrapperRef} className={styles.heading}>
+      <Typewriter
+        options={{
+          autoStart: false,
+          loop: false,
+          deleteSpeed: 50,
+        }}
+        onInit={(tw) => {
+          typewriterRef.current = tw;
+        }}
+      />
+    </h2>
   );
 }
 
+type FloaterConfig = {
+  img: any;
+  top: string;
+  left: string;
+  size: string;
+  delay: string;
+  duration: string;
+};
 
 function ContactMe() {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
@@ -170,7 +169,7 @@ function ContactMe() {
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
           <Image
-            key={i}
+            key={`float-${i}-${f.top}-${f.left}`}
             src={f.img}
             alt=""
             aria-hidden="true"
@@ -190,9 +189,12 @@ function ContactMe() {
       </div>
 
       <div className={styles.content}>
-        <h2 className={styles.heading}>Get in Touch</h2>
+        <HeadingTypewriter />
         <div className={styles.summarySection}>
-          <span className={styles.summarySectionText}> I´m always open to discussing exploring new projects, developments, and partnerships. </span>
+          <span className={styles.summarySectionText}>
+            I'm open to full-time roles, consulting, and partnerships—especially
+            in product design, frontend, and AI-driven experiences.
+          </span>
         </div>
 
         {/* Contact form and contact details */}
@@ -204,19 +206,19 @@ function ContactMe() {
           <div className={styles.contacMeContainer}>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-               <div><span> USA: +206 556 8918</span></div>    
+              <span> USA: +206 556 8918</span>
             </div>
             <div className={styles.contactRow}>
               <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <div><span> Mexico: +52 55 36 71 57 12</span></div>
+              <span> Mexico: +52 55 36 71 57 12</span>
             </div>
             <div className={styles.contactRow}>
-              <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }}/>
-              <div><span> aaeggermont@outlook.com</span></div>
+              <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
+              <span> aaeggermont@outlook.com</span>
             </div>
             <div className={styles.contactRow}>
-              <LinkedInIcon onClick={handleLinkedIn} sx={{ color: '#02232c' }} style={{ fontSize: 40 }} /> 
-              <div><span onClick={handleLinkedIn}> LinkedIn</span></div>
+              <LinkedInIcon onClick={handleLinkedIn} sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
+              <span onClick={handleLinkedIn}> LinkedIn</span>
             </div>
           </div>
         </div>

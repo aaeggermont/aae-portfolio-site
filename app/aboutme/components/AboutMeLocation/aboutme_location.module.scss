@@ -1,0 +1,66 @@
+.aboutme {
+  &Location {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px 0px #00000040;
+    border: 1px solid #E5DBDB;
+    padding: 3rem;
+    margin-bottom: 40px;
+    justify-content: center;
+    max-width: 714px;
+    min-width: 280px;
+    margin-left: 5%;
+    margin-right: 5%;
+    transform: scale(80%);
+
+    @media #{$xs}, #{$sm} {
+      padding: 2rem;
+    }
+
+    &Title {
+      font-size: clamp(1rem, 4vw, 1.5rem);
+      font-family: var(--font-poppins);
+      color: #074C5F;
+      font-weight: bold;
+      //margin-bottom: 100px;
+
+      @media #{$xs}, #{$sm} {
+        //font-size: 18px;
+        margin-bottom: 20px;
+      }
+    }
+
+    &Img {
+      display: inline-block;
+      margin-bottom: 20px;
+      //padding: 20px;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    &Info {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      grid-column-gap: 0px;
+      grid-row-gap: 5px;
+      font-weight: 500;
+      font-size: clamp(0.8rem, 2vw, 1.2rem);
+
+      @media #{$xs}, #{$sm} {
+        display: flex;
+        flex-wrap: wrap;
+        grid-column-gap: 0px;
+        grid-row-gap: 5px;
+      
+        &_Cell {
+            width: 50%;
+        }
+      }
+    }
+  }
+}

@@ -1,12 +1,11 @@
 /* app/home/home-panels.module.scss */
-/* app/home/home-panels.module.scss */
 
 .panelsContainer {
   position: relative;
   width: 100%;
   height: 100vh;
-  overflow: visible !important;
-  
+  /* overflow visible so stacked panels can extend; avoid clipping during slide */
+  overflow: visible;
 }
 
 .panel {

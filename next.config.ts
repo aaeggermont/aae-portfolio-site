@@ -9,6 +9,20 @@ const nextConfig: NextConfig = {
       @use "@/styles/mixins" as *;
     `,
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
