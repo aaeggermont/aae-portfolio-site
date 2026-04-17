@@ -5,7 +5,9 @@ import "../styles/globals.scss";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
+import { Footer } from '@/components/Footer';
 import { Aos } from '@/aos';
+
 
 // Primary UI font
 const poppins = Poppins({
@@ -48,6 +50,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <AppProviders>
             <Header />
             {children}
+            <Footer />
           </AppProviders>
         </AppRouterCacheProvider>
       </body>
