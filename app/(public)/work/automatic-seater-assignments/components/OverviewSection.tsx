@@ -1,4 +1,5 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
+import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 export const OverviewSection = () => {
   const paragraphs = [
@@ -26,6 +27,7 @@ export const OverviewSection = () => {
             color="white"
             textAlign="center"
             fontFamily="'Poppins', Helvetica"
+            fontSize={36}
           >
             Overview
           </Typography>
@@ -36,7 +38,15 @@ export const OverviewSection = () => {
                 component="p"
                 sx={{
                   color: "#cfcccc",
-                  fontSize: "1rem",
+                  [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+                    fontSize: 20,
+                  },
+                  [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+                    fontSize: 26,
+                  },
+                  [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
+                    fontSize: 18,
+                  },
                   fontFamily: "'Poppins', Helvetica",
                   fontWeight: 500,
                   lineHeight: 1.7,

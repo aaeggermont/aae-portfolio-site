@@ -78,6 +78,10 @@
   @extend %fullBleedBreakout;
 }
 
+.previewDemoFullBleed {
+  @extend %fullBleedBreakout;
+}
+
 .hero {
   text-align: left;
   margin-bottom: 3rem;
