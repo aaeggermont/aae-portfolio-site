@@ -26,7 +26,9 @@ export default function AutomaticSeaterAssignmentsPage() {
         <div className={`${styles.banner} ${styles.bannerFullBleed}`}>
           <ImageBanner />
         </div>
-        <OverviewSection />
+        <div className={styles.overviewFullBleed}>
+          <OverviewSection />
+        </div>
         <div className={styles.container}>
           <TestSignOutButton />
         </div>

@@ -13,12 +13,11 @@ export const OverviewSection = () => {
         width: "100%",
         background:
           "linear-gradient(180deg, rgba(30,59,90,1) 0%, rgba(64,126,192,1) 77%)",
-        borderTop: "1px solid #a8a8a8",
         py: 8,
         px: { xs: 4, md: 10 },
       }}
     >
-      <Container maxWidth="md">
+      <Container maxWidth="lg">
         <Stack spacing={4} alignItems="center">
           <Typography
             variant="h4"

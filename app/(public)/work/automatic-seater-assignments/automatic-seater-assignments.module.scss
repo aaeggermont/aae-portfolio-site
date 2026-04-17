@@ -54,7 +54,7 @@
 
 .banner {
   width: 100%;
-  margin-bottom: 2rem;
+  //margin-bottom: 2rem;
 }
 
 /**
@@ -62,12 +62,20 @@
  * `overflow-x` on `.page` must stay visible or this is clipped.
  * Avoid `transform` here — it breaks `position: fixed` inside `GatedImage` full-viewport loading overlay.
  */
-.bannerFullBleed {
+%fullBleedBreakout {
   position: relative;
   width: 100vw;
   max-width: none;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
+}
+
+.bannerFullBleed {
+  @extend %fullBleedBreakout;
+}
+
+.overviewFullBleed {
+  @extend %fullBleedBreakout;
 }
 
 .hero {
