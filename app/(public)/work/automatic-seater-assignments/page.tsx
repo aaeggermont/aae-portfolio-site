@@ -12,7 +12,7 @@ import PreviewDemo from "./components/PreviewDemo";
 import MainSolutionParagraph from "./components/MainSolutionParagraph";
 import ProjectOverviewCard from "./components/ProjectOverviewCard";
 import KeyBenefitsCard from "./components/KeyBenefitsCard";
-
+import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 const PROJECT_ID = 4;
 const PROJECT_KEY = "project_4";
@@ -44,8 +44,16 @@ export default function AutomaticSeaterAssignmentsPage() {
               mx: "auto",
               px: 2, 
               py: 4,
-              paddingTop: 16,
-              paddingBottom: 16,
+              paddingTop: 8,
+              paddingBottom: 8,
+              [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+                paddingTop: 10,
+                paddingBottom: 10,
+              },
+              [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+                paddingTop: 16,
+                paddingBottom: 16,
+              },
               backgroundColor: "white",
               borderRadius: "16px",
               display: "flex",

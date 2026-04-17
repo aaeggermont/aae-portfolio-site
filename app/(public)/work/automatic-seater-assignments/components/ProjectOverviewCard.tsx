@@ -2,6 +2,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { Box, Stack, Typography } from "@mui/material";
+import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 const columns = [
   {
@@ -25,8 +26,19 @@ export const ProjectOverviewCard = () => {
   return (
     <Box
       sx={{
-        width: 500,
-        height: 350,
+         [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
+            maxHeight: 386,
+            height: 350,
+         },
+         [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+            width: 500,
+            height: 350,
+         },
+         [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+            width: 500,
+            height: 370,
+         },
+      
         borderRadius: "32px",
         overflow: "hidden",
         borderTop: "1px solid #a8a8a8",
@@ -47,6 +59,9 @@ export const ProjectOverviewCard = () => {
             color: "#fff",
             pb: "16px",
             fontSize: 24,
+            [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
+                fontSize: 20,
+            },
             lineHeight: "normal",
             textAlign: "center",
           }}
@@ -72,6 +87,10 @@ export const ProjectOverviewCard = () => {
                   sx={{
                     width: 45,
                     height: 45,
+                    [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
+                        width: 30,
+                        height: 30,
+                    },
                     borderRadius: "50%",
                     backgroundColor: "rgba(30, 40, 120, 0.75)",
                     display: "flex",
@@ -87,6 +106,9 @@ export const ProjectOverviewCard = () => {
                     fontWeight: 600,
                     color: "#fff",
                     fontSize: 18,
+                    [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
+                        fontSize: 16,
+                    },
                     textAlign: "center",
                     lineHeight: "normal",
                   }}
@@ -104,6 +126,9 @@ export const ProjectOverviewCard = () => {
                       fontWeight: 400,
                       color: "#fff",
                       fontSize: 16,
+                      [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
+                        fontSize: 14,
+                        },
                       textAlign: "center",
                       lineHeight: "normal",
                     }}

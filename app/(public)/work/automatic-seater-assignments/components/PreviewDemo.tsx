@@ -8,7 +8,7 @@ const PROJECT_KEY = "project_4";
 const OBJECT_PATH = "projects/project_4/SeaterVideoRecording-Desktop.gif";
 
 /** Preview figure max width per band (px) — aligns to `breakpointPx` ranges. */
-const PREVIEW_MAX_WIDTH_MOBILE_PX = 366;
+const PREVIEW_MAX_WIDTH_MOBILE_PX = 440;
 const PREVIEW_MAX_WIDTH_TABLET_PX = 800;
 const PREVIEW_MAX_WIDTH_DESKTOP_PX = 1034;
 

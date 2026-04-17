@@ -27,7 +27,15 @@ export const OverviewSection = () => {
             color="white"
             textAlign="center"
             fontFamily="'Poppins', Helvetica"
-            fontSize={36}
+            fontSize={24}
+            sx={{
+              [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+                fontSize: 30,
+              },
+              [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+                fontSize: 36,
+              },
+            }}
           >
             Overview
           </Typography>
