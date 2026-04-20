@@ -28,11 +28,11 @@ export const ProjectOverviewCard = () => {
       sx={{
          [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
             maxHeight: 386,
-            height: 350,
+            height: 300,
          },
          [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
             width: 500,
-            height: 350,
+            height: 300,
          },
          [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
             width: 500,

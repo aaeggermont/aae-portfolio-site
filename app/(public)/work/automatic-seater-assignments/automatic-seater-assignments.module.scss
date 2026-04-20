@@ -1,12 +1,14 @@
 @import "@/styles/variables";
 
+/* Layout floor matches `breakpointPx.mobileMin` / TS responsive bands. */
 .page {
   min-height: 100vh;
   width: 100%;
   max-width: 100%;
+  min-width: $mobile-min;
   margin: 0;
   background-color: #f4f8fb;
-  /* Do not clip — full-bleed banner extends past this box via transform. */
+  /* Horizontal clip lives on `.pageClipViewport` so full-bleed children still align to 100vw. */
   overflow-x: visible;
   //padding: 3.5rem 0 5rem;
 }
@@ -59,7 +61,7 @@
 
 /**
  * Break out of `global-container` (and any full-width parent) to viewport width.
- * `overflow-x` on `.page` must stay visible or this is clipped.
+ * Horizontal clip for sub-$mobile-min viewports is on `.pageClipViewport`; keep `.page` overflow-x visible.
  * Avoid `transform` here — it breaks `position: fixed` inside `GatedImage` full-viewport loading overlay.
  */
 %fullBleedBreakout {
@@ -68,6 +70,12 @@
   max-width: none;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
+}
+
+.pageClipViewport {
+  @extend %fullBleedBreakout;
+  overflow-x: clip;
+  box-sizing: border-box;
 }
 
 .bannerFullBleed {

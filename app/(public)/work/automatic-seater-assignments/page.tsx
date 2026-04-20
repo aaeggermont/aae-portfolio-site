@@ -2,6 +2,7 @@
 
 import React from "react";
 import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
 import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
@@ -12,10 +13,21 @@ import PreviewDemo from "./components/PreviewDemo";
 import MainSolutionParagraph from "./components/MainSolutionParagraph";
 import ProjectOverviewCard from "./components/ProjectOverviewCard";
 import KeyBenefitsCard from "./components/KeyBenefitsCard";
+import StandardParagraphBlock from "./components/StandardParagraphBlock";
+import ResearchMethod from "./components/ResearchMethod";
+import { researchMethodSectionData } from "./researchMethodSectionData";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 const PROJECT_ID = 4;
 const PROJECT_KEY = "project_4";
+
+const STAR_TOURS_CASE_STUDY_TITLE = "Star Tours Case Study";
+
+const STAR_TOURS_CASE_STUDY_PARAGRAPHS = [
+  "Star Tours is a motion simulator attraction available at several Disney theme parks, based on the original Star Wards film series created by George Lucas. Set in the Star Wars universe, the attraction sends Guests on a turbulent trip across the galaxy, as droids C-3PO and R2-D2 attempt to safely return a spy to the Rebel Alliance.",
+  "The Star Tours attraction was the best fit to test the inception and adoption of the Automatic Seater. This attraction was chosen because of the very high guest attendance with long waiting times and a desire of a seating more than one party per row. The complexity for Cast Member of seating manually at such locations with added social-distancing constraints can be very complex and time consuming.",
+  "A Human Centered Design approach was employed during the design, development and implementation phases where Human Computer Interaction(HCI) was a essential methodology during the initial analysis phase.",
+];
 
 export default function AutomaticSeaterAssignmentsPage() {
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
@@ -29,15 +41,16 @@ export default function AutomaticSeaterAssignmentsPage() {
       projectKey={PROJECT_KEY}
       title="Automatic Seating Assignments"
     >
-      <div className={styles.page} data-viewport-band={viewportBand}>
+      <div className={styles.pageClipViewport}>
+        <div className={styles.page} data-viewport-band={viewportBand}>
         <div className={`${styles.banner} ${styles.bannerFullBleed}`}>
           <ImageBanner />
         </div>
         <div className={styles.overviewFullBleed}>
           <OverviewSection />
+         
         </div>
         <div className={styles.previewDemoFullBleed}>
-
           <Box 
             sx={{ 
               width: "100%", 
@@ -84,9 +97,33 @@ export default function AutomaticSeaterAssignmentsPage() {
               <KeyBenefitsCard />
             </Box>
           </Box>
+          
+            <Box
+              sx={{
+                background:
+                  "linear-gradient(180deg, rgba(64,126,192,1) 0%, rgba(3,4,5,1) 77%)",
+                minHeight: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                justifyContent: "flex-start",
+                width: "100%",
+                mx: "auto",
+                py: 4,
+                paddingTop: 8,
+                paddingBottom: 8,
+              }}>
+              <StandardParagraphBlock
+                title={STAR_TOURS_CASE_STUDY_TITLE}
+                paragraphs={STAR_TOURS_CASE_STUDY_PARAGRAPHS}
+              />
+              <ResearchMethod data={researchMethodSectionData} />
+              </Box>
+
         </div>
         <div className={styles.container}>
           <TestSignOutButton />
+        </div>
         </div>
       </div>
     </ProjectAccessGate>

@@ -38,7 +38,7 @@ export const MainSolutionParagraph = () => {
             fontSize: 24,
           },
           [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
-            fontSize: 20,
+            fontSize: 30,
           },
           [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
             fontSize: 36,

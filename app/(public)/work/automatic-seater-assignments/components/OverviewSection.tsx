@@ -1,5 +1,10 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
+import {
+  CASE_STUDY_CONTAINER_MAX_WIDTH,
+  caseStudyContainerSx,
+  caseStudySectionGutterSx,
+} from "../caseStudyLayout";
 
 export const OverviewSection = () => {
   const paragraphs = [
@@ -11,14 +16,13 @@ export const OverviewSection = () => {
     <Box
       component="section"
       sx={{
-        width: "100%",
+        ...caseStudySectionGutterSx,
         background:
           "linear-gradient(180deg, rgba(30,59,90,1) 0%, rgba(64,126,192,1) 77%)",
         py: 8,
-        px: { xs: 4, md: 10 },
       }}
     >
-      <Container maxWidth="lg">
+      <Container maxWidth={CASE_STUDY_CONTAINER_MAX_WIDTH} sx={caseStudyContainerSx}>
         <Stack spacing={4} alignItems="center">
           <Typography
             variant="h4"
@@ -46,11 +50,11 @@ export const OverviewSection = () => {
                 component="p"
                 sx={{
                   color: "#cfcccc",
-                  [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
-                    fontSize: 20,
-                  },
                   [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
                     fontSize: 26,
+                  },
+                  [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+                    fontSize: 20,
                   },
                   [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
                     fontSize: 18,
