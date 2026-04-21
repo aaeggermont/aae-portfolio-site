@@ -24,6 +24,8 @@ export type ResearchCardContentBlock =
       objectPath: string;
       alt: string;
       caption?: string;
+      /** Optional helper text shown under caption (e.g. interaction hint). */
+      annotation?: string;
       objectFit?: "cover" | "contain";
       aspectRatio?: string;
       /**
@@ -37,9 +39,14 @@ export type ResearchCardContentBlock =
       sizes?: string;
       priority?: boolean;
       /**
-       * Full-viewport loading overlay (same as hero banner). Prefer `false` for inline illustrations.
+       * Full-viewport loading overlay (same as hero banner). Ignored when `lightbox` is true.
        */
       fullViewportLoading?: boolean;
+      /**
+       * When `true`, uses `lightbox.js-react` (`SlideshowLightbox`): click to open zoom + pan (wheel / drag / pinch).
+       * Requires `NEXT_PUBLIC_LIGHTBOXJS_LICENSE` and `initLightboxJS` in `app/providers.tsx`.
+       */
+      lightbox?: boolean;
     }
   | {
       type: "custom";

@@ -81,6 +81,8 @@ export const researchMethods: ResearchMethodBlockData[] = [
             priority: true,
             fullViewportLoading: true,
             objectFit: "contain",
+            lightbox: true,
+            annotation: "(Double click on illustration to zoom in and browse)",
           },
         ],
       },

@@ -2,14 +2,8 @@
 
 import { Box, Stack, Typography } from "@mui/material";
 
-import GatedImage from "@/lib/media/GatedImage";
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
-
-/** Matches `ImageBanner` / case study gated assets. */
-const DEFAULT_MEDIA_PROJECT_KEY = "project_4";
-
-/** Card is capped ~815px; use with `GatedImage` `sizes`. */
-const DEFAULT_IMAGE_SIZES = "(max-width: 900px) 100vw, min(815px, 100vw)";
+import { ResearchMethodImageBlock } from "./ResearchMethodImageBlock";
 
 const bodyTextBaseSx = {
   color: "#ffffff",
@@ -107,63 +101,8 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
         </Stack>
       );
     }
-    case "image": {
-      const ratio = block.aspectRatio ?? "16 / 9";
-      const projectKey = block.projectKey ?? DEFAULT_MEDIA_PROJECT_KEY;
-      const objectFit = block.objectFit ?? "cover";
-      /** `contain` letterboxes; empty bands showed the old dark fill—use light fill for typical diagrams. */
-      const frameBg =
-        block.letterboxBackground ??
-        (objectFit === "contain" ? "#ffffff" : "rgba(0,0,0,0.2)");
-      return (
-        <Stack spacing={1} px={2}>
-          <Box
-            sx={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: ratio,
-              borderRadius: "8px",
-              overflow: "hidden",
-              bgcolor: frameBg,
-            }}
-          >
-            <Box
-              sx={{
-                position: "absolute",
-                inset: 0,
-                "& img": {
-                  display: "block",
-                },
-              }}
-            >
-              <GatedImage
-                mode="fill"
-                projectKey={projectKey}
-                objectPath={block.objectPath}
-                alt={block.alt}
-                sizes={block.sizes ?? DEFAULT_IMAGE_SIZES}
-                priority={block.priority ?? false}
-                fullViewportLoading={block.fullViewportLoading ?? false}
-                style={{ objectFit }}
-              />
-            </Box>
-          </Box>
-          {block.caption ? (
-            <Typography
-              sx={{
-                color: "#cfcccc",
-                fontSize: "12px",
-                lineHeight: 1.5,
-                fontFamily: "'Poppins', Helvetica",
-                textAlign: "center",
-              }}
-            >
-              {block.caption}
-            </Typography>
-          ) : null}
-        </Stack>
-      );
-    }
+    case "image":
+      return <ResearchMethodImageBlock block={block} />;
     case "custom":
       return <Box sx={{ px: 2 }}>{block.node}</Box>;
     default: {

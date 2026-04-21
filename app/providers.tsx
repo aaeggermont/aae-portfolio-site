@@ -5,6 +5,7 @@ import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { initLightboxJS } from "lightbox.js-react";
 import { ResponsiveQueryProvider } from "../lib/responsive/ResponsiveQueryProvider";
 
 const theme = createTheme({
@@ -20,6 +21,14 @@ const theme = createTheme({
 });
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
+  React.useEffect(() => {
+    const key = process.env.NEXT_PUBLIC_LIGHTBOXJS_LICENSE;
+    if (!key) return;
+    const plan =
+      process.env.NEXT_PUBLIC_LIGHTBOXJS_PLAN === "team" ? "team" : "individual";
+    initLightboxJS(key, plan);
+  }, []);
+
   return (
     <AppRouterCacheProvider options={{ key: "mui" }}>
       <ThemeProvider theme={theme}>
