@@ -186,4 +186,129 @@ export const researchMethods: ResearchMethodBlockData[] = [
       },
     ],
   },
+
+  {
+    id: "prototyping",
+    kicker: "User Research Methods",
+    title: "4. Prototyping",
+    introParagraphs: [
+      "Wire frames: Low and high fidelity Wireframes were developed using Figma, and software simulations using Python programs and an Angular SPA  were extensibly used at multiple design and co-design iterations.",
+    ],
+      cards: [
+      {
+        id: "landing-screen-illustration",
+        contentBlocks: [
+          {
+            type: "image",
+            title: "Landing Screen",
+            id: "landing-screen",
+            objectPath: "projects/project_4/LandingScreen-StarTours.png",
+            alt: "Landing Screen",
+            //aspectRatio: "16 / 9",
+            sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1000px",
+            priority: true,
+            fullViewportLoading: true,
+            objectFit: "contain",
+            lightbox: true,
+            letterboxBackground: "transparent",
+            lightboxModalBackground: "#CBCBCB",
+            annotation: "(Double click on illustration to zoom in and browse)",
+          },
+          {
+            type: "image",
+            title: "Landing Screen",
+            id: "landing-screen-specs",
+            objectPath: "projects/project_4/LandingScreen-StarTours-Specs.png",
+            alt: "Landing Screen",
+            //aspectRatio: "16 / 9",
+            sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1000px",
+            priority: true,
+            fullViewportLoading: true,
+            objectFit: "contain",
+            lightbox: true,
+            letterboxBackground: "#E9F0F8",
+            lightboxModalBackground: "#CBCBCB",
+            annotation: "(Double click on illustration to zoom in and browse)",
+          },
+          {
+            type: "image",
+            title: "Interactive View",
+            id: "interactive-view-screen",
+            objectPath: "projects/project_4/InteractiveMode-StarTours.png",
+            alt: "Interactive View",
+            //aspectRatio: "16 / 9",
+            sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1000px",
+            priority: true,
+            fullViewportLoading: true,
+            objectFit: "contain",
+            lightbox: true,
+            letterboxBackground: "transparent",
+            lightboxModalBackground: "#CBCBCB",
+            annotation: "(Double click on illustration to zoom in and browse)",
+          },
+          {
+            type: "image",
+            title: "Interactive View",
+            id: "interactive-view-screen-specs",
+            objectPath: "projects/project_4/InteractiveMode-StarTours-specs.png",
+            alt: "Interactive View",
+            //aspectRatio: "16 / 9",
+            sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1000px",
+            priority: true,
+            fullViewportLoading: true,
+            objectFit: "contain",
+            lightbox: true,
+            letterboxBackground: "#ffffff",
+            lightboxModalBackground: "#CBCBCB",
+            annotation: "(Double click on illustration to zoom in and browse)",
+          },
+          {
+            type: "paragraphs",
+            id: "activity-theory-persona-intro",
+            paragraphs: [
+              [
+                { text: "Reusable Components: ", style: "emphasis" },
+                {
+                  text: "The primary design goal was to build a framework and interactive interface that can be scalable and reusable across different types of attractions. To achieve this goal the design was kept minimalistic in the different user interfaces employing material design and a configuration driven backend.",
+                },
+                { text: "During the rapid ethnography and user research, I learned that white boards and cardboards were used to train operation cast members memorize seat numbers to mentally do math to allocate groups of people to be seated together in a section of a ride or attraction."},
+                             ],
+              [
+                { text: "This requires a cognitive effort that could be replaced by automating this process so the cast member focuses mainly on bringing the guest the best possible experience and ensure optimal attraction's throughput."},
+
+              ]
+            ],
+          }
+        ],
+      },
+    ],
+  },
+  {
+    id: "test-iterate-report",
+    kicker: "User Research Methods",
+    title: "5. Test, Iterate, Report",
+    introParagraphs: [
+      "The primary objective was to gather qualitative data to evaluate Cast Members interaction with the new design and quantitative data to assess common issues and new feature opportunities that could arise:" 
+    ],
+    cards: [
+      {
+        id: "subject-matter-expert",
+       
+        contentBlocks: [
+          {
+            type: "bullets",
+            id: "sme-bullets",
+            items: [
+              "Weekly usability testing sessions during development post launch phase.",
+              "Co-design usability testing sessions were conducted during development and post launch phase.",
+              "Post launch phase usability testing sessions were conducted to assess the new features and functionality of the application.",
+              "Physical Observations and video surveillance footage was evaluated to analyze new team dynamics and flows in the Guests throughput management.",
+              "New features were developed during the iteration and testings phases such as real time asynchronous communication in the app, manual seat assignments and on the fly gate configurations."
+
+            ],
+          },
+        ],
+      },
+    ],
+  },
 ];

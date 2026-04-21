@@ -15,6 +15,40 @@ export type ResearchMethodImageBlockData = Extract<
 const DEFAULT_MEDIA_PROJECT_KEY = "project_4";
 const DEFAULT_IMAGE_SIZES = "(max-width: 900px) 100vw, min(815px, 100vw)";
 
+const DEFAULT_LIGHTBOX_MODAL_BG = "rgba(8, 12, 18, 0.97)";
+
+/** Contrast for header/close icons; `lightbox.js` `theme` overwrites `backgroundColor` on mount, so we avoid `theme` and set this explicitly. */
+function lightboxIconColorForModalBackground(background: string): string {
+  const t = background.trim().toLowerCase();
+  if (t === "transparent") return "#c0c0c0";
+  const rgba = t.match(/^rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+  if (rgba) {
+    const r = +rgba[1];
+    const g = +rgba[2];
+    const b = +rgba[3];
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.55 ? "#1a1a1a" : "#c0c0c0";
+  }
+  const hex = t.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+  if (hex) {
+    const h = hex[1];
+    const full =
+      h.length === 3
+        ? h
+            .split("")
+            .map((c) => c + c)
+            .join("")
+        : h;
+    const v = parseInt(full, 16);
+    const r = (v >> 16) & 255;
+    const g = (v >> 8) & 255;
+    const b = v & 255;
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.55 ? "#1a1a1a" : "#c0c0c0";
+  }
+  return "#c0c0c0";
+}
+
 type Props = {
   block: ResearchMethodImageBlockData;
 };
@@ -107,6 +141,9 @@ export function ResearchMethodImageBlock({ block }: Props) {
       );
     }
 
+    const modalBg =
+      block.lightboxModalBackground ?? DEFAULT_LIGHTBOX_MODAL_BG;
+
     return (
       <Stack spacing={1} px={2}>
         {blockTitle}
@@ -117,8 +154,8 @@ export function ResearchMethodImageBlock({ block }: Props) {
           showThumbnails={false}
           showSlideshowIcon={false}
           showNavigationDots={false}
-          theme="night"
-          backgroundColor="rgba(8, 12, 18, 0.97)"
+          backgroundColor={modalBg}
+          iconColor={lightboxIconColorForModalBackground(modalBg)}
           modalClose="clickOutside"
         >
           <img

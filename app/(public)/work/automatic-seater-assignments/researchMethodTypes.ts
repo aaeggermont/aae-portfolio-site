@@ -51,8 +51,14 @@ export type ResearchCardContentBlock =
       /**
        * Area behind the image when `objectFit` is `contain` (letterboxing).
        * Defaults to white for diagrams; use when the asset doesn’t match `aspectRatio`.
+       * Use `"transparent"` so the card gradient shows through.
        */
       letterboxBackground?: string;
+      /**
+       * Backdrop behind the image when `lightbox` is open (`SlideshowLightbox` `backgroundColor`).
+       * Defaults to a dark scrim; set `"transparent"` for no overlay tint.
+       */
+      lightboxModalBackground?: string;
       /** Defaults to this case study’s gated project (`project_4`). */
       projectKey?: string;
       /** Passed to `next/image` `sizes`; omit for a sensible default in the card layout. */
