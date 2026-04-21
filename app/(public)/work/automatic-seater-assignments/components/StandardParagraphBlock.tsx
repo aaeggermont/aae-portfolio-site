@@ -1,4 +1,5 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
+import type { ResponsiveStyleValue } from "@mui/system";
 
 import {
   CASE_STUDY_CONTAINER_MAX_WIDTH,
@@ -9,11 +10,20 @@ import {
 export type StandardParagraphBlockProps = {
   title?: string;
   paragraphs: string[];
+  /** Optional extra spacing above the block wrapper. */
+  paddingTop?: ResponsiveStyleValue<number | string>;
+  /** Optional extra spacing below the block wrapper. */
+  paddingBottom?: ResponsiveStyleValue<number | string>;
 };
 
-export function StandardParagraphBlock({ title, paragraphs }: StandardParagraphBlockProps) {
+export function StandardParagraphBlock({
+  title,
+  paragraphs,
+  paddingTop,
+  paddingBottom,
+}: StandardParagraphBlockProps) {
   return (
-    <Box sx={caseStudySectionGutterSx}>
+    <Box sx={{ ...caseStudySectionGutterSx, pt: paddingTop, pb: paddingBottom }}>
       <Container maxWidth={CASE_STUDY_CONTAINER_MAX_WIDTH} sx={caseStudyContainerSx}>
         <Stack alignItems="flex-start" spacing={4} sx={{ pb: 8 }}>
           {title ? (

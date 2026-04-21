@@ -118,6 +118,15 @@ export default function AutomaticSeaterAssignmentsPage() {
                 py: 4,
                 paddingTop: 8,
                 paddingBottom: 8,
+                gap: {xs: 2, sm: 2, md: 2, lg: 3},
+                [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                },
+                [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+                  paddingTop: 16,
+                  paddingBottom: 16,
+                },
               }}>
               <StandardParagraphBlock
                 title={STAR_TOURS_CASE_STUDY_TITLE}
@@ -143,7 +152,10 @@ export default function AutomaticSeaterAssignmentsPage() {
               </Container>
         
               <StandardParagraphBlock
+                title="User Research"
                 paragraphs={STAR_TOURS_CASE_STUDY_PARAGRAPHS2}
+                paddingTop={{ xs: 4, sm: 4, md: 4, lg: 4 }}
+                paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
               />
 
               <Stack
