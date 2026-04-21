@@ -26,7 +26,7 @@ type Props = {
 export const ResearchMethodCardShell = ({ card }: Props) => {
   return (
     <Stack spacing={2} p={2}>
-      <Typography sx={cardTitleSx}>{card.title}</Typography>
+      {card.title ? <Typography sx={cardTitleSx}>{card.title}</Typography> : null}
       {card.subtitle ? (
         <Typography sx={cardSubtitleSx}>{card.subtitle}</Typography>
       ) : null}

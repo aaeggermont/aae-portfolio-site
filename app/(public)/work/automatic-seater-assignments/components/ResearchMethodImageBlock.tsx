@@ -43,6 +43,22 @@ export function ResearchMethodImageBlock({ block }: Props) {
     </Typography>
   ) : null;
 
+  const blockTitle = block.title ? (
+    <Typography
+      component="h3"
+      sx={{
+        fontFamily: "'Poppins', Helvetica",
+        fontWeight: 700,
+        color: "#ffffff",
+        fontSize: { xs: "1rem", md: "1.125rem" },
+        textAlign: "center",
+        lineHeight: 1.3,
+      }}
+    >
+      {block.title}
+    </Typography>
+  ) : null;
+
   const annotation = block.annotation ? (
     <Typography
       sx={{
@@ -93,6 +109,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
 
     return (
       <Stack spacing={1} px={2}>
+        {blockTitle}
         <SlideshowLightbox
           framework="next"
           images={[{ src: url, alt: block.alt }]}
@@ -127,6 +144,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
 
   return (
     <Stack spacing={1} px={2}>
+      {blockTitle}
       <Box
         sx={{
           position: "relative",

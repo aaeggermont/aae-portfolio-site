@@ -38,6 +38,8 @@ export type ResearchCardContentBlock =
   | {
       type: "image";
       id: string;
+      /** Optional label above the figure (e.g. “Site Map”), distinct from card title. */
+      title?: string;
       /** Firebase Storage path (e.g. `projects/project_4/illustration.png`). */
       objectPath: string;
       alt: string;
@@ -80,7 +82,8 @@ export type ResearchCardContentBlock =
 
 export type ResearchMethodCardData = {
   id: string;
-  title: string;
+  /** Omit when headings live only in `contentBlocks` (e.g. image `title`). */
+  title?: string;
   subtitle?: string;
   contentBlocks: ResearchCardContentBlock[];
 };

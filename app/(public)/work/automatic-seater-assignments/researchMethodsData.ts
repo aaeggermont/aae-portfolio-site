@@ -121,4 +121,69 @@ export const researchMethods: ResearchMethodBlockData[] = [
       },
     ],
   },
+  {
+    id: "ideation-and-initial-prototyping",
+    kicker: "User Research Methods",
+    title: "3. Ideation & Initial Prototyping",
+    introParagraphs: [
+      "Formulation of Real-Time Seating Flows:  The cycle to seat Guests in an attraction’s vehicle requires the coordination of more than one Cast Member. Currently Cast Members employ hand signals and use their memory to calculate on the fly the allocation of Guest parties in vehicles.",
+      "This real time communication led to the idea of using bidirectional real-time messaging with visualizations of vehicles' individual seats status to track the seating assignments. This way both the Grouper and Gate Agents have a real time view of the seating assignments and can manage the flow of people in the waiting queues.",
+      "The flow of Guests into an attraction can also be split into multiple queues of people so each queue is managed independently.",
+      "Organizing a framework:  Based on the activity theory analysis and data collected in affinity diagrams, the ideas and concepts were sorted so features and functionality were identified through a sitemap.",
+      "The goal was to architect an application with components that could be reused driven by different configurations based on different attractions."    ],
+    cards: [
+      {
+        id: "sitemap-illustration",
+        contentBlocks: [
+          {
+            type: "image",
+            title: "Site Map",
+            id: "sitemap-illustration",
+            objectPath: "projects/project_4/AutomaticSeater-Sitemap.png",
+            alt: "Site Map Illustration",
+            //aspectRatio: "16 / 9",
+            sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1000px",
+            priority: true,
+            fullViewportLoading: true,
+            objectFit: "contain",
+            lightbox: true,
+            annotation: "(Double click on illustration to zoom in and browse)",
+          },
+          {
+            type: "paragraphs",
+            id: "activity-theory-persona-intro",
+            paragraphs: [
+              [
+                { text: "Development Introspection:  ", style: "emphasis" },
+                {
+                  text: "  The nature of a real-time communication between Groupers and Gate Agents and the need for real time visualization of positional seats assigned and available in an attraction’s vehicle led to the idea of using Web sockets in a distributed mobile application. The application could have different views and features based on the Cast Member’s role.",
+                },
+                { text: "The development team explored different technologies for message queues, storage of configurations, and frontend and backend solutions that supported bidirectional real time messaging capabilities."}
+              ],
+              [
+                { text: "The development team explored different technologies for message queues, storage of configurations, and frontend and backend solutions that supported bidirectional real time messaging capabilities."}
+              ],
+              [
+                { text: "The team analyzed the implementation of probabilistic algorithms to recommend positional seating orders in a ride’s vehicle. A software prototype was developed with a functional MVP with a ride’s vehicle visualization."}
+              ],
+            ],
+          },
+          {
+            type: "image",
+            title: "Software Intronspection and Initial Prototypes",
+            id: "initialprototype-illustration",
+            objectPath: "projects/project_4/Illustration-Initial-Prototype.png",
+            alt: "Initial Prototype Illustration",
+            //aspectRatio: "16 / 9",
+            sizes: "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 1000px",
+            priority: true,
+            fullViewportLoading: true,
+            objectFit: "contain",
+            lightbox: true,
+            annotation: "(Double click on illustration to zoom in and browse)",
+          },
+        ],
+      },
+    ],
+  },
 ];
