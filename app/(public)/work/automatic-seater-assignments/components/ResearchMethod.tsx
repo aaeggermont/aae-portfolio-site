@@ -2,12 +2,12 @@ import { Box, Stack, Typography } from "@mui/material";
 
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 import { caseStudySectionGutterSx } from "../caseStudyLayout";
-import type { ResearchMethodSectionData } from "../researchMethodTypes";
+import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
 
 type Props = {
-  /** Section copy and card blocks — from static module today; Firestore later. */
-  data: ResearchMethodSectionData;
+  /** One item from `researchMethods` — static list today; Firestore later. */
+  data: ResearchMethodBlockData;
 };
 
 export const ResearchMethod = ({ data }: Props) => {

@@ -1,6 +1,15 @@
+"use client";
+
 import { Box, Stack, Typography } from "@mui/material";
 
+import GatedImage from "@/lib/media/GatedImage";
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
+
+/** Matches `ImageBanner` / case study gated assets. */
+const DEFAULT_MEDIA_PROJECT_KEY = "project_4";
+
+/** Card is capped ~815px; use with `GatedImage` `sizes`. */
+const DEFAULT_IMAGE_SIZES = "(max-width: 900px) 100vw, min(815px, 100vw)";
 
 const bodyTextBaseSx = {
   color: "#ffffff",
@@ -85,8 +94,14 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
                   —
                 </Typography>
               )}
-              <Typography 
-              sx={{ ...bulletTextSx, fontSize: { xs: "0.9rem", md: "1rem", lg: "1rem" } }}>{text}</Typography>
+              <Typography
+                sx={{
+                  ...bulletTextSx,
+                  fontSize: { xs: "0.9rem", md: "1rem", lg: "1rem" },
+                }}
+              >
+                {text}
+              </Typography>
             </Box>
           ))}
         </Stack>
@@ -94,6 +109,12 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
     }
     case "image": {
       const ratio = block.aspectRatio ?? "16 / 9";
+      const projectKey = block.projectKey ?? DEFAULT_MEDIA_PROJECT_KEY;
+      const objectFit = block.objectFit ?? "cover";
+      /** `contain` letterboxes; empty bands showed the old dark fill—use light fill for typical diagrams. */
+      const frameBg =
+        block.letterboxBackground ??
+        (objectFit === "contain" ? "#ffffff" : "rgba(0,0,0,0.2)");
       return (
         <Stack spacing={1} px={2}>
           <Box
@@ -103,20 +124,29 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
               aspectRatio: ratio,
               borderRadius: "8px",
               overflow: "hidden",
-              bgcolor: "rgba(0,0,0,0.2)",
+              bgcolor: frameBg,
             }}
           >
             <Box
-              component="img"
-              src={block.src}
-              alt={block.alt}
               sx={{
-                width: "100%",
-                height: "100%",
-                objectFit: block.objectFit ?? "cover",
-                display: "block",
+                position: "absolute",
+                inset: 0,
+                "& img": {
+                  display: "block",
+                },
               }}
-            />
+            >
+              <GatedImage
+                mode="fill"
+                projectKey={projectKey}
+                objectPath={block.objectPath}
+                alt={block.alt}
+                sizes={block.sizes ?? DEFAULT_IMAGE_SIZES}
+                priority={block.priority ?? false}
+                fullViewportLoading={block.fullViewportLoading ?? false}
+                style={{ objectFit }}
+              />
+            </Box>
           </Box>
           {block.caption ? (
             <Typography

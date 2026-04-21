@@ -3,6 +3,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
 import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
@@ -15,7 +16,7 @@ import ProjectOverviewCard from "./components/ProjectOverviewCard";
 import KeyBenefitsCard from "./components/KeyBenefitsCard";
 import StandardParagraphBlock from "./components/StandardParagraphBlock";
 import ResearchMethod from "./components/ResearchMethod";
-import { researchMethodSectionData } from "./researchMethodSectionData";
+import { researchMethods } from "./researchMethodsData";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 const PROJECT_ID = 4;
@@ -117,7 +118,17 @@ export default function AutomaticSeaterAssignmentsPage() {
                 title={STAR_TOURS_CASE_STUDY_TITLE}
                 paragraphs={STAR_TOURS_CASE_STUDY_PARAGRAPHS}
               />
-              <ResearchMethod data={researchMethodSectionData} />
+              <Stack
+                spacing={8}
+                sx={{
+                  width: "100%",
+                  alignItems: "stretch",
+                }}
+              >
+                {researchMethods.map((block) => (
+                  <ResearchMethod key={block.id} data={block} />
+                ))}
+              </Stack>
               </Box>
 
         </div>

@@ -20,11 +20,26 @@ export type ResearchCardContentBlock =
   | {
       type: "image";
       id: string;
-      src: string;
+      /** Firebase Storage path (e.g. `projects/project_4/illustration.png`). */
+      objectPath: string;
       alt: string;
       caption?: string;
       objectFit?: "cover" | "contain";
       aspectRatio?: string;
+      /**
+       * Area behind the image when `objectFit` is `contain` (letterboxing).
+       * Defaults to white for diagrams; use when the asset doesn’t match `aspectRatio`.
+       */
+      letterboxBackground?: string;
+      /** Defaults to this case study’s gated project (`project_4`). */
+      projectKey?: string;
+      /** Passed to `next/image` `sizes`; omit for a sensible default in the card layout. */
+      sizes?: string;
+      priority?: boolean;
+      /**
+       * Full-viewport loading overlay (same as hero banner). Prefer `false` for inline illustrations.
+       */
+      fullViewportLoading?: boolean;
     }
   | {
       type: "custom";
@@ -40,7 +55,13 @@ export type ResearchMethodCardData = {
   contentBlocks: ResearchCardContentBlock[];
 };
 
-export type ResearchMethodSectionData = {
+/**
+ * One research-method block on the page (e.g. “1. Understanding…”) with intro copy
+ * and a list of method cards (SME interviews, workshops, etc.).
+ */
+export type ResearchMethodBlockData = {
+  /** Stable id for React keys / Firestore (e.g. doc id or slug). */
+  id: string;
   kicker: string;
   title: string;
   introParagraphs: string[];
