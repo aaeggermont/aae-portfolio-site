@@ -2,16 +2,26 @@ import { Box, Stack, Typography } from "@mui/material";
 
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
 
-const bulletRowSx = {
+const bodyTextBaseSx = {
   color: "#ffffff",
-  fontSize: "14px",
   lineHeight: 1.6,
   fontFamily: "'Poppins', Helvetica",
 } as const;
 
 const paragraphSx = {
-  ...bulletRowSx,
-};
+  ...bodyTextBaseSx,
+  fontSize: "14px",
+} as const;
+
+const bulletTextSx = {
+  ...bodyTextBaseSx,
+  fontSize: "inherit",
+  minWidth: 0,
+} as const;
+
+const bulletRowFontSx = {
+  fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
+} as const;
 
 type Props = {
   block: ResearchCardContentBlock;
@@ -32,14 +42,17 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
     case "bullets": {
       const marker = block.marker ?? "square";
       return (
-        <Stack spacing={2}>
+        <Stack spacing={1.5} px={0.5}>
           {block.items.map((text, index) => (
-            <Stack
+            <Box
               key={`${block.id}-b-${index}`}
-              direction="row"
-              spacing={1.5}
-              alignItems="flex-start"
-              px={2}
+              sx={{
+                ...bulletRowFontSx,
+                display: "grid",
+                gridTemplateColumns: "auto 1fr",
+                columnGap: "13px",
+                alignItems: "start",
+              }}
             >
               {marker === "square" ? (
                 <Box
@@ -49,7 +62,7 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
                     minWidth: 12,
                     bgcolor: "#e2e3e8",
                     borderRadius: "4px",
-                    mt: "4px",
+                    mt: "0.35em",
                   }}
                 />
               ) : marker === "dot" ? (
@@ -61,19 +74,20 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
                     minWidth: 8,
                     borderRadius: "50%",
                     bgcolor: "#e2e3e8",
-                    mt: "6px",
+                    mt: "0.45em",
                   }}
                 />
               ) : (
                 <Typography
                   component="span"
-                  sx={{ ...bulletRowSx, minWidth: "1em", mt: "2px" }}
+                  sx={{ ...bulletTextSx, minWidth: "1em", mt: "0.2em" }}
                 >
                   —
                 </Typography>
               )}
-              <Typography sx={bulletRowSx}>{text}</Typography>
-            </Stack>
+              <Typography 
+              sx={{ ...bulletTextSx, fontSize: { xs: "0.9rem", md: "1rem", lg: "1rem" } }}>{text}</Typography>
+            </Box>
           ))}
         </Stack>
       );

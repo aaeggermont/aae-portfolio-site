@@ -35,8 +35,8 @@ export function StandardParagraphBlock({ title, paragraphs }: StandardParagraphB
                 fontFamily="'Poppins', Helvetica"
                 fontWeight={500}
                 color="#cfcccc"
-                fontSize="26px"
-                sx={{ m: 0 }}
+                fontSize={ { xs: "1rem", md: "1.1rem", lg: "1.2rem" } }
+                sx={{ m: 0, lineHeight: "1.6" }}
               >
                 {text}
               </Typography>
