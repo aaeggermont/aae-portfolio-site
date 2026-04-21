@@ -34,8 +34,39 @@ const STAR_TOURS_CASE_STUDY_PARAGRAPHS = [
 const STAR_TOURS_CASE_STUDY_PARAGRAPHS2 = [
   " In order to understand better the pain points and current processes, I first focused on understanding the operation aspects of the facility and current workflows and procedures of Cast Members working at the attraction. I employed the following research methods:"];
 
+const FINAL_RESULTS_KEY_METRICS = {
+  id: "final-results-key-metrics",
+  title: "Final Results & Key Metrics",
+  contentBlocks: [
+    {
+      type: "bullets",
+      items: [
+        "Increase in throughout when the app was used by Cast Members, in some cases up to 10%.",
+        "Reduced training time for new Cast Members.",
+        "Allowed Cast Members to seat Guests filling all cabins.",
+        "Reduced congestion at merge point of queue, increasing guest flow.",
+        "Ability to simulate different party size scenarios and measure capacity."
+      ],
+    },
+  ]
+};
+  
+const NEXT_STEPS = {
+  id: "next-steps",
+  title: "Next Steps",
+  contentBlocks: [
+    {
+      type: "bullets",
+      items: [
+        "Gamification of the Automatic Seater to increase engagement and motivation of Cast Members.",
+        "Roll out to additional attractions such as theater seating",
+        "Realtime Analytics and Reporting to allow in the moment data driven business decisions."
+      ],
+    },
+  ]
+};
 
-export default function AutomaticSeaterAssignmentsPage() {
+  export default function AutomaticSeaterAssignmentsPage() {
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
 
   const viewportBand =
@@ -107,7 +138,7 @@ export default function AutomaticSeaterAssignmentsPage() {
             <Box
               sx={{
                 background:
-                  "linear-gradient(180deg, rgba(64,126,192,1) 0%, rgba(3,4,5,1) 77%)",
+                  "linear-gradient(180deg, rgba(64,126,192,1) 0%, rgba(3,4,5,1) 10%)",
                 minHeight: "100vh",
                 display: "flex",
                 flexDirection: "column",
@@ -169,8 +200,25 @@ export default function AutomaticSeaterAssignmentsPage() {
                   <ResearchMethod key={block.id} data={block} />
                 ))}
               </Stack>
-              </Box>
 
+              <StandardParagraphBlock
+                title="Final Results & Key Metrics"
+                bullets={FINAL_RESULTS_KEY_METRICS.contentBlocks.flatMap((block) =>
+                  block.type === "bullets" ? block.items : [],
+                )}
+                paddingTop={{ xs: 8, sm: 8, md: 10, lg: 12 }}
+                paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
+              />
+             
+              <StandardParagraphBlock
+                title="Next Steps"
+                bullets={NEXT_STEPS.contentBlocks.flatMap((block) =>
+                  block.type === "bullets" ? block.items : [],
+                )}
+                paddingTop={{ xs: 4, sm: 4, md: 4, lg: 12 }}
+                paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
+              />
+            </Box>
         </div>
         <div className={styles.container}>
           <TestSignOutButton />
