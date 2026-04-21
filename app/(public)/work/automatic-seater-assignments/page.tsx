@@ -16,6 +16,7 @@ import ProjectOverviewCard from "./components/ProjectOverviewCard";
 import KeyBenefitsCard from "./components/KeyBenefitsCard";
 import StandardParagraphBlock from "./components/StandardParagraphBlock";
 import ResearchMethod from "./components/ResearchMethod";
+import { ResearchMethodImageBlock } from "./components/ResearchMethodImageBlock";
 import { researchMethods } from "./researchMethodsData";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 
@@ -29,6 +30,10 @@ const STAR_TOURS_CASE_STUDY_PARAGRAPHS = [
   "The Star Tours attraction was the best fit to test the inception and adoption of the Automatic Seater. This attraction was chosen because of the very high guest attendance with long waiting times and a desire of a seating more than one party per row. The complexity for Cast Member of seating manually at such locations with added social-distancing constraints can be very complex and time consuming.",
   "A Human Centered Design approach was employed during the design, development and implementation phases where Human Computer Interaction(HCI) was a essential methodology during the initial analysis phase.",
 ];
+
+const STAR_TOURS_CASE_STUDY_PARAGRAPHS2 = [
+  " In order to understand better the pain points and current processes, I first focused on understanding the operation aspects of the facility and current workflows and procedures of Cast Members working at the attraction. I employed the following research methods:"];
+
 
 export default function AutomaticSeaterAssignmentsPage() {
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
@@ -118,6 +123,29 @@ export default function AutomaticSeaterAssignmentsPage() {
                 title={STAR_TOURS_CASE_STUDY_TITLE}
                 paragraphs={STAR_TOURS_CASE_STUDY_PARAGRAPHS}
               />
+
+              <Container maxWidth="lg" sx={{ py: 2 }}>
+                <ResearchMethodImageBlock
+                  block={{
+                    id: "human-centered-design-illustration",
+                    title: "A Human Centered Design",
+                    objectPath:
+                      "projects/project_4/Illustration-Human-Centered-Design.png",
+                    alt: "Human centered design process illustration",
+                    objectFit: "contain",
+                    aspectRatio: "16 / 9",
+                    lightbox: true,
+                    letterboxBackground: "transparent",
+                    lightboxModalBackground: "#ffffff",
+                    annotation: "(Double click on illustration to zoom in and browse)",
+                  }}
+                />
+              </Container>
+        
+              <StandardParagraphBlock
+                paragraphs={STAR_TOURS_CASE_STUDY_PARAGRAPHS2}
+              />
+
               <Stack
                 spacing={8}
                 sx={{

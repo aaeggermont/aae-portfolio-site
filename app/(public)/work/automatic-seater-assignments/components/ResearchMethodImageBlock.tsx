@@ -12,6 +12,11 @@ export type ResearchMethodImageBlockData = Extract<
   { type: "image" }
 >;
 
+export type StandaloneResearchMethodImageData = Omit<
+  ResearchMethodImageBlockData,
+  "type"
+>;
+
 const DEFAULT_MEDIA_PROJECT_KEY = "project_4";
 const DEFAULT_IMAGE_SIZES = "(max-width: 900px) 100vw, min(815px, 100vw)";
 
@@ -50,7 +55,7 @@ function lightboxIconColorForModalBackground(background: string): string {
 }
 
 type Props = {
-  block: ResearchMethodImageBlockData;
+  block: ResearchMethodImageBlockData | StandaloneResearchMethodImageData;
 };
 
 export function ResearchMethodImageBlock({ block }: Props) {

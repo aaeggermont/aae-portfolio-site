@@ -103,6 +103,8 @@ export type ResearchMethodBlockData = {
   id: string;
   kicker: string;
   title: string;
+  /** Background used by the outer method section shell. */
+  background: string;
   introParagraphs: string[];
   cards: ResearchMethodCardData[];
 };

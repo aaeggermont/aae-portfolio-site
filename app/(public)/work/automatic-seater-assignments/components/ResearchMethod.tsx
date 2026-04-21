@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const ResearchMethod = ({ data }: Props) => {
-  const { kicker, title, introParagraphs, cards } = data;
+  const { kicker, title, background, introParagraphs, cards } = data;
 
   return (
     <Box sx={caseStudySectionGutterSx}>
@@ -24,8 +24,7 @@ export const ResearchMethod = ({ data }: Props) => {
           borderRadius: "32px",
           overflow: "hidden",
           borderTop: "1px solid #a8a8a8",
-          background:
-            "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
+          background,
           py: { xs: 3, md: 6, lg: 8 },
           px: { xs: 3, md: 6, lg: 8 },
         }}

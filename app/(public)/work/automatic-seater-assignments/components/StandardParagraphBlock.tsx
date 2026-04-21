@@ -7,7 +7,7 @@ import {
 } from "../caseStudyLayout";
 
 export type StandardParagraphBlockProps = {
-  title: string;
+  title?: string;
   paragraphs: string[];
 };
 
@@ -16,17 +16,19 @@ export function StandardParagraphBlock({ title, paragraphs }: StandardParagraphB
     <Box sx={caseStudySectionGutterSx}>
       <Container maxWidth={CASE_STUDY_CONTAINER_MAX_WIDTH} sx={caseStudyContainerSx}>
         <Stack alignItems="flex-start" spacing={4} sx={{ pb: 8 }}>
-          <Typography
-            component="h2"
-            variant="h4"
-            fontFamily="'Poppins', Helvetica"
-            fontWeight="bold"
-            color="white"
-            textAlign="center"
-            alignSelf="stretch"
-          >
-            {title}
-          </Typography>
+          {title ? (
+            <Typography
+              component="h2"
+              variant="h4"
+              fontFamily="'Poppins', Helvetica"
+              fontWeight="bold"
+              color="white"
+              textAlign="center"
+              alignSelf="stretch"
+            >
+              {title}
+            </Typography>
+          ) : null}
           <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", width: "100%", gap: 3 }}>
             {paragraphs.map((text, index) => (
               <Typography

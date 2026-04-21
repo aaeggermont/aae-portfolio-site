@@ -10,6 +10,8 @@ export const researchMethods: ResearchMethodBlockData[] = [
     id: "understanding-the-problem",
     kicker: "User Research Methods",
     title: "1. Understanding the Problem",
+    background:
+      "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
     introParagraphs: [
       "Cast Members need to keep track of how many Guests were in a given row and try to do some simple mathematical calculations on the fly to squeeze in more parties. This manual process results in longer waiting times for Guests and lowers the attractions throughput. We employed the following user research methodologies to better understand the problem:",
     ],
@@ -63,6 +65,8 @@ export const researchMethods: ResearchMethodBlockData[] = [
     id: "defining-the-problem",
     kicker: "User Research Methods",
     title: "2. Defining & Reframing the Problem",
+    background:
+      "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
     introParagraphs: [
       "Activity theory was employed to understand current operation processes and identify processes that could be optimized and automated. Understanding these underlying processes when Cast Members are interacting with technology and Guests and the idea of paying attention to a goal oriented activity helps understand current manual operation processes and identify processes that could be optimized and automated. The main focus is on meaningful goal oriented activities. This analysis helped with definitions of personas and their roles.",
     ],
@@ -125,6 +129,8 @@ export const researchMethods: ResearchMethodBlockData[] = [
     id: "ideation-and-initial-prototyping",
     kicker: "User Research Methods",
     title: "3. Ideation & Initial Prototyping",
+    background:
+      "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
     introParagraphs: [
       "Formulation of Real-Time Seating Flows:  The cycle to seat Guests in an attraction’s vehicle requires the coordination of more than one Cast Member. Currently Cast Members employ hand signals and use their memory to calculate on the fly the allocation of Guest parties in vehicles.",
       "This real time communication led to the idea of using bidirectional real-time messaging with visualizations of vehicles' individual seats status to track the seating assignments. This way both the Grouper and Gate Agents have a real time view of the seating assignments and can manage the flow of people in the waiting queues.",
@@ -191,6 +197,8 @@ export const researchMethods: ResearchMethodBlockData[] = [
     id: "prototyping",
     kicker: "User Research Methods",
     title: "4. Prototyping",
+    background:
+      "linear-gradient(109deg, rgba(255,255,255,1) 13%, rgba(109,156,206,1) 100%)",
     introParagraphs: [
       "Wire frames: Low and high fidelity Wireframes were developed using Figma, and software simulations using Python programs and an Angular SPA  were extensibly used at multiple design and co-design iterations.",
     ],
@@ -287,6 +295,8 @@ export const researchMethods: ResearchMethodBlockData[] = [
     id: "test-iterate-report",
     kicker: "User Research Methods",
     title: "5. Test, Iterate, Report",
+    background:
+      "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
     introParagraphs: [
       "The primary objective was to gather qualitative data to evaluate Cast Members interaction with the new design and quantitative data to assess common issues and new feature opportunities that could arise:" 
     ],
