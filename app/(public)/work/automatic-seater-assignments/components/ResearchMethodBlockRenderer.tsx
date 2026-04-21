@@ -2,8 +2,12 @@
 
 import { Box, Stack, Typography } from "@mui/material";
 
-import type { ResearchCardContentBlock } from "../researchMethodTypes";
+import type {
+  ResearchCardContentBlock,
+  RichParagraphSegment,
+} from "../researchMethodTypes";
 import { ResearchMethodImageBlock } from "./ResearchMethodImageBlock";
+import UserPersonas from "./UserPersonas";
 
 const bodyTextBaseSx = {
   color: "#ffffff",
@@ -13,7 +17,7 @@ const bodyTextBaseSx = {
 
 const paragraphSx = {
   ...bodyTextBaseSx,
-  fontSize: "14px",
+  fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
 } as const;
 
 const bulletTextSx = {
@@ -30,14 +34,44 @@ type Props = {
   block: ResearchCardContentBlock;
 };
 
+const renderRichParagraphSegment = (
+  segment: RichParagraphSegment,
+  key: string,
+) => {
+  const isEmphasis = segment.style === "emphasis";
+  return (
+    <Box
+      key={key}
+      component="span"
+      sx={
+        isEmphasis
+          ? {
+              color: "#EDD84A",
+              fontWeight: 600,
+            }
+          : undefined
+      }
+    >
+      {segment.text}
+    </Box>
+  );
+};
+
 export const ResearchMethodBlockRenderer = ({ block }: Props) => {
   switch (block.type) {
     case "paragraphs":
       return (
-        <Stack spacing={1.5} px={2}>
-          {block.paragraphs.map((text, i) => (
+        <Stack spacing={1.5} py={2}>
+          {block.paragraphs.map((paragraph, i) => (
             <Typography key={`${block.id}-p-${i}`} sx={paragraphSx}>
-              {text}
+              {typeof paragraph === "string"
+                ? paragraph
+                : paragraph.map((segment, j) =>
+                    renderRichParagraphSegment(
+                      segment,
+                      `${block.id}-p-${i}-seg-${j}`,
+                    ),
+                  )}
             </Typography>
           ))}
         </Stack>
@@ -103,6 +137,8 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
     }
     case "image":
       return <ResearchMethodImageBlock block={block} />;
+    case "userPersonas":
+      return <UserPersonas personas={block.personas} />;
     case "custom":
       return <Box sx={{ px: 2 }}>{block.node}</Box>;
     default: {

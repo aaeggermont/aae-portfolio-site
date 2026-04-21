@@ -1,5 +1,23 @@
 import type { ReactNode } from "react";
 
+export type RichParagraphSegment = {
+  text: string;
+  /**
+   * `emphasis` is used for highlighted terms within a sentence.
+   * Current style in renderer: #EDD84A + semibold.
+   */
+  style?: "default" | "emphasis";
+};
+
+export type RichParagraphValue = string | RichParagraphSegment[];
+
+export type ResearchUserPersona = {
+  title: string;
+  description: string;
+  objectPath: string;
+  alt: string;
+};
+
 /**
  * Ordered body content inside a research method card.
  * Order is preserved: e.g. paragraphs → image → bullets → paragraphs.
@@ -8,7 +26,7 @@ export type ResearchCardContentBlock =
   | {
       type: "paragraphs";
       id: string;
-      paragraphs: string[];
+      paragraphs: RichParagraphValue[];
     }
   | {
       type: "bullets";
@@ -47,6 +65,11 @@ export type ResearchCardContentBlock =
        * Requires `NEXT_PUBLIC_LIGHTBOXJS_LICENSE` and `initLightboxJS` in `app/providers.tsx`.
        */
       lightbox?: boolean;
+    }
+  | {
+      type: "userPersonas";
+      id: string;
+      personas: ResearchUserPersona[];
     }
   | {
       type: "custom";

@@ -84,6 +84,39 @@ export const researchMethods: ResearchMethodBlockData[] = [
             lightbox: true,
             annotation: "(Double click on illustration to zoom in and browse)",
           },
+          {
+            type: "paragraphs",
+            id: "activity-theory-persona-intro",
+            paragraphs: [
+              [
+                { text: "Two " },
+                { text: "User Personas", style: "emphasis" },
+                {
+                  text: " were identified in the Activity Theory analysis based on activities, actions at the facility's daily operation:",
+                },
+              ],
+            ],
+          },
+          {
+            type: "userPersonas",
+            id: "user-personas-block",
+            personas: [
+              {
+                title: "Grouper",
+                description:
+                  "An operations cast member helping organize arriving groups of guests at an attraction into parties and assign them to a gate at ride or theater.",
+                objectPath: "projects/project_4/Grouper-Persona.png",
+                alt: "Grouper persona",
+              },
+              {
+                title: "Gate Agent",
+                description:
+                  "An operations cast member helping guest grouped into parties find their seats in attraction cabins or theater sections.",
+                objectPath: "projects/project_4/Gate-Agent-Persona.png",
+                alt: "Gate agent persona",
+              },
+            ],
+          },
         ],
       },
     ],
