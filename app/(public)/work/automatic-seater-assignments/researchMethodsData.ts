@@ -12,6 +12,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
     title: "1. Understanding the Problem",
     background:
       "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
+    textColors: {
+      kicker: "#eef305",
+      title: "#ffffff",
+      introParagraph: "#ffffff",
+    },
     introParagraphs: [
       "Cast Members need to keep track of how many Guests were in a given row and try to do some simple mathematical calculations on the fly to squeeze in more parties. This manual process results in longer waiting times for Guests and lowers the attractions throughput. We employed the following user research methodologies to better understand the problem:",
     ],
@@ -67,6 +72,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
     title: "2. Defining & Reframing the Problem",
     background:
       "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
+    textColors: {
+      kicker: "#eef305",
+      title: "#ffffff",
+      introParagraph: "#ffffff",
+    },
     introParagraphs: [
       "Activity theory was employed to understand current operation processes and identify processes that could be optimized and automated. Understanding these underlying processes when Cast Members are interacting with technology and Guests and the idea of paying attention to a goal oriented activity helps understand current manual operation processes and identify processes that could be optimized and automated. The main focus is on meaningful goal oriented activities. This analysis helped with definitions of personas and their roles.",
     ],
@@ -87,10 +97,19 @@ export const researchMethods: ResearchMethodBlockData[] = [
             objectFit: "contain",
             lightbox: true,
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#ffffff",
+              caption: "#cfcccc",
+              annotation: "#dbe6f0",
+            },
           },
           {
             type: "paragraphs",
             id: "activity-theory-persona-intro",
+            textColors: {
+              paragraph: "#ffffff",
+              emphasis: "#EDD84A",
+            },
             paragraphs: [
               [
                 { text: "Two " },
@@ -131,6 +150,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
     title: "3. Ideation & Initial Prototyping",
     background:
       "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
+    textColors: {
+      kicker: "#eef305",
+      title: "#ffffff",
+      introParagraph: "#ffffff",
+    },
     introParagraphs: [
       "Formulation of Real-Time Seating Flows:  The cycle to seat Guests in an attraction’s vehicle requires the coordination of more than one Cast Member. Currently Cast Members employ hand signals and use their memory to calculate on the fly the allocation of Guest parties in vehicles.",
       "This real time communication led to the idea of using bidirectional real-time messaging with visualizations of vehicles' individual seats status to track the seating assignments. This way both the Grouper and Gate Agents have a real time view of the seating assignments and can manage the flow of people in the waiting queues.",
@@ -154,10 +178,19 @@ export const researchMethods: ResearchMethodBlockData[] = [
             objectFit: "contain",
             lightbox: true,
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#ffffff",
+              caption: "#cfcccc",
+              annotation: "#dbe6f0",
+            },
           },
           {
             type: "paragraphs",
             id: "activity-theory-persona-intro",
+            textColors: {
+              paragraph: "#ffffff",
+              emphasis: "#EDD84A",
+            },
             paragraphs: [
               [
                 { text: "Development Introspection:  ", style: "emphasis" },
@@ -187,6 +220,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
             objectFit: "contain",
             lightbox: true,
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#ffffff",
+              caption: "#cfcccc",
+              annotation: "#dbe6f0",
+            },
           },
         ],
       },
@@ -199,6 +237,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
     title: "4. Prototyping",
     background:
       "linear-gradient(109deg, rgba(255,255,255,1) 13%, rgba(109,156,206,1) 100%)",
+    textColors: {
+      kicker: "#04C300",
+      title: "#23466A",
+      introParagraph: "#204061",
+    },
     introParagraphs: [
       "Wire frames: Low and high fidelity Wireframes were developed using Figma, and software simulations using Python programs and an Angular SPA  were extensibly used at multiple design and co-design iterations.",
     ],
@@ -221,6 +264,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
             letterboxBackground: "transparent",
             lightboxModalBackground: "#CBCBCB",
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#204061",
+              caption: "#204061",
+              annotation: "#204061",
+            },
           },
           {
             type: "image",
@@ -234,9 +282,14 @@ export const researchMethods: ResearchMethodBlockData[] = [
             fullViewportLoading: true,
             objectFit: "contain",
             lightbox: true,
-            letterboxBackground: "#E9F0F8",
+            letterboxBackground: "transparent",
             lightboxModalBackground: "#CBCBCB",
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#204061",
+              caption: "#204061",
+              annotation: "#204061",
+            },
           },
           {
             type: "image",
@@ -253,6 +306,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
             letterboxBackground: "transparent",
             lightboxModalBackground: "#CBCBCB",
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#204061",
+              caption: "#204061",
+              annotation: "#204061",
+            },
           },
           {
             type: "image",
@@ -266,13 +324,22 @@ export const researchMethods: ResearchMethodBlockData[] = [
             fullViewportLoading: true,
             objectFit: "contain",
             lightbox: true,
-            letterboxBackground: "#ffffff",
+            letterboxBackground: "transparent",
             lightboxModalBackground: "#CBCBCB",
             annotation: "(Double click on illustration to zoom in and browse)",
+            textColors: {
+              title: "#204061",
+              caption: "#204061",
+              annotation: "#204061",
+            },
           },
           {
             type: "paragraphs",
             id: "activity-theory-persona-intro",
+            textColors: {
+              paragraph: "#204061",
+              emphasis: "#04C300",
+            },
             paragraphs: [
               [
                 { text: "Reusable Components: ", style: "emphasis" },
@@ -286,6 +353,58 @@ export const researchMethods: ResearchMethodBlockData[] = [
 
               ]
             ],
+          },
+          {
+            type: "reusableComponent",
+            id: "reusable-seat-component",
+            title: "The Seat",
+            description:
+              "The most basic element is the seat component. This element is a clickable component that visualizes the state of a given seat.",
+            objectPath: "projects/project_4/Seat-Component.png",
+            alt: "Seat component",
+            textColors: {
+              title: "#04C300",
+              description: "#204061",
+            },
+          },
+          {
+            type: "reusableComponent",
+            id: "reusable-cabin-geometry",
+            title: "The Cabin Geometry",
+            description:
+              "Each cabin is represented by a geometry element that contains clickable seats for manual seating assignments. The geometry is an abstraction component that can be used in different rides and attractions in the form of cabins, vehicles, and theater seating sections.",
+            objectPath: "projects/project_4/Cabin-Geometry-Component.png",
+            alt: "Cabin geometry component",
+            textColors: {
+              title: "#04C300",
+              description: "#204061",
+            },
+          },
+          {
+            type: "reusableComponent",
+            id: "reusable-keypad",
+            title: "Keypad",
+            description:
+              "A key path is used to enter a Guest party size and automatically assign the seats while optimizing seating capacity. This key path can be used in other attractions and rides requiring the seating of more than 4 Guests per cabin or vehicle.",
+            objectPath: "projects/project_4/Keypad-Component.png",
+            alt: "Keypad component",
+            textColors: {
+              title: "#04C300",
+              description: "#204061",
+            },
+          },
+          {
+            type: "reusableComponent",
+            id: "reusable-cabin-geometry-configuration",
+            title: "The Cabin Geometry Configuration",
+            description:
+              "Cabin geometries can be configured independently to mark seats as broken, accessibility seats, infants, etc.",
+            objectPath: "projects/project_4/Cabin-Geometry-Configuration.png",
+            alt: "Cabin geometry configuration",
+            textColors: {
+              title: "#04C300",
+              description: "#204061",
+            },
           }
         ],
       },
@@ -297,6 +416,11 @@ export const researchMethods: ResearchMethodBlockData[] = [
     title: "5. Test, Iterate, Report",
     background:
       "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
+    textColors: {
+      kicker: "#eef305",
+      title: "#ffffff",
+      introParagraph: "#ffffff",
+    },
     introParagraphs: [
       "The primary objective was to gather qualitative data to evaluate Cast Members interaction with the new design and quantitative data to assess common issues and new feature opportunities that could arise:" 
     ],

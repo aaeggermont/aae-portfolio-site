@@ -27,6 +27,11 @@ export type ResearchCardContentBlock =
       type: "paragraphs";
       id: string;
       paragraphs: RichParagraphValue[];
+      /** Optional per-block typography colors for paragraph text and emphasis segments. */
+      textColors?: {
+        paragraph?: string;
+        emphasis?: string;
+      };
     }
   | {
       type: "bullets";
@@ -46,6 +51,12 @@ export type ResearchCardContentBlock =
       caption?: string;
       /** Optional helper text shown under caption (e.g. interaction hint). */
       annotation?: string;
+      /** Optional typography colors for title/caption/annotation around the image. */
+      textColors?: {
+        title?: string;
+        caption?: string;
+        annotation?: string;
+      };
       objectFit?: "cover" | "contain";
       aspectRatio?: string;
       /**
@@ -80,6 +91,22 @@ export type ResearchCardContentBlock =
       personas: ResearchUserPersona[];
     }
   | {
+      type: "reusableComponent";
+      id: string;
+      title: string;
+      description: string;
+      /** Firebase Storage path (e.g. `projects/project_4/Seat-Component.png`). */
+      objectPath: string;
+      alt: string;
+      /** Defaults to this case study’s gated project (`project_4`). */
+      projectKey?: string;
+      sizes?: string;
+      textColors?: {
+        title?: string;
+        description?: string;
+      };
+    }
+  | {
       type: "custom";
       id: string;
       /** Escape hatch for layouts not covered by structured blocks. */
@@ -105,6 +132,12 @@ export type ResearchMethodBlockData = {
   title: string;
   /** Background used by the outer method section shell. */
   background: string;
+  /** Typography colors for method header and intro copy. */
+  textColors: {
+    kicker: string;
+    title: string;
+    introParagraph: string;
+  };
   introParagraphs: string[];
   cards: ResearchMethodCardData[];
 };

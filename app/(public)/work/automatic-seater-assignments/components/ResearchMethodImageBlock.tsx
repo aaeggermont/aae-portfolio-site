@@ -67,11 +67,14 @@ export function ResearchMethodImageBlock({ block }: Props) {
     (objectFit === "contain" ? "#ffffff" : "rgba(0,0,0,0.2)");
 
   const { url, error } = useSignedMediaUrl(projectKey, block.objectPath);
+  const titleColor = block.textColors?.title ?? "#ffffff";
+  const captionColor = block.textColors?.caption ?? "#cfcccc";
+  const annotationColor = block.textColors?.annotation ?? "#dbe6f0";
 
   const caption = block.caption ? (
     <Typography
       sx={{
-        color: "#cfcccc",
+        color: captionColor,
         fontSize: "12px",
         lineHeight: 1.5,
         fontFamily: "'Poppins', Helvetica",
@@ -88,7 +91,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
       sx={{
         fontFamily: "'Poppins', Helvetica",
         fontWeight: 700,
-        color: "#ffffff",
+        color: titleColor,
         fontSize: { xs: "1rem", md: "1.125rem" },
         textAlign: "center",
         lineHeight: 1.3,
@@ -101,7 +104,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
   const annotation = block.annotation ? (
     <Typography
       sx={{
-        color: "#dbe6f0",
+        color: annotationColor,
         fontSize: "12px",
         lineHeight: 1.5,
         fontFamily: "'Poppins', Helvetica",

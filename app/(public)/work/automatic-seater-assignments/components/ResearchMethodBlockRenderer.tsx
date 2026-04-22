@@ -7,6 +7,7 @@ import type {
   RichParagraphSegment,
 } from "../researchMethodTypes";
 import { ResearchMethodImageBlock } from "./ResearchMethodImageBlock";
+import { ReusableComponent } from "./ReusableComponent";
 import UserPersonas from "./UserPersonas";
 
 const bodyTextBaseSx = {
@@ -37,6 +38,7 @@ type Props = {
 const renderRichParagraphSegment = (
   segment: RichParagraphSegment,
   key: string,
+  emphasisColor: string,
 ) => {
   const isEmphasis = segment.style === "emphasis";
   return (
@@ -46,7 +48,7 @@ const renderRichParagraphSegment = (
       sx={
         isEmphasis
           ? {
-              color: "#EDD84A",
+              color: emphasisColor,
               fontWeight: 600,
             }
           : undefined
@@ -59,23 +61,30 @@ const renderRichParagraphSegment = (
 
 export const ResearchMethodBlockRenderer = ({ block }: Props) => {
   switch (block.type) {
-    case "paragraphs":
+    case "paragraphs": {
+      const paragraphColor = block.textColors?.paragraph ?? "#ffffff";
+      const emphasisColor = block.textColors?.emphasis ?? "#EDD84A";
       return (
         <Stack spacing={1.5} py={2}>
           {block.paragraphs.map((paragraph, i) => (
-            <Typography key={`${block.id}-p-${i}`} sx={paragraphSx}>
+            <Typography
+              key={`${block.id}-p-${i}`}
+              sx={{ ...paragraphSx, color: paragraphColor }}
+            >
               {typeof paragraph === "string"
                 ? paragraph
                 : paragraph.map((segment, j) =>
                     renderRichParagraphSegment(
                       segment,
                       `${block.id}-p-${i}-seg-${j}`,
+                      emphasisColor,
                     ),
                   )}
             </Typography>
           ))}
         </Stack>
       );
+    }
     case "bullets": {
       const marker = block.marker ?? "square";
       return (
@@ -137,6 +146,18 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
     }
     case "image":
       return <ResearchMethodImageBlock block={block} />;
+    case "reusableComponent":
+      return (
+        <ReusableComponent
+          title={block.title}
+          description={block.description}
+          objectPath={block.objectPath}
+          alt={block.alt}
+          projectKey={block.projectKey}
+          sizes={block.sizes}
+          textColors={block.textColors}
+        />
+      );
     case "userPersonas":
       return <UserPersonas personas={block.personas} />;
     case "custom":

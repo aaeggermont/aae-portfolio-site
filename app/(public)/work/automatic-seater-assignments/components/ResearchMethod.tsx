@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const ResearchMethod = ({ data }: Props) => {
-  const { kicker, title, background, introParagraphs, cards } = data;
+  const { kicker, title, background, textColors, introParagraphs, cards } = data;
 
   return (
     <Box sx={caseStudySectionGutterSx}>
@@ -35,7 +35,7 @@ export const ResearchMethod = ({ data }: Props) => {
             sx={{
               fontFamily: "'Poppins', Helvetica",
               fontWeight: "bold",
-              color: "#eef305",
+              color: textColors.kicker,
               fontSize: { xs: "1.1rem", md: "1.2rem", lg: "1.4rem" },
               lineHeight: "normal",
               textAlign: { xs: "center", md: "left", lg: "left" },
@@ -48,7 +48,7 @@ export const ResearchMethod = ({ data }: Props) => {
             sx={{
               fontFamily: "'Poppins', Helvetica",
               fontWeight: "bold",
-              color: "#ffffff",
+              color: textColors.title,
               fontSize: { xs: "1.1rem", md: "1.8rem", lg: "2rem" },
               textAlign: { xs: "center", md: "left", lg: "left" },
               lineHeight: "normal",
@@ -64,7 +64,7 @@ export const ResearchMethod = ({ data }: Props) => {
               <Typography
                 key={`intro-${i}`}
                 sx={{
-                  color: "#ffffff",
+                  color: textColors.introParagraph,
                   fontSize: { xs: "1rem", md: "1.1rem", lg: "1.2rem" },
                   lineHeight: 1.6,
                   fontFamily: "'Poppins', Helvetica",
