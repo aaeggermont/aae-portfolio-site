@@ -37,7 +37,7 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
   console.log('caseStudy', caseStudy);
 
     return (
-        <div style={{ paddingBottom: '2000px' }}>
+        <div>
             <ProjectHeader />
             <div className='global-container'>
               <OverviewSection data={{ designChallenge, theProblem, solution }} />

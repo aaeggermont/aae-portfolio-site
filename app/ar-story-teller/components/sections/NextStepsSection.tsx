@@ -45,7 +45,6 @@ export function NextStepsSection({ data }: NextStepsSectionProps) {
             <ParagraphImg
                 alt='Next Steps'
                 imagesSrc={nextSteps.sectionSeparatorImages}
-                width="20%"
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"

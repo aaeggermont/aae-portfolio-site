@@ -34,16 +34,14 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
                     <ProjectImage
                         objectPath={getImagePath(0)}
                         alt={alt}
-                        width={imagesSrc[0]?.width}
-                        height={imagesSrc[0]?.height}
                         style={{
-                            width: '90%',
+                            width: '100px',
                             height: 'auto',
                             alignSelf: 'center',
                             paddingTop: '3rem',
                         }}
                     />
-                    <div className="description"><p>{description}</p></div>
+                    {/* <div className="description"><p>{description}</p></div> */}
                 </div>
             </>
         );
@@ -53,16 +51,14 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
                 <ProjectImage
                     objectPath={getImagePath(1)}
                     alt={alt}
-                    width={imagesSrc[1]?.width}
-                    height={imagesSrc[1]?.height}
                     style={{
-                        width: '100%',
+                        width: '100px',
                         height: 'auto',
                         alignSelf: 'center',
                         paddingTop: '2.5rem',
                     }}
                 />
-                <div className="description">{description}</div>
+                {/* <div className="description">{description}</div> */}
             </div>
         );
     } else if (screenDevice.isMobile) {
@@ -71,16 +67,14 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
                 <ProjectImage
                     objectPath={getImagePath(2)}
                     alt={alt}
-                    width={imagesSrc[2]?.width}
-                    height={imagesSrc[2]?.height}
                     style={{
-                        width: '90%',
+                        width: '100px',
                         height: 'auto',
                         paddingTop: '3rem',
                     }}
                 />
                 {title ? <div className="title">{title}</div> : null}
-                <div className="description">{description}</div>
+                {/* <div className="description">{description}</div> */}
             </div>
         );
     }

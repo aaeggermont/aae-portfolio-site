@@ -8,8 +8,8 @@ import GatedImage from "@/lib/media/GatedImage";
 type ProjectImageProps = {
   objectPath: string; // e.g. "projects/project_1/GenericTaskFlow.png"
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   className?: string;
   style?: React.CSSProperties;
   sizes?: string;
