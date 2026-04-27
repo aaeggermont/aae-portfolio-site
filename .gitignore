@@ -53,3 +53,5 @@ media-assets/*
 # scripts
 /scripts
 
+# agent
+.agent

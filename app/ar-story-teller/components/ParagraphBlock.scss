@@ -1,0 +1,23 @@
+@media #{$desktop} {
+    .st-paragraph-block {
+        margin: auto;
+        width: 85%;
+    }
+
+}
+
+@media #{$tablet} {
+    .st-paragraph-block {
+        margin: auto;
+        width: 85%;
+    }
+}
+
+@media #{$mobile} {
+    .storyteller-xsxm-paragraph-block {
+        margin: auto;
+        width: 100%;
+        padding: 0 5%;
+    }
+}
+

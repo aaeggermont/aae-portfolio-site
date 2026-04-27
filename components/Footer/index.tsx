@@ -3,7 +3,7 @@
 import IconButton from '@mui/material/IconButton';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
-import { useResponsive } from '@/app/lib/responsive/ResponsiveQueryProvider';
+import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import { FooterLogo } from './FooterLogo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';

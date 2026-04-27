@@ -2,6 +2,9 @@
 // Import your SCSS so classNames still work
 import { HeaderMobile } from './HeaderMobile';
 import { HeaderDesktop } from './HeaderDesktop';
+import { headerState } from './HeaderState';
+import { useAtomValue } from 'jotai';
+import styles from './header.module.scss';
 
 export type HeaderProps = {
   isDark?: boolean;
@@ -10,21 +13,24 @@ export type HeaderProps = {
 };
 
 export default function Header({
-  isDark,
   fontColor: fontColorProp,
   logoFontColor: logoFontColorProp,
 }: HeaderProps) {
+  const { isDark, position } = useAtomValue(headerState);
   let fontColor = fontColorProp || "#074c5f";
-  const logoFontColor = logoFontColorProp || "#074c5f";
+  let logoFontColor = logoFontColorProp || "#074c5f";
 
   if (isDark) {
     fontColor = "#ffffff";
+    logoFontColor = "#ffffff";
   }
 
   const resumeHref = "/resume/AntonioEggermontResume-2024.pdf";
 
   return (
-    <header className="header_area">
+    <header
+      className={styles.header_area}
+      style={{ position }}>
       <div className="global-container">
         {/* Mobile header */}
         <HeaderMobile

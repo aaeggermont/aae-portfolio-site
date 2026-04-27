@@ -1,0 +1,90 @@
+@media #{$desktop} {
+    .mockup-container {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        width: 45%;
+        padding-top: 5rem;
+
+        span {
+            text-align: center;
+            margin-bottom: 1rem;
+            font-family: var(--font-poppins);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #102764;
+        }
+
+        p {
+            padding-top: 2rem;
+            padding-left: 15%;
+            padding-right: 15%;
+            font-family: var(--font-poppins);
+            font-size: 1rem;
+            font-weight: 400;
+            color: #102764;
+        }
+    }
+}
+
+@media  #{$tablet} {
+    .mockup-container {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
+        width: 55%;
+
+        span {
+            padding-top: 6rem;
+            text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #102764;
+        }
+
+        p {
+            padding-top: 3rem;
+            padding-left: 15%;
+            padding-right: 15%;
+            font-family: var(--font-poppins);
+            font-size: 1rem;
+            font-weight: 400;
+            color: #102764;
+        }
+    }
+}
+
+@media #{$mobile} {
+    .mockup-container {
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .title {
+            text-align: center;
+            font-family: poppins;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #102764;
+            padding-top: 2rem;
+            padding-bottom: 1rem;
+        }
+
+        .description {
+            font-family: poppins;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #102764;
+            text-align: center;
+            padding-top: 1.5rem;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
+    }
+}

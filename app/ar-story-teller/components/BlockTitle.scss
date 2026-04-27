@@ -1,0 +1,32 @@
+@media #{$desktop} {
+    .block-title {
+        padding-top: 5rem;
+        padding-bottom: 3rem;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 600;
+        color: $font-color-normal;
+    }
+}
+
+@media #{$tablet} {
+    .block-title {
+        text-align: center;
+        padding-top: 5rem;
+        padding-bottom: 3rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: $font-color-normal;
+    }
+}
+
+
+@media #{$mobile} {
+    .block-title {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: 600;
+        color: $font-color-normal;
+    }
+}
+

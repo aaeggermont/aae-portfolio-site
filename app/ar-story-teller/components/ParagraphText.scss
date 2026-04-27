@@ -1,0 +1,46 @@
+@media #{$desktop} {
+    .st-paragraph-text {
+        margin: auto;
+        width: 85%;
+        padding-top: 1rem;
+        .text-paragraph {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: $font-color-normal;
+        }
+    }
+
+}
+
+@media #{$tablet} {
+    .st-paragraph-text {
+        margin: auto;
+        width: 85%;
+        padding-top: 1rem;
+        .text-paragraph {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: $font-color-normal;
+        }
+
+    }
+}
+
+@media #{$mobile} {
+    .storyteller-xsxm-paragraph-text {
+        margin: auto;
+        width: 100%;
+        padding: 0 5%;
+        padding-top: 2rem;
+        .text-paragraph {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: $font-color-normal;
+        }
+
+    }
+}
+
