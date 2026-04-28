@@ -11,6 +11,35 @@ export type RichParagraphSegment = {
 
 export type RichParagraphValue = string | RichParagraphSegment[];
 
+export type ReadMoreWordConfig = {
+  /**
+   * Per-paragraph word limits for collapsed mode.
+   * Keys are zero-based paragraph indexes.
+   */
+  wordLimitsByParagraphIndex?: Record<number, number>;
+  /** Word limit for paragraph index 0. */
+  firstParagraphWords?: number;
+  /** Word limit for paragraph index 1. */
+  secondParagraphWords?: number;
+  /**
+   * Paragraph index that should display the inline expansion trigger.
+   * Defaults to first truncated paragraph.
+   */
+  expandTriggerParagraphIndex?: number;
+  /** Defaults to "Read more". */
+  buttonLabel?: string;
+  /** Defaults to "Read less". */
+  readLessButtonLabel?: string;
+  /** Optional text color for both "Read more" and "Read less". */
+  textColor?: string;
+  /** Optional font family for both toggle labels. */
+  fontFamily?: string;
+  /** Optional font weight for both toggle labels. */
+  fontWeight?: number | string;
+  /** Optional font size for both toggle labels. */
+  fontSize?: number | string;
+};
+
 export type ResearchUserPersona = {
   title: string;
   description: string;
@@ -32,6 +61,8 @@ export type ResearchCardContentBlock =
         paragraph?: string;
         emphasis?: string;
       };
+      /** Optional truncation + inline expand/collapse behavior for this paragraph block. */
+      readMore?: ReadMoreWordConfig;
     }
   | {
       type: "bullets";
@@ -138,6 +169,8 @@ export type ResearchMethodBlockData = {
     title: string;
     introParagraph: string;
   };
+  /** Optional intro truncation + "Read more" behavior for paragraphs 1 and 2. */
+  introParagraphReadMore?: ReadMoreWordConfig;
   introParagraphs: string[];
   cards: ResearchMethodCardData[];
 };

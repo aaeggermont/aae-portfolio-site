@@ -1,33 +1,38 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
-const benefitItems = [
-  "Intelligent seating decisions through the use of historic party size distribution.",
-  "Potential integration into park´s reservation systems",
-  "Increased seating of Guest throughput over manual procedures.",
-  "The app can be used as a simulation tool to test seating throughput of different scenarios.",
-];
 
-export const KeyBenefitsCard = () => {
+export type KeyBenefitsCardData = {
+  title: string;
+  background: string;
+  items: string[];
+};
+
+type Props = {
+  data: KeyBenefitsCardData;
+};
+
+export const KeyBenefitsCard = ({ data }: Props) => {
+  const { title, background, items } = data;
+
   return (
     <Box
       sx={{
         [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
-            width: 386,
-            height: 350,
-         },
-         [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
-            width: 500,
-            height: 350,
-         },
-         [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
-            width: 500,
-            height: 370,
-         },
+          width: 386,
+          height: 350,
+        },
+        [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+          width: 500,
+          height: 350,
+        },
+        [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+          width: 500,
+          height: 370,
+        },
         borderRadius: "32px",
         overflow: "hidden",
         borderTop: "1px solid #a8a8a8",
-        background:
-          "linear-gradient(109deg, rgba(64,126,192,1) 13%, rgba(30,59,90,1) 100%)",
+        background,
         pt: 2.5,
         pb: "61px",
         px: 2,
@@ -47,21 +52,21 @@ export const KeyBenefitsCard = () => {
           fontSize: "24px",
           [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
             fontSize: 20,
-            },
-            [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
-                fontSize: 24,
-            },
-            [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
-                fontSize: 24,
-            },
+          },
+          [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
+            fontSize: 24,
+          },
+          [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
+            fontSize: 24,
+          },
           lineHeight: "normal",
           mt: "-1px",
         }}
       >
-        Key Benefits
+        {title}
       </Typography>
       <Stack spacing={2} sx={{ p: 2, width: "100%" }}>
-        {benefitItems.map((text, index) => (
+        {items.map((text, index) => (
           <Stack
             key={index}
             direction="row"
@@ -69,7 +74,6 @@ export const KeyBenefitsCard = () => {
             spacing={1.5}
             sx={{ px: 2, width: "100%" }}
           >
-            {/* Bullet indicator */}
             <Box
               sx={{
                 width: 12,
@@ -86,14 +90,14 @@ export const KeyBenefitsCard = () => {
                 lineHeight: 1.5,
                 flex: 1,
                 [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
-                    fontWeight: 500,
-                    fontSize: 14,
+                  fontWeight: 500,
+                  fontSize: 14,
                 },
                 [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
-                    fontSize: 16,
+                  fontSize: 16,
                 },
                 [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
-                    fontSize: 18,
+                  fontSize: 18,
                 },
               }}
             >

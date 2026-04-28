@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 
 import { breakpointPx } from "@/lib/responsive/breakpoints";
@@ -6,12 +7,107 @@ import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
 
 type Props = {
-  /** One item from `researchMethods` — static list today; Firestore later. */
+  /** One item from `automaticSeaterAssignmentsDataProject.researchMethods` (static today; Firestore later). */
   data: ResearchMethodBlockData;
 };
 
 export const ResearchMethod = ({ data }: Props) => {
-  const { kicker, title, background, textColors, introParagraphs, cards } = data;
+  const {
+    kicker,
+    title,
+    background,
+    textColors,
+    introParagraphReadMore,
+    introParagraphs,
+    cards,
+  } = data;
+  const [expandedIntroParagraphs, setExpandedIntroParagraphs] = React.useState(false);
+
+  React.useEffect(() => {
+    setExpandedIntroParagraphs(false);
+  }, [introParagraphs, introParagraphReadMore]);
+
+  const getLimitForParagraphIndex = (index: number): number | undefined => {
+    if (!introParagraphReadMore) return undefined;
+    const mapLimit = introParagraphReadMore.wordLimitsByParagraphIndex?.[index];
+    if (typeof mapLimit === "number") return mapLimit;
+    if (index === 0) return introParagraphReadMore.firstParagraphWords;
+    if (index === 1) return introParagraphReadMore.secondParagraphWords;
+    return undefined;
+  };
+
+  const truncateAtWordLimit = (text: string, limit: number): string => {
+    const words = text.trim().split(/\s+/);
+    if (words.length <= limit) return text;
+    return words.slice(0, limit).join(" ");
+  };
+
+  const displayedIntroParagraphs = React.useMemo(() => {
+    if (expandedIntroParagraphs || !introParagraphReadMore) return introParagraphs;
+    const triggerIndex = introParagraphReadMore.expandTriggerParagraphIndex;
+    const collapsedSource =
+      typeof triggerIndex === "number" && triggerIndex >= 0
+        ? introParagraphs.slice(0, Math.min(triggerIndex + 1, introParagraphs.length))
+        : introParagraphs;
+    return collapsedSource.map((paragraph, index) => {
+      const limit = getLimitForParagraphIndex(index);
+      if (!limit || limit < 1) return paragraph;
+      return truncateAtWordLimit(paragraph, limit);
+    });
+  }, [expandedIntroParagraphs, introParagraphReadMore, introParagraphs]);
+
+  const hasTruncatedIntroParagraphs = React.useMemo(() => {
+    if (!introParagraphReadMore) return false;
+    const triggerIndex = introParagraphReadMore.expandTriggerParagraphIndex;
+    const hasHiddenParagraphs =
+      typeof triggerIndex === "number" &&
+      triggerIndex >= 0 &&
+      triggerIndex < introParagraphs.length - 1;
+    return introParagraphs.some((paragraph, index) => {
+      const limit = getLimitForParagraphIndex(index);
+      if (!limit || limit < 1) return false;
+      return paragraph.trim().split(/\s+/).length > limit;
+    }) || hasHiddenParagraphs;
+  }, [introParagraphReadMore, introParagraphs]);
+
+  const truncatedIntroParagraphFlags = React.useMemo(() => {
+    if (!introParagraphReadMore) return [] as boolean[];
+    return introParagraphs.map((paragraph, index) => {
+      const limit = getLimitForParagraphIndex(index);
+      if (!limit || limit < 1) return false;
+      return paragraph.trim().split(/\s+/).length > limit;
+    });
+  }, [introParagraphReadMore, introParagraphs]);
+
+  const expandTriggerParagraphIndex = React.useMemo(() => {
+    if (!introParagraphReadMore) return -1;
+    if (typeof introParagraphReadMore.expandTriggerParagraphIndex === "number") {
+      return Math.max(
+        0,
+        Math.min(introParagraphReadMore.expandTriggerParagraphIndex, introParagraphs.length - 1),
+      );
+    }
+    return truncatedIntroParagraphFlags.findIndex(Boolean);
+  }, [introParagraphReadMore, truncatedIntroParagraphFlags, introParagraphs.length]);
+
+  const readToggleColor = introParagraphReadMore?.textColor ?? textColors.title;
+  const readToggleFontFamily =
+    introParagraphReadMore?.fontFamily ?? "'Poppins', Helvetica";
+  const readToggleFontWeight = introParagraphReadMore?.fontWeight ?? 600;
+  const readToggleFontSize = introParagraphReadMore?.fontSize ?? "inherit";
+  const readToggleTextSx = {
+    border: "none",
+    background: "transparent",
+    p: 0,
+    m: 0,
+    cursor: "pointer",
+    fontFamily: readToggleFontFamily,
+    fontWeight: readToggleFontWeight,
+    color: readToggleColor,
+    fontSize: readToggleFontSize,
+    textTransform: "none",
+    lineHeight: 1.6,
+  } as const;
 
   return (
     <Box sx={caseStudySectionGutterSx}>
@@ -60,7 +156,7 @@ export const ResearchMethod = ({ data }: Props) => {
 
         <Box p={2}>
           <Stack spacing={2}>
-            {introParagraphs.map((paragraph, i) => (
+            {displayedIntroParagraphs.map((paragraph, i) => (
               <Typography
                 key={`intro-${i}`}
                 sx={{
@@ -71,8 +167,36 @@ export const ResearchMethod = ({ data }: Props) => {
                 }}
               >
                 {paragraph}
+                {!expandedIntroParagraphs &&
+                hasTruncatedIntroParagraphs &&
+                i === expandTriggerParagraphIndex ? (
+                  <>
+                    {truncatedIntroParagraphFlags[i] ? "... " : " "}
+                    <Box
+                      component="button"
+                      type="button"
+                      onClick={() => setExpandedIntroParagraphs(true)}
+                      sx={readToggleTextSx}
+                    >
+                      {introParagraphReadMore?.buttonLabel ?? "Read more"}
+                    </Box>
+                  </>
+                ) : null}
               </Typography>
             ))}
+            {expandedIntroParagraphs && hasTruncatedIntroParagraphs ? (
+              <Box
+                component="button"
+                type="button"
+                onClick={() => setExpandedIntroParagraphs((prev) => !prev)}
+                sx={{
+                  alignSelf: "flex-start",
+                  ...readToggleTextSx,
+                }}
+              >
+                {introParagraphReadMore?.readLessButtonLabel ?? "Read less"}
+              </Box>
+            ) : null}
           </Stack>
         </Box>
 

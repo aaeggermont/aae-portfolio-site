@@ -4,13 +4,23 @@ import Box from "@mui/material/Box";
 import GatedImage from "@/lib/media/GatedImage";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 
-const PROJECT_KEY = "project_4";
-const OBJECT_PATH = "projects/project_4/SeaterVideoRecording-Desktop.gif";
-
 /** Preview figure max width per band (px) — aligns to `breakpointPx` ranges. */
 const PREVIEW_MAX_WIDTH_MOBILE_PX = 440;
 const PREVIEW_MAX_WIDTH_TABLET_PX = 800;
 const PREVIEW_MAX_WIDTH_DESKTOP_PX = 1034;
+
+export type PreviewDemoData = {
+  projectKey: string;
+  objectPath: string;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
+  fullViewportLoading?: boolean;
+};
+
+type Props = {
+  data: PreviewDemoData;
+};
 
 /**
  * GatedImage `mode`:
@@ -19,7 +29,16 @@ const PREVIEW_MAX_WIDTH_DESKTOP_PX = 1034;
  *
  * Demo uses `objectFit: "contain"` so the whole GIF stays visible inside the frame (`cover` would crop).
  */
-export default function PreviewDemo() {
+export default function PreviewDemo({ data }: Props) {
+  const {
+    projectKey,
+    objectPath,
+    alt,
+    sizes,
+    priority = true,
+    fullViewportLoading = false,
+  } = data;
+
   return (
     <Box
       component="figure"
@@ -45,12 +64,13 @@ export default function PreviewDemo() {
       }}
     >
       <GatedImage
-        priority
+        priority={priority}
+        fullViewportLoading={fullViewportLoading}
         mode="fill"
-        projectKey={PROJECT_KEY}
-        objectPath={OBJECT_PATH}
-        alt="Automatic seater demo recording"
-        sizes={`(max-width: ${breakpointPx.mobileMax}px) ${PREVIEW_MAX_WIDTH_MOBILE_PX}px, (max-width: ${breakpointPx.tabletMax}px) ${PREVIEW_MAX_WIDTH_TABLET_PX}px, ${PREVIEW_MAX_WIDTH_DESKTOP_PX}px`}
+        projectKey={projectKey}
+        objectPath={objectPath}
+        alt={alt}
+        sizes={sizes}
         style={{ objectFit: "contain" }}
       />
     </Box>

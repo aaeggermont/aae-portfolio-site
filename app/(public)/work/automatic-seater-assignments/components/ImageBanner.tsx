@@ -4,33 +4,37 @@ import { Box, Typography } from "@mui/material";
 import GatedImage from "@/lib/media/GatedImage";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 
-type ImageBannerProps = {
-  objectPath?: string;
-  alt?: string;
+export type ImageBannerData = {
+  projectKey: string;
+  objectPath: string;
+  alt: string;
+  sizes: string;
+  headline: string;
+  taglineLine1: string;
+  taglineLine2: string;
 };
 
-const DEFAULT_OBJECT_PATH = "projects/project_4/STBannerDesktop.png";
+type Props = {
+  data: ImageBannerData;
+};
 
-// Align with styles/variables.scss — $tablet-min, $desktop-min
-//const TABLET_MIN_PX = 768;
-//const DESKTOP_MIN_PX = 1024;
+export default function ImageBanner({ data }: Props) {
+  const {
+    projectKey,
+    objectPath,
+    alt,
+    sizes,
+    headline,
+    taglineLine1,
+    taglineLine2,
+  } = data;
 
-const PROJECT_KEY = "project_4";
-
-/** Parent handles full-bleed width; image always spans viewport width. */
-const BANNER_SIZES = "100vw";
-
-export default function ImageBanner({
-  objectPath = DEFAULT_OBJECT_PATH,
-  alt = "Automatic seating assignments banner",
-}: ImageBannerProps) {
   return (
     <Box
       component="section"
       sx={{
         position: "relative",
         width: "100%",
-        // Mobile: taller crop; tablet: 16:9; desktop: wide hero (1.62)
         aspectRatio: "4 / 5",
         overflow: "hidden",
         backgroundColor: "#000",
@@ -58,10 +62,10 @@ export default function ImageBanner({
           fullViewportLoading
           priority
           mode="fill"
-          projectKey={PROJECT_KEY}
+          projectKey={projectKey}
           objectPath={objectPath}
           alt={alt}
-          sizes={BANNER_SIZES}
+          sizes={sizes}
           style={{ objectFit: "cover" }}
         />
       </Box>
@@ -91,7 +95,7 @@ export default function ImageBanner({
             letterSpacing: 0,
           }}
         >
-          Automatic Seating Assignments
+          {headline}
         </Typography>
 
         <Typography
@@ -107,9 +111,9 @@ export default function ImageBanner({
             letterSpacing: 0,
           }}
         >
-          Serving as many Guests as possible
-         
-          as quickly as possible
+          {taglineLine1}
+          <br />
+          {taglineLine2}
         </Typography>
       </Box>
     </Box>

@@ -6,19 +6,25 @@ import {
   caseStudySectionGutterSx,
 } from "../caseStudyLayout";
 
-export const OverviewSection = () => {
-  const paragraphs = [
-    "Disney Theme Parks operate on the principle of serving as many Guests as possible and as quickly as possible. Maintaining high attraction capacity and throughput is essential to getting Guests into the gates and keeping them happy while maximize attractions capacity.",
-    "One key aspect of attraction capacity is the seat assignment process. Attractions staff referred as Cast Members need to keep track of how many Guests were in a given row and try to do some mathematical calculations on the fly to squeeze in more parties of Guests. This as a result increases operational complexity as social distance requirements lead to more complicated mathematical and tracking of party sizes, and social distancing seats.",
-  ];
+export type OverviewSectionData = {
+  title: string;
+  paragraphs: string[];
+  background: string;
+};
+
+type Props = {
+  data: OverviewSectionData;
+};
+
+export const OverviewSection = ({ data }: Props) => {
+  const { title, paragraphs, background } = data;
 
   return (
     <Box
       component="section"
       sx={{
         ...caseStudySectionGutterSx,
-        background:
-          "linear-gradient(180deg, rgba(30,59,90,1) 0%, rgba(64,126,192,1) 77%)",
+        background,
         py: 8,
       }}
     >
@@ -41,7 +47,7 @@ export const OverviewSection = () => {
               },
             }}
           >
-            Overview
+            {title}
           </Typography>
           <Box>
             {paragraphs.map((text, index) => (

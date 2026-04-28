@@ -8,7 +8,18 @@ const CONTENT_MAX_WIDTH_DESKTOP_PX = 734;
 
 const titleFontFamily = "'Poppins', Helvetica, sans-serif";
 
-export const MainSolutionParagraph = () => {
+export type MainSolutionParagraphData = {
+  title: string;
+  body: string;
+};
+
+type Props = {
+  data: MainSolutionParagraphData;
+};
+
+export const MainSolutionParagraph = ({ data }: Props) => {
+  const { title, body } = data;
+
   return (
     <Stack
       spacing={4}
@@ -45,7 +56,7 @@ export const MainSolutionParagraph = () => {
           },
         }}
       >
-        Solution
+        {title}
       </Typography>
       <Typography
         variant="body1"
@@ -65,9 +76,7 @@ export const MainSolutionParagraph = () => {
           },
         }}
       >
-        A scalable, configuration driven Web mobile app designed to automate the
-        seating assignments for Guests in attractions and rides
-        at&nbsp;&nbsp;Disney theme parks.
+        {body}
       </Typography>
     </Stack>
   );
