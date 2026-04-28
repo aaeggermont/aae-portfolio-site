@@ -17,14 +17,36 @@ import KeyBenefitsCard from "./components/KeyBenefitsCard";
 import StandardParagraphBlock from "./components/StandardParagraphBlock";
 import ResearchMethod from "./components/ResearchMethod";
 import { ResearchMethodImageBlock } from "./components/ResearchMethodImageBlock";
-import { automaticSeaterAssignmentsDataProject } from "./automatic-seater-assignments.data";
+import { automaticSeaterAssignmentsDataProject } from "@/scripts/automatic-seater-assignments.data";
+import {
+  subscribeAutomaticSeaterAssignmentsProject,
+  type AutomaticSeaterAssignmentsProjectDocument,
+} from "./automatic-seater-assignments.firestore";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
 
 export default function AutomaticSeaterAssignmentsPage() {
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
+  const [project, setProject] = React.useState<AutomaticSeaterAssignmentsProjectDocument>(
+    automaticSeaterAssignmentsDataProject,
+  );
+  const [snapshotVersion, setSnapshotVersion] = React.useState(0);
 
-  /** Simulates one Firestore read for this project (single collection document). */
-  const project = automaticSeaterAssignmentsDataProject;
+  React.useEffect(() => {
+    const unsubscribe = subscribeAutomaticSeaterAssignmentsProject(
+      (projectFromDb) => {
+        setProject(projectFromDb);
+        setSnapshotVersion((prev) => prev + 1);
+      },
+      (error) => {
+        console.warn(
+          "[automatic-seater-assignments] Firestore realtime read failed; using local fallback data.",
+          error,
+        );
+      },
+    );
+
+    return unsubscribe;
+  }, []);
 
   const viewportBand =
     isMobile ? "mobile" : isTablet ? "tablet" : isDesktopOrLaptop ? "desktop" : "unknown";
@@ -36,7 +58,11 @@ export default function AutomaticSeaterAssignmentsPage() {
       title={project.gateTitle}
     >
       <div className={styles.pageClipViewport}>
-        <div className={styles.page} data-viewport-band={viewportBand}>
+        <div
+          key={snapshotVersion}
+          className={styles.page}
+          data-viewport-band={viewportBand}
+        >
         <div className={`${styles.banner} ${styles.bannerFullBleed}`}>
           <ImageBanner data={project.imageBanner} />
         </div>
