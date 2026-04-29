@@ -7,6 +7,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { auth } from "@/firebase";
 
 type GatedImageProps = {
   projectKey: string; // e.g. "project_4"
@@ -48,9 +49,14 @@ export default function GatedImage({
       setErr(null);
       setUrl(null);
 
+      const idToken = await auth.currentUser?.getIdToken().catch(() => undefined);
+
       const res = await fetch("/api/media/signed-url", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+        },
         credentials: "include",
         body: JSON.stringify({ projectKey, objectPath }),
       });
