@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 
     const { auth } = getAdmin();
 
-    await auth.verifyIdToken(idToken, true);
+    await auth.verifyIdToken(idToken, false);
 
     const expiresIn = 5 * 24 * 60 * 60 * 1000;
     const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
