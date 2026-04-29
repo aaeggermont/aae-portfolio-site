@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
+import { breakpointPx } from "./breakpoints";
+
 type ResponsiveContextValue = {
   isDesktopOrLaptop: boolean;
   isTablet: boolean;
@@ -28,27 +30,17 @@ export function ResponsiveQueryProvider({ children }: { children: React.ReactNod
     setMounted(true);
   }, []);
 
-  // Keep these in sync with your SCSS breakpoints in variables.scss
-  const desktopMin = 1024;
-  const desktopMax = 3800;
-
-  const mobileMin = 360;
-  const mobileMax = 767;
-
-  const tabletMin = 768;
-  const tabletMax = 1023;
-
   // ✅ ALWAYS call hooks (no conditional hooks)
   const mqDesktopOrLaptop = useMediaQuery({
-    query: `(min-width: ${desktopMin}px) and (max-width: ${desktopMax}px)`,
+    query: `(min-width: ${breakpointPx.desktopMin}px) and (max-width: ${breakpointPx.desktopMax}px)`,
   });
 
   const mqTablet = useMediaQuery({
-    query: `(min-width: ${tabletMin}px) and (max-width: ${tabletMax}px)`,
+    query: `(min-width: ${breakpointPx.tabletMin}px) and (max-width: ${breakpointPx.tabletMax}px)`,
   });
 
   const mqMobile = useMediaQuery({
-    query: `(min-width: ${mobileMin}px) and (max-width: ${mobileMax}px)`,
+    query: `(min-width: ${breakpointPx.mobileMin}px) and (max-width: ${breakpointPx.mobileMax}px)`,
   });
 
   const mqPortrait = useMediaQuery({ query: "(orientation: portrait)" });
