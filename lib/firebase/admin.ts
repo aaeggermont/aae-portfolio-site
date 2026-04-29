@@ -1,48 +1,92 @@
 // lib/firebase/admin.ts
-import { getApps, initializeApp, applicationDefault } from "firebase-admin/app";
+import {
+  getApp,
+  initializeApp,
+  applicationDefault,
+  type App as FirebaseAdminApp,
+} from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
 import { getStorage } from "firebase-admin/storage";
 
-const BUCKET = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET; 
-const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+const isCloudRuntime = !!process.env.K_SERVICE || !!process.env.FUNCTION_TARGET;
+
+const PROJECT_ID = isCloudRuntime
+  ? process.env.FIREBASE_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+    process.env.GOOGLE_CLOUD_PROJECT ||
+    process.env.GCLOUD_PROJECT
+  : process.env.FIREBASE_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+    process.env.GOOGLE_CLOUD_PROJECT;
+
+const BUCKET = isCloudRuntime
+  ? process.env.FIREBASE_STORAGE_BUCKET || process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  : process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || process.env.FIREBASE_STORAGE_BUCKET;
 
 function applyEnvBridge() {
   // Project id
-  if (!process.env.GOOGLE_CLOUD_PROJECT && process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
+  if (
+    !isCloudRuntime &&
+    !process.env.GOOGLE_CLOUD_PROJECT &&
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  ) {
     process.env.GOOGLE_CLOUD_PROJECT = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   }
 
-  // Credentials path (LOCAL ONLY usually)
-  if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && process.env.AAE_GOOGLE_APPLICATION_CREDENTIALS) {
+  // Credentials path: local development only.
+  // In Cloud Run / Functions, rely on workload identity (application default credentials).
+  if (
+    !isCloudRuntime &&
+    !process.env.GOOGLE_APPLICATION_CREDENTIALS &&
+    process.env.AAE_GOOGLE_APPLICATION_CREDENTIALS
+  ) {
     process.env.GOOGLE_APPLICATION_CREDENTIALS = process.env.AAE_GOOGLE_APPLICATION_CREDENTIALS;
+  }
+
+  // If cloud runtime has a local path configured by env, clear it to avoid ENOENT.
+  if (isCloudRuntime && process.env.GOOGLE_APPLICATION_CREDENTIALS?.startsWith("./")) {
+    delete process.env.GOOGLE_APPLICATION_CREDENTIALS;
   }
 }
 
 export function getAdmin() {
-  if (!getApps().length) {
+  applyEnvBridge();
+  const projectId = isCloudRuntime
+    ? process.env.FIREBASE_PROJECT_ID ||
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+      process.env.GOOGLE_CLOUD_PROJECT ||
+      process.env.GCLOUD_PROJECT ||
+      PROJECT_ID
+    : process.env.FIREBASE_PROJECT_ID ||
+      process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID ||
+      process.env.GOOGLE_CLOUD_PROJECT ||
+      PROJECT_ID;
 
-    applyEnvBridge();
-    if (!PROJECT_ID) {
-      throw new Error(
-        "Missing projectId. Set NEXT_PUBLIC_FIREBASE_PROJECT_ID  in .env.local"
-      );
-    }
+  if (!projectId) {
+    throw new Error("Missing Firebase project id in server environment.");
+  }
 
-    initializeApp({
+  let app: FirebaseAdminApp;
+  try {
+    // Reuse default app when available.
+    app = getApp();
+  } catch {
+    // If only named apps exist (or no app exists), create the default app explicitly.
+    app = initializeApp({
       credential: applicationDefault(),
-      projectId: PROJECT_ID,
+      projectId,
       ...(BUCKET ? { storageBucket: BUCKET } : {}),
     });
   }
 
-  const storage = getStorage();
-  const bucket = BUCKET ? storage.bucket(BUCKET) : storage.bucket(); // default bucket if set
+  const storage = getStorage(app);
+  const bucket = BUCKET ? storage.bucket(BUCKET) : storage.bucket();
 
   return {
-    auth: getAuth(),
-    db: getFirestore(),
+    auth: getAuth(app),
+    db: getFirestore(app),
     bucket,
-    storage
+    storage,
   };
 }
