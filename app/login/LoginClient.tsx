@@ -22,6 +22,7 @@ export default function LoginClient({ nextPath }: { nextPath: string }) {
     await fetch("/api/auth/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ idToken }),
     });
 
