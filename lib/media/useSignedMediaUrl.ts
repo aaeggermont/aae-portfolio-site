@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { auth } from "@/firebase";
 
 /**
  * Fetches a time-limited signed URL for a gated Storage object (same endpoint as `GatedImage`).
@@ -15,9 +16,13 @@ export function useSignedMediaUrl(projectKey: string, objectPath: string) {
     setUrl(null);
 
     (async () => {
+      const idToken = await auth.currentUser?.getIdToken().catch(() => undefined);
       const res = await fetch("/api/media/signed-url", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}),
+        },
         credentials: "include",
         body: JSON.stringify({ projectKey, objectPath }),
       });
