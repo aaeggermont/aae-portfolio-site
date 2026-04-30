@@ -8,6 +8,10 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { auth } from "@/firebase";
+import SessionAccessDialog, {
+  type SessionAccessDialogReason,
+} from "@/lib/access/SessionAccessDialog";
+import { signOutSessionAndReloadForSignIn } from "@/lib/auth/signInAgainNavigation";
 
 type GatedImageProps = {
   projectKey: string; // e.g. "project_4"
@@ -41,6 +45,18 @@ export default function GatedImage({
   const [url, setUrl] = React.useState<string | null>(null);
   const [err, setErr] = React.useState<string | null>(null);
   const [imageReady, setImageReady] = React.useState(false);
+  const [dialogReason, setDialogReason] =
+    React.useState<SessionAccessDialogReason | null>(null);
+
+  const isAccessIssueReason = React.useCallback((reason?: string) => {
+    return (
+      reason === "session_hard_expired" ||
+      reason === "no_session" ||
+      reason === "bad_session" ||
+      reason === "not_allowed" ||
+      reason === "signed_url_failed"
+    );
+  }, []);
 
   React.useEffect(() => {
     let alive = true;
@@ -66,7 +82,11 @@ export default function GatedImage({
       if (!alive) return;
 
       if (!res.ok || !data?.url) {
-        setErr(data?.message || data?.reason || `signed-url failed (${res.status})`);
+        const reason = typeof data?.reason === "string" ? data.reason : undefined;
+        if (isAccessIssueReason(reason)) {
+          setDialogReason(reason as SessionAccessDialogReason);
+        }
+        setErr(data?.message || reason || `signed-url failed (${res.status})`);
         return;
       }
 
@@ -81,7 +101,7 @@ export default function GatedImage({
     return () => {
       alive = false;
     };
-  }, [projectKey, objectPath]);
+  }, [projectKey, objectPath, isAccessIssueReason]);
 
   React.useEffect(() => {
     if (!fullViewportLoading) return;
@@ -126,6 +146,10 @@ export default function GatedImage({
       />
     );
 
+  const handleSignInAgain = React.useCallback(() => {
+    void signOutSessionAndReloadForSignIn(auth);
+  }, []);
+
   return (
     <Box
       sx={{
@@ -159,6 +183,11 @@ export default function GatedImage({
         </Box>
       ) : null}
       {inner}
+      <SessionAccessDialog
+        open={dialogReason !== null}
+        reason={dialogReason ?? "unknown"}
+        onSignInAgain={handleSignInAgain}
+      />
     </Box>
   );
 }

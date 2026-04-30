@@ -35,6 +35,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { auth, db } from "@/firebase";
+import SessionAccessDialog from "@/lib/access/SessionAccessDialog";
+import { signOutSessionAndReloadForSignIn } from "@/lib/auth/signInAgainNavigation";
 import { ProjectAccessContext } from "./ProjectAccessContext";
 
 type GateProps = {
@@ -70,9 +72,9 @@ function requestId(projectKey: string, uid: string) {
   return `${projectKey}_${uid}`;
 }
 
-/** Default: 6 hours. Override with `SESSION_SILENT_REFRESH_INTERVAL_MS` (see next.config.ts env). */
+/** Default: 24 hours. Override with `SESSION_SILENT_REFRESH_INTERVAL_MS` (see next.config.ts env). */
 function getSilentRefreshIntervalMs(): number {
-  const DEFAULT_MS = 6 * 60 * 60 * 1000;
+  const DEFAULT_MS = 24 * 60 * 60 * 1000;
   const raw = process.env.SESSION_SILENT_REFRESH_INTERVAL_MS;
   if (raw === undefined || raw === "") return DEFAULT_MS;
   const n = Number(raw);
@@ -106,6 +108,7 @@ export default function ProjectAccessGate({
   const [password, setPassword] = React.useState("");
   const [authBusy, setAuthBusy] = React.useState(false);
   const [msg, setMsg] = React.useState<string | null>(null);
+  const [sessionHardExpired, setSessionHardExpired] = React.useState(false);
 
   React.useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -218,35 +221,44 @@ export default function ProjectAccessGate({
 
   React.useEffect(() => {
     if (visibilityLoading) return;
-    if (visibility !== "restricted" || !user) return;
+    if (visibility !== "restricted" || !user || sessionHardExpired) return;
 
     const signedInUser = user;
     const refreshEveryMs = getSilentRefreshIntervalMs();
     let cancelled = false;
 
-    async function refreshServerSession() {
+    async function refreshServerSessionWithReasonHandling() {
       try {
         const idToken = await signedInUser.getIdToken(true);
-        await fetch("/api/auth/session/refresh", {
+        const res = await fetch("/api/auth/session/refresh", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ idToken }),
+          body: JSON.stringify({ idToken, projectKey }),
           credentials: "include",
         });
+
+        if (!res.ok) {
+          const payload = (await res.json().catch(() => null)) as
+            | { reason?: string }
+            | null;
+          if (payload?.reason === "session_hard_expired") {
+            setSessionHardExpired(true);
+          }
+        }
       } catch {
         // Transient network/auth errors — next interval or tab focus will retry.
       }
     }
 
-    void refreshServerSession();
+    void refreshServerSessionWithReasonHandling();
 
     const intervalId = window.setInterval(() => {
-      if (!cancelled) void refreshServerSession();
+      if (!cancelled) void refreshServerSessionWithReasonHandling();
     }, refreshEveryMs);
 
     const onVisibility = () => {
       if (cancelled || document.visibilityState !== "visible") return;
-      void refreshServerSession();
+      void refreshServerSessionWithReasonHandling();
     };
 
     document.addEventListener("visibilitychange", onVisibility);
@@ -256,7 +268,11 @@ export default function ProjectAccessGate({
       window.clearInterval(intervalId);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [user, visibility, visibilityLoading]);
+  }, [user, visibility, visibilityLoading, sessionHardExpired, projectKey]);
+
+  const handleSessionDialogSignInAgain = React.useCallback(() => {
+    void signOutSessionAndReloadForSignIn(auth);
+  }, []);
 
   async function mintSessionCookie(user: User) {
     const idToken = await user.getIdToken(true);
@@ -377,43 +393,62 @@ export default function ProjectAccessGate({
   const accessPending =
     visibility === "restricted" && !!user && !allowlistReady;
 
+  const sessionDialog = (
+    <SessionAccessDialog
+      open={sessionHardExpired}
+      reason="session_hard_expired"
+      onSignInAgain={handleSessionDialogSignInAgain}
+    />
+  );
+
   if (loading || visibilityLoading || accessPending) {
     const verifyingOnly = accessPending && !loading && !visibilityLoading;
 
     return (
-      <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center", px: 2 }}>
-        <Stack spacing={2} alignItems="center" sx={{ width: "100%", maxWidth: 360 }}>
-          <CircularProgress />
-          <Typography variant="body2" color="text.secondary" textAlign="center">
-            {verifyingOnly ? "Verifying access…" : "Checking access…"}
-          </Typography>
-          {verifyingOnly ? (
-            <LinearProgress sx={{ width: "100%", borderRadius: 1 }} />
-          ) : null}
-        </Stack>
-      </Box>
+      <>
+        {sessionDialog}
+        <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center", px: 2 }}>
+          <Stack spacing={2} alignItems="center" sx={{ width: "100%", maxWidth: 360 }}>
+            <CircularProgress />
+            <Typography variant="body2" color="text.secondary" textAlign="center">
+              {verifyingOnly ? "Verifying access…" : "Checking access…"}
+            </Typography>
+            {verifyingOnly ? (
+              <LinearProgress sx={{ width: "100%", borderRadius: 1 }} />
+            ) : null}
+          </Stack>
+        </Box>
+      </>
     );
   }
 
   if (visibility === "public") {
     return (
-      <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
-        {children}
-      </ProjectAccessContext.Provider>
+      <>
+        {sessionDialog}
+        <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
+          {children}
+        </ProjectAccessContext.Provider>
+      </>
     );
   }
 
   if (user && allowed) {
     return (
-      <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
-        {children}
-      </ProjectAccessContext.Provider>
+      <>
+        {sessionDialog}
+        <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
+          {children}
+        </ProjectAccessContext.Provider>
+      </>
     );
   }
 
   return (
-    <Box sx={{ maxWidth: 720, mx: "auto", py: { xs: 5, md: 8 }, px: 2 }}>
-      <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 2 }}>
+    <>
+      {sessionDialog}
+      <Box sx={{ maxWidth: 720, mx: "auto", py: { xs: 5, md: 8 }, px: 2 }}>
+        <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 2 }}>
         <Stack spacing={2}>
           <Typography variant="h4" sx={{ fontWeight: 800 }}>
             {title}
@@ -532,7 +567,8 @@ export default function ProjectAccessGate({
             </Stack>
           )}
         </Stack>
-      </Paper>
-    </Box>
+        </Paper>
+      </Box>
+    </>
   );
 }

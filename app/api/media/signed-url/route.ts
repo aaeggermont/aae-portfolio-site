@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAdmin } from "@/lib/firebase/admin";
+import {
+  applyProjectSessionStartCookie,
+  evaluateProjectSessionWindow,
+  getProjectSessionCookieName,
+  hardExpiredProjectSessionResponse,
+  isHardExpiredFromAuthTime,
+} from "@/lib/auth/projectSessionWindow";
 
 export const runtime = "nodejs";
 
@@ -23,6 +30,7 @@ function buildProxyUrl(req: Request, projectKey: string, objectPath: string) {
 export async function POST(req: Request) {
   try {
     const { auth, db, bucket } = getAdmin();
+    const cookieStore = await cookies();
 
     const { projectKey, objectPath } = (await req.json()) as Body;
 
@@ -36,7 +44,7 @@ export async function POST(req: Request) {
     }
 
     // verify session cookie; fallback to Bearer ID token when cookie is unavailable
-    const session = (await cookies()).get("session")?.value;
+    const session = cookieStore.get("session")?.value;
     let decoded: { uid: string; email?: string | null } | null = null;
 
     if (session) {
@@ -97,10 +105,47 @@ export async function POST(req: Request) {
       if (!enabled || (!uidOk && !emailOk)) {
         return NextResponse.json({ ok: false, reason: "not_allowed" }, { status: 403 });
       }
-    }
 
-    // sign URL
-    const expiresMs = 10 * 60 * 1000; // 10 minutes
+      // Strong absolute timeout check based on Firebase auth_time.
+      if (isHardExpiredFromAuthTime((decoded as { auth_time?: number }).auth_time)) {
+        return hardExpiredProjectSessionResponse(projectKey);
+      }
+
+      const projectSessionCookieName = getProjectSessionCookieName(projectKey);
+      const projectSessionState = evaluateProjectSessionWindow(
+        projectKey,
+        cookieStore.get(projectSessionCookieName)?.value,
+      );
+      if (projectSessionState.hardExpired) {
+        return hardExpiredProjectSessionResponse(projectKey);
+      }
+
+      // sign URL
+      const expiresMs = 10 * 60 * 1000; // 10 minutes
+      let url: string;
+      try {
+        [url] = await bucket.file(objectPath).getSignedUrl({
+          version: "v4",
+          action: "read",
+          expires: Date.now() + expiresMs,
+        });
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        if (message.includes("PERMISSION_DENIED")) {
+          url = buildProxyUrl(req, projectKey, objectPath);
+        } else {
+          throw error;
+        }
+      }
+
+      const res = NextResponse.json({ ok: true, url, expiresAt: Date.now() + expiresMs });
+      if (projectSessionState.shouldSetStartCookie) {
+        applyProjectSessionStartCookie(res, projectKey, projectSessionState.nowSeconds);
+      }
+      return res;
+    }
+    // Public project path (no allowlist/session window enforcement needed)
+    const expiresMs = 10 * 60 * 1000;
     let url: string;
     try {
       [url] = await bucket.file(objectPath).getSignedUrl({
@@ -116,7 +161,6 @@ export async function POST(req: Request) {
         throw error;
       }
     }
-
     return NextResponse.json({ ok: true, url, expiresAt: Date.now() + expiresMs });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
