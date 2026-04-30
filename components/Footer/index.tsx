@@ -10,12 +10,12 @@ import { usePathname } from 'next/navigation';
 import styles from './footer.module.scss';
 
 type FooterProps = {
-  isDark: boolean;
-  logoFontColor: string;
-  fontColor: string;
-}
+  isDark?: boolean;
+  logoFontColor?: string;
+  fontColor?: string;
+};
 
-export function Footer(props: FooterProps) {
+export function Footer(props: FooterProps = {}) {
     const screenDevice = useResponsive();
     const pathname = usePathname();
 
@@ -70,7 +70,7 @@ export function Footer(props: FooterProps) {
                         { MenuLinks }
                     </div>
                     <div className={styles['logo-section']}>
-                        <FooterLogo color={logoFontColor} height='20px' />
+                        <FooterLogo color={logoFontColor} width="55px" height="20px" />
                     </div>
                     <div className={styles['copyright-section']}>
                         <span style={{
@@ -85,7 +85,7 @@ export function Footer(props: FooterProps) {
             <div className="container" >
                 <div className={styles['footer-container']} >
                     <div className={styles['logo-section']}>
-                        <FooterLogo color={logoFontColor} height='20px' />
+                        <FooterLogo color={logoFontColor} width="55px" height="20px" />
 
                         <div className="contact-area">
                             <IconButton color="primary" component="label" onClick={handleLinkedIn}>
