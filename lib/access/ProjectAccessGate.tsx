@@ -70,6 +70,15 @@ function requestId(projectKey: string, uid: string) {
   return `${projectKey}_${uid}`;
 }
 
+/** Default: 6 hours. Override with `SESSION_SILENT_REFRESH_INTERVAL_MS` (see next.config.ts env). */
+function getSilentRefreshIntervalMs(): number {
+  const DEFAULT_MS = 6 * 60 * 60 * 1000;
+  const raw = process.env.SESSION_SILENT_REFRESH_INTERVAL_MS;
+  if (raw === undefined || raw === "") return DEFAULT_MS;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 ? n : DEFAULT_MS;
+}
+
 export default function ProjectAccessGate({
   projectId,
   projectKey,
@@ -206,6 +215,48 @@ export default function ProjectAccessGate({
 
     return () => unsub();
   }, [user, allowed, projectKey, visibility, visibilityLoading]);
+
+  React.useEffect(() => {
+    if (visibilityLoading) return;
+    if (visibility !== "restricted" || !user) return;
+
+    const signedInUser = user;
+    const refreshEveryMs = getSilentRefreshIntervalMs();
+    let cancelled = false;
+
+    async function refreshServerSession() {
+      try {
+        const idToken = await signedInUser.getIdToken(true);
+        await fetch("/api/auth/session/refresh", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ idToken }),
+          credentials: "include",
+        });
+      } catch {
+        // Transient network/auth errors — next interval or tab focus will retry.
+      }
+    }
+
+    void refreshServerSession();
+
+    const intervalId = window.setInterval(() => {
+      if (!cancelled) void refreshServerSession();
+    }, refreshEveryMs);
+
+    const onVisibility = () => {
+      if (cancelled || document.visibilityState !== "visible") return;
+      void refreshServerSession();
+    };
+
+    document.addEventListener("visibilitychange", onVisibility);
+
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+      document.removeEventListener("visibilitychange", onVisibility);
+    };
+  }, [user, visibility, visibilityLoading]);
 
   async function mintSessionCookie(user: User) {
     const idToken = await user.getIdToken(true);
