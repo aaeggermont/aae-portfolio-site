@@ -128,8 +128,14 @@ const SHADOW_DEPTH_EXP = 0.68;
 const SAMPLE_GAP = 3;
 const SKIP_THRESHOLD = 0.96;
 
-/** Stride: rgba (4) + pointSize + shapeKind + rotation = 7 floats */
-const STATIC_STRIDE = 28;
+/** Stride: rgba (4) + pointSize + shapeKind + rotation + homeYNorm = 8 floats */
+const STATIC_STRIDE = 32;
+
+/** First-load sweep (top → bottom); shader uses normalized rest Y per particle */
+const REVEAL_DURATION_MS = 3150;
+/** Sweep line in normalized home Y [0 = top, 1 = bottom]; must stay within ~[-band, 1+band] for smooth edges */
+const REVEAL_FROM = 0;
+const REVEAL_TO = 1.12;
 
 const VS = `
 attribute vec2 a_position;
@@ -137,12 +143,14 @@ attribute vec4 a_color;
 attribute float a_pointSize;
 attribute float a_shapeKind;
 attribute float a_rotation;
+attribute float a_homeYNorm;
 uniform vec2 u_resolution;
 uniform float u_dpr;
 uniform float u_maxPointSize;
 varying vec4 v_color;
 varying float v_shapeKind;
 varying float v_rotation;
+varying float v_homeYNorm;
 
 void main() {
   float ndcX = a_position.x / u_resolution.x * 2.0 - 1.0;
@@ -153,6 +161,7 @@ void main() {
   v_color = a_color;
   v_shapeKind = a_shapeKind;
   v_rotation = a_rotation;
+  v_homeYNorm = a_homeYNorm;
 }
 `;
 
@@ -161,6 +170,9 @@ precision mediump float;
 varying vec4 v_color;
 varying float v_shapeKind;
 varying float v_rotation;
+varying float v_homeYNorm;
+uniform float u_reveal;
+uniform float u_revealActive;
 
 float sdfCircle(vec2 p, float r) {
   return length(p) - r;
@@ -220,7 +232,14 @@ void main() {
   float rim = exp(-(d * d) / 0.00055);
   col *= 1.0 - rim * 0.15;
 
-  gl_FragColor = vec4(col, v_color.a * edge);
+  float alpha = v_color.a * edge;
+  if (u_revealActive > 0.5) {
+    float revealBand = 0.09;
+    float sw = smoothstep(u_reveal - revealBand, u_reveal + revealBand, v_homeYNorm);
+    alpha *= (1.0 - sw);
+  }
+
+  gl_FragColor = vec4(col, alpha);
 }
 `;
 
@@ -287,6 +306,8 @@ type GlBundle = {
   uResolution: WebGLUniformLocation | null;
   uDpr: WebGLUniformLocation | null;
   uMaxPointSize: WebGLUniformLocation | null;
+  uReveal: WebGLUniformLocation | null;
+  uRevealActive: WebGLUniformLocation | null;
   bufPos: WebGLBuffer;
   bufStatic: WebGLBuffer;
   maxPointSize: number;
@@ -313,11 +334,18 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
   const idleFramesRef = useRef(0);
   const simRef = useRef<Sim | null>(null);
   const glBundleRef = useRef<GlBundle | null>(null);
+  const introRevealDoneRef = useRef(false);
+  const revealStartMsRef = useRef<number | null>(null);
+  const prevLayoutDimsRef = useRef<{ w: number; h: number } | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current ?? canvas?.parentElement;
     if (!canvas || !wrap) return;
+
+    prevLayoutDimsRef.current = null;
+    introRevealDoneRef.current = false;
+    revealStartMsRef.current = null;
 
     let disposed = false;
     const teardown: (() => void)[] = [];
@@ -357,9 +385,12 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const aPointSize = gl.getAttribLocation(program, "a_pointSize");
       const aShapeKind = gl.getAttribLocation(program, "a_shapeKind");
       const aRotation = gl.getAttribLocation(program, "a_rotation");
+      const aHomeYNorm = gl.getAttribLocation(program, "a_homeYNorm");
       const uResolution = gl.getUniformLocation(program, "u_resolution");
       const uDpr = gl.getUniformLocation(program, "u_dpr");
       const uMaxPointSize = gl.getUniformLocation(program, "u_maxPointSize");
+      const uReveal = gl.getUniformLocation(program, "u_reveal");
+      const uRevealActive = gl.getUniformLocation(program, "u_revealActive");
 
       const range = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE) as Float32Array;
       const maxPointSize = Math.min(127, range[1] ?? 127);
@@ -379,9 +410,12 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         aPointSize,
         aShapeKind,
         aRotation,
+        aHomeYNorm,
         uResolution,
         uDpr,
         uMaxPointSize,
+        uReveal,
+        uRevealActive,
         bufPos,
         bufStatic,
         maxPointSize,
@@ -397,9 +431,12 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         aPointSize,
         aShapeKind,
         aRotation,
+        aHomeYNorm,
         uResolution,
         uDpr,
         uMaxPointSize,
+        uReveal,
+        uRevealActive,
         bufPos,
         bufStatic,
       } = b;
@@ -414,6 +451,22 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       gl.uniform1f(uDpr, dpr);
       gl.uniform1f(uMaxPointSize, b.maxPointSize);
 
+      let reveal = REVEAL_TO;
+      let revealActive = 0;
+      if (!introRevealDoneRef.current && revealStartMsRef.current != null && uReveal && uRevealActive) {
+        revealActive = 1;
+        const elapsed = performance.now() - revealStartMsRef.current;
+        const t = Math.min(1, elapsed / REVEAL_DURATION_MS);
+        const ease = 1 - (1 - t) ** 3;
+        reveal = REVEAL_FROM + (REVEAL_TO - REVEAL_FROM) * ease;
+        if (t >= 1) {
+          introRevealDoneRef.current = true;
+          revealActive = 0;
+        }
+      }
+      gl.uniform1f(uReveal, reveal);
+      gl.uniform1f(uRevealActive, revealActive);
+
       gl.bindBuffer(gl.ARRAY_BUFFER, bufStatic);
       gl.enableVertexAttribArray(aColor);
       gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, STATIC_STRIDE, 0);
@@ -423,6 +476,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       gl.vertexAttribPointer(aShapeKind, 1, gl.FLOAT, false, STATIC_STRIDE, 20);
       gl.enableVertexAttribArray(aRotation);
       gl.vertexAttribPointer(aRotation, 1, gl.FLOAT, false, STATIC_STRIDE, 24);
+      gl.enableVertexAttribArray(aHomeYNorm);
+      gl.vertexAttribPointer(aHomeYNorm, 1, gl.FLOAT, false, STATIC_STRIDE, 28);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
       gl.enableVertexAttribArray(aPosition);
@@ -517,7 +572,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const cg = new Float32Array(n);
       const cb = new Float32Array(n);
       const ca = new Float32Array(n);
-      const staticInterleaved = new Float32Array(n * 7);
+      const invH = h > 1 ? 1 / (h - 1) : 1;
+      const staticInterleaved = new Float32Array(n * 8);
       const posUpload = new Float32Array(n * 2);
 
       for (let i = 0; i < n; i++) {
@@ -530,7 +586,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         cg[i] = cgList[i];
         cb[i] = cbList[i];
         ca[i] = caList[i];
-        const o = i * 7;
+        const homeYNorm = hy[i] * invH;
+        const o = i * 8;
         staticInterleaved[o] = cr[i];
         staticInterleaved[o + 1] = cg[i];
         staticInterleaved[o + 2] = cb[i];
@@ -538,6 +595,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         staticInterleaved[o + 4] = rad[i];
         staticInterleaved[o + 5] = shapeKindList[i];
         staticInterleaved[o + 6] = rotationList[i];
+        staticInterleaved[o + 7] = homeYNorm;
         posUpload[i * 2] = x[i];
         posUpload[i * 2 + 1] = y[i];
       }
@@ -606,8 +664,10 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       uploadPositionsOnly(b, sim);
       bindAttribsAndDraw(b, sim);
 
+      const revealing =
+        !introRevealDoneRef.current && revealStartMsRef.current != null;
       const mouseOff = mx < -1000;
-      if (kinetic < KINETIC_STOP && mouseOff) {
+      if (!revealing && kinetic < KINETIC_STOP && mouseOff) {
         idleFramesRef.current += 1;
         if (idleFramesRef.current >= FRAMES_IDLE_STOP) {
           stopLoop();
@@ -633,6 +693,12 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const h = Math.max(1, Math.floor(wrap.clientHeight));
       const dpr = window.devicePixelRatio || 1;
 
+      const prev = prevLayoutDimsRef.current;
+      if (prev && (prev.w !== w || prev.h !== h)) {
+        introRevealDoneRef.current = true;
+      }
+      prevLayoutDimsRef.current = { w, h };
+
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       canvas.style.width = `${w}px`;
@@ -657,8 +723,12 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       buildSim(w, h, dpr, pixels);
       const sim = simRef.current;
       if (!sim) return;
+      if (!introRevealDoneRef.current) {
+        revealStartMsRef.current = performance.now();
+      }
       uploadBuffersOnce(bundle, sim);
       bindAttribsAndDraw(bundle, sim);
+      kickLoop();
     };
 
     const onContextLost = (e: Event) => {
