@@ -107,14 +107,23 @@ function drawImageCoverBottom(
   ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dW, dH);
 }
 
-const SPRING = 0.22;
-const DAMP = 0.86;
+/** Stronger spring / damping help dots hug their sampled pixels under alive motion (less smear). */
+const SPRING = 0.29;
+const DAMP = 0.88;
 const MOUSE_R = 155;
 const MOUSE_PUSH = 7.2;
 /** Higher = more color straight from the photo (stands up vs hero chrome/text). */
 const COLOR_MIX = 0.74;
-const KINETIC_STOP = 0.35;
-const FRAMES_IDLE_STOP = 18;
+/**
+ * Perpetual micro-motion — keep amplitude small vs stipple gap so color samples stay aligned with marks.
+ * (Large offsets read as softness because positions drift from the pixels colors were taken from.)
+ */
+const ALIVE_BASE_AMP = 1.05;
+const ALIVE_TIME_SCALE = 0.00105;
+const ALIVE_FREQ_X = 1.0;
+const ALIVE_FREQ_Y = 1.19;
+const ALIVE_BREATH_PERIOD_MS = 12800;
+const TAU = Math.PI * 2;
 
 /** Push mids/shadows away from pivot so the stipple reads less flat (photo-driven). */
 const LUMA_CONTRAST_PIVOT = 0.36;
@@ -125,8 +134,9 @@ const LUMA_TONE_GAMMA = 1.16;
 const SHADOW_DEPTH_EXP = 0.68;
 
 /** Grid step (px); smaller = finer stipple / smaller marks (density ∝ 1/gap²). */
-const SAMPLE_GAP = 3;
-const SKIP_THRESHOLD = 0.96;
+const SAMPLE_GAP = 2;
+/** Slightly fewer random drops so edges/high-frequency detail keep coverage. */
+const SKIP_THRESHOLD = 0.97;
 
 /** Stride: rgba (4) + pointSize + shapeKind + rotation + homeYNorm = 8 floats */
 const STATIC_STRIDE = 32;
@@ -293,6 +303,10 @@ type Sim = {
   ca: Float32Array;
   posUpload: Float32Array;
   staticInterleaved: Float32Array;
+  /** Per-particle phase & weight for `ALIVE_*` motion (radians / 0..1). */
+  phaseAx: Float32Array;
+  phaseAy: Float32Array;
+  aliveWeight: Float32Array;
 };
 
 type GlBundle = {
@@ -303,6 +317,7 @@ type GlBundle = {
   aPointSize: number;
   aShapeKind: number;
   aRotation: number;
+  aHomeYNorm: number;
   uResolution: WebGLUniformLocation | null;
   uDpr: WebGLUniformLocation | null;
   uMaxPointSize: WebGLUniformLocation | null;
@@ -331,7 +346,6 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const rafRef = useRef(0);
-  const idleFramesRef = useRef(0);
   const simRef = useRef<Sim | null>(null);
   const glBundleRef = useRef<GlBundle | null>(null);
   const introRevealDoneRef = useRef(false);
@@ -502,7 +516,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
 
     const buildSim = (w: number, h: number, dpr: number, pixels: Uint8ClampedArray) => {
       const gap = SAMPLE_GAP;
-      const jitter = gap * 0.2;
+      const jitter = gap * 0.15;
 
       const hxList: number[] = [];
       const hyList: number[] = [];
@@ -513,6 +527,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const caList: number[] = [];
       const shapeKindList: number[] = [];
       const rotationList: number[] = [];
+      const phaseAxList: number[] = [];
+      const phaseAyList: number[] = [];
+      const aliveWeightList: number[] = [];
 
       let gy = 0;
       for (let y = 0; y < h; y += gap, gy++) {
@@ -557,6 +574,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
           caList.push(ca);
           shapeKindList.push(shapeKind);
           rotationList.push(rotation);
+          phaseAxList.push(cellHash(gx + 11, gy + 22) * TAU);
+          phaseAyList.push(cellHash(gx + 79, gy + 41) * TAU);
+          aliveWeightList.push(0.62 + cellHash(gx + 3, gy + 99) * 0.38);
         }
       }
 
@@ -575,6 +595,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const invH = h > 1 ? 1 / (h - 1) : 1;
       const staticInterleaved = new Float32Array(n * 8);
       const posUpload = new Float32Array(n * 2);
+      const phaseAx = new Float32Array(n);
+      const phaseAy = new Float32Array(n);
+      const aliveWeight = new Float32Array(n);
 
       for (let i = 0; i < n; i++) {
         hx[i] = hxList[i];
@@ -586,6 +609,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         cg[i] = cgList[i];
         cb[i] = cbList[i];
         ca[i] = caList[i];
+        phaseAx[i] = phaseAxList[i];
+        phaseAy[i] = phaseAyList[i];
+        aliveWeight[i] = aliveWeightList[i];
         const homeYNorm = hy[i] * invH;
         const o = i * 8;
         staticInterleaved[o] = cr[i];
@@ -618,6 +644,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         ca,
         posUpload,
         staticInterleaved,
+        phaseAx,
+        phaseAy,
+        aliveWeight,
       };
     };
 
@@ -630,21 +659,28 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const b = glBundleRef.current;
       if (!sim || !b || !canvas) return;
 
-      const { n, hx, hy, x, y, vx, vy, posUpload } = sim;
+      const { n, hx, hy, x, y, vx, vy, posUpload, phaseAx, phaseAy, aliveWeight } = sim;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
 
-      let kinetic = 0;
+      const nowMs = performance.now();
+      const t = nowMs * ALIVE_TIME_SCALE;
+      const breath =
+        0.96 + 0.04 * Math.sin((nowMs / ALIVE_BREATH_PERIOD_MS) * TAU);
+
       for (let i = 0; i < n; i++) {
-        let fx = (hx[i] - x[i]) * SPRING;
-        let fy = (hy[i] - y[i]) * SPRING;
+        const amp = ALIVE_BASE_AMP * aliveWeight[i] * breath;
+        const ox = amp * Math.sin(ALIVE_FREQ_X * t + phaseAx[i]);
+        const oy = amp * Math.cos(ALIVE_FREQ_Y * t + phaseAy[i]);
+        let fx = (hx[i] + ox - x[i]) * SPRING;
+        let fy = (hy[i] + oy - y[i]) * SPRING;
 
         const dx = x[i] - mx;
         const dy = y[i] - my;
         const dist = Math.sqrt(dx * dx + dy * dy);
         if (dist > 0.5 && dist < MOUSE_R) {
-          const t = 1 - dist / MOUSE_R;
-          const push = MOUSE_PUSH * t * t;
+          const falloff = 1 - dist / MOUSE_R;
+          const push = MOUSE_PUSH * falloff * falloff;
           fx += (dx / dist) * push;
           fy += (dy / dist) * push;
         }
@@ -655,7 +691,6 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         vy[i] = nvy;
         x[i] += nvx;
         y[i] += nvy;
-        kinetic += nvx * nvx + nvy * nvy;
 
         posUpload[i * 2] = x[i];
         posUpload[i * 2 + 1] = y[i];
@@ -664,25 +699,11 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       uploadPositionsOnly(b, sim);
       bindAttribsAndDraw(b, sim);
 
-      const revealing =
-        !introRevealDoneRef.current && revealStartMsRef.current != null;
-      const mouseOff = mx < -1000;
-      if (!revealing && kinetic < KINETIC_STOP && mouseOff) {
-        idleFramesRef.current += 1;
-        if (idleFramesRef.current >= FRAMES_IDLE_STOP) {
-          stopLoop();
-          return;
-        }
-      } else {
-        idleFramesRef.current = 0;
-      }
-
       if (disposed) return;
       rafRef.current = requestAnimationFrame(drawFrame);
     };
 
     const kickLoop = () => {
-      idleFramesRef.current = 0;
       if (rafRef.current) return;
       rafRef.current = requestAnimationFrame(drawFrame);
     };
@@ -728,7 +749,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       }
       uploadBuffersOnce(bundle, sim);
       bindAttribsAndDraw(bundle, sim);
-      kickLoop();
+      if (typeof document === "undefined" || !document.hidden) {
+        kickLoop();
+      }
     };
 
     const onContextLost = (e: Event) => {
@@ -751,6 +774,14 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         canvas.removeEventListener("webglcontextlost", onContextLost);
         canvas.removeEventListener("webglcontextrestored", onContextRestored);
       });
+
+      const onVisibility = () => {
+        if (disposed) return;
+        if (document.hidden) stopLoop();
+        else kickLoop();
+      };
+      document.addEventListener("visibilitychange", onVisibility);
+      teardown.push(() => document.removeEventListener("visibilitychange", onVisibility));
 
       layoutAndSeed();
 
