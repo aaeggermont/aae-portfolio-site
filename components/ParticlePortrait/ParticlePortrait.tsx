@@ -17,6 +17,70 @@ function cellHash(gx: number, gy: number): number {
   return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
 }
 
+function clamp01(x: number): number {
+  return Math.max(0, Math.min(1, x));
+}
+
+/** Display-space Rec. 709 luma (fast; fine for stipple sampling). */
+function luma709(r: number, g: number, b: number): number {
+  return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+}
+
+function contrastAroundPivot(L: number, pivot: number, strength: number): number {
+  return clamp01(pivot + (L - pivot) * strength);
+}
+
+/**
+ * Turn sampled photo RGB into stipple color + alpha + semantic darkness.
+ * Contrast lift on luma + hue-preserving shadow scaling (not flat gray).
+ */
+function stippleToneFromPixel(r: number, g: number, b: number): {
+  fr: number;
+  fg: number;
+  fb: number;
+  ca: number;
+  darkness: number;
+} {
+  let L = luma709(r, g, b);
+  L = contrastAroundPivot(L, LUMA_CONTRAST_PIVOT, LUMA_CONTRAST_STRENGTH);
+  L = clamp01(Math.pow(L, LUMA_TONE_GAMMA));
+  const darkness = 1 - L;
+
+  const rn = r / 255;
+  const gn = g / 255;
+  const bn = b / 255;
+
+  const shadowCurve = Math.pow(darkness, SHADOW_DEPTH_EXP);
+  const luminanceScale = 0.16 + 0.84 * (1 - shadowCurve * 0.92);
+
+  let tr = rn * luminanceScale;
+  let tg = gn * luminanceScale;
+  let tb = bn * luminanceScale;
+
+  const m = COLOR_MIX;
+  tr = tr * m + 0.06 * (1 - m);
+  tg = tg * m + 0.06 * (1 - m);
+  tb = tb * m + 0.07 * (1 - m);
+
+  const deep = darkness * darkness;
+  const crush = deep * 0.32;
+  tr *= 1 - crush * 0.12;
+  tg *= 1 - crush * 0.14;
+  tb *= 1 - crush * 0.06;
+
+  const ca =
+    0.11 +
+    Math.min(0.9, darkness * 0.94 + (1 - darkness) * 0.05);
+
+  return {
+    fr: clamp01(tr),
+    fg: clamp01(tg),
+    fb: clamp01(tb),
+    ca,
+    darkness,
+  };
+}
+
 function drawImageCoverBottom(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
@@ -44,18 +108,33 @@ const COLOR_MIX = 0.55;
 const KINETIC_STOP = 0.35;
 const FRAMES_IDLE_STOP = 18;
 
+/** Push mids/shadows away from pivot so the stipple reads less flat (photo-driven). */
+const LUMA_CONTRAST_PIVOT = 0.38;
+const LUMA_CONTRAST_STRENGTH = 1.72;
+/** >1 slightly deepens tone overall after contrast (richer shadow separation). */
+const LUMA_TONE_GAMMA = 1.06;
+/** How aggressively darker regions pull RGB toward deep shades (hue preserved). */
+const SHADOW_DEPTH_EXP = 0.72;
+
 /** ~2× particle count vs gap=5 (density ∝ 1/gap²) */
 const SAMPLE_GAP = 4;
 const SKIP_THRESHOLD = 0.96;
+
+/** Stride: rgba (4) + pointSize + shapeKind + rotation = 7 floats */
+const STATIC_STRIDE = 28;
 
 const VS = `
 attribute vec2 a_position;
 attribute vec4 a_color;
 attribute float a_pointSize;
+attribute float a_shapeKind;
+attribute float a_rotation;
 uniform vec2 u_resolution;
 uniform float u_dpr;
 uniform float u_maxPointSize;
 varying vec4 v_color;
+varying float v_shapeKind;
+varying float v_rotation;
 
 void main() {
   float ndcX = a_position.x / u_resolution.x * 2.0 - 1.0;
@@ -64,16 +143,56 @@ void main() {
   float ps = a_pointSize * 2.0 * u_dpr;
   gl_PointSize = clamp(max(ps, 1.0), 1.0, u_maxPointSize);
   v_color = a_color;
+  v_shapeKind = a_shapeKind;
+  v_rotation = a_rotation;
 }
 `;
 
 const FS = `
 precision mediump float;
 varying vec4 v_color;
+varying float v_shapeKind;
+varying float v_rotation;
+
+float sdfCircle(vec2 p, float r) {
+  return length(p) - r;
+}
+
+float sdfHex(vec2 p, float r) {
+  vec2 q = abs(p);
+  return max(q.x * 0.8660254 + q.y * 0.5, q.y) - r;
+}
+
+float sdfDiamond(vec2 p, float r) {
+  return abs(p.x) + abs(p.y) - r;
+}
+
+float sdfSquircle(vec2 p, float r) {
+  vec2 q = abs(p);
+  float rr = pow(r, 2.35);
+  return pow(q.x, 2.35) + pow(q.y, 2.35) - rr;
+}
+
 void main() {
   vec2 uv = gl_PointCoord.xy - 0.5;
-  if (dot(uv, uv) > 0.25) discard;
-  gl_FragColor = v_color;
+  float c = cos(v_rotation);
+  float s = sin(v_rotation);
+  vec2 p = vec2(c * uv.x - s * uv.y, s * uv.x + c * uv.y);
+
+  float d;
+  if (v_shapeKind < 0.5) {
+    d = sdfCircle(p, 0.46);
+  } else if (v_shapeKind < 1.5) {
+    d = sdfHex(p, 0.41);
+  } else if (v_shapeKind < 2.5) {
+    d = sdfDiamond(p, 0.52);
+  } else {
+    d = sdfSquircle(p, 0.42);
+  }
+
+  float edge = 1.0 - smoothstep(-0.045, 0.045, d);
+  if (edge < 0.004) discard;
+  gl_FragColor = vec4(v_color.rgb, v_color.a * edge);
 }
 `;
 
@@ -135,6 +254,8 @@ type GlBundle = {
   aPosition: number;
   aColor: number;
   aPointSize: number;
+  aShapeKind: number;
+  aRotation: number;
   uResolution: WebGLUniformLocation | null;
   uDpr: WebGLUniformLocation | null;
   uMaxPointSize: WebGLUniformLocation | null;
@@ -206,6 +327,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const aPosition = gl.getAttribLocation(program, "a_position");
       const aColor = gl.getAttribLocation(program, "a_color");
       const aPointSize = gl.getAttribLocation(program, "a_pointSize");
+      const aShapeKind = gl.getAttribLocation(program, "a_shapeKind");
+      const aRotation = gl.getAttribLocation(program, "a_rotation");
       const uResolution = gl.getUniformLocation(program, "u_resolution");
       const uDpr = gl.getUniformLocation(program, "u_dpr");
       const uMaxPointSize = gl.getUniformLocation(program, "u_maxPointSize");
@@ -226,6 +349,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         aPosition,
         aColor,
         aPointSize,
+        aShapeKind,
+        aRotation,
         uResolution,
         uDpr,
         uMaxPointSize,
@@ -236,8 +361,20 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
     }
 
     function bindAttribsAndDraw(b: GlBundle, sim: Sim) {
-      const { gl, program, aPosition, aColor, aPointSize, uResolution, uDpr, uMaxPointSize, bufPos, bufStatic } =
-        b;
+      const {
+        gl,
+        program,
+        aPosition,
+        aColor,
+        aPointSize,
+        aShapeKind,
+        aRotation,
+        uResolution,
+        uDpr,
+        uMaxPointSize,
+        bufPos,
+        bufStatic,
+      } = b;
       const { w, h, dpr, n } = sim;
 
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -251,9 +388,13 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
 
       gl.bindBuffer(gl.ARRAY_BUFFER, bufStatic);
       gl.enableVertexAttribArray(aColor);
-      gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 20, 0);
+      gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, STATIC_STRIDE, 0);
       gl.enableVertexAttribArray(aPointSize);
-      gl.vertexAttribPointer(aPointSize, 1, gl.FLOAT, false, 20, 16);
+      gl.vertexAttribPointer(aPointSize, 1, gl.FLOAT, false, STATIC_STRIDE, 16);
+      gl.enableVertexAttribArray(aShapeKind);
+      gl.vertexAttribPointer(aShapeKind, 1, gl.FLOAT, false, STATIC_STRIDE, 20);
+      gl.enableVertexAttribArray(aRotation);
+      gl.vertexAttribPointer(aRotation, 1, gl.FLOAT, false, STATIC_STRIDE, 24);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
       gl.enableVertexAttribArray(aPosition);
@@ -287,6 +428,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const cgList: number[] = [];
       const cbList: number[] = [];
       const caList: number[] = [];
+      const shapeKindList: number[] = [];
+      const rotationList: number[] = [];
 
       let gy = 0;
       for (let y = 0; y < h; y += gap, gy++) {
@@ -307,28 +450,29 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
 
           if (alpha < 38) continue;
 
-          const brightness = (r + g + b) / 3;
-          const darkness = 1 - brightness / 255;
-          if (darkness < 0.055) continue;
+          const tone = stippleToneFromPixel(r, g, b);
+          const { fr, fg, fb, ca, darkness } = tone;
+          if (darkness < 0.048) continue;
 
           const breathe = 0.93 + cellHash(gx + 31, gy + 7) * 0.12;
           const rad = Math.min(
             1.22,
-            Math.max(0.26, (0.1 + darkness * darkness * 2.05) * breathe),
+            Math.max(0.26, (0.1 + darkness * darkness * 2.15) * breathe),
           );
 
-          const fr = r * COLOR_MIX + 18 * (1 - COLOR_MIX);
-          const fg = g * COLOR_MIX + 18 * (1 - COLOR_MIX);
-          const fb = b * COLOR_MIX + 20 * (1 - COLOR_MIX);
-          const ca = 0.14 + Math.min(0.82, darkness * 0.88 + 0.06 * (brightness / 255));
+          const hShape = cellHash(gx + 101, gy + 47);
+          const shapeKind = hShape < 0.26 ? 0 : hShape < 0.52 ? 1 : hShape < 0.76 ? 2 : 3;
+          const rotation = cellHash(gx + 3, gy + 88) * Math.PI * 2;
 
           hxList.push(px);
           hyList.push(py);
           radList.push(rad);
-          crList.push(fr / 255);
-          cgList.push(fg / 255);
-          cbList.push(fb / 255);
+          crList.push(fr);
+          cgList.push(fg);
+          cbList.push(fb);
           caList.push(ca);
+          shapeKindList.push(shapeKind);
+          rotationList.push(rotation);
         }
       }
 
@@ -344,7 +488,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const cg = new Float32Array(n);
       const cb = new Float32Array(n);
       const ca = new Float32Array(n);
-      const staticInterleaved = new Float32Array(n * 5);
+      const staticInterleaved = new Float32Array(n * 7);
       const posUpload = new Float32Array(n * 2);
 
       for (let i = 0; i < n; i++) {
@@ -357,12 +501,14 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         cg[i] = cgList[i];
         cb[i] = cbList[i];
         ca[i] = caList[i];
-        const o = i * 5;
+        const o = i * 7;
         staticInterleaved[o] = cr[i];
         staticInterleaved[o + 1] = cg[i];
         staticInterleaved[o + 2] = cb[i];
         staticInterleaved[o + 3] = ca[i];
         staticInterleaved[o + 4] = rad[i];
+        staticInterleaved[o + 5] = shapeKindList[i];
+        staticInterleaved[o + 6] = rotationList[i];
         posUpload[i * 2] = x[i];
         posUpload[i * 2 + 1] = y[i];
       }
