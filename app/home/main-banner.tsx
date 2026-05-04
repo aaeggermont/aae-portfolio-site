@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import IconButton from "@mui/material/IconButton";
 import gsap from "gsap";
-
+import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from 'typewriter-effect';
@@ -146,6 +146,12 @@ function MainBanner() {
         className={styles.bannerPhoto}
       >
         <div className={styles.blobMask}>
+        <ParticlePortrait
+          src="/images/ProfilePhoto.png"
+          className={styles.bannerPhotoImage}
+    />
+
+          {/* eslint-disable-next-line @next/next/no-img-element
           <Image
             src={AntonioBannerPhoto}
             alt="Portrait of Antonio Aranda Eggermont"
@@ -153,7 +159,7 @@ function MainBanner() {
             priority
             className={styles.bannerPhotoImage}
             sizes="(max-width: 767px) 70vw, (max-width: 1023px) 40vw, 26vw"
-          />
+          /> */}
         </div>
       </div>
     </section>
