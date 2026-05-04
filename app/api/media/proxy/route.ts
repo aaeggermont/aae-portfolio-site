@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { getAdmin } from "@/lib/firebase/admin";
+import {
+  evaluateProjectSessionWindow,
+  getProjectSessionCookieName,
+  hardExpiredProjectSessionResponse,
+  isHardExpiredFromAuthTime,
+} from "@/lib/auth/projectSessionWindow";
 
 export const runtime = "nodejs";
 
@@ -11,6 +17,7 @@ function normalizeEmail(email?: string | null) {
 export async function GET(req: Request) {
   try {
     const { auth, db, bucket } = getAdmin();
+    const cookieStore = await cookies();
     const { searchParams } = new URL(req.url);
     const projectKey = searchParams.get("projectKey") ?? "";
     const objectPath = searchParams.get("objectPath") ?? "";
@@ -23,7 +30,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ ok: false, reason: "invalid_path" }, { status: 400 });
     }
 
-    const session = (await cookies()).get("session")?.value;
+    const session = cookieStore.get("session")?.value;
     if (!session) {
       return NextResponse.json({ ok: false, reason: "no_session" }, { status: 401 });
     }
@@ -57,6 +64,18 @@ export async function GET(req: Request) {
 
       if (!enabled || (!uidOk && !emailOk)) {
         return NextResponse.json({ ok: false, reason: "not_allowed" }, { status: 403 });
+      }
+
+      if (isHardExpiredFromAuthTime((decoded as { auth_time?: number }).auth_time)) {
+        return hardExpiredProjectSessionResponse(projectKey);
+      }
+
+      const projectSessionState = evaluateProjectSessionWindow(
+        projectKey,
+        cookieStore.get(getProjectSessionCookieName(projectKey))?.value,
+      );
+      if (projectSessionState.hardExpired) {
+        return hardExpiredProjectSessionResponse(projectKey);
       }
     }
 
