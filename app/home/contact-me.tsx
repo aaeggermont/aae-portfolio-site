@@ -11,7 +11,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import emailjs from '@emailjs/browser';
 import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 24;
 
 function HeadingTypewriter() {
   const wrapperRef = useRef<HTMLHeadingElement | null>(null);
