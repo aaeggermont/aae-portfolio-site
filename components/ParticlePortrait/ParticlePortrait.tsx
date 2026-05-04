@@ -51,26 +51,33 @@ function stippleToneFromPixel(r: number, g: number, b: number): {
   const bn = b / 255;
 
   const shadowCurve = Math.pow(darkness, SHADOW_DEPTH_EXP);
-  const luminanceScale = 0.16 + 0.84 * (1 - shadowCurve * 0.92);
+  const luminanceScale = 0.05 + 0.95 * (1 - shadowCurve * 0.95);
 
   let tr = rn * luminanceScale;
   let tg = gn * luminanceScale;
   let tb = bn * luminanceScale;
 
   const m = COLOR_MIX;
-  tr = tr * m + 0.06 * (1 - m);
-  tg = tg * m + 0.06 * (1 - m);
-  tb = tb * m + 0.07 * (1 - m);
+  tr = tr * m + 0.035 * (1 - m);
+  tg = tg * m + 0.035 * (1 - m);
+  tb = tb * m + 0.04 * (1 - m);
 
   const deep = darkness * darkness;
-  const crush = deep * 0.32;
-  tr *= 1 - crush * 0.12;
-  tg *= 1 - crush * 0.14;
-  tb *= 1 - crush * 0.06;
+  const crush = deep * 0.36;
+  tr *= 1 - crush * 0.14;
+  tg *= 1 - crush * 0.16;
+  tb *= 1 - crush * 0.07;
 
+  /* Global darken — keeps hue from tone mapping */
+  const punch = 1.78;
+  tr *= punch;
+  tg *= punch;
+  tb *= punch;
+
+  /* Higher base alpha so stipple holds weight next to large headline copy */
   const ca =
-    0.11 +
-    Math.min(0.9, darkness * 0.94 + (1 - darkness) * 0.05);
+    0.18 +
+    Math.min(0.94, darkness * 0.97 + (1 - darkness) * 0.09);
 
   return {
     fr: clamp01(tr),
@@ -104,20 +111,21 @@ const SPRING = 0.22;
 const DAMP = 0.86;
 const MOUSE_R = 155;
 const MOUSE_PUSH = 7.2;
-const COLOR_MIX = 0.55;
+/** Higher = more color straight from the photo (stands up vs hero chrome/text). */
+const COLOR_MIX = 0.74;
 const KINETIC_STOP = 0.35;
 const FRAMES_IDLE_STOP = 18;
 
 /** Push mids/shadows away from pivot so the stipple reads less flat (photo-driven). */
-const LUMA_CONTRAST_PIVOT = 0.38;
-const LUMA_CONTRAST_STRENGTH = 1.72;
-/** >1 slightly deepens tone overall after contrast (richer shadow separation). */
-const LUMA_TONE_GAMMA = 1.06;
+const LUMA_CONTRAST_PIVOT = 0.36;
+const LUMA_CONTRAST_STRENGTH = 2.02;
+/** >1 deepens mids/shadows after contrast (stronger separation vs page background). */
+const LUMA_TONE_GAMMA = 1.16;
 /** How aggressively darker regions pull RGB toward deep shades (hue preserved). */
-const SHADOW_DEPTH_EXP = 0.72;
+const SHADOW_DEPTH_EXP = 0.68;
 
-/** ~2× particle count vs gap=5 (density ∝ 1/gap²) */
-const SAMPLE_GAP = 4;
+/** Grid step (px); smaller = finer stipple / smaller marks (density ∝ 1/gap²). */
+const SAMPLE_GAP = 3;
 const SKIP_THRESHOLD = 0.96;
 
 /** Stride: rgba (4) + pointSize + shapeKind + rotation = 7 floats */
@@ -190,9 +198,29 @@ void main() {
     d = sdfSquircle(p, 0.42);
   }
 
-  float edge = 1.0 - smoothstep(-0.045, 0.045, d);
+  /* Slightly wider AA band so tiles read a touch more merged / organic */
+  float edge = 1.0 - smoothstep(-0.052, 0.052, d);
   if (edge < 0.004) discard;
-  gl_FragColor = vec4(v_color.rgb, v_color.a * edge);
+
+  vec3 col = v_color.rgb;
+  float len = length(p);
+
+  /* Stronger chroma vs gray — matches higher COLOR_MIX on CPU */
+  float lum = dot(col, vec3(0.299, 0.587, 0.114));
+  col = mix(vec3(lum), col, 1.24);
+  col = clamp(col, 0.0, 1.0);
+
+  /* Narrow highlight range — preserves modeling but stays darker on average */
+  float light = 0.67 + 0.11 * clamp(-p.y * 1.05 - p.x * 0.42 + 0.18, 0.0, 1.0);
+  col *= light;
+
+  float dome = 1.0 - smoothstep(0.0, 0.44, len);
+  col *= 0.75 + 0.11 * dome;
+
+  float rim = exp(-(d * d) / 0.00055);
+  col *= 1.0 - rim * 0.15;
+
+  gl_FragColor = vec4(col, v_color.a * edge);
 }
 `;
 
@@ -455,9 +483,10 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
           if (darkness < 0.048) continue;
 
           const breathe = 0.93 + cellHash(gx + 31, gy + 7) * 0.12;
+          /* Smaller gl_PointSize → more facial detail; caps stay within typical GPU point limits */
           const rad = Math.min(
-            1.22,
-            Math.max(0.26, (0.1 + darkness * darkness * 2.15) * breathe),
+            0.92,
+            Math.max(0.18, (0.07 + darkness * darkness * 1.68) * breathe),
           );
 
           const hShape = cellHash(gx + 101, gy + 47);

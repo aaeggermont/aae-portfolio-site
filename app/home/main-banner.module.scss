@@ -96,7 +96,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 5%;
+  gap: clamp(1.5rem, 5vw, 4rem);
   position: relative;
   overflow: visible;
 
@@ -119,16 +119,17 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: 40vw;
+    /* Narrower column so the portrait can carry more visual weight beside the headline */
+    width: min(36rem, 34vw);
     padding: 4rem 0;
     z-index: 2;
 
     @media screen and #{$tablet} {
-      width: 50vw;
+      width: min(38rem, 46vw);
     }
 
     @media screen and #{$desktop-device} {
-      width: 40vw;
+      width: min(36rem, 34vw);
     }
 
     @media screen and #{$mobile} {
@@ -140,20 +141,23 @@
 
   .bannerPhoto {
     position: relative;
-    /* Taller frame + larger clamps so the stipple portrait reads bigger on the page */
-    width: clamp(280px, 34vw, 680px);
+    /* Larger clamp vs text column — portrait reads as co-equal hero element */
+    width: clamp(300px, 42vw, 780px);
     aspect-ratio: 3 / 4;
     height: auto;
-    max-height: min(92vh, 860px);
+    max-height: min(94vh, 900px);
     z-index: 2;
+    filter: drop-shadow(0 22px 48px rgba(15, 23, 42, 0.22))
+      drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
 
     @media screen and #{$tablet} {
-      width: clamp(280px, 44vw, 680px);
+      width: clamp(300px, 48vw, 780px);
     }
 
     @media screen and #{$mobile} {
-      width: min(94vw, 440px);
+      width: min(94vw, 460px);
       margin-bottom: 0.5rem;
+      filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
     }
   }
 
@@ -213,13 +217,14 @@
     }
 
     @media screen and #{$tablet} {
-      max-width: 700px;
-      min-width: 500px;
+      max-width: min(700px, 100%);
+      min-width: 0;
     }
 
     @media screen and #{$desktop-device} {
-      max-width: 700px;
-      min-width: 500px;
+      max-width: min(700px, 100%);
+      min-width: 0;
+      opacity: 0.93;
     }
   }
 
@@ -234,6 +239,10 @@
     @media screen and #{$mobile} {
       max-width: 32rem;
       padding: 0 1.5rem;
+    }
+
+    @media screen and #{$desktop-device} {
+      opacity: 0.88;
     }
   }
 
