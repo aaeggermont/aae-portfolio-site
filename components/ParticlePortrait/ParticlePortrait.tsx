@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Stippled portrait with scatter → spring-back motion, in the spirit of creative
- * portfolio particle portraits (e.g. https://tishukov.com/ — dense points, fluid mouse response).
+ * Stippled portrait with scatter → spring-back (e.g. https://tishukov.com/).
+ * WebGL1 point sprites: GPU draws many points; physics stays CPU. ~2× density (gap 4 vs 5).
  */
 type ParticlePortraitProps = {
   src: string;
@@ -44,39 +44,131 @@ const COLOR_MIX = 0.55;
 const KINETIC_STOP = 0.35;
 const FRAMES_IDLE_STOP = 18;
 
+/** ~2× particle count vs gap=5 (density ∝ 1/gap²) */
+const SAMPLE_GAP = 4;
+const SKIP_THRESHOLD = 0.96;
+
+const VS = `
+attribute vec2 a_position;
+attribute vec4 a_color;
+attribute float a_pointSize;
+uniform vec2 u_resolution;
+uniform float u_dpr;
+uniform float u_maxPointSize;
+varying vec4 v_color;
+
+void main() {
+  float ndcX = a_position.x / u_resolution.x * 2.0 - 1.0;
+  float ndcY = 1.0 - a_position.y / u_resolution.y * 2.0;
+  gl_Position = vec4(ndcX, ndcY, 0.0, 1.0);
+  float ps = a_pointSize * 2.0 * u_dpr;
+  gl_PointSize = clamp(max(ps, 1.0), 1.0, u_maxPointSize);
+  v_color = a_color;
+}
+`;
+
+const FS = `
+precision mediump float;
+varying vec4 v_color;
+void main() {
+  vec2 uv = gl_PointCoord.xy - 0.5;
+  if (dot(uv, uv) > 0.25) discard;
+  gl_FragColor = v_color;
+}
+`;
+
+function compileShader(gl: WebGLRenderingContext, type: number, source: string) {
+  const sh = gl.createShader(type);
+  if (!sh) return null;
+  gl.shaderSource(sh, source);
+  gl.compileShader(sh);
+  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+    console.error("[ParticlePortrait] shader:", gl.getShaderInfoLog(sh));
+    gl.deleteShader(sh);
+    return null;
+  }
+  return sh;
+}
+
+function createPointProgram(gl: WebGLRenderingContext) {
+  const vs = compileShader(gl, gl.VERTEX_SHADER, VS);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, FS);
+  if (!vs || !fs) return null;
+  const prog = gl.createProgram();
+  if (!prog) return null;
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  gl.deleteShader(vs);
+  gl.deleteShader(fs);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    console.error("[ParticlePortrait] program:", gl.getProgramInfoLog(prog));
+    gl.deleteProgram(prog);
+    return null;
+  }
+  return prog;
+}
+
+type Sim = {
+  w: number;
+  h: number;
+  dpr: number;
+  n: number;
+  hx: Float32Array;
+  hy: Float32Array;
+  x: Float32Array;
+  y: Float32Array;
+  vx: Float32Array;
+  vy: Float32Array;
+  rad: Float32Array;
+  cr: Float32Array;
+  cg: Float32Array;
+  cb: Float32Array;
+  ca: Float32Array;
+  posUpload: Float32Array;
+  staticInterleaved: Float32Array;
+};
+
+type GlBundle = {
+  gl: WebGLRenderingContext;
+  program: WebGLProgram;
+  aPosition: number;
+  aColor: number;
+  aPointSize: number;
+  uResolution: WebGLUniformLocation | null;
+  uDpr: WebGLUniformLocation | null;
+  uMaxPointSize: WebGLUniformLocation | null;
+  bufPos: WebGLBuffer;
+  bufStatic: WebGLBuffer;
+  maxPointSize: number;
+};
+
+function getWebGL1Context(canvas: HTMLCanvasElement): WebGLRenderingContext | null {
+  const opts: WebGLContextAttributes = {
+    alpha: true,
+    premultipliedAlpha: false,
+    antialias: false,
+    powerPreference: "high-performance",
+  };
+  return (
+    (canvas.getContext("webgl", opts) as WebGLRenderingContext | null) ??
+    (canvas.getContext("experimental-webgl", opts) as WebGLRenderingContext | null)
+  );
+}
+
 export default function ParticlePortrait({ src, className }: ParticlePortraitProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const rafRef = useRef(0);
   const idleFramesRef = useRef(0);
-
-  /** Mutable sim state — rebuilt on resize / image load */
-  const simRef = useRef<{
-    w: number;
-    h: number;
-    dpr: number;
-    n: number;
-    hx: Float32Array;
-    hy: Float32Array;
-    x: Float32Array;
-    y: Float32Array;
-    vx: Float32Array;
-    vy: Float32Array;
-    rad: Float32Array;
-    cr: Float32Array;
-    cg: Float32Array;
-    cb: Float32Array;
-    ca: Float32Array;
-  } | null>(null);
+  const simRef = useRef<Sim | null>(null);
+  const glBundleRef = useRef<GlBundle | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current ?? canvas?.parentElement;
     if (!canvas || !wrap) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
 
     let disposed = false;
     const teardown: (() => void)[] = [];
@@ -92,9 +184,100 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       }
     };
 
+    function releaseGl() {
+      const b = glBundleRef.current;
+      if (!b) return;
+      const { gl, program, bufPos, bufStatic } = b;
+      gl.deleteBuffer(bufPos);
+      gl.deleteBuffer(bufStatic);
+      gl.deleteProgram(program);
+      glBundleRef.current = null;
+    }
+
+    function initGl(canvasEl: HTMLCanvasElement): GlBundle | null {
+      const gl = getWebGL1Context(canvasEl);
+      if (!gl) {
+        console.error("[ParticlePortrait] WebGL unavailable");
+        return null;
+      }
+      const program = createPointProgram(gl);
+      if (!program) return null;
+
+      const aPosition = gl.getAttribLocation(program, "a_position");
+      const aColor = gl.getAttribLocation(program, "a_color");
+      const aPointSize = gl.getAttribLocation(program, "a_pointSize");
+      const uResolution = gl.getUniformLocation(program, "u_resolution");
+      const uDpr = gl.getUniformLocation(program, "u_dpr");
+      const uMaxPointSize = gl.getUniformLocation(program, "u_maxPointSize");
+
+      const range = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE) as Float32Array;
+      const maxPointSize = Math.min(127, range[1] ?? 127);
+
+      const bufPos = gl.createBuffer()!;
+      const bufStatic = gl.createBuffer()!;
+
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+      gl.disable(gl.DEPTH_TEST);
+
+      return {
+        gl,
+        program,
+        aPosition,
+        aColor,
+        aPointSize,
+        uResolution,
+        uDpr,
+        uMaxPointSize,
+        bufPos,
+        bufStatic,
+        maxPointSize,
+      };
+    }
+
+    function bindAttribsAndDraw(b: GlBundle, sim: Sim) {
+      const { gl, program, aPosition, aColor, aPointSize, uResolution, uDpr, uMaxPointSize, bufPos, bufStatic } =
+        b;
+      const { w, h, dpr, n } = sim;
+
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+
+      gl.useProgram(program);
+      gl.uniform2f(uResolution, w, h);
+      gl.uniform1f(uDpr, dpr);
+      gl.uniform1f(uMaxPointSize, b.maxPointSize);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, bufStatic);
+      gl.enableVertexAttribArray(aColor);
+      gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, 20, 0);
+      gl.enableVertexAttribArray(aPointSize);
+      gl.vertexAttribPointer(aPointSize, 1, gl.FLOAT, false, 20, 16);
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+      gl.drawArrays(gl.POINTS, 0, n);
+    }
+
+    function uploadBuffersOnce(b: GlBundle, sim: Sim) {
+      const { gl, bufPos, bufStatic } = b;
+      gl.bindBuffer(gl.ARRAY_BUFFER, bufStatic);
+      gl.bufferData(gl.ARRAY_BUFFER, sim.staticInterleaved, gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
+      gl.bufferData(gl.ARRAY_BUFFER, sim.posUpload, gl.DYNAMIC_DRAW);
+    }
+
+    function uploadPositionsOnly(b: GlBundle, sim: Sim) {
+      const { gl, bufPos } = b;
+      gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
+      gl.bufferSubData(gl.ARRAY_BUFFER, 0, sim.posUpload);
+    }
+
     const buildSim = (w: number, h: number, dpr: number, pixels: Uint8ClampedArray) => {
-      const gap = 5;
-      const skipThreshold = 0.96;
+      const gap = SAMPLE_GAP;
       const jitter = gap * 0.2;
 
       const hxList: number[] = [];
@@ -109,7 +292,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       for (let y = 0; y < h; y += gap, gy++) {
         let gx = 0;
         for (let x = 0; x < w; x += gap, gx++) {
-          if (cellHash(gx, gy) > skipThreshold) continue;
+          if (cellHash(gx, gy) > SKIP_THRESHOLD) continue;
 
           const jx = (cellHash(gx + 17, gy + 3) - 0.5) * jitter;
           const jy = (cellHash(gx, gy + 9) - 0.5) * jitter;
@@ -142,9 +325,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
           hxList.push(px);
           hyList.push(py);
           radList.push(rad);
-          crList.push(fr);
-          cgList.push(fg);
-          cbList.push(fb);
+          crList.push(fr / 255);
+          cgList.push(fg / 255);
+          cbList.push(fb / 255);
           caList.push(ca);
         }
       }
@@ -161,6 +344,8 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const cg = new Float32Array(n);
       const cb = new Float32Array(n);
       const ca = new Float32Array(n);
+      const staticInterleaved = new Float32Array(n * 5);
+      const posUpload = new Float32Array(n * 2);
 
       for (let i = 0; i < n; i++) {
         hx[i] = hxList[i];
@@ -172,9 +357,35 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         cg[i] = cgList[i];
         cb[i] = cbList[i];
         ca[i] = caList[i];
+        const o = i * 5;
+        staticInterleaved[o] = cr[i];
+        staticInterleaved[o + 1] = cg[i];
+        staticInterleaved[o + 2] = cb[i];
+        staticInterleaved[o + 3] = ca[i];
+        staticInterleaved[o + 4] = rad[i];
+        posUpload[i * 2] = x[i];
+        posUpload[i * 2 + 1] = y[i];
       }
 
-      simRef.current = { w, h, dpr, n, hx, hy, x, y, vx, vy, rad, cr, cg, cb, ca };
+      simRef.current = {
+        w,
+        h,
+        dpr,
+        n,
+        hx,
+        hy,
+        x,
+        y,
+        vx,
+        vy,
+        rad,
+        cr,
+        cg,
+        cb,
+        ca,
+        posUpload,
+        staticInterleaved,
+      };
     };
 
     const drawFrame = () => {
@@ -183,14 +394,14 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         return;
       }
       const sim = simRef.current;
-      if (!sim || !canvas || !ctx) return;
+      const b = glBundleRef.current;
+      if (!sim || !b || !canvas) return;
 
-      const { w, h, dpr, n, hx, hy, x, y, vx, vy, rad, cr, cg, cb, ca } = sim;
+      const { n, hx, hy, x, y, vx, vy, posUpload } = sim;
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
 
       let kinetic = 0;
-
       for (let i = 0; i < n; i++) {
         let fx = (hx[i] - x[i]) * SPRING;
         let fy = (hy[i] - y[i]) * SPRING;
@@ -212,17 +423,13 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         x[i] += nvx;
         y[i] += nvy;
         kinetic += nvx * nvx + nvy * nvy;
+
+        posUpload[i * 2] = x[i];
+        posUpload[i * 2 + 1] = y[i];
       }
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-
-      for (let i = 0; i < n; i++) {
-        ctx.beginPath();
-        ctx.arc(x[i], y[i], rad[i], 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${cr[i] | 0},${cg[i] | 0},${cb[i] | 0},${ca[i]})`;
-        ctx.fill();
-      }
+      uploadPositionsOnly(b, sim);
+      bindAttribsAndDraw(b, sim);
 
       const mouseOff = mx < -1000;
       if (kinetic < KINETIC_STOP && mouseOff) {
@@ -266,23 +473,40 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       const pixels = offCtx.getImageData(0, 0, w, h).data;
 
       stopLoop();
-      buildSim(w, h, dpr, pixels);
+      releaseGl();
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
+      const bundle = initGl(canvas);
+      if (!bundle) return;
+      glBundleRef.current = bundle;
+
+      buildSim(w, h, dpr, pixels);
       const sim = simRef.current;
-      if (sim) {
-        for (let i = 0; i < sim.n; i++) {
-          ctx.beginPath();
-          ctx.arc(sim.x[i], sim.y[i], sim.rad[i], 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${sim.cr[i] | 0},${sim.cg[i] | 0},${sim.cb[i] | 0},${sim.ca[i]})`;
-          ctx.fill();
-        }
-      }
+      if (!sim) return;
+      uploadBuffersOnce(bundle, sim);
+      bindAttribsAndDraw(bundle, sim);
+    };
+
+    const onContextLost = (e: Event) => {
+      e.preventDefault();
+      stopLoop();
+      releaseGl();
+      simRef.current = null;
+    };
+
+    const onContextRestored = () => {
+      if (disposed) return;
+      layoutAndSeed();
     };
 
     image.onload = () => {
       if (disposed) return;
+      canvas.addEventListener("webglcontextlost", onContextLost, false);
+      canvas.addEventListener("webglcontextrestored", onContextRestored, false);
+      teardown.push(() => {
+        canvas.removeEventListener("webglcontextlost", onContextLost);
+        canvas.removeEventListener("webglcontextrestored", onContextRestored);
+      });
+
       layoutAndSeed();
 
       const onResize = () => layoutAndSeed();
@@ -319,6 +543,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         canvas.removeEventListener("mouseleave", onLeave);
         ro?.disconnect();
         stopLoop();
+        releaseGl();
         simRef.current = null;
       });
     };
