@@ -2,6 +2,7 @@
 // Import your SCSS so classNames still work
 import { HeaderMobile } from './HeaderMobile';
 import { HeaderDesktop } from './HeaderDesktop';
+import styles from "./header.module.scss";
 
 export type HeaderProps = {
   isDark?: boolean;
@@ -25,7 +26,7 @@ export default function Header({
 
   return (
     <header className="header_area">
-      <div className="global-container">
+      <div className={`global-container ${styles.contentCap}`}>
         {/* Mobile header */}
         <HeaderMobile
           isDark={isDark}
