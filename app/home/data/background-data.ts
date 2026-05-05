@@ -1,13 +1,13 @@
-import type { StaticImageData } from "next/image";
+import type { ImageProps } from "next/image";
 
-import UXUIDesignIcon from "../images/UXUIDesignIcon.png";
-import HumanCenteredDesignIcon from "../images/HumanCenteredDesignIcon.png";
-import FrontEndDevelopmentIcon from "../images/FullStrackDevelopmentIcon.png";
-import SystemsArchitectureIcon from "../images/SystemsArchitectureIcon.png";
+import UXUIDesignIcon from "../images/UXUIDesignIcon.svg";
+import HumanCenteredDesignIcon from "../images/HumanCenteredDesignIcon.svg";
+import FrontEndDevelopmentIcon from "../images/FullStrackDevelopmentIcon.svg";
+import SystemsArchitectureIcon from "../images/SystemsArchitectureIcon.svg";
 
 export type BackgroundItem = {
   title: string;
-  img: StaticImageData;
+  img: ImageProps["src"];
   description: string[];
 };
 

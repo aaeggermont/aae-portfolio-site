@@ -6,21 +6,16 @@ import Image from "next/image";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardActionArea from "@mui/material/CardActionArea";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import CloseIcon from "@mui/icons-material/Close";
 
 import styles from "./background.module.scss";
-
-// Local type for the data shape coming from background-data.tsx
-type BackgroundItem = {
-  title: string;
-  img: any;            // string | StaticImageData (from imported PNGs)
-  description: string[];
-};
+import type { BackgroundItem } from "@/app/home/data/background-data";
 
 type BackgroundCardProps = {
   info: BackgroundItem;
@@ -52,6 +47,7 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         {/* Header: icon + title */}
         <div
           style={{
+            position: "relative",
             display: "flex",
             justifyContent: "center",
             flexDirection: "row",
@@ -60,6 +56,22 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
             gap: "1.5rem",
           }}
         >
+          <Tooltip title="Close">
+            <IconButton
+              aria-label="Close dialog"
+              onClick={handleClose}
+              size="small"
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                color: "#011114",
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+
           <div
             style={{
               position: "relative",
@@ -121,22 +133,6 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
             </DialogContentText>
           ))}
         </DialogContent>
-
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            sx={{
-              fontSize: { xs: "0.9rem", sm: "1rem", md: "1rem", lg: "1.05rem" },
-              fontWeight: 600,
-              fontFamily: "Poppins, sans-serif",
-              margin: "0.75rem 1rem",
-              color: "#011114",
-            }}
-            autoFocus
-          >
-            Close
-          </Button>
-        </DialogActions>
       </Dialog>
 
       {/* Card */}
