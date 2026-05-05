@@ -9,6 +9,9 @@ $container-max: 1920px;
 /** Max width for header + home panels so ultra-wide viewports stay centered (matches layout polish). */
 $layout-content-max-width: 1563px;
 
+/** About page main column — narrower for comfortable reading. */
+$about-me-content-max-width: 1024px;
+
 
 // Mobile ranges
 $mobile-min: 360px;

@@ -1,10 +1,15 @@
 .aboutMePage {
-  /* Match header / home panels: cap width on ultra-wide viewports (main already uses `global-container`). */
+  /* Narrower cap than global layout — see `$about-me-content-max-width` (main already uses `global-container`). */
   width: 100%;
-  max-width: $layout-content-max-width;
+  max-width: $about-me-content-max-width;
   margin-left: auto;
   margin-right: auto;
   box-sizing: border-box;
+
+  @media screen and #{$tablet} {
+    padding-left: clamp(2rem, 4vw, 2.5rem);
+    padding-right: clamp(2rem, 4vw, 2.5rem);
+  }
 
   &Content {
     width: 100%;

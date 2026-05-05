@@ -1,7 +1,7 @@
 .timeline {
   &Container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     flex-direction: column;
     margin-bottom: 20px;
@@ -10,7 +10,9 @@
   &Info {
     display: grid;
     grid-template-columns: 1fr 140px 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: auto;
+    align-items: start;
+    align-content: start;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
   }
@@ -20,26 +22,34 @@
   }
 
   &Company {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     padding: 20px 0;
 
+    // Reset UA / inherited heading margins so role → company spacing is only `gap`
+    h5 {
+      margin: 0;
+    }
+
     &Position {
-      font-weight: bold;
+      font-weight: 600;
       font-size: 20px;
-      line-height: 100%;
+      line-height: 1.2;
       letter-spacing: 0%;
-      padding-bottom: 10px;
     }
 
     &Name {
       font-size: 18px;
-      line-height: 100%;
+      font-weight: 500;
+      line-height: 1.2;
       letter-spacing: 0%;
-      padding-bottom: 10px;
     }
 
     &Location {
       font-size: 18px;
-      line-height: 100%;
+      font-weight: 500;
+      line-height: 1.2;
       letter-spacing: 0%;
     }
   }
@@ -54,6 +64,7 @@
   &Period {
     width: 140px;
     height: 100%;
+    align-self: stretch;
     display: flex;
     flex-direction: column;
     align-items: center;

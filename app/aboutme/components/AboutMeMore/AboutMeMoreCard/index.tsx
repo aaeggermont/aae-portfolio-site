@@ -52,7 +52,7 @@ export function AboutMeMoreCard({
         backgroundColor: "#ffffff",
         transition:
           "transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, opacity 0.22s ease",
-        width: { xs: 65, sm: 65, md: 135, lg: 165, xl: 207 },
+        width: { xs: 65, sm: 65, md: 155, lg: 155, xl: 135 },
         height: { xs: 110, sm: 110, md: 214, lg: 214, xl: 214 },
 
         // selected state (subtle but clear)
