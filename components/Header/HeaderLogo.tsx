@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { useCallback, useMemo, useState } from "react";
 import { buildPublicStorageUrlWithBucket } from "@/lib/firebase/publicStorageUrl";
-
-const LOGO_PNG_STORAGE_PATH = "site/AAE-SimpleLogo.png";
+import { HEADER_LOGO_PNG_STORAGE_PATH } from "@/lib/home/landingAssetPaths";
 const LOCAL_FALLBACK_SVG = "/images/topbar-header/AAE-SimpleLogo.svg";
 
 type LogoProps = {
@@ -28,7 +27,7 @@ function useLogoSrc(): string {
     /* Use the bucket string from env as-is. New projects use `*.firebasestorage.app` in the REST path;
      * rewriting to `*.appspot.com` breaks URLs for those buckets (404). */
     try {
-      return buildPublicStorageUrlWithBucket(bucket, LOGO_PNG_STORAGE_PATH);
+      return buildPublicStorageUrlWithBucket(bucket, HEADER_LOGO_PNG_STORAGE_PATH);
     } catch {
       return LOCAL_FALLBACK_SVG;
     }
