@@ -1,5 +1,10 @@
 .aboutMePage {
-  @include global-container;
+  /* Match header / home panels: cap width on ultra-wide viewports (main already uses `global-container`). */
+  width: 100%;
+  max-width: $layout-content-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 
   &Content {
     width: 100%;
