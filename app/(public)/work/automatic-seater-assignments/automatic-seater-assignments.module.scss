@@ -7,7 +7,7 @@
   max-width: 100%;
   min-width: $mobile-min;
   margin: 0;
-  background-color: #f4f8fb;
+  background-color: var(--page-canvas);
   /* Horizontal clip lives on `.pageClipViewport` so full-bleed children still align to 100vw. */
   overflow-x: visible;
   //padding: 3.5rem 0 5rem;

@@ -10,6 +10,7 @@ import MainBanner from "./main-banner";
 import MyBackground from "./my-background";
 import LatestProjects from "./latest-projects";
 import ContactMe from "./contact-me";
+import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -134,32 +135,19 @@ function HomePanels() {
 
   return (
     <div ref={containerRef} className={styles.panelsContainer}>
-      {/* Make sure these data-bg values match the section backgrounds */}
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // MainBanner bg
-      >
+      <section className={styles.panel} data-bg={PAGE_CANVAS}>
         <MainBanner />
       </section>
 
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // MyBackground bg
-      >
+      <section className={styles.panel} data-bg={PAGE_CANVAS}>
         <MyBackground />
       </section>
 
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // LatestProjects bg
-      >
+      <section className={styles.panel} data-bg={PAGE_CANVAS}>
         <LatestProjects />
       </section>
 
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // ContactMe bg
-      >
+      <section className={styles.panel} data-bg={PAGE_CANVAS}>
         <ContactMe />
       </section>
     </div>

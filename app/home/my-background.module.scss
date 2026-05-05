@@ -3,7 +3,7 @@
 .myBackgroundSection {
   min-height: 100vh;
   width: 100%;
-  background-color: #f4f8fb;
+  background-color: var(--page-canvas);
   display: flex;
   align-items: center;
   overflow: visible !important;

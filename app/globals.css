@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f4f8fb;
+  /* Prefer syncing with `lib/theme/pageCanvas.ts`; inherits `--page-canvas` when html sets it */
+  --background: var(--page-canvas, #f4f8fb);
   --foreground: #171717;
 }
 

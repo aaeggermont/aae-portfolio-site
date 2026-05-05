@@ -101,7 +101,7 @@
   position: relative;
   overflow: visible;
   isolation: isolate;
-  //background-color: #0091d4;
+  background-color: var(--page-canvas);
 
   /* Desktop only: shift panel up by header height so content is centered in the viewport */
   @media screen and #{$desktop-device} {
