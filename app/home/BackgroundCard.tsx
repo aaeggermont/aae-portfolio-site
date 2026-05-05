@@ -75,8 +75,8 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           <div
             style={{
               position: "relative",
-              width: 100,
-              height: 100,
+              width: 65,
+              height: 65,
               flexShrink: 0,
             }}
           >
