@@ -12,12 +12,35 @@
   position: relative;
   overflow: visible;
 
+  &_embedded {
+    min-height: 0;
+    flex: 1 1 auto;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    .contactFormContainer {
+      @media screen and #{$desktop-device, $tablet} {
+        margin-top: clamp(1rem, 2.5vh, 3rem);
+      }
+
+      @media screen and #{$mobile} {
+        padding-top: 1vh;
+      }
+    }
+  }
+
   .content {
     text-align: center;
     width: 100%;
     position: relative;
     z-index: 1;
     padding-bottom: 10%;
+  }
+
+  &_embedded .content {
+    padding-bottom: 1.5rem;
   }
 
   .heading {
@@ -163,4 +186,13 @@
 @keyframes slowFloat {
   0%   { transform: translate(-10px, 240px) scale(0.5); }
   100% { transform: translate(10px, -28px) scale(1.06); }
+}
+
+/* Centers main block in the area above the docked home footer */
+.embeddedCenter {
+  box-sizing: border-box;
+  width: 100%;
+  flex: 0 1 auto;
+  margin-top: auto;
+  margin-bottom: auto;
 }

@@ -11,6 +11,7 @@ import MyBackground from "./my-background";
 import LatestProjects from "./latest-projects";
 import ContactMe from "./contact-me";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
+import { Footer } from "@/components/Footer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -147,8 +148,18 @@ function HomePanels() {
         <LatestProjects />
       </section>
 
-      <section className={styles.panel} data-bg={PAGE_CANVAS}>
-        <ContactMe />
+      <section
+        className={`${styles.panel} ${styles.panelWithFooter}`}
+        data-bg={PAGE_CANVAS}
+      >
+        <div className={styles.panelContactStack}>
+          <div className={styles.panelContactScroll}>
+            <ContactMe embedInPanel />
+          </div>
+          <div className={styles.panelFooterWrap}>
+            <Footer dockedInPanel />
+          </div>
+        </div>
       </section>
     </div>
   );
