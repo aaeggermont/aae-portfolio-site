@@ -16,21 +16,21 @@ export const latestProjectsItems: LatestProjectItem[] = [
     title: "Disney AR Magic Tours",
     img: ARMagicToursThumb,
     description: [
-      "Enhanced the guest experience in Disney World theme parks by turning the environment into an attraction itself using augmented reality."
+      "Enhanced park experiences by transforming the environment into an interactive AR-driven attraction",
     ],
   },
   {
     title: "Disney Cruise Line Revenue Management",
     img: DCLImageThumb,
     description: [
-      "Modernized a web app for revenue management to streamline data ingestion, visualization, and real-time notifications."
+      "Led front-end redesign of dashboards, data grids, and ingestion workflows for pricing and inventory insights."
     ],
   },
   {
     title: "R-3X – Automatic Seating Assignments",
     img: R3XAutomaticSeaterThumb,
     description: [
-      "Optimized throughput for seating guests at rides and attractions in Disney World theme parks."
+      "Led development of a real-time mobile solution to optimize guest seating throughput at rides and attractions."
     ],
   },
 ];

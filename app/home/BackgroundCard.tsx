@@ -17,6 +17,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import styles from "./background.module.scss";
 import type { BackgroundItem } from "@/app/home/data/background-data";
 
+const DIALOG_ICON_OPACITY = 0.80;
+const CARD_ICON_OPACITY = 0.80;
+
 type BackgroundCardProps = {
   info: BackgroundItem;
   dimensions?: {
@@ -84,7 +87,7 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
               src={img}
               alt={title}
               fill
-              style={{ objectFit: "contain" }}
+              style={{ objectFit: "contain", opacity: DIALOG_ICON_OPACITY }}
             />
           </div>
 
@@ -175,7 +178,7 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
                 src={img}
                 alt={title}
                 fill
-                style={{ objectFit: "contain" }}
+                style={{ objectFit: "contain", opacity: CARD_ICON_OPACITY }}
               />
             </div>
           </div>
