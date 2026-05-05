@@ -1,11 +1,79 @@
+"use client";
+
+import Image from "next/image";
+import { useCallback, useMemo, useState } from "react";
+import { buildPublicStorageUrlWithBucket } from "@/lib/firebase/publicStorageUrl";
+
+const LOGO_PNG_STORAGE_PATH = "site/AAE-SimpleLogo.png";
+const LOCAL_FALLBACK_SVG = "/images/topbar-header/AAE-SimpleLogo.svg";
+
 type LogoProps = {
-  color: string,
-  width: string,
-  height: string,
+  width?: string | number;
+  height?: string | number;
+  color?: string;
+  className?: string;
+  alt?: string;
+};
+
+function parseDim(v: string | number | undefined, fallback: number): number {
+  if (v === undefined) return fallback;
+  const n = typeof v === "number" ? v : parseInt(v, 10);
+  return Number.isFinite(n) ? n : fallback;
 }
 
-export function HeaderLogo({ width, height, color }: LogoProps) {
-  return <svg width={width} height={height} fill={color} viewBox="0 0 71 26" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17.964 21.536H8.532L7.02 26H0.576L9.72 0.727999H16.848L25.992 26H19.476L17.964 21.536ZM16.38 16.784L13.248 7.532L10.152 16.784H16.38ZM44.507 21.536H35.075L33.563 26H27.119L36.263 0.727999H43.391L52.535 26H46.019L44.507 21.536ZM42.923 16.784L39.791 7.532L36.695 16.784H42.923ZM61.4739 5.66V10.772H69.7179V15.524H61.4739V21.068H70.7979V26H55.3179V0.727999H70.7979V5.66H61.4739Z"/>
-  </svg>
+function useLogoSrc(): string {
+  return useMemo(() => {
+    const bucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET?.trim();
+    if (!bucket) return LOCAL_FALLBACK_SVG;
+    /* Use the bucket string from env as-is. New projects use `*.firebasestorage.app` in the REST path;
+     * rewriting to `*.appspot.com` breaks URLs for those buckets (404). */
+    try {
+      return buildPublicStorageUrlWithBucket(bucket, LOGO_PNG_STORAGE_PATH);
+    } catch {
+      return LOCAL_FALLBACK_SVG;
+    }
+  }, []);
+}
+
+/**
+ * PNG from Storage (`unoptimized` for public download URLs) or local SVG under `public/`.
+ * Next `<Image>` keeps a real layout box — plain `<img>`/`<picture>` was collapsing in the flex header.
+ */
+export function HeaderLogo({
+  width = 100,
+  height = 30,
+  className,
+  alt = "Antonio Aranda Eggermont — home",
+}: LogoProps) {
+  const maxW = parseDim(width, 100);
+  const maxH = parseDim(height, 30);
+  const remoteSrc = useLogoSrc();
+  const [src, setSrc] = useState(remoteSrc);
+
+  const onError = useCallback(() => {
+    setSrc((current) =>
+      current !== LOCAL_FALLBACK_SVG ? LOCAL_FALLBACK_SVG : current,
+    );
+  }, []);
+
+  return (
+    <Image
+      className={className}
+      src={src}
+      alt={alt}
+      width={maxW}
+      height={maxH}
+      unoptimized
+      priority
+      sizes={`${maxW}px`}
+      onError={onError}
+      style={{
+        width: "auto",
+        height: "auto",
+        maxWidth: maxW,
+        maxHeight: maxH,
+        objectFit: "contain",
+      }}
+    />
+  );
 }

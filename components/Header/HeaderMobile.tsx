@@ -53,8 +53,8 @@ export function HeaderMobile({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width='120'
-              height='20'
+              width='190'
+              height='50'
               color={logoFontColor}
             />
           </Link>
@@ -101,8 +101,8 @@ export function HeaderMobile({
 
         <div className={styles.sidenav_header}>
           <HeaderLogo
-            width='60'
-            height='20'
+            width='190'
+            height='50'
             color='#FFFFFF'
           />
           <p>Antonio Aranda Eggermont</p>

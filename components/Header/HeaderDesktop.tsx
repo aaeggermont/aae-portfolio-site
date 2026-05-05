@@ -23,8 +23,8 @@ export function HeaderDesktop({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width='100'
-              height='30'
+              width='190'
+              height='50'
               color={logoFontColor || ''}
             />
           </Link>

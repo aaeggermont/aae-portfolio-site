@@ -1,13 +1,10 @@
 /* app/home/home-panels.module.scss */
 
-/* Desktop cap: keep scroll-pinned sections readable on ultra-wide viewports (e.g. 3k). */
-$home-panels-max-width: 1563px;
-
 .panelsContainer {
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  max-width: $home-panels-max-width;
+  max-width: $layout-content-max-width;
   margin-left: auto;
   margin-right: auto;
   height: 100vh;
