@@ -70,61 +70,69 @@ function ParallaxCloudLayer({
   );
 }
 
+function BannerTitles() {
+  return (
+    <div className="banner-titles">
+      <div className="banner-titles__inner">
+        <h1 data-aos="fade-up" className="banner-text-title">
+          Augmented Reality Magic Tours
+        </h1>
+        <p
+          data-aos="fade-up"
+          data-aos-delay="100"
+          className="banner-text-subtitle"
+        >
+          Exploring storytelling throught computer vision, machine learning and
+          Augmented Reality at Walt Disney World.
+        </p>
+        <p
+          data-aos="fade-up"
+          data-aos-delay="200"
+          className="banner-text-subtitle"
+        >
+          A graduate research project at University of Washington Human
+          Centered Design & Engineering.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function ProjectHeaderDesktop() {
   return (
     <div className="storyteller-banner">
-      <div className="banner-titles">
-        <div className="container">
-          <h1 data-aos="fade-up" className="banner-text-title">
-            Augmented Reality Magic Tours
-          </h1>
-          <p
-            data-aos="fade-up"
-            data-aos-delay="100"
-            className="banner-text-subtitle"
-          >
-            Exploring storytelling throught computer vision, machine learning and
-            Augmented Reality at Walt Disney World.
-          </p>
-          <p
-            data-aos="fade-up"
-            data-aos-delay="200"
-            className="banner-text-subtitle"
-          >
-            A graduate research project at University of Washington Human
-            Centered Design & Engineering.
-          </p>
-        </div>
+      <div className="storyteller-banner__hero">
+        <BannerTitles />
+        <ParallaxBanner
+          className="project-header-parallax"
+          style={{ backgroundColor: '#153077' }}
+        >
+          <ParallaxCloudLayer
+            src={CloudsLayer4}
+            alt="Clouds Layer 4"
+            speed={12}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayer3}
+            alt="Clouds Layer 3"
+            speed={8}
+            aosDelay={200}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayer2}
+            alt="Clouds Layer 2"
+            speed={3}
+            layerLiftPx={150}
+            aosDelay={400}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayer1}
+            alt="Clouds Layer 1"
+            speed={-3}
+            aosDelay={600}
+          />
+        </ParallaxBanner>
       </div>
-      <ParallaxBanner
-        className="project-header-parallax"
-        style={{ backgroundColor: '#153077' }}
-      >
-        <ParallaxCloudLayer 
-          src={CloudsLayer4} 
-          alt="Clouds Layer 4" 
-          speed={12} />
-        <ParallaxCloudLayer
-          src={CloudsLayer3}
-          alt="Clouds Layer 3"
-          speed={8}
-          aosDelay={200}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayer2}
-          alt="Clouds Layer 2"
-          speed={3}
-          layerLiftPx={150}
-          aosDelay={400}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayer1}
-          alt="Clouds Layer 1"
-          
-          speed={-3}
-          aosDelay={600}
-        />
-      </ParallaxBanner>
       <div className="people-in-line">
         <Image
           className="people-in-line__crowd"
@@ -141,54 +149,34 @@ function ProjectHeaderDesktop() {
 function ProjectHeaderTablet() {
   return (
     <div className="storyteller-banner">
-      <div className="banner-titles">
-        <div className="container">
-          <h1 data-aos="fade-up" className="banner-text-title">
-            Augmented Reality Magic Tours
-          </h1>
-          <p
-            data-aos="fade-up"
-            data-aos-delay="100"
-            className="banner-text-subtitle"
-          >
-            Exploring storytelling throught computer vision, machine learning and
-            Augmented Reality at Walt Disney World.
-          </p>
-          <p
-            data-aos="fade-up"
-            data-aos-delay="200"
-            className="banner-text-subtitle"
-          >
-            A graduate research project at University of Washington Human
-            Centered Design & Engineering.
-          </p>
-        </div>
+      <div className="storyteller-banner__hero">
+        <BannerTitles />
+        <ParallaxBanner
+          className="project-header-parallax"
+          style={{ backgroundColor: '#153077' }}
+        >
+          <ParallaxCloudLayer src={CloudsLayer4} alt="Clouds Layer 4" speed={4} />
+          <ParallaxCloudLayer
+            src={CloudsLayer3}
+            alt="Clouds Layer 3"
+            speed={2}
+            aosDelay={200}
+            layerLiftPx={50}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayer2}
+            alt="Clouds Layer 2"
+            speed={0}
+            aosDelay={400}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayer1}
+            alt="Clouds Layer 1"
+            speed={-2}
+            aosDelay={600}
+          />
+        </ParallaxBanner>
       </div>
-      <ParallaxBanner
-        className="project-header-parallax"
-        style={{ backgroundColor: '#153077' }}
-      >
-        <ParallaxCloudLayer src={CloudsLayer4} alt="Clouds Layer 4" speed={4} />
-        <ParallaxCloudLayer
-          src={CloudsLayer3}
-          alt="Clouds Layer 3"
-          speed={2}
-          aosDelay={200}
-          layerLiftPx={50}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayer2}
-          alt="Clouds Layer 2"
-          speed={0}
-          aosDelay={400}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayer1}
-          alt="Clouds Layer 1"
-          speed={-2}
-          aosDelay={600}
-        />
-      </ParallaxBanner>
       <div className="people-in-line">
         <Image
           className="people-in-line__crowd"
@@ -208,62 +196,42 @@ function ProjectHeaderMobile() {
 
   return (
     <div className="storyteller-banner">
-      <div className="banner-titles">
-        <div className="container">
-          <h1 data-aos="fade-up" className="banner-text-title">
-            Augmented Reality Magic Tours
-          </h1>
-          <p
-            data-aos="fade-up"
-            data-aos-delay="100"
-            className="banner-text-subtitle"
-          >
-            Exploring storytelling throught computer vision, machine learning and
-            Augmented Reality at Walt Disney World.
-          </p>
-          <p
-            data-aos="fade-up"
-            data-aos-delay="200"
-            className="banner-text-subtitle"
-          >
-            A graduate research project at University of Washington Human
-            Centered Design & Engineering.
-          </p>
-        </div>
+      <div className="storyteller-banner__hero">
+        <BannerTitles />
+        <ParallaxBanner
+          className="project-header-parallax"
+          style={{ backgroundColor: '#153077' }}
+        >
+          <ParallaxCloudLayer
+            src={CloudsLayerMobile4}
+            alt="Clouds Layer Mobile 4"
+            speed={4}
+            imgClassName={mobileTop}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayerMobile3}
+            alt="Clouds Layer Mobile 3"
+            speed={2}
+            aosDelay={200}
+            imgClassName={mobileTop}
+            layerLiftPx={50}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayerMobile2}
+            alt="Clouds Layer Mobile 2"
+            speed={0}
+            aosDelay={400}
+            imgClassName={mobileTop}
+          />
+          <ParallaxCloudLayer
+            src={CloudsLayerMobile1}
+            alt="Clouds Layer Mobile 1"
+            speed={-2}
+            aosDelay={600}
+            withAos={false}
+          />
+        </ParallaxBanner>
       </div>
-      <ParallaxBanner
-        className="project-header-parallax"
-        style={{ backgroundColor: '#153077' }}
-      >
-        <ParallaxCloudLayer
-          src={CloudsLayerMobile4}
-          alt="Clouds Layer Mobile 4"
-          speed={4}
-          imgClassName={mobileTop}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayerMobile3}
-          alt="Clouds Layer Mobile 3"
-          speed={2}
-          aosDelay={200}
-          imgClassName={mobileTop}
-          layerLiftPx={50}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayerMobile2}
-          alt="Clouds Layer Mobile 2"
-          speed={0}
-          aosDelay={400}
-          imgClassName={mobileTop}
-        />
-        <ParallaxCloudLayer
-          src={CloudsLayerMobile1}
-          alt="Clouds Layer Mobile 1"
-          speed={-2}
-          aosDelay={600}
-          withAos={false}
-        />
-      </ParallaxBanner>
       <div className="people-in-line">
         <Image
           className="people-in-line__crowd"

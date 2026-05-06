@@ -2,9 +2,12 @@
 .project-header-parallax {
   /* Static vertical shift for clouds — use top/height (not transform) so
      `react-scroll-parallax` can own `transform` on `ParallaxBannerLayer`. */
-  --project-header-cloud-lift: 100px;
+  --project-header-cloud-lift: 10px;
 
   position: relative;
+  z-index: 0;
+  /* Solid blue paints first; absolutely positioned layers stack above it. */
+  isolation: isolate;
   width: 100%;
   overflow: hidden;
   background-color: #153077;
@@ -22,6 +25,7 @@
 .project-header-parallax__layer {
   position: absolute;
   inset: 0;
+  z-index: 1;
   width: 100%;
   height: 100%;
 }
@@ -64,20 +68,44 @@
   }
 }
 
+/* Titles may come first in DOM for semantics; they still overlay via absolute + z-index. */
+.storyteller-banner__hero {
+  position: relative;
+  width: 100%;
+}
+
+.storyteller-banner__hero .banner-titles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  box-sizing: border-box;
+  pointer-events: none;
+  /* Must stay absolute — do not set `position: relative` in breakpoint blocks below. */
+}
+
+.storyteller-banner__hero .banner-titles__inner {
+  pointer-events: auto;
+  width: 100%;
+}
+
 @media #{$desktop} {
     .storyteller-banner {
+        /* Tweak vertical offset of hero copy; does not use `position: relative`. */
+        --banner-titles-overlay-top: -80%;
+
         padding-top: 200px;
         background-color: #153077;
 
         .banner-titles {
-            display: flex;
+            top: var(--banner-titles-overlay-top);
+            bottom: 0;
+            left: 0;
+            right: 0;
             align-items: center;
             justify-content: center;
-            position: relative;
-            top: 30%;
-            width: 100%;
-            padding-left: 2%;
-            padding-right: 2%;
+            padding-left: 10%;
+            padding-right: 0%;
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
@@ -90,8 +118,8 @@
                 font-size: 1.3rem;
                 font-family: var(--font-poppins);
                 color: #ffbb00;
-                font-weight: 400;
-                width: 50%;
+                font-weight: 500;
+                width: 70%;
             }
         }
 
@@ -109,17 +137,19 @@
 
 @media  #{$tablet} {
     .storyteller-banner {
+        --banner-titles-overlay-top: -80%;
+
         padding-top: 200px;
         background-color: #153077;
 
         .banner-titles {
-            display: flex;
+            top: var(--banner-titles-overlay-top);
+            bottom: 0;
+            left: 0;
+            right: 0;
             align-items: center;
             justify-content: center;
-            position: relative;
-            top: 30%;
-            width: 100%;
-            padding-left: 2%;
+            padding-left: 10%;
             padding-right: 2%;
 
             .banner-text-title {
@@ -128,13 +158,13 @@
                 font-family: var(--font-poppins);
                 color: #ffffff;
                 font-weight: 600;
-                width: 50%;
+                width: 100%;
             }
             p {
-                font-size: 1rem;
+                font-size: 1.2rem;
                 font-family: var(--font-poppins);
                 color: #ffbb00;
-                font-weight: 400;
+                font-weight: 500;
                 width: 80%;
             }
         }
@@ -153,6 +183,8 @@
 
 @media #{$mobile} {
     .storyteller-banner {
+        --banner-titles-overlay-top: -40%;
+
         padding-top: 100px;
         background-color: #153077;
 
@@ -167,19 +199,19 @@
         }
 
         .banner-titles {
-            display: flex;
+            top: var(--banner-titles-overlay-top);
+            bottom: 0;
+            left: 0;
+            right: 0;
             flex-direction: column;
-            align-items: start;
+            align-items: center;
             justify-content: center;
-            width: 100%;
-            position: relative;
-            top: 20%;
             padding-left: 2%;
             padding-right: 2%;
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 1.5rem;
+                font-size: 1.2rem;
                 font-family: var(--font-poppins);
                 color: #ffffff;
                 font-weight: 600;
@@ -190,7 +222,7 @@
                 font-size: 1rem;
                 font-family: var(--font-poppins);
                 color: #ffbb00;
-                font-weight: 400;
+                font-weight: 500;
                 width: 100%;
                 text-align: center;
             }
