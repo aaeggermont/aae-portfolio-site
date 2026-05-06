@@ -102,7 +102,7 @@ export default function MyWorkPageView() {
 
   return (
     <section className={styles.myWorkSection} id="my-work">
-      <div className="global-container">
+      <div className={styles.myWorkPage}>
         {/* Decorative floating images */}
         <div className={styles.floatLayer}>
           {floaters.map((f, i) => (

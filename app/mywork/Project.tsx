@@ -34,8 +34,8 @@ type Props = {
 };
 
 const cardSize = {
-  width: { xs: 280, sm: 280, md: 276, lg: 276, xl: 345 },
-  height: { xs: 180, sm: 180, md: 177, lg: 177, xl: 221 },
+  width: { xs: 320, sm: 320, md: 276, lg: 276, xl: 276 },
+  height: { xs: 226, sm: 226, md: 195, lg: 195, xl: 195 },
 } as const;
 
 export default function Project({ data, onOpenPdf }: Props) {

@@ -12,6 +12,9 @@ $layout-content-max-width: 1563px;
 /** About page main column — narrower for comfortable reading. */
 $about-me-content-max-width: 1024px;
 
+/** My Work page main column — same cap as About for consistent layout. */
+$mywork-content-max-width: 1024px;
+
 
 // Mobile ranges
 $mobile-min: 360px;
