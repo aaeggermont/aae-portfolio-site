@@ -9,8 +9,23 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import Project, { type ProjectProps } from "./Project";
 import { db } from "@/firebase";
 import PdfModal from "@/lib/pdf/PdfModal";
+import Typewriter from "typewriter-effect";
+import { MyWorkPageData } from "./data/mywork-data";
 
 const FLOAT_COUNT = 14;
+
+function MyWorkTitleTypewriter() {
+  return (
+    <Typewriter
+      options={{
+        strings: MyWorkPageData.pageTitle,
+        autoStart: true,
+        loop: false,
+        deleteSpeed: 50,
+      }}
+    />
+  );
+}
 
 type FloaterConfig = {
   img: any;
@@ -127,7 +142,10 @@ export default function MyWorkPageView() {
         </div>
 
         <div className={styles.content}>
-          <h2 className={styles.heading}>My Work</h2>
+          
+          <h2 className={styles.heading}>
+            <MyWorkTitleTypewriter />
+          </h2>
 
           <div className={styles.summarySection}>
             <span className={styles.summarySectionText}>
