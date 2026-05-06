@@ -148,13 +148,34 @@ export default function Project({ data, onOpenPdf }: Props) {
             sx={{
               ...cardSize,
               p: 0,
+              display: "flex",
+              flexDirection: "column",
               backgroundColor: "rgba(0, 0, 0, 0.05)",
               borderRadius: 2,
               overflow: "hidden",
             }}
           >
-            <CardActionArea sx={{ width: "100%", height: "100%" }} onClick={handleAction}>
-              <CardContent sx={{ p: 2, height: "100%" }}>
+            <CardActionArea
+              sx={{
+                flex: 1,
+                minHeight: 0,
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+                justifyContent: "center",
+              }}
+              onClick={handleAction}
+            >
+              <CardContent
+                sx={{
+                  p: 2,
+                  width: "100%",
+                  maxHeight: "100%",
+                  flex: "0 1 auto",
+                  overflowY: "auto",
+                }}
+              >
                 <Typography
                   sx={{
                     fontFamily: "'Poppins', sans-serif",
