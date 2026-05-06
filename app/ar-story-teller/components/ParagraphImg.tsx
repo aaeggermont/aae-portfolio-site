@@ -27,12 +27,17 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
         }
     };
 
+    const desktopImg = getImagePath(0);
+    const tabletImg = getImagePath(1);
+    const mobileImg = getImagePath(2);
+
     if (screenDevice.isDesktopOrLaptop) {
+        if (!desktopImg) return null;
         return (
             <>
                 <div {...props} className="storyteller-paragraphimg">
                     <ProjectImage
-                        objectPath={getImagePath(0)}
+                        objectPath={desktopImg}
                         alt={alt}
                         style={{
                             width: '100px',
@@ -46,10 +51,11 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
             </>
         );
     } else if (screenDevice.isTablet) {
+        if (!tabletImg) return null;
         return (
             <div {...props} className="storyteller-paragraphimg">
                 <ProjectImage
-                    objectPath={getImagePath(1)}
+                    objectPath={tabletImg}
                     alt={alt}
                     style={{
                         width: '100px',
@@ -62,10 +68,11 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
             </div>
         );
     } else if (screenDevice.isMobile) {
+        if (!mobileImg) return null;
         return (
             <div {...props} className="storyteller-paragraphimg">
                 <ProjectImage
-                    objectPath={getImagePath(2)}
+                    objectPath={mobileImg}
                     alt={alt}
                     style={{
                         width: '100px',

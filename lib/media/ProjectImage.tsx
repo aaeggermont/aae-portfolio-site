@@ -4,9 +4,13 @@ import React from "react";
 import Image from "next/image";
 import { useProjectAccess } from "@/lib/access/ProjectAccessContext";
 import GatedImage from "@/lib/media/GatedImage";
+import {
+  buildPublicStorageUrl,
+  stripLeadingSlash,
+} from "@/lib/firebase/publicStorageUrl";
 
 type ProjectImageProps = {
-  objectPath: string; // e.g. "projects/project_1/GenericTaskFlow.png"
+  objectPath?: string; // e.g. "projects/project_1/GenericTaskFlow.png"
   alt: string;
   width?: number;
   height?: number;
@@ -14,24 +18,10 @@ type ProjectImageProps = {
   style?: React.CSSProperties;
   sizes?: string;
   priority?: boolean;
+  /** When restricted, passes through to GatedImage `fullViewportLoading`. */
+  fullViewportLoading?: boolean;
 };
 
-function stripLeadingSlash(path: string) {
-  return path?.startsWith("/") ? path.slice(1) : path;
-}
-
-function buildPublicStorageUrl(objectPath: string) {
-  const bucket = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
-
-  if (!bucket) {
-    throw new Error("Missing NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET");
-  }
-
-  const normalizedPath = stripLeadingSlash(objectPath);
-  // Firebase Storage REST: path must be URI-encoded; ?alt=media returns file bytes (not JSON)
-  const encodedPath = encodeURIComponent(normalizedPath);
-  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodedPath}?alt=media`;
-}
 
 export default function ProjectImage({
   objectPath,
@@ -42,9 +32,14 @@ export default function ProjectImage({
   style,
   sizes,
   priority = false,
+  fullViewportLoading = false,
 }: ProjectImageProps) {
   const { projectKey, visibility } = useProjectAccess();
   console.log("Project Access Context:", { projectKey, visibility });
+
+  if (!objectPath) {
+    return null;
+  }
 
   const normalizedPath = stripLeadingSlash(objectPath);
 
@@ -77,6 +72,7 @@ export default function ProjectImage({
       style={style}
       sizes={sizes}
       priority={priority}
+      fullViewportLoading={fullViewportLoading}
     />
   );
 }

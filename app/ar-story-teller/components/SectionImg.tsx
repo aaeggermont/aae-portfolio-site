@@ -16,14 +16,18 @@ interface SectionImgProps {
 
 export function SectionImg({ imagesSrc, alt, ...props }: SectionImgProps) {
     const screenDevice = useResponsive();
+    const desktopImg = imagesSrc?.[0]?.src as unknown as string | undefined;
+    const tabletImg = imagesSrc?.[1]?.src as unknown as string | undefined;
+    const mobileImg = imagesSrc?.[2]?.src as unknown as string | undefined;
 
     console.log(imagesSrc, 'imagesSrc');
 
     if (screenDevice.isDesktopOrLaptop) {
+        if (!desktopImg) return null;
         return (
             <div {...props} className="sectionimg-container">
                 <ProjectImage
-                    objectPath={imagesSrc[0]?.src as unknown as string}
+                    objectPath={desktopImg}
                     alt={alt || ''}
                     width={imagesSrc[0]?.width}
                     height={imagesSrc[0]?.height}
@@ -31,10 +35,11 @@ export function SectionImg({ imagesSrc, alt, ...props }: SectionImgProps) {
             </div>
         );
     } else if (screenDevice.isTablet) {
+        if (!tabletImg) return null;
         return (
             <div {...props} className="sectionimg-container">
                 <ProjectImage
-                    objectPath={imagesSrc[1]?.src as unknown as string}
+                    objectPath={tabletImg}
                     alt={alt || ''}
                     width={imagesSrc[1]?.width}
                     height={imagesSrc[1]?.height}
@@ -42,10 +47,11 @@ export function SectionImg({ imagesSrc, alt, ...props }: SectionImgProps) {
             </div>
         );
     } else if (screenDevice.isMobile) {
+        if (!mobileImg) return null;
         return (
             <div {...props}>
                 <ProjectImage
-                    objectPath={imagesSrc[2]?.src as unknown as string}
+                    objectPath={mobileImg}
                     alt={alt || ''}
                     width={imagesSrc[2]?.width}
                     height={imagesSrc[2]?.height}

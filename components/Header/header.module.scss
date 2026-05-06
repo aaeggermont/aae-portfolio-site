@@ -1,3 +1,20 @@
+.header_area {
+  position: relative;
+  z-index: 100;
+}
+
+/**
+ * Caps inner header row to the same width as home panels on wide screens.
+ * Combine with `global-container` on the wrapper — tablet/mobile margins unchanged.
+ */
+.contentCap {
+  width: 100%;
+  max-width: $layout-content-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
 @keyframes slide-in-menu {
 	from {
 		width: 0px;
@@ -8,23 +25,12 @@
 	}
 }
 
-.header_area {
-	width: 100%;
-	z-index: 100;
-}
-
 .site_menu {
-	display: flex;
+	display: none;
 	justify-content: center;
 
-	@media #{$xs}{
-		display: none;
-	}
-	@media #{$sm}{
-		display: none;
-	}
-	@media #{$md}{
-		display: none;
+	@media (min-width: #{$desktop-min}) {
+		display: flex;
 	}
 }
 
@@ -38,6 +44,20 @@
 
 .brand_logo {
   display: flex;
+  flex-shrink: 0;
+  min-width: min-content;
+
+  /* Next.js <Link> renders <a> — without this, the logo image can collapse to 0×0 in flex layouts */
+  a {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    text-decoration: none;
+  }
+
+  img {
+    vertical-align: middle;
+  }
 }
 
 .main_menu{
@@ -97,11 +117,7 @@
 		padding: 20px;
 	}
 
-	@media #{$lg}{
-		display: none;
-	}
-
-	@media #{$desktop}{
+	@media (min-width: #{$desktop-min}) {
 		display: none;
 	}
 
@@ -114,7 +130,7 @@
 		padding: 5px;
 		border-radius: 100%;
 		background: $font-color-bold;
-    cursor: pointer;
+    	cursor: pointer;
 
 		.menu_icon{
 			width: 20px;
@@ -165,7 +181,7 @@
 	transform: translateX(-110%);
 	transition: .5s;
 
-  &.active{
+  	&.active{
 		transform: translateX(0);
 	}
 

@@ -4,6 +4,8 @@ html, body {
   color: #222;
   margin: 0;
   padding: 0;
+  /* Token from `lib/theme/pageCanvas.ts` via `--page-canvas` on `<html>` */
+  background-color: var(--page-canvas);
 }
 
 /* Keep header above GSAP-pinned content (e.g. home panels) so nav links stay clickable */
@@ -29,6 +31,8 @@ html, body {
 
 .global-container {
   @include global-container;
+  /* Allow full-bleed children (e.g. hero banners) to extend to the viewport edges. */
+  overflow-x: visible;
 }
 
 

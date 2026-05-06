@@ -10,6 +10,10 @@
     flex-wrap: wrap;
     //gap: 32px;
 
+    @media #{$lg} {
+      gap: 1.5rem;  
+    }
+
     @media #{$md} {
       gap: 1rem;  
     }

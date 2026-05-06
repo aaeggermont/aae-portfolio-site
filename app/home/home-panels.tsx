@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,17 +10,39 @@ import MainBanner from "./main-banner";
 import MyBackground from "./my-background";
 import LatestProjects from "./latest-projects";
 import ContactMe from "./contact-me";
+import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
+import { Footer } from "@/components/Footer";
+import { LandingSplash } from "./LandingSplash";
+import { preloadLandingImages } from "@/lib/home/preloadLandingAssets";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_SEGMENTS_MULTIPLIER = 1; // one viewport height per panel transition
 
+/** Minimum time splash stays visible (avoids a subliminal flash) */
+const MIN_SPLASH_MS = 880;
+
+type SplashPhase = "loading" | "fading" | "done";
+
 function HomePanels() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [splashPhase, setSplashPhase] = useState<SplashPhase>("loading");
+
+  useLayoutEffect(() => {
+    if (splashPhase === "done") {
+      document.body.style.overflow = "";
+      return;
+    }
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [splashPhase]);
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
 
+    let cancelled = false;
     let resizeCleanup: (() => void) | undefined;
 
     const ctx = gsap.context(() => {
@@ -32,22 +54,20 @@ function HomePanels() {
       const segments = totalPanels - 1;
 
       const getScrollEnd = () =>
-        (typeof window !== "undefined" ? window.innerHeight : 800) * segments * SCROLL_SEGMENTS_MULTIPLIER;
+        (typeof window !== "undefined" ? window.innerHeight : 800) *
+        segments *
+        SCROLL_SEGMENTS_MULTIPLIER;
 
-      // Collect panel background colors from data-bg
       const panelBgs = panels.map(
         (panel) => panel.getAttribute("data-bg") || "#ffffff"
       );
 
-      // Set initial body background to first panel color
       gsap.set("body", { backgroundColor: panelBgs[0] });
 
-      // Stack panels and set initial positions
       panels.forEach((panel, i) => {
         gsap.set(panel, { zIndex: i + 1 });
 
         if (i > 0) {
-          // all panels except the first start below the viewport
           gsap.set(panel, { yPercent: 100 });
         }
       });
@@ -90,7 +110,6 @@ function HomePanels() {
         },
       });
 
-      // Panels slide + MyBackground cards anim
       panels.forEach((panel, i) => {
         if (i === 0) {
           return;
@@ -126,43 +145,76 @@ function HomePanels() {
       resizeCleanup = () => window.removeEventListener("resize", onResize);
     }, containerRef);
 
+    ScrollTrigger.refresh();
+
+    void (async () => {
+      try {
+        await Promise.all([
+          preloadLandingImages(),
+          document.fonts.ready,
+          new Promise<void>((resolve) => setTimeout(resolve, MIN_SPLASH_MS)),
+        ]);
+      } finally {
+        if (cancelled) return;
+        requestAnimationFrame(() => {
+          if (!cancelled) {
+            setSplashPhase("fading");
+          }
+        });
+      }
+    })();
+
     return () => {
+      cancelled = true;
       resizeCleanup?.();
       ctx.revert();
     };
   }, []);
 
+  const shellLocked = splashPhase !== "done";
+
   return (
-    <div ref={containerRef} className={styles.panelsContainer}>
-      {/* Make sure these data-bg values match the section backgrounds */}
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // MainBanner bg
+    <>
+      <div
+        ref={containerRef}
+        className={styles.panelsContainer}
+        aria-hidden={shellLocked}
+        inert={shellLocked ? true : undefined}
       >
-        <MainBanner />
-      </section>
+        <section className={styles.panel} data-bg={PAGE_CANVAS}>
+          <MainBanner />
+        </section>
 
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // MyBackground bg
-      >
-        <MyBackground />
-      </section>
+        <section className={styles.panel} data-bg={PAGE_CANVAS}>
+          <MyBackground />
+        </section>
 
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // LatestProjects bg
-      >
-        <LatestProjects />
-      </section>
+        <section className={styles.panel} data-bg={PAGE_CANVAS}>
+          <LatestProjects />
+        </section>
 
-      <section
-        className={styles.panel}
-        data-bg="#f4f8fb"   // ContactMe bg
-      >
-        <ContactMe />
-      </section>
-    </div>
+        <section
+          className={`${styles.panel} ${styles.panelWithFooter}`}
+          data-bg={PAGE_CANVAS}
+        >
+          <div className={styles.panelContactStack}>
+            <div className={styles.panelContactScroll}>
+              <ContactMe embedInPanel />
+            </div>
+            <div className={styles.panelFooterWrap}>
+              <Footer dockedInPanel />
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {splashPhase !== "done" && (
+        <LandingSplash
+          phase={splashPhase === "fading" ? "fading" : "loading"}
+          onFadeEnd={() => setSplashPhase("done")}
+        />
+      )}
+    </>
   );
 }
 

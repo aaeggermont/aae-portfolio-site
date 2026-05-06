@@ -19,6 +19,9 @@ interface MockupIllustrationProps {
 
 export function MockupIllustration({ alt, imagesSrc, title, width, description, ...props }: MockupIllustrationProps) {
     const screenDevice = useResponsive();
+    const desktopImg = imagesSrc?.[0];
+    const tabletImg = imagesSrc?.[1];
+    const mobileImg = imagesSrc?.[2];
 
     const imgStyle: React.CSSProperties = {
         alignSelf: 'center',
@@ -28,11 +31,12 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
     };
 
     if (screenDevice.isDesktopOrLaptop) {
+        if (!desktopImg) return null;
         return (
             <div {...props} className="mockup-container">
                 <span>{title}</span>
                 <ProjectImage
-                    objectPath={imagesSrc[0]}
+                    objectPath={desktopImg}
                     alt={alt}
                     width={300}
                     height={300}
@@ -41,11 +45,12 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
             </div>
         );
     } else if (screenDevice.isTablet) {
+        if (!tabletImg) return null;
         return (
             <div {...props} className="mockup-container">
                 <span>{title}</span>
                 <ProjectImage
-                    objectPath={imagesSrc[1]}
+                    objectPath={tabletImg}
                     alt={alt}
                     width={300}
                     height={300}
@@ -54,11 +59,12 @@ export function MockupIllustration({ alt, imagesSrc, title, width, description, 
             </div>
         );
     } else if (screenDevice.isMobile) {
+        if (!mobileImg) return null;
         return (
             <div {...props} className="mockup-container">
                 <span className="title">{title}</span>
                 <ProjectImage
-                    objectPath={imagesSrc[2]}
+                    objectPath={mobileImg}
                     alt={alt}
                     width={300}
                     height={300}

@@ -11,7 +11,7 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import emailjs from '@emailjs/browser';
 import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 24;
 
 function HeadingTypewriter() {
   const wrapperRef = useRef<HTMLHeadingElement | null>(null);
@@ -69,7 +69,12 @@ type FloaterConfig = {
   duration: string;
 };
 
-function ContactMe() {
+type ContactMeProps = {
+  /** When true, section shares viewport with footer — fills remaining height and scrolls internally */
+  embedInPanel?: boolean;
+};
+
+function ContactMe({ embedInPanel = false }: ContactMeProps) {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
@@ -162,9 +167,49 @@ function ContactMe() {
     window.location.href = 'https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/';
   };
 
+  const mainContent = (
+    <div className={styles.content}>
+      <HeadingTypewriter />
+      <div className={styles.summarySection}>
+        <span className={styles.summarySectionText}>
+          I&apos;m open to full-time roles, consulting, and partnerships—especially
+          in product design, frontend, and AI-driven experiences.
+        </span>
+      </div>
+
+      <div className={styles.contactFormContainer}>
+        <QrFloatingCard src="/images/qr/AAEQRImage.png" title="Scan me" />
+        <div className={styles.contacMeContainer}>
+          <div className={styles.contactRow}>
+            <PhoneIphoneIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
+            <span> USA: +206 556 8918</span>
+          </div>
+          <div className={styles.contactRow}>
+            <PhoneIphoneIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
+            <span> Mexico: +52 55 36 71 57 12</span>
+          </div>
+          <div className={styles.contactRow}>
+            <AlternateEmailIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
+            <span> aaeggermont@outlook.com</span>
+          </div>
+          <div className={styles.contactRow}>
+            <LinkedInIcon
+              onClick={handleLinkedIn}
+              sx={{ color: "#02232c" }}
+              style={{ fontSize: 40 }}
+            />
+            <span onClick={handleLinkedIn}> LinkedIn</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <section className={styles.contactMeSection} id="contact-me">
+    <section
+      className={`${styles.contactMeSection} ${embedInPanel ? styles.contactMeSection_embedded : ""}`}
+      id="contact-me"
+    >
        {/* Decorative floating images – render only after we have client-side config */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
@@ -188,41 +233,11 @@ function ContactMe() {
         ))}
       </div>
 
-      <div className={styles.content}>
-        <HeadingTypewriter />
-        <div className={styles.summarySection}>
-          <span className={styles.summarySectionText}>
-            I'm open to full-time roles, consulting, and partnerships—especially
-            in product design, frontend, and AI-driven experiences.
-          </span>
-        </div>
-
-        {/* Contact form and contact details */}
-       
-        <div className={styles.contactFormContainer}>
-          <QrFloatingCard
-              src="/images/qr/AAEQRImage.png"
-              title="Scan me"/>
-          <div className={styles.contacMeContainer}>
-            <div className={styles.contactRow}>
-              <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <span> USA: +206 556 8918</span>
-            </div>
-            <div className={styles.contactRow}>
-              <PhoneIphoneIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <span> Mexico: +52 55 36 71 57 12</span>
-            </div>
-            <div className={styles.contactRow}>
-              <AlternateEmailIcon sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <span> aaeggermont@outlook.com</span>
-            </div>
-            <div className={styles.contactRow}>
-              <LinkedInIcon onClick={handleLinkedIn} sx={{ color: '#02232c' }} style={{ fontSize: 40 }} />
-              <span onClick={handleLinkedIn}> LinkedIn</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      {embedInPanel ? (
+        <div className={styles.embeddedCenter}>{mainContent}</div>
+      ) : (
+        mainContent
+      )}
   
       {toast && (
         <div

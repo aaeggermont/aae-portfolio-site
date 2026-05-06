@@ -2,10 +2,11 @@
 import type { ReactNode } from "react";
 import { AppProviders } from "./providers";
 import "../styles/globals.scss";
+import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
-import { Footer } from '@/components/Footer';
+import { ConditionalFooter } from '@/components/ConditionalFooter';
 import { Aos } from '@/aos';
 
 
@@ -42,15 +43,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-        className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
-      >
+      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
+      style={{ ["--page-canvas" as string]: PAGE_CANVAS }}
+    >
       <Aos/>
       <body>
         <AppRouterCacheProvider options={{ key: "mui" }}>
           <AppProviders>
             <Header />
             {children}
-            <Footer />
+            <ConditionalFooter />
           </AppProviders>
         </AppRouterCacheProvider>
       </body>
