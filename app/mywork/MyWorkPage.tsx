@@ -10,6 +10,7 @@ import Project, { type ProjectProps } from "./Project";
 import { db } from "@/firebase";
 import PdfModal from "@/lib/pdf/PdfModal";
 import Typewriter from "typewriter-effect";
+import AOS from "aos";
 import { MyWorkPageData } from "./data/mywork-data";
 
 const FLOAT_COUNT = 14;
@@ -115,6 +116,13 @@ export default function MyWorkPageView() {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      AOS.refresh();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [projects, isLoading, hasError]);
+
   return (
     <section className={styles.myWorkSection} id="my-work">
       <div className={styles.myWorkPage}>
@@ -143,11 +151,20 @@ export default function MyWorkPageView() {
 
         <div className={styles.content}>
           
-          <h2 className={styles.heading}>
+          <h2
+            className={styles.heading}
+            data-aos="fade-up"
+            data-aos-duration="1000"
+          >
             <MyWorkTitleTypewriter />
           </h2>
 
-          <div className={styles.summarySection}>
+          <div
+            className={styles.summarySection}
+            data-aos="fade-up"
+            data-aos-delay="100"
+            data-aos-duration="1000"
+          >
             <span className={styles.summarySectionText}>
               I build and contribute to end-to-end applications using technologies such as
               Angular, React, Node.js, and iOS, bridging UX design and engineering to
@@ -161,19 +178,34 @@ export default function MyWorkPageView() {
 
           {/* simple error/loading handling */}
           {hasError && (
-            <p className={styles.errorText}>
+            <p
+              className={styles.errorText}
+              data-aos="fade-up"
+              data-aos-duration="700"
+            >
               Something went wrong loading projects. Please try again later.
             </p>
           )}
 
           {isLoading && !hasError && (
-            <p className={styles.loadingText}>Loading projects…</p>
+            <p
+              className={styles.loadingText}
+              data-aos="fade-up"
+              data-aos-duration="700"
+            >
+              Loading projects…
+            </p>
           )}
 
           {!isLoading && !hasError && (
             <div className={styles.portfolioProjectsContainer}>
-              {projects.map((project) => (
-                <div key={project.id}>
+              {projects.map((project, index) => (
+                <div
+                  key={project.id}
+                  data-aos="fade-up"
+                  data-aos-duration="700"
+                  data-aos-delay={String(Math.min(index * 80, 400))}
+                >
                   <Project
                     data={project.data}
                     onOpenPdf={(url, title) => openPdf(url, title)}
