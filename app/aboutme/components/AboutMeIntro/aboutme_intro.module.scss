@@ -42,7 +42,7 @@
     &Desc {
       p {
         color: $font-color-bold;
-        font-size: 16px;
+        @include fluid-type(16px, 20px, 24px);
         font-weight: 500;
       }
     }
