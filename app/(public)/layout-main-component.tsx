@@ -8,8 +8,10 @@ export function LayoutMainComponent({ children }: { children: ReactNode }) {
     const isFullWidth = useAtomValue(layoutState);
 
     return (
-        <main className={`${isFullWidth ? '' : 'global-container'} flex-1`}>
+        <main
+          className={`${isFullWidth ? "" : "global-container"} flex-1 w-full min-w-0`}
+        >
           {children}
         </main>
-    )
+    );
 }

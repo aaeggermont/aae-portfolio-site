@@ -1,3 +1,69 @@
+/* Hero parallax — aspect ratios align with `ImageBanner` + `lib/responsive/breakpoints.ts`. */
+.project-header-parallax {
+  /* Static vertical shift for clouds — use top/height (not transform) so
+     `react-scroll-parallax` can own `transform` on `ParallaxBannerLayer`. */
+  --project-header-cloud-lift: 100px;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #153077;
+  aspect-ratio: 4 / 5;
+
+  @media screen and (min-width: $tablet-min) {
+    aspect-ratio: 16 / 9;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    aspect-ratio: 1.62 / 1;
+  }
+}
+
+.project-header-parallax__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inner shift: avoids `transform` on nodes inside the parallax layer subtree. */
+.project-header-parallax__layer-shift {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--project-header-cloud-lift));
+  height: calc(100% + var(--project-header-cloud-lift));
+}
+
+.project-header-parallax__img {
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+@media screen and (max-width: $mobile-max) {
+  .project-header-parallax__img--mobile-top {
+    object-position: center top;
+  }
+}
+
+/* Crowd illustration: centered, full asset visible (letterboxing ok). */
+.storyteller-banner .people-in-line__crowd {
+  display: block;
+  width: 90%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (min-width: $tablet-min) {
+  .storyteller-banner .people-in-line__crowd {
+    width: 60%;
+  }
+}
+
 @media #{$desktop} {
     .storyteller-banner {
         padding-top: 200px;
@@ -37,10 +103,6 @@
             justify-content: center;
             background-color: white;
             padding-top: 5%;
-
-            img {
-                width: 100%;
-            }
         }
     }
 }

@@ -10,9 +10,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         {/* Optional shared header */}
         {/* <Header /> */}
 
-        <main className="global-container flex-1 w-full min-w-0">
-          {children} 
-        </main>
+        <LayoutMainComponent>{children}</LayoutMainComponent>
       </div>
     </ClientProviders>
   );
