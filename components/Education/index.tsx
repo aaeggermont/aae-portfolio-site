@@ -26,7 +26,7 @@ export function Education ({ data = [] }: TimelineProps) {
             <span className={styles.educationSchoolName}>{val.school}</span>
             <h5 className={styles.educationLocation}> {val.location}</h5>
             <div className={styles.educationPeriodBackground}>{val.year} </div>
-            <p className='education-details'>{val.details}</p>
+            <p className={styles.educationDetails}>{val.details}</p>
           </div>
         </div>
       ))}
