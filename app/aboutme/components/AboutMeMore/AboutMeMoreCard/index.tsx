@@ -52,8 +52,8 @@ export function AboutMeMoreCard({
         backgroundColor: "#ffffff",
         transition:
           "transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, opacity 0.22s ease",
-        width: { xs: 65, sm: 65, md: 135, lg: 165, xl: 207 },
-        height: { xs: 110, sm: 110, md: 214, lg: 214, xl: 214 },
+        width: { xs: 120, sm: 142, md: 155, lg: 155, xl: 155 },
+        height: { xs: 166, sm: 196, md: 214, lg: 214, xl: 214 },
 
         // selected state (subtle but clear)
         outline: selected ? "2px solid rgba(7, 76, 95, 0.55)" : "1px solid rgba(0,0,0,0.06)",
@@ -127,7 +127,7 @@ export function AboutMeMoreCard({
               fontWeight: 500,
               color: "#011114",
               lineHeight: 1.15,
-              fontSize: { xs: "0.50rem", md: "1.05rem" },
+              fontSize: { xs: "1rem", md: "1.05rem" },
             }}
           >
             {title}
