@@ -167,7 +167,7 @@ function ProjectHeaderDesktop() {
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-11%" speed={38} />
+      <PeopleInLineCrowd initialTop="-10%" speed={38} />
     </div>
   );
 }
