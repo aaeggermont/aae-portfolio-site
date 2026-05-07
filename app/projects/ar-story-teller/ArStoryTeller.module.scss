@@ -4,6 +4,16 @@
     //background-color: aqua;
 }
 
+/* Outer content wrapper for `ArStoryTellerPage`. Replaces the global `global-container` so
+   this case study can own its own cap (1024px) without affecting other routes. */
+.project-content {
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1rem, 5vw, 2rem);
+    padding-right: clamp(1rem, 5vw, 2rem);
+}
+
 $project-font-color: #03133C;
 $project-font-family: poppins;
 

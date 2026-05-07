@@ -1,227 +1,123 @@
 'use client';
 import './ProjectOverview.scss';
+import Image, { type StaticImageData } from 'next/image';
 import MyRolesIcon from '../Images/MyRolesIcon.png';
 import TimelineIcon from '../Images/TimelineIcon.png';
 import CategoryIcon from '../Images/CategoryIcon.png';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
-import Image from 'next/image';
 
 interface ProjectOverviewProps {
-  title?: string;
-  [key: string]: unknown;
+    title?: string;
+    [key: string]: unknown;
 }
 
-export function ProjectOverview({ title, ...props}: ProjectOverviewProps) {
+interface OverviewItem {
+    icon: StaticImageData;
+    title: string;
+    items: string[];
+}
+
+/* Hardcoded copy — no data flows into this component yet (see `ArStoryTellerPage`). */
+const OVERVIEW_ITEMS: OverviewItem[] = [
+    {
+        icon: MyRolesIcon,
+        title: 'My Roles',
+        items: ['Project Lead', 'UX/UI Designer', 'Technology Research'],
+    },
+    {
+        icon: TimelineIcon,
+        title: 'Timeline',
+        items: ['9 Months'],
+    },
+    {
+        icon: CategoryIcon,
+        title: 'Category',
+        items: [
+            'Extended Reality (XR)',
+            'Entertainment',
+            'Computer Vision',
+            'iOS Mobile Development',
+        ],
+    },
+];
+
+const OVERVIEW_HEADING = 'Project Overview';
+const ICON_SIZE = 42;
+
+function OverviewIcon({ icon, alt }: { icon: StaticImageData; alt: string }) {
+    return (
+        <Image
+            alt={alt}
+            src={icon}
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+            className="overview-icon-img"
+        />
+    );
+}
+
+function OverviewColumn({ item }: { item: OverviewItem }) {
+    return (
+        <div className="overview-column">
+            <div className="overview-column-icon">
+                <OverviewIcon icon={item.icon} alt={`${item.title} icon`} />
+            </div>
+            <div className="overview-column-title">{item.title}</div>
+            <ul className="overview-column-items">
+                {item.items.map((entry) => (
+                    <li key={entry}>{entry}</li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+function OverviewRow({ item }: { item: OverviewItem }) {
+    return (
+        <div className="overview-row">
+            <div className="overview-row-icon">
+                <OverviewIcon icon={item.icon} alt={`${item.title} icon`} />
+                <div className="overview-row-icon-label">{item.title}</div>
+            </div>
+            <ul className="overview-row-items">
+                {item.items.map((entry) => (
+                    <li key={entry}>{entry}</li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+export function ProjectOverview({ title, ...props }: ProjectOverviewProps) {
     const screenDevice = useResponsive();
 
-    if ( screenDevice.isDesktopOrLaptop ) {
+    if (screenDevice.isDesktopOrLaptop || screenDevice.isTablet) {
         return (
-            <div {...props} className='overview-container'>
-                <div className='overview-title'>Project Overview</div>
-                <div className='overview-columns'>
-                    <div className="column-tier">
-                        <div className='overview-row-icon'>
-                            <div className='image-icon'>
-                                <Image
-                                    alt='My Roles Icon'
-                                    src = { MyRolesIcon }
-                                    style = {{
-                                        width: "42px",
-                                        height: "42px"
-                                    }}
-                                />
-                            </div>
-                            <div className='myroles-text'><span>My Roles</span></div>
-                        </div>
-
-                        <div className='overview-row-text '>
-                            <span> Project Lead</span>
-                            <span> UX/UI Designerr</span>
-                            <span> Technology Research</span>
-                        </div>
-                    </div>
-                    <div className="column-tier">
-                        <div className='overview-row-icon'>
-                            <div className='image-icon'>
-                                <Image
-                                    alt='My Roles Icon'
-                                    src = { MyRolesIcon }
-                                    style = {{
-                                        width: "42px",
-                                        height: "42px"
-                                    }}
-                                />
-                            </div>
-                            <div className='myroles-text'><span>Timeline</span> </div>
-                        </div>
-
-                        <div className='overview-row-text '>
-                            <span> 9 Months </span>
-                        </div>
-                    </div>
-
-                    <div className="column-tier">
-                        <div className='overview-row-icon'>
-                            <div className='image-icon'>
-                                <Image
-                                    alt='My Roles Icon'
-                                    src = { MyRolesIcon }
-                                    style = {{
-                                        width: "42px",
-                                        height: "42px"
-                                    }}
-                                />
-                            </div>
-                            <div className='myroles-text'><span>Category</span> </div>
-                        </div>
-
-                        <div className='overview-row-text'>
-                            <span> Extended Reality (XR) </span>
-                            <span> Entertainment </span>
-                            <span> Computer Vision </span>
-                            <span> iOS Mobile Development</span>
-                        </div>
-                    </div>
+            <div {...props} className="overview-container">
+                <h2 className="overview-title">{title ?? OVERVIEW_HEADING}</h2>
+                <div className="overview-columns">
+                    {OVERVIEW_ITEMS.map((item) => (
+                        <OverviewColumn key={item.title} item={item} />
+                    ))}
                 </div>
             </div>
-        )
-    } else if (  screenDevice.isMobile  ) {
-        return (
-            <div {...props} className='storyteller-overview-container-mobile'>
-                <div className='overview-title'>  Project Overview</div>
-                <div className='overview-row'>
-                    <div className='overview-row-icon'>
-                        <div className='image-icon'>
-                            <Image
-                                alt='My Roles Icon'
-                                src = { MyRolesIcon }
-                                style = {{
-                                    width: "42px",
-                                    height: "42px"
-                                }}
-                            />
-                        </div>
-                        <div> My Roles</div>
-                    </div>
-                    <div className='overview-row-text '>
-                        <span> Project Lead</span>
-                        <span> UX/UI Designer & Engineer</span>
-                        <span> Technology Research</span>
-
-                    </div>
-                </div>
-
-                <div className='overview-row'>
-                    <div className='overview-row-icon'>
-                        <div className='image-icon'>
-                            <Image
-                                alt='Timeline Icon'
-                                className='image-icon'
-                                src = { TimelineIcon }
-                                style = {{
-                                    width: "42px",
-                                    height: "42px"
-                                }}
-                            />
-                        </div>
-                        <div> Time Line</div>
-                    </div>
-                    <div className='overview-row-text '>
-
-                        <span> 9 Months </span>
-
-                    </div>
-                </div>
-
-                <div className='overview-row'>
-                    <div className='overview-row-icon'>
-                        <div className='image-icon'>
-                            <Image
-                                alt='Category Icon'
-                                className='image-icon'
-                                src = { CategoryIcon }
-                                style = {{
-                                    width: "42px",
-                                    height: "42px"
-                                }}
-                            />
-                        </div>
-                        <div> Category</div>
-                    </div>
-                    <div className='overview-row-text '>
-                        <span> Extended Reality (XR) </span>
-                        <span> Entertainment</span>
-                        <span> Computer Vision</span>
-                        <span> iOS Mobile Development</span>
-                    </div>
-                </div>
-            </div>
-        )
-
-    } else if (  screenDevice.isTablet  ) {
-        return (
-            <div {...props} className='overview-container'>
-                <div className='overview-title'>  Project Overview</div>
-                <div className="row-overview">
-                    <div className='column-content'>
-                        <Image
-                            alt='My Roles Icon'
-                            src = { MyRolesIcon }
-                            style = {{
-                                width: "42px",
-                                height: "42px"
-                            }}
-                        />
-                    </div>
-                    <div className='column-content'>
-                        <Image
-                            alt='My Roles Icon'
-                            src = { MyRolesIcon }
-                            style = {{
-                                width: "42px",
-                                height: "42px"
-                            }}
-                        />
-                    </div>
-                    <div className='column-content'>
-                        <Image
-                            alt='My Roles Icon'
-                            src = { MyRolesIcon }
-                            style = {{
-                                width: "42px",
-                                height: "42px"
-                            }}
-                        />
-                    </div>
-                </div>
-                <div className="row-overview">
-                    <div className='column-content'>
-                        <div className='myroles-title'> My Roles</div>
-                    </div>
-                    <div className='column-content'>
-                        <div className='myroles-title'> Timeline</div>
-                    </div>
-                    <div className='column-content'>
-                        <div className='myroles-title'> Category</div>
-                    </div>
-                </div>
-                <div className="row-overview">
-                    <div className='column-content'>
-                        <div className='myroles-text'> Project Lead</div>
-                        <div className='myroles-text'> UX/UI Designer</div>
-                        <div className='myroles-text'> User Research</div>
-                    </div>
-                    <div className='column-content'>
-                        <div className='myroles-text'> 9 Months</div>
-                    </div>
-                    <div className='column-content'>
-                        <div className='myroles-text'> Extended Reality (XR) </div>
-                        <div className='myroles-text'> Entertainment</div>
-                        <div className='myroles-text'> Computer Vision</div>
-                        <div className='myroles-text'> iOS Mobile Development</div>
-                    </div>
-                </div>
-            </div>
-       );
+        );
     }
+
+    if (screenDevice.isMobile) {
+        return (
+            <div {...props} className="overview-container overview-container--mobile">
+                <h2 className="overview-title">{title ?? OVERVIEW_HEADING}</h2>
+                <div className="overview-rows">
+                    {OVERVIEW_ITEMS.map((item) => (
+                        <OverviewRow key={item.title} item={item} />
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    return null;
 }
+
+export default ProjectOverview;

@@ -1,13 +1,13 @@
 @mixin desktop-title-text {
     font-family: var(--font-poppins);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: #03133C;
 }
 
 @mixin desktop-section-text {
     font-family: var(--font-poppins);
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 400;
     color: #03133C;
 }
@@ -31,8 +31,6 @@
         margin-top: 200px;
     }
     .project-summary .project-summary-container {
-
-
         .storyteller-laptoplg-content-left {
             display: flex;
             flex-direction: column;
@@ -45,7 +43,7 @@
             }
 
             p {
-                padding-top: 2rem;
+                padding-top: 1rem;
                 @include desktop-section-text;
             }
         }
@@ -69,6 +67,30 @@
                 @include desktop-section-text;
             }
         }
+
+        .storyteller-laptoplg-content-center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 65%;
+            
+          
+            margin-right: auto;
+            margin-left: auto;
+            padding-top: 10rem;
+
+            span {
+                text-align: center;
+                @include desktop-title-text;
+            }
+
+            p {
+                padding-top: 2rem;
+                @include desktop-section-text;
+            }
+        }
+
+
 
     }
 }

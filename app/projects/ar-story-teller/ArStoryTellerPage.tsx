@@ -1,8 +1,10 @@
 "use client";
 
+import styles from './ArStoryTeller.module.scss';
 import { ProjectHeader } from './components/ProjectHeader';
 import { OverviewSection } from './components/sections/OverviewSection';
 import { TeamSection } from './components/sections/TeamSection';
+import { ProjectOverviewSection } from './components/sections/ProjectOverviewSection'; 
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
 import { NotificationsSection } from './components/sections/NotificationsSection';
 import { MagicExperiencesSection } from './components/sections/MagicExperiencesSection';
@@ -32,21 +34,33 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
     };
   }, [setLayoutState, setHeaderState]);
 
-  const { designChallenge, theProblem, solution, team, nextSteps, caseStudy } = projectData;
+  
 
-  console.log('caseStudy', caseStudy);
+  const { designChallenge, theProblem, solution, team, nextSteps, caseStudy } = projectData;
+  console.log('--------------------------------');
+  console.log(designChallenge, 'designChallenge');
+  console.log(theProblem, 'theProblem');
+  console.log(solution, 'solution');
+  console.log(team, 'team');
+  console.log(nextSteps, 'nextSteps');
+  console.log(caseStudy, 'caseStudy');
+  console.log('--------------------------------');
 
     return (
         <div>
             <ProjectHeader />
-            <div className='global-container'>
+            <div className={styles['project-content']}>
               <OverviewSection data={{ designChallenge, theProblem, solution }} />
               <TeamSection data={{ team }} />
+              <ProjectOverviewSection  />
+
+              {/*
+              
               <CaseStudyOverviewSection data={{ caseStudy }} />
               <NotificationsSection data={{ caseStudy }} />
               <MagicExperiencesSection data={{ caseStudy }} />
               <DesignSystemSection data={{ caseStudy }} />
-              <NextStepsSection data={{ nextSteps }} />
+              <NextStepsSection data={{ nextSteps }} /> */}
             </div>
         </div>
     )

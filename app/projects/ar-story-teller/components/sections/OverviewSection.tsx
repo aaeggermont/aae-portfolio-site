@@ -3,7 +3,7 @@ import OverviewParagraphBlock from '../OverviewParagraphBlock';
 import ParagraphImg from '../ParagraphImg';
 import { StaticImageData } from 'next/image';
 import styles from '../../ArStoryTeller.module.scss';
-import { SolutionDemo } from '../SolutionDemo';
+import { SolutionDemo } from '../demo/SolutionDemo';
 import { ProjectOverview } from '../ProjectOverview';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -33,29 +33,29 @@ export function OverviewSection({ data }: OverviewSectionProps) {
 
     return (
         <section className={styles['project-container']}>
-            <OverviewParagraphBlock
+
+            {/* SSR-stable wrapper so AOS can register at `init()` even though
+                `OverviewParagraphBlock` only renders content after `useResponsive` mounts.
+                Using default anchor-placement (`top-bottom`): triggers when wrapper top
+                enters viewport bottom — robust when the element sits just below the hero. */}
+            <div
                 data-aos="fade-up"
                 data-aos-duration="1000"
-                data-aos-anchor-placement="top-center"
-                title1={designChallenge.title}
-                paragraph1={designChallenge.paragraphs}
-                title2={theProblem.title}
-                paragraph2={theProblem.paragraphs}
-                title3={solution.title}
-                paragraph3={solution.paragraphs}
-            />
+                data-aos-once="true"
+            >
+                <OverviewParagraphBlock
+                    title1={designChallenge.title}
+                    paragraph1={designChallenge.paragraphs}
+                    title2={theProblem.title}
+                    paragraph2={theProblem.paragraphs}
+                />
+            </div>
 
             <SolutionDemo
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-anchor-placement="top-center"
+                title={solution.title}
+                paragraphs={solution.paragraphs}
             />
 
-            <ProjectOverview
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-anchor-placement="top-center"
-            />
         </section>
     );
 }

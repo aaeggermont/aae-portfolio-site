@@ -1,186 +1,211 @@
+/* Project Overview — three-up grid (desktop/tablet) and stacked rows (mobile).
+   Variables (`$desktop`, `$tablet`, `$mobile`, `$font-color-bold`, `$font-color-normal`)
+   come from `styles/variables.scss` via Next's `sassOptions.additionalData`. */
+
+.overview-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    box-sizing: border-box;
+}
+
+.overview-title {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    color: #03133c;
+    text-align: center;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.overview-icon-img {
+    display: block;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 @media #{$desktop} {
     .overview-container {
-        margin: auto;
         padding-top: 8rem;
+    }
 
-        .overview-title {
-            font-family: var(--font-poppins);
-            font-size: 2rem;
-            font-weight: 600;
-            color: #1D2D92;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
+    .overview-title {
+        font-size: 1.7rem;
+        color: #03133c;
+        padding-top: 1.25rem;
+        padding-bottom: 2rem;
+    }
+
+    .overview-columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .overview-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: center;
+
+        .overview-column-icon {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 0.75rem;
         }
 
-        .overview-columns {
+        .overview-column-title {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: $font-color-bold;
+            padding-bottom: 0.5rem;
+        }
+
+        .overview-column-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
+            gap: 0.25rem;
             width: 100%;
-            .column-tier {
-                display: flex;
-                flex-direction: column;
 
-                width: 50%;
-                .overview-row-icon {
-                    text-align: center;
-                    display: flex;
-                    flex-direction: column;
-                    padding-bottom: 0.5rem;
-                }
-
-                .myroles-text {
-                    padding-top: 0.5rem;
-                    span {
-                        font-family: var(--font-poppins);
-                        font-size: 1.2rem;
-                        font-weight: 600;
-                        color: $font-color-bold;
-                        text-align: center;
-                    }
-
-                }
-
-                .overview-row-text {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    width: 100%;
-                    span {
-                        font-family: var(--font-poppins);
-                        font-size: 1.1rem;
-                        font-weight: 400;
-                        color: #000000;
-                    }
-                }
-
+            li {
+                font-family: var(--font-poppins);
+                font-size: 1.1rem;
+                font-weight: 400;
+                color: $font-color-normal;
             }
         }
     }
 }
 
-
 @media #{$tablet} {
-    .overview-container  {
-        margin: auto;
+    .overview-container {
         padding-top: 6rem;
-        width: 80%;
+    }
 
-        .overview-title {
-            padding-top: 20px;
-            padding-bottom: 30px;
-            text-align: center;
+    .overview-title {
+        font-size: 1.6rem;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+
+    .overview-columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .overview-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: center;
+
+        .overview-column-icon {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 0.75rem;
         }
 
-        .row-overview {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: top;
+        .overview-column-title {
+            font-family: var(--font-poppins);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $font-color-bold;
+            padding-bottom: 0.5rem;
+        }
 
-            .column-content {
-                width: 33%;
-                text-align: center;
-            }
-            .myroles-title {
-                text-align: center;
-                padding-top: 1rem;
-                font-family: var(--font-poppins);
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: $font-color-bold;
-            }
-            .myroles-text {
-                padding-top: 0.3rem;
+        .overview-column-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            width: 100%;
+
+            li {
                 font-family: var(--font-poppins);
                 font-size: 1rem;
                 font-weight: 400;
-                color: #000000;
-            }
-
-        }
-
-        .overview-columns {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: top;
-
-            .column-tier {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 33%;
-
-                .overview-row-icon {
-                    text-align: center;
-                    display: flex;
-                    flex-direction: column;
-                    padding-bottom: 1.5rem;
-                }
-
-                .myroles-text {
-                    text-align: center;
-                    padding-top: 1rem;
-                    font-family: var(--font-poppins);
-                    font-size: 1.5rem;
-                    font-weight: 400;
-                    color: $font-color-bold;
-                }
-
-                .overview-row-text {
-                    font-family: var(--font-poppins);
-                    font-size: 16px;
-                    font-weight: 400;
-                    color: $font-color-bold;
-
-                }
+                color: $font-color-normal;
             }
         }
     }
 }
 
-
-.storyteller-overview-container-mobile {
-    max-width: 428px;
-    margin: auto;
-    padding-top: 4rem;
+@media #{$mobile} {
+    .overview-container--mobile {
+        padding-top: 4rem;
+    }
 
     .overview-title {
-        font-family: var(--font-poppins);
-        font-size: 22px;
-        font-weight: 600;
-        color: #1D2D92;
-        padding-top: 20px;
-        padding-bottom: 10px;
-        text-align: center;
+        font-size: 1.375rem;
+        padding-top: 1.25rem;
+        padding-bottom: 1rem;
+    }
+
+    .overview-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
     }
 
     .overview-row {
         display: flex;
-        flex-wrap: nowrap;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
+        gap: 1rem;
         width: 100%;
-        padding-top: 1rem;
-        padding-bottom:  .5rem;
 
         .overview-row-icon {
-            width: 45%;
-            text-align: center;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            flex: 0 0 35%;
+            text-align: center;
         }
 
-        .overview-row-text {
-            width: 70%;
+        .overview-row-icon-label {
+            margin-top: 0.5rem;
             font-family: var(--font-poppins);
-            font-size: 16px;
-            font-weight: 400;
-            color: #000000;
+            font-size: 1rem;
+            font-weight: 600;
+            color: $font-color-bold;
+        }
+
+        .overview-row-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex: 1 1 auto;
+            min-width: 0;
             display: flex;
             flex-direction: column;
+            gap: 0.25rem;
 
+            li {
+                font-family: var(--font-poppins);
+                font-size: 1rem;
+                font-weight: 400;
+                color: $font-color-normal;
+            }
         }
     }
 }
