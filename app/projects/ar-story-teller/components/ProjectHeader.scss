@@ -50,6 +50,18 @@
   }
 }
 
+/* Crowd strip vertical offset: `--people-in-line-initial-top` on `.storyteller-banner`, or `initialTop` on `PeopleInLineCrowd` (inline wins). */
+.storyteller-banner .people-in-line {
+  margin-top: var(--people-in-line-initial-top, 0);
+}
+
+/* Wrapper for `Parallax` around the crowd image (Option B — section scroll parallax). */
+.storyteller-banner .people-in-line__parallax {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 /* Crowd illustration: centered, full asset visible (letterboxing ok). */
 .storyteller-banner .people-in-line__crowd {
   display: block;

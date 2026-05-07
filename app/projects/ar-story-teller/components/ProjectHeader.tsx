@@ -10,7 +10,11 @@ import CloudsLayerMobile2 from '../Images/cloud-mobile-2.png';
 import CloudsLayerMobile3 from '../Images/cloud-mobile-3.png';
 import CloudsLayerMobile4 from '../Images/cloud-mobile-4.png';
 import CrowdsWaitingDesktop from '../Images/CrowdsWaiting-Desktop.png';
-import { ParallaxBanner, ParallaxBannerLayer } from 'react-scroll-parallax';
+import {
+  Parallax,
+  ParallaxBanner,
+  ParallaxBannerLayer,
+} from 'react-scroll-parallax';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import Image, { StaticImageData } from 'next/image';
 
@@ -67,6 +71,36 @@ function ParallaxCloudLayer({
         </div>
       </div>
     </ParallaxBannerLayer>
+  );
+}
+
+/** Crowd strip below the hero — scroll parallax (Option B), not a `ParallaxBanner` layer. */
+function PeopleInLineCrowd({
+  speed,
+  withAosFade = false,
+  /** Vertical offset where the strip sits in the layout (`margin-top`; px, %, rem, etc.). Negative values pull upward. */
+  initialTop,
+}: {
+  speed: number;
+  withAosFade?: boolean;
+  initialTop?: CSSProperties['marginTop'];
+}) {
+  const stripStyle: CSSProperties | undefined =
+    initialTop != null ? { marginTop: initialTop } : undefined;
+
+  return (
+    <div className="people-in-line" style={stripStyle}>
+      <Parallax speed={speed} className="people-in-line__parallax">
+        <Image
+          className="people-in-line__crowd"
+          alt="Crowds waiting in line"
+          src={CrowdsWaitingDesktop}
+          width={1600}
+          height={900}
+          {...(withAosFade ? { 'data-aos': 'fade' as const } : {})}
+        />
+      </Parallax>
+    </div>
   );
 }
 
@@ -133,15 +167,7 @@ function ProjectHeaderDesktop() {
           />
         </ParallaxBanner>
       </div>
-      <div className="people-in-line">
-        <Image
-          className="people-in-line__crowd"
-          alt="Crowds Waiting Desktop"
-          src={CrowdsWaitingDesktop}
-          width={1600}
-          height={900}
-        />
-      </div>
+      <PeopleInLineCrowd initialTop="-11%" speed={38} />
     </div>
   );
 }
@@ -177,15 +203,7 @@ function ProjectHeaderTablet() {
           />
         </ParallaxBanner>
       </div>
-      <div className="people-in-line">
-        <Image
-          className="people-in-line__crowd"
-          alt="Crowds Waiting Desktop"
-          src={CrowdsWaitingDesktop}
-          width={1600}
-          height={900}
-        />
-      </div>
+      <PeopleInLineCrowd initialTop="-9%" speed={8} />
     </div>
   );
 }
@@ -232,16 +250,7 @@ function ProjectHeaderMobile() {
           />
         </ParallaxBanner>
       </div>
-      <div className="people-in-line">
-        <Image
-          className="people-in-line__crowd"
-          alt="Crowds Waiting Desktop"
-          src={CrowdsWaitingDesktop}
-          width={1600}
-          height={900}
-          data-aos="fade"
-        />
-      </div>
+      <PeopleInLineCrowd initialTop="-35%" speed={4} withAosFade />
     </div>
   );
 }
