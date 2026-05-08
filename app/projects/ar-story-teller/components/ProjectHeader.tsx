@@ -203,7 +203,7 @@ function ProjectHeaderTablet() {
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-9%" speed={8} />
+      <PeopleInLineCrowd initialTop="-19%" speed={8} />
     </div>
   );
 }
