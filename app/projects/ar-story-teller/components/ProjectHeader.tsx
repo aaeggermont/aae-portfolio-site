@@ -5,10 +5,10 @@ import CloudsLayer1 from '../Images/cloud-1.png';
 import CloudsLayer2 from '../Images/cloud-2.png';
 import CloudsLayer3 from '../Images/cloud-3.png';
 import CloudsLayer4 from '../Images/cloud-4.png';
-import CloudsLayerMobile1 from '../Images/cloud-mobile-1.png';
-import CloudsLayerMobile2 from '../Images/cloud-mobile-2.png';
-import CloudsLayerMobile3 from '../Images/cloud-mobile-3.png';
-import CloudsLayerMobile4 from '../Images/cloud-mobile-4.png';
+import CloudsLayerMobile1 from '../Images/clouds-layer-1.png';
+import CloudsLayerMobile2 from '../Images/clouds-layer-2.png';
+import CloudsLayerMobile3 from '../Images/clouds-layer-3.png';
+import CloudsLayerMobile4 from '../Images/clouds-layer-4.png';
 import CrowdsWaitingDesktop from '../Images/CrowdsWaiting-Desktop.png';
 import {
   Parallax,
@@ -27,6 +27,15 @@ type ParallaxCloudLayerProps = {
   withAos?: boolean;
   /** Extra upward offset for this layer only (px). Does not use `transform`. */
   layerLiftPx?: number;
+  /** Visual size multiplier for the image (1 = no change, 0.8 = 80%). */
+  scale?: number;
+  /** Anchor for the scale; defaults to `center bottom` to match `object-position`. */
+  scaleOrigin?: CSSProperties['transformOrigin'];
+  /** Override CSS `object-fit`. Default (`cover`) crops the image to fill the container.
+      Use `contain` to see the whole image (may letterbox). */
+  objectFit?: CSSProperties['objectFit'];
+  /** Override CSS `object-position`. Defaults to the value in `.project-header-parallax__img`. */
+  objectPosition?: CSSProperties['objectPosition'];
 };
 
 function ParallaxCloudLayer({
@@ -37,6 +46,10 @@ function ParallaxCloudLayer({
   imgClassName = 'project-header-parallax__img',
   withAos = true,
   layerLiftPx = 0,
+  scale = 1,
+  scaleOrigin = 'center bottom',
+  objectFit,
+  objectPosition,
 }: ParallaxCloudLayerProps) {
   /* Inline top/height so extra lift always wins (CSS var-only overrides were flaky in some cases). */
   const shiftStyle: CSSProperties | undefined =
@@ -46,6 +59,20 @@ function ParallaxCloudLayer({
           height: `calc(100% + var(--project-header-cloud-lift) + ${layerLiftPx}px)`,
         }
       : undefined;
+
+  /* Inline image style — sizing/positioning of the image content within the layer.
+     Lives on `<Image>` directly so it doesn't fight the library's transforms on
+     `ParallaxBannerLayer` or our own `top/height` shift on `__layer-shift`. */
+  const imgStyle: CSSProperties | undefined = (() => {
+    const style: CSSProperties = {};
+    if (scale !== 1) {
+      style.transform = `scale(${scale})`;
+      style.transformOrigin = scaleOrigin;
+    }
+    if (objectFit) style.objectFit = objectFit;
+    if (objectPosition) style.objectPosition = objectPosition;
+    return Object.keys(style).length > 0 ? style : undefined;
+  })();
 
   return (
     <ParallaxBannerLayer expanded speed={speed}>
@@ -60,6 +87,7 @@ function ParallaxCloudLayer({
             fill
             sizes="100vw"
             className={imgClassName}
+            style={imgStyle}
             {...(withAos
               ? {
                   'data-aos': 'fade-up' as const,
@@ -137,20 +165,21 @@ function ProjectHeaderDesktop() {
     <div className="storyteller-banner">
       <div className="storyteller-banner__hero">
         <BannerTitles />
-        <ParallaxBanner
-          className="project-header-parallax"
-          style={{ backgroundColor: '#153077' }}
-        >
+        <ParallaxBanner className="project-header-parallax">
           <ParallaxCloudLayer
             src={CloudsLayer4}
             alt="Clouds Layer 4"
             speed={12}
+            objectFit="contain"
+            objectPosition="center 15%"
           />
           <ParallaxCloudLayer
             src={CloudsLayer3}
             alt="Clouds Layer 3"
             speed={8}
             aosDelay={200}
+             objectFit="contain"
+            objectPosition="center 17%"
           />
           <ParallaxCloudLayer
             src={CloudsLayer2}
@@ -158,16 +187,20 @@ function ProjectHeaderDesktop() {
             speed={3}
             layerLiftPx={150}
             aosDelay={400}
+            objectFit="contain"
+            objectPosition="center 28%"
           />
           <ParallaxCloudLayer
             src={CloudsLayer1}
             alt="Clouds Layer 1"
             speed={-3}
             aosDelay={600}
+            objectFit="contain"
+            objectPosition="center 16%"
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-10%" speed={38} />
+      <PeopleInLineCrowd initialTop="-45%" speed={38} />
     </div>
   );
 }
@@ -177,10 +210,7 @@ function ProjectHeaderTablet() {
     <div className="storyteller-banner">
       <div className="storyteller-banner__hero">
         <BannerTitles />
-        <ParallaxBanner
-          className="project-header-parallax"
-          style={{ backgroundColor: '#153077' }}
-        >
+        <ParallaxBanner className="project-header-parallax">
           <ParallaxCloudLayer src={CloudsLayer4} alt="Clouds Layer 4" speed={4} />
           <ParallaxCloudLayer
             src={CloudsLayer3}
@@ -216,10 +246,7 @@ function ProjectHeaderMobile() {
     <div className="storyteller-banner">
       <div className="storyteller-banner__hero">
         <BannerTitles />
-        <ParallaxBanner
-          className="project-header-parallax"
-          style={{ backgroundColor: '#153077' }}
-        >
+        <ParallaxBanner className="project-header-parallax">
           <ParallaxCloudLayer
             src={CloudsLayerMobile4}
             alt="Clouds Layer Mobile 4"
