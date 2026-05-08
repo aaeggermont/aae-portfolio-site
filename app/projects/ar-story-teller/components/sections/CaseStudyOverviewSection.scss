@@ -1,0 +1,24 @@
+/* Case study section banner — full-bleed: breaks out of the page's `.project-content`
+   max-width (1024px) so the image edges always touch the viewport edges.
+
+   How it works: `50%` resolves against the parent's content width; `50vw` is half of the
+   viewport. Their difference is the exact distance from the parent's edge to the viewport
+   edge. Applying that as negative left/right margins extends the box to the viewport edges,
+   while the auto-computed width naturally fills the new horizontal space (no `100vw` needed,
+   so no scrollbar-induced overflow). */
+.case-study-banner {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-top: 3rem;
+}
+
+/* Image fills the full-bleed wrapper but is capped at the asset's intrinsic width so it
+   never upscales on 4K+ displays; auto margins center it within the wrapper when capped. */
+.case-study-banner__image {
+    display: block;
+    width: 100%;
+    max-width: 1920px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}

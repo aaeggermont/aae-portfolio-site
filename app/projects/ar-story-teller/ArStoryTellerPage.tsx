@@ -53,10 +53,9 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
               <OverviewSection data={{ designChallenge, theProblem, solution }} />
               <TeamSection data={{ team }} />
               <ProjectOverviewSection  />
-
-              {/*
-              
               <CaseStudyOverviewSection data={{ caseStudy }} />
+
+               {/*
               <NotificationsSection data={{ caseStudy }} />
               <MagicExperiencesSection data={{ caseStudy }} />
               <DesignSystemSection data={{ caseStudy }} />
