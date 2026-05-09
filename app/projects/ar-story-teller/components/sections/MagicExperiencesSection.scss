@@ -1,0 +1,28 @@
+/* Magic Experiences row layout — desktop only.
+
+   Tablet and mobile stay column-stacked (no flex applied), so the existing
+   `.mockup-container` widths defined in `MockupIllustration.scss` keep working
+   unchanged below `$desktop-min`. We'll iterate on smaller breakpoints in a
+   follow-up. */
+
+@media #{$desktop} {
+    .magic-experiences__row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2rem;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Override the per-item `width: 45%` from `MockupIllustration.scss` only when an
+       item is rendered inside the row wrapper. `flex: 1 1 0` makes each mockup share
+       the available space evenly. */
+    .magic-experiences__row .mockup-container {
+        width: auto;
+        flex: 1 1 0;
+        padding-top: 0;
+    }
+}

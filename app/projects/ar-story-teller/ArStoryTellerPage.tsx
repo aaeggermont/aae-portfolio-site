@@ -36,15 +36,7 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
 
   
 
-  const { designChallenge, theProblem, solution, team, nextSteps, caseStudy } = projectData;
-  console.log('--------------------------------');
-  console.log(designChallenge, 'designChallenge');
-  console.log(theProblem, 'theProblem');
-  console.log(solution, 'solution');
-  console.log(team, 'team');
-  console.log(nextSteps, 'nextSteps');
-  console.log(caseStudy, 'caseStudy');
-  console.log('--------------------------------');
+  const { designChallenge, theProblem, solution, team, nextSteps, caseStudy, projectOverview} = projectData;
 
     return (
         <div>
@@ -54,10 +46,11 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
               <TeamSection data={{ team }} />
               <ProjectOverviewSection  />
               <CaseStudyOverviewSection data={{ caseStudy }} />
+              <MagicExperiencesSection data={{ caseStudy }} />
 
                {/*
               <NotificationsSection data={{ caseStudy }} />
-              <MagicExperiencesSection data={{ caseStudy }} />
+            
               <DesignSystemSection data={{ caseStudy }} />
               <NextStepsSection data={{ nextSteps }} /> */}
             </div>

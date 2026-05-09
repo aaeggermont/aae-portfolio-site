@@ -1,5 +1,6 @@
 'use client';
-import ParagraphBlock from '../ParagraphBlock';
+import './MagicExperiencesSection.scss';
+import SectionTitle from '../SectionTitle';
 import MockupIllustration from '../MockupIllustration';
 import { StaticImageData } from 'next/image';
 import styles from '../../ArStoryTeller.module.scss';
@@ -39,29 +40,31 @@ export function MagicExperiencesSection({ data }: MagicExperiencesSectionProps) 
 
     return (
         <section className={styles['project-container']}>
-            <ParagraphBlock
+
+            <SectionTitle
                 title={magicExperiences.title}
-                paragraphs={magicExperiences.paragraphs}
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
 
-            {EXPERIENCE_ORDER.map((index) => {
-                const experience = magicExperiences.experiences[index];
-                return (
-                    <MockupIllustration
-                        key={index}
-                        alt={experience.alt ?? ''}
-                        imagesSrc={experience.images}
-                        title={experience.title}
-                        description={experience.description}
-                        data-aos="fade-up"
-                        data-aos-duration="1000"
-                        data-aos-anchor-placement="top-center"
-                    />
-                );
-            })}
+            <div className="magic-experiences__row">
+                {EXPERIENCE_ORDER.map((index) => {
+                    const experience = magicExperiences.experiences[index];
+                    return (
+                        <MockupIllustration
+                            key={index}
+                            alt={experience.alt ?? ''}
+                            imagesSrc={experience.images}
+                            title={experience.title}
+                            description={experience.description}
+                            data-aos="fade-up"
+                            data-aos-duration="1000"
+                            data-aos-anchor-placement="top-center"
+                        />
+                    );
+                })}
+            </div>
         </section>
     );
 }

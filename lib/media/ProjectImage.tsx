@@ -20,6 +20,9 @@ type ProjectImageProps = {
   priority?: boolean;
   /** When restricted, passes through to GatedImage `fullViewportLoading`. */
   fullViewportLoading?: boolean;
+  /** Optional CSS `border-radius` (number → px, or any CSS string like `'1rem'`, `'50%'`).
+   *  `style.borderRadius` overrides this when both are set. */
+  borderRadius?: React.CSSProperties["borderRadius"];
 };
 
 
@@ -33,6 +36,7 @@ export default function ProjectImage({
   sizes,
   priority = false,
   fullViewportLoading = false,
+  borderRadius,
 }: ProjectImageProps) {
   const { projectKey, visibility } = useProjectAccess();
   console.log("Project Access Context:", { projectKey, visibility });
@@ -42,6 +46,13 @@ export default function ProjectImage({
   }
 
   const normalizedPath = stripLeadingSlash(objectPath);
+
+  /* `borderRadius` is a convenience default; spread `style` after so caller-supplied
+     `style.borderRadius` always wins. */
+  const mergedStyle: React.CSSProperties | undefined =
+    borderRadius != null || style
+      ? { ...(borderRadius != null ? { borderRadius } : {}), ...style }
+      : undefined;
 
   if (visibility === "public") {
     const publicUrl = buildPublicStorageUrl(normalizedPath);
@@ -53,7 +64,7 @@ export default function ProjectImage({
         width={width}
         height={height}
         className={className}
-        style={style}
+        style={mergedStyle}
         sizes={sizes}
         priority={priority}
         unoptimized
@@ -69,7 +80,7 @@ export default function ProjectImage({
       width={width}
       height={height}
       className={className}
-      style={style}
+      style={mergedStyle}
       sizes={sizes}
       priority={priority}
       fullViewportLoading={fullViewportLoading}

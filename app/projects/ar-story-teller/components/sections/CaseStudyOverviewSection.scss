@@ -1,24 +1,77 @@
-/* Case study section banner — full-bleed: breaks out of the page's `.project-content`
-   max-width (1024px) so the image edges always touch the viewport edges.
+/* Case study section banner.
 
-   How it works: `50%` resolves against the parent's content width; `50vw` is half of the
-   viewport. Their difference is the exact distance from the parent's edge to the viewport
-   edge. Applying that as negative left/right margins extends the box to the viewport edges,
-   while the auto-computed width naturally fills the new horizontal space (no `100vw` needed,
-   so no scrollbar-induced overflow). */
+   - Tablet & mobile (< $desktop-min): the banner stays inside the page's `.project-content`,
+     inheriting its horizontal padding (`clamp(1rem, 5vw, 2rem)`), so the image keeps the same
+     left/right margins as the rest of the page content.
+   - Desktop (>= $desktop-min): the banner becomes full-bleed by breaking out of the parent
+     via negative `vw`-relative margins. `50%` resolves against the parent's content width;
+     `50vw` is half the viewport. Their difference is the exact distance from the parent's
+     edge to the viewport edge — applying that as negative margins extends the box to the
+     viewport edges. Auto-computed width then fills the new horizontal space (no `100vw`
+     needed, so no scrollbar-induced horizontal overflow).
+
+   `position: relative` makes the wrapper the containing block for the title overlay. */
 .case-study-banner {
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
+    position: relative;
     padding-top: 3rem;
 }
 
-/* Image fills the full-bleed wrapper but is capped at the asset's intrinsic width so it
-   never upscales on 4K+ displays; auto margins center it within the wrapper when capped. */
+@media screen and (min-width: $desktop-min) {
+    .case-study-banner {
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+    }
+}
+
+/* Image fills the full-bleed wrapper but is capped so it never upscales beyond its design
+   size; auto margins center it within the wrapper when capped. Keep this value in sync with
+   the `sizes` hint on `<ProjectImage>` so srcset selection matches the rendered width. */
 .case-study-banner__image {
     display: block;
     width: 100%;
-    max-width: 1920px;
+    max-width: 1260px;
     height: auto;
     margin-left: auto;
     margin-right: auto;
+}
+
+/* Title overlay — anchored to the image (not the viewport). To keep alignment with the image
+   at every breakpoint, the overlay shares the image's `max-width` cap and is centered within
+   the full-bleed wrapper via auto margins. Text is left-aligned with a small horizontal inset
+   so it doesn't sit flush against the image's left edge.
+
+   Hidden until React adds the `--loaded` modifier (after the image's `load` event fires),
+   then fades in. `pointer-events: none` so the overlay never blocks interactions on the
+   image. */
+.case-study-banner__title-overlay {
+    position: absolute;
+    top: 12%;
+    left: 0;
+    right: 0;
+    max-width: 1260px;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+    pointer-events: none;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 1800ms ease-out;
+}
+
+.case-study-banner__title-overlay--loaded {
+    opacity: 1;
+}
+
+/* Dedicated banner title styling; intentionally separate from the shared `BlockTitle`. */
+.case-study-banner__title {
+    margin: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+    font-family: var(--font-poppins);
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
 }
