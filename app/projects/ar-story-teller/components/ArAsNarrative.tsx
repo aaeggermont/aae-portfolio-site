@@ -17,6 +17,12 @@ interface ArAsNarrativeProps {
 const AR_NARRATIVE_IMAGE_INTRINSIC_WIDTH = 1280;
 const AR_NARRATIVE_IMAGE_INTRINSIC_HEIGHT = 960;
 
+/* The "row" layout kicks in at the project's desktop boundary (1024px) rather than MUI's
+   default `md` breakpoint (900px). Tablet sizes (768–1023px) stay column-stacked because
+   the right-column image would otherwise crowd the title/description in that range.
+   See `lib/responsive/breakpoints.ts` for the source-of-truth boundaries. */
+const DESKTOP_BREAKPOINT_MQ = "@media (min-width: 1024px)";
+
 const ArAsNarrative = ({
   title,
   paragraphs = [],
@@ -36,11 +42,26 @@ const ArAsNarrative = ({
       }}
     >
       <Stack
-        direction={{ xs: "column", md: "row" }}
-        spacing={{ xs: 4, md: 8 }}
-        alignItems="flex-start"
+        sx={{
+          flexDirection: "column",
+          alignItems: "flex-start",
+          gap: 4,
+          [DESKTOP_BREAKPOINT_MQ]: {
+            flexDirection: "row",
+            gap: 8,
+          },
+        }}
       >
-        <Stack spacing={2} flex={1} maxWidth={{ xs: "100%", md: 628.5 }}>
+        <Stack
+          spacing={2}
+          sx={{
+            flex: 1,
+            maxWidth: "100%",
+            [DESKTOP_BREAKPOINT_MQ]: {
+              maxWidth: "628.5px",
+            },
+          }}
+        >
           <Typography
             component="h2"
             sx={{
@@ -48,7 +69,10 @@ const ArAsNarrative = ({
               fontWeight: 800,
               fontSize: { xs: "1.5rem", sm: "1.5rem", md: "2rem" },
               lineHeight: 1.1,
-              textAlign: { xs: "center", md: "left" },
+              textAlign: "center",
+              [DESKTOP_BREAKPOINT_MQ]: {
+                textAlign: "left",
+              },
             }}
           >
             {title}
@@ -68,14 +92,26 @@ const ArAsNarrative = ({
             </Typography>
           ))}
         </Stack>
-        <Box flex={1} maxWidth={{ xs: "100%", md: 628.5 }} width="100%">
+        <Box
+          sx={{
+            flex: 1,
+            width: "100%",
+            maxWidth: "100%",
+            [DESKTOP_BREAKPOINT_MQ]: {
+              maxWidth: "628.5px",
+            },
+          }}
+        >
           <ProjectImage
             objectPath={imageSrc}
             alt={alt}
             width={AR_NARRATIVE_IMAGE_INTRINSIC_WIDTH}
             height={AR_NARRATIVE_IMAGE_INTRINSIC_HEIGHT}
             borderRadius="24px"
-            sizes="(max-width: 900px) 100vw, 628px"
+            /* `sizes` mirrors the layout: full viewport width while the image sits in its
+               own row (column-stacked), capped near the column max once it shares a row
+               with the text at the desktop boundary. */
+            sizes="(max-width: 1023px) 100vw, 628px"
             style={{ display: "block", width: "100%", height: "auto" }}
           />
         </Box>
