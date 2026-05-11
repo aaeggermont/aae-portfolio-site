@@ -1,6 +1,6 @@
 'use client';
 import './MagicExperiencesSection.scss';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import SectionTitle from '../SectionTitle';
 import ARMobileScreen from '../ARMobileScreen';
 import styles from '../../ArStoryTeller.module.scss';
@@ -10,14 +10,14 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface MagicExperience {
+export interface MagicExperience {
     title: string;
     alt: string;
     description: string;
     images: string[];
 }
 
-interface MagicExperiences {
+export interface MagicExperiences {
     title: string;
     paragraphs: string[];
     experiences: MagicExperience[];
@@ -39,6 +39,26 @@ const EXPERIENCE_ORDER = [3, 0, 1, 2] as const;
 /** Sub-pixel rounding can leave the "next" button enabled at the very end of a scroll
  *  range; use a small epsilon when comparing scroll positions. */
 const SCROLL_EDGE_EPSILON = 2;
+
+/**
+ * Default vertical spacing between direct children inside `MagicExperiencesSection`.
+ *
+ * These values are intentionally `0rem` to preserve the current visual layout: the title
+ * still owns its bottom padding, and the mobile nav keeps its own small offset in SCSS.
+ * Increase these values when you want a component-level gap between the title, mockup row,
+ * and mobile nav without editing each child.
+ */
+const MAGIC_EXPERIENCES_SECTION_GAPS = {
+    mobile: '3rem',
+    tablet: '6rem',
+    desktop: '8rem',
+} as const;
+
+const magicExperiencesGapStyle: CSSProperties = {
+    ['--magic-experiences-gap-mobile' as string]: MAGIC_EXPERIENCES_SECTION_GAPS.mobile,
+    ['--magic-experiences-gap-tablet' as string]: MAGIC_EXPERIENCES_SECTION_GAPS.tablet,
+    ['--magic-experiences-gap-desktop' as string]: MAGIC_EXPERIENCES_SECTION_GAPS.desktop,
+} as CSSProperties;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -88,13 +108,18 @@ export function MagicExperiencesSection({ data }: MagicExperiencesSectionProps) 
     }, []);
 
     return (
-        <section className={styles['project-container']}>
+        <section
+            className={`${styles['project-container']} magic-experiences`}
+            style={magicExperiencesGapStyle}
+        >
 
             <SectionTitle
                 title={magicExperiences.title}
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
+                paddingTop="1.5rem"
+                paddingBottom="2rem"
             />
 
             <div

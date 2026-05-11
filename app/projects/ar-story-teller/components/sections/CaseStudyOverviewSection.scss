@@ -1,3 +1,32 @@
+/* Internal section spacing. Mirrors the pattern in `ArStoryTeller.module.scss` and
+   `MagicExperiencesSection.scss`: a single `--case-study-overview-gap` is set per
+   breakpoint and applied as `margin-top` to every direct child after the first via
+   `> * + *`. Defaults below are kept aligned with `CASE_STUDY_OVERVIEW_GAPS` in
+   `CaseStudyOverviewSection.tsx` so the section still renders sensibly if the inline
+   style is ever removed. Override a single internal gap by setting
+   `--case-study-overview-gap-self` inline on a child. */
+.case-study-overview {
+    --case-study-overview-gap-mobile: 0rem;
+    --case-study-overview-gap-tablet: 0rem;
+    --case-study-overview-gap-desktop: 0rem;
+    --case-study-overview-gap: var(--case-study-overview-gap-mobile);
+
+    @media #{$tablet} {
+        --case-study-overview-gap: var(--case-study-overview-gap-tablet);
+    }
+
+    @media #{$desktop} {
+        --case-study-overview-gap: var(--case-study-overview-gap-desktop);
+    }
+
+    > * + * {
+        margin-top: var(
+            --case-study-overview-gap-self,
+            var(--case-study-overview-gap)
+        );
+    }
+}
+
 /* Case study section banner.
 
    - Tablet & mobile (< $desktop-min): the banner stays inside the page's `.project-content`,
@@ -24,20 +53,24 @@
 }
 
 /* Image fills the full-bleed wrapper but is capped so it never upscales beyond its design
-   size; auto margins center it within the wrapper when capped. Keep this value in sync with
-   the `sizes` hint on `<ProjectImage>` so srcset selection matches the rendered width. */
+   size; auto margins center it within the wrapper when capped. The cap tracks
+   `--layout-max-width-desktop` from `.project-content` so the banner stays in lock-step
+   with the page-wide desktop max-width set in `LAYOUT_DIMENSIONS`. Keep the `sizes` hint
+   on `<ProjectImage>` in sync with this value so srcset selection matches the rendered
+   width. */
 .case-study-banner__image {
     display: block;
     width: 100%;
-    max-width: 1260px;
+    max-width: var(--layout-max-width-desktop);
     height: auto;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* Title overlay — anchored to the image (not the viewport). To keep alignment with the image
-   at every breakpoint, the overlay shares the image's `max-width` cap and is centered within
-   the full-bleed wrapper via auto margins. Text is left-aligned with a small horizontal inset
+/* Title overlay — anchored to the image (not the viewport). To keep alignment with the
+   image at every breakpoint, the overlay shares the image's `max-width` cap (which now
+   reads from the same `--layout-max-width-desktop` variable) and is centered within the
+   full-bleed wrapper via auto margins. Text is left-aligned with a small horizontal inset
    so it doesn't sit flush against the image's left edge.
 
    Hidden until React adds the `--loaded` modifier (after the image's `load` event fires),
@@ -48,7 +81,7 @@
     top: 12%;
     left: 0;
     right: 0;
-    max-width: 1260px;
+    max-width: var(--layout-max-width-desktop);
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;

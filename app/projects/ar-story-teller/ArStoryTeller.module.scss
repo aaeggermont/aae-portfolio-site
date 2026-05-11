@@ -4,14 +4,69 @@
     //background-color: aqua;
 }
 
-/* Outer content wrapper for `ArStoryTellerPage`. Replaces the global `global-container` so
-   this case study can own its own cap (1024px) without affecting other routes. */
+/* Outer content wrapper for `ArStoryTellerPage`. Replaces the global `global-container`
+   so this case study can own its own horizontal cap and gutter scheme without affecting
+   other routes.
+
+   Two independent concerns ride on the same element:
+
+   1. Layout dimensions — `--layout-max-width-{mobile,tablet,desktop}` and
+      `--layout-margin-{mobile,tablet,desktop}`, set by `LAYOUT_DIMENSIONS` in
+      `ArStoryTellerPage.tsx`. The active values (`--layout-max-width` / `--layout-margin`)
+      are applied as `max-width` and horizontal padding on this wrapper, constraining every
+      descendant section automatically. Mobile is `none` (no cap) so phones fill their
+      viewport; tablet/desktop cap and center.
+   2. Section gaps — `--section-gap-{mobile,tablet,desktop}`, set by `SECTION_GAPS` in
+      `ArStoryTellerPage.tsx`. The active `--section-gap` is applied as `margin-top` to
+      every direct child after the first, with `--section-gap-self` as the per-section
+      escape hatch.
+
+   Defaults below mirror the constants in the TS file so the page still renders coherently
+   if the inline style is ever removed. */
 .project-content {
-    max-width: 1260px;
+    /* Layout dimensions — fallback defaults; overridden by inline vars from React. */
+    --layout-max-width-mobile: none;
+    --layout-max-width-tablet: 1024px;
+    --layout-max-width-desktop: 1260px;
+    --layout-margin-mobile: 16px;
+    --layout-margin-tablet: 40px;
+    --layout-margin-desktop: 80px;
+
+    /* Active values, switched per breakpoint. */
+    --layout-max-width: var(--layout-max-width-mobile);
+    --layout-margin: var(--layout-margin-mobile);
+
+    /* Section gap — fallback defaults; overridden by inline vars from React. */
+    --section-gap-mobile: 3rem;
+    --section-gap-tablet: 5rem;
+    --section-gap-desktop: 8rem;
+    --section-gap: var(--section-gap-mobile);
+
+    @media #{$tablet} {
+        --layout-max-width: var(--layout-max-width-tablet);
+        --layout-margin: var(--layout-margin-tablet);
+        --section-gap: var(--section-gap-tablet);
+    }
+
+    @media #{$desktop} {
+        --layout-max-width: var(--layout-max-width-desktop);
+        --layout-margin: var(--layout-margin-desktop);
+        --section-gap: var(--section-gap-desktop);
+    }
+
+    max-width: var(--layout-max-width);
     margin-left: auto;
     margin-right: auto;
-    padding-left: clamp(1rem, 5vw, 2rem);
-    padding-right: clamp(1rem, 5vw, 2rem);
+    padding-left: var(--layout-margin);
+    padding-right: var(--layout-margin);
+
+    /* Adjacent-sibling rule: every direct child *after the first* gets a top margin equal
+       to its own `--section-gap-self` (escape hatch) or the active `--section-gap`
+       (default). The first child has no previous sibling so it isn't pushed down — that's
+       intentional so the hero/first-section spacing stays under the parent's control. */
+    > * + * {
+        margin-top: var(--section-gap-self, var(--section-gap));
+    }
 }
 
 $project-font-color: #03133C;

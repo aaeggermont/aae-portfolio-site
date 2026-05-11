@@ -1,5 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
 import ProjectImage from "@/lib/media/ProjectImage";
+import {
+  LAYOUT_DIMENSIONS,
+  cssLengthToPx,
+  getUsableLayoutWidth,
+} from "../layoutConfig";
 
 interface ArAsNarrativeProps {
   title: string;
@@ -16,6 +21,19 @@ interface ArAsNarrativeProps {
    loaded asset. Update if your asset is significantly off this ratio. */
 const AR_NARRATIVE_IMAGE_INTRINSIC_WIDTH = 1280;
 const AR_NARRATIVE_IMAGE_INTRINSIC_HEIGHT = 960;
+const AR_NARRATIVE_DESKTOP_STACK_GAP_PX = 64;
+const AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH = `${
+  (getUsableLayoutWidth("desktop") - AR_NARRATIVE_DESKTOP_STACK_GAP_PX) / 2
+}px`;
+const AR_NARRATIVE_IMAGE_SIZES = [
+  `(max-width: 767px) calc(100vw - ${
+    cssLengthToPx(LAYOUT_DIMENSIONS.mobile.margin) * 2
+  }px)`,
+  `(max-width: 1023px) calc(100vw - ${
+    cssLengthToPx(LAYOUT_DIMENSIONS.tablet.margin) * 2
+  }px)`,
+  AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH,
+].join(", ");
 
 /* The "row" layout kicks in at the project's desktop boundary (1024px) rather than MUI's
    default `md` breakpoint (900px). Tablet sizes (768–1023px) stay column-stacked because
@@ -58,7 +76,7 @@ const ArAsNarrative = ({
             flex: 1,
             maxWidth: "100%",
             [DESKTOP_BREAKPOINT_MQ]: {
-              maxWidth: "628.5px",
+              maxWidth: AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH,
             },
           }}
         >
@@ -67,7 +85,7 @@ const ArAsNarrative = ({
             sx={{
               color: "#03133c",
               fontWeight: 800,
-              fontSize: { xs: "1.5rem", sm: "1.5rem", md: "2rem" },
+              fontSize: { xs: "1.5rem", sm: "1.5rem", md: "1.75rem" },
               lineHeight: 1.1,
               textAlign: "center",
               [DESKTOP_BREAKPOINT_MQ]: {
@@ -84,7 +102,7 @@ const ArAsNarrative = ({
               sx={{
                 color: "#002464",
                 fontWeight: 500,
-                fontSize: { xs: "1.5rem", sm: "1.2rem", md: "1.3rem" },
+                fontSize: { xs: "1.5rem", sm: "1.2rem", md: "1.5rem" },
                 lineHeight: 1.35,
               }}
             >
@@ -98,7 +116,7 @@ const ArAsNarrative = ({
             width: "100%",
             maxWidth: "100%",
             [DESKTOP_BREAKPOINT_MQ]: {
-              maxWidth: "628.5px",
+              maxWidth: AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH,
             },
           }}
         >
@@ -111,7 +129,7 @@ const ArAsNarrative = ({
             /* `sizes` mirrors the layout: full viewport width while the image sits in its
                own row (column-stacked), capped near the column max once it shares a row
                with the text at the desktop boundary. */
-            sizes="(max-width: 1023px) 100vw, 628px"
+            sizes={AR_NARRATIVE_IMAGE_SIZES}
             style={{ display: "block", width: "100%", height: "auto" }}
           />
         </Box>

@@ -1,11 +1,11 @@
 @media #{$desktop} {
     .st-paragraph-text {
         margin: auto;
-        width: 85%;
+        width: 100%;
         padding-top: 1rem;
         .text-paragraph {
             font-family: var(--font-poppins);
-            font-size: clamp(1rem, 1.05vw + 0.94rem, 1.3rem);
+            font-size: clamp(1rem, 1.05vw + 0.94rem, 1.5rem);
             font-weight: 400;
             color: $font-color-normal;
         }
@@ -16,11 +16,11 @@
 @media #{$tablet} {
     .st-paragraph-text {
         margin: auto;
-        width: 85%;
+        width: 100%;
         padding-top: 1rem;
         .text-paragraph {
             font-family: var(--font-poppins);
-            font-size: clamp(1rem, 1.05vw + 0.94rem, 1.3rem);
+            font-size: clamp(1rem, 1.05vw + 0.94rem, 1.5rem);
             font-weight: 400;
             color: $font-color-normal;
         }

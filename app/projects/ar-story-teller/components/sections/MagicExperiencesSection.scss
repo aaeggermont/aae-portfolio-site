@@ -8,6 +8,28 @@
    `width: …%` and `margin: auto` from `ARMobileScreen.scss`, otherwise the card auto-centers
    at a fraction of its track and the grid/flex sizing has nothing to size against. */
 
+.magic-experiences {
+    --magic-experiences-gap-mobile: 0rem;
+    --magic-experiences-gap-tablet: 0rem;
+    --magic-experiences-gap-desktop: 0rem;
+    --magic-experiences-gap: var(--magic-experiences-gap-mobile);
+
+    @media #{$tablet} {
+        --magic-experiences-gap: var(--magic-experiences-gap-tablet);
+    }
+
+    @media #{$desktop} {
+        --magic-experiences-gap: var(--magic-experiences-gap-desktop);
+    }
+
+    > * + * {
+        margin-top: var(
+            --magic-experiences-gap-self,
+            var(--magic-experiences-gap)
+        );
+    }
+}
+
 @media #{$desktop} {
     .magic-experiences__row {
         display: flex;
@@ -145,7 +167,8 @@
         display: flex;
         justify-content: flex-end;
         gap: 0.75rem;
-        margin-top: 1.25rem;
+        margin-top: 0;
+        --magic-experiences-gap-self: 1.25rem;
     }
 
     .magic-experiences__nav-button {
