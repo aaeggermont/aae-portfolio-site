@@ -1,9 +1,12 @@
-/* Magic Experiences row layout — desktop only.
+/* Magic Experiences row layout.
 
-   Tablet and mobile stay column-stacked (no flex applied), so the existing
-   `.mockup-container` widths defined in `MockupIllustration.scss` keep working
-   unchanged below `$desktop-min`. We'll iterate on smaller breakpoints in a
-   follow-up. */
+   - Desktop: single row of 4 mockups (flex).
+   - Tablet:  2 × 2 grid of mockups (grid).
+   - Mobile:  horizontal scroll-snap carousel with prev/next buttons (flex + overflow).
+
+   On every breakpoint where we apply a layout container we also have to reset the per-item
+   `width: …%` and `margin: auto` from `ARMobileScreen.scss`, otherwise the card auto-centers
+   at a fraction of its track and the grid/flex sizing has nothing to size against. */
 
 @media #{$desktop} {
     .magic-experiences__row {
@@ -17,12 +20,117 @@
         margin-right: auto;
     }
 
-    /* Override the per-item `width: 45%` from `MockupIllustration.scss` only when an
-       item is rendered inside the row wrapper. `flex: 1 1 0` makes each mockup share
-       the available space evenly. */
-    .magic-experiences__row .mockup-container {
+    /* `flex: 1 1 0` makes each mockup share the available space evenly.
+       `margin: 0` resets the base rule's `margin: auto`, which on a flex row's cross axis
+       silently overrides `align-items: flex-start` and vertically centers any card whose
+       intrinsic height is shorter than its row-mates — manifesting as one card sitting
+       a few pixels lower than the others. */
+    .magic-experiences__row .ar-mobile-screen-container {
         width: auto;
         flex: 1 1 0;
         padding-top: 0;
+        margin: 0;
+    }
+}
+
+@media #{$tablet} {
+    /* 2 × 2 grid. With four children and `repeat(2, 1fr)`, items naturally flow into a
+       second row — no JS, no JSX changes, no per-child sizing math. `align-items: start`
+       keeps every card's top edge flush with its row-mate (same fix as the desktop flex
+       branch, just expressed in grid terms). */
+    .magic-experiences__row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: start;
+        justify-items: center;
+        gap: 2rem;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .magic-experiences__row .ar-mobile-screen-container {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+@media #{$mobile} {
+    /* Horizontal scroll-snap carousel.
+
+       `overflow-x: auto` gives us free native swipe support on touch devices.
+       `scroll-snap-type: x mandatory` makes each release land on a card.
+       Scrollbar is hidden because the prev/next buttons are the canonical UI;
+       the visual peek of adjacent cards is what tells users "this scrolls". */
+    .magic-experiences__row {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        width: 100%;
+        margin: 0;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    /* Each card is a snap target. `flex: 0 0 85%` keeps the card a fixed fraction of the
+       carousel width regardless of the flex container's content; combined with
+       `scroll-snap-align: center`, the active card centers in view with a small peek of
+       its neighbors on either side — Apple's mobile pattern. */
+    .magic-experiences__row .ar-mobile-screen-container {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+        margin: 0;
+    }
+
+    /* Apple-style nav row: small round chevron buttons anchored at the right edge of
+       the section. Sits *outside* the scroll container so taps on the buttons can't be
+       eaten by an in-progress swipe gesture. */
+    .magic-experiences__nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 1.25rem;
+    }
+
+    .magic-experiences__nav-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        border-radius: 50%;
+        border: none;
+        background: rgba(16, 39, 100, 0.08);
+        color: #102764;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 200ms ease, opacity 200ms ease;
+
+        &:hover:not(:disabled),
+        &:focus-visible:not(:disabled) {
+            background: rgba(16, 39, 100, 0.14);
+        }
+
+        &:focus-visible {
+            outline: 2px solid #102764;
+            outline-offset: 2px;
+        }
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
     }
 }
