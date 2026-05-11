@@ -48,11 +48,15 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
               <CaseStudyOverviewSection data={{ caseStudy }} />
               <MagicExperiencesSection data={{ caseStudy }} />
 
-               {/*
+               
               <NotificationsSection data={{ caseStudy }} />
-            
+
+              {/* 
+             
+           
               <DesignSystemSection data={{ caseStudy }} />
-              <NextStepsSection data={{ nextSteps }} /> */}
+              <NextStepsSection data={{ nextSteps }} /> 
+               */}
             </div>
         </div>
     )

@@ -79,8 +79,14 @@
         align-content: center;
         width: 55%;
 
+        /* Title / description spacing intentionally mirrors the desktop rhythm
+           (`padding-top: 2rem` above the title, `margin-bottom: 1rem` to the description).
+           The original values (`6rem` / `3rem`) were authored when each card was a
+           full-width column on tablet; in the 2×2 grid each card is roughly the width
+           of a desktop 4-up card, so the desktop spacing reads correctly here. */
         .title {
-            padding-top: 6rem;
+            padding-top: 2rem;
+            margin-bottom: 1rem;
             text-align: center;
             font-family: var(--font-poppins);
             font-size: 1.2rem;
@@ -89,7 +95,6 @@
         }
 
         .description {
-            padding-top: 3rem;
             padding-left: 15%;
             padding-right: 15%;
             font-family: var(--font-poppins);
