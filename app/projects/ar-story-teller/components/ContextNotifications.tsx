@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
+import ProjectImage from "@/lib/media/ProjectImage";
 import { getUsableLayoutWidth } from "../layoutConfig";
 
 /* The card caps at the project's desktop usable width (`1260 − 2 × 80 = 1100px`) and
@@ -9,11 +13,8 @@ import { getUsableLayoutWidth } from "../layoutConfig";
    component looking right if it's ever rendered outside the page wrapper. */
 const CONTEXT_NOTIFICATIONS_MAX_WIDTH = getUsableLayoutWidth("desktop");
 
-/* Inline iPhone notification mockup (Figma export). Kept as a data URI so this component
-   stays self-contained and doesn't require an asset import; if we end up generating more
-   than one variant, it's worth promoting to a dedicated PNG under `Images/`. */
-const NOTIFICATION_IMAGE_SRC =
-  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbQAAAFpCAYAAAB9dZYkAAAACXBIWXMAAAsSAAALEgHS3X78AAAgAElEQVR4nO3de5BU9Z3/8c+QwGQm2TQkWJQm2bJg0C1uWJYJbQ1hK6m0m1ZrQf0xqv1VdW9q+6L9VdVZrW0n5p6qK3m0sYwG2y0hTQhA0g0m0mQmGQmCwQmA0E0mQmJm7j+e7zv3fPec+5957n3nPec+59z3nPec+59z3n3n1m2p2mQAAAPg6r6cAAABg1z5wAAAA0J0BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAA6E4BAAAAuG6m4v0f9v7r9w0AAHh3v7+fT9x8+fLly9fX18fHR0dGxsbFxcXKysrIyMjPz8/f39/////8X7eAAAgH6vV6vV6vX6vX6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vV6vX4fQAAQJ8tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLT0+AABAn+Li4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLj4wAAQJ+qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq+gAAQJ+ampqampqampqampqampqampqampqampqampqampqampqampqampqampqampqaPgAAQJ+tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2tra2trf4AAECf8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/MTAABAn9bW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1g8AAECfzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozw8AAECf4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4wAAQJ/T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PTEwAAQJ+2trYAAADg4V7S8cZ7v9f2y7l8c3mK1m8q9m9n4N1m3mYzv8l6m9q2b3y7Y5m4v1xk5b5m7c8m7h0mYvV1e7n9+8uLq7u9vJ3G8Zr8+qf6P2k8Z2M3Y0N3l8s6o9h8tYv8o9QwAAaH0o1QAAANCdAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOhOAQAAAOj+F2xP2r4m3QkAAAAASUVORK5CYII=";
+const NOTIFICATION_IMAGE_INTRINSIC_WIDTH = 434;
+const NOTIFICATION_IMAGE_INTRINSIC_HEIGHT = 361;
 
 const navigationButtons = [
   {
@@ -33,12 +34,29 @@ export interface ContextualNotificationsProps {
   /* Optional + defaulted in the component because Firestore data is loosely typed and
      the field may not be present on every document. Same pattern as `ArAsNarrative`. */
   paragraphs?: string[];
+  images?: string[];
+  alt?: string;
 }
 
 export const ContextualNotifications = ({
   title,
   paragraphs = [],
+  images = [],
+  alt = "Contextual notification example",
 }: ContextualNotificationsProps) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const currentImage = images[currentImageIndex];
+  const canGoPrevious = currentImageIndex > 0;
+  const canGoNext = currentImageIndex < images.length - 1;
+
+  const handlePrevious = () => {
+    setCurrentImageIndex((index) => Math.max(index - 1, 0));
+  };
+
+  const handleNext = () => {
+    setCurrentImageIndex((index) => Math.min(index + 1, images.length - 1));
+  };
+
   return (
     <Box
       component="section"
@@ -85,28 +103,34 @@ export const ContextualNotifications = ({
             ))}
           </Stack>
           <Stack spacing={3} alignItems="center">
-            <Box
-              component="img"
-              src={NOTIFICATION_IMAGE_SRC}
-              alt="Contextual notification example"
-              sx={{
-                width: "100%",
-                maxWidth: 434,
-                height: "auto",
-                display: "block",
-              }}
-            />
+            {currentImage ? (
+              <Box sx={{ width: "100%", maxWidth: 434 }}>
+                <ProjectImage
+                  objectPath={currentImage}
+                  alt={`${alt} ${currentImageIndex + 1}`}
+                  width={NOTIFICATION_IMAGE_INTRINSIC_WIDTH}
+                  height={NOTIFICATION_IMAGE_INTRINSIC_HEIGHT}
+                  sizes="(max-width: 767px) 100vw, 434px"
+                  style={{ display: "block", width: "100%", height: "auto" }}
+                />
+              </Box>
+            ) : null}
             <Stack
               direction="row"
               spacing={1}
               justifyContent="flex-end"
               sx={{ width: "100%" }}
             >
-              {navigationButtons.map((button, index) => (
+              {navigationButtons.map((button) => (
                 <IconButton
                   key={button.key}
                   aria-label={button.label}
-                  disabled={index === 0}
+                  disabled={
+                    button.key === "previous" ? !canGoPrevious : !canGoNext
+                  }
+                  onClick={
+                    button.key === "previous" ? handlePrevious : handleNext
+                  }
                   size="small"
                   sx={{
                     width: 30,

@@ -31,7 +31,7 @@ interface ARAsNarrativeTool {
 interface NotificationsAttrac {
     title: string;
     paragraphs: string[];
-    imageSrc: string[];
+    images: string[];
     alt: string;
 }
 
@@ -196,6 +196,8 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
                 <ContextualNotifications
                     title={notificationsAttrac.title}
                     paragraphs={notificationsAttrac.paragraphs}
+                    images={notificationsAttrac.images}
+                    alt={notificationsAttrac.alt}
                 />
             ) : null}
         </section>
