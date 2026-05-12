@@ -135,14 +135,16 @@ export const ContextualNotifications = ({
                   sx={{
                     width: 30,
                     height: 30,
-                    bgcolor: "#f1f1f3",
-                    color: "#11255f",
+                    bgcolor:
+                      button.key === "next" ? "#142257" : "#f1f1f3",
+                    color: button.key === "next" ? "#ffffff" : "#11255f",
                     "&.Mui-disabled": {
                       bgcolor: "#f1f1f3",
                       color: "rgba(17, 37, 95, 0.28)",
                     },
                     "&:hover": {
-                      bgcolor: "#e8e8ec",
+                      bgcolor:
+                        button.key === "next" ? "#1d317a" : "#e8e8ec",
                     },
                   }}
                 >
