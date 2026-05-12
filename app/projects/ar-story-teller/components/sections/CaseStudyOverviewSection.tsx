@@ -31,6 +31,7 @@ interface ARAsNarrativeTool {
 interface NotificationsAttrac {
     title: string;
     paragraphs: string[];
+    imageSrc: string[];
     alt: string;
 }
 
@@ -103,7 +104,7 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
     console.log('--------------------------------');
     console.log(caseStudy, 'caseStudy');
     console.log('--------------------------------');
-    const { overview, overviewImages, overviewImagesAlt, ARAsNarrativeTool } = caseStudy;
+    const { overview, overviewImages, overviewImagesAlt, ARAsNarrativeTool, notificationsAttrac } = caseStudy;
     console.log('--------------------------------');
     console.log(overview, 'overview');
     console.log('--------------------------------');
@@ -191,8 +192,11 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
 
             <MagicExperiencesSection data={{ caseStudy }} />
 
-            {ContextualNotifications ? (
-                <ContextualNotifications />
+            {notificationsAttrac ? (
+                <ContextualNotifications
+                    title={notificationsAttrac.title}
+                    paragraphs={notificationsAttrac.paragraphs}
+                />
             ) : null}
         </section>
     );
