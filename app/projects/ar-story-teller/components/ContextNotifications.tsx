@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
@@ -15,6 +15,7 @@ const CONTEXT_NOTIFICATIONS_MAX_WIDTH = getUsableLayoutWidth("desktop");
 
 const NOTIFICATION_IMAGE_INTRINSIC_WIDTH = 434;
 const NOTIFICATION_IMAGE_INTRINSIC_HEIGHT = 361;
+const NOTIFICATION_CAROUSEL_INTERVAL_MS = 3500;
 
 const navigationButtons = [
   {
@@ -45,16 +46,38 @@ export const ContextualNotifications = ({
   alt = "Contextual notification example",
 }: ContextualNotificationsProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasUserInteractedWithCarousel, setHasUserInteractedWithCarousel] =
+    useState(false);
   const currentImage = images[currentImageIndex];
-  const canGoPrevious = currentImageIndex > 0;
-  const canGoNext = currentImageIndex < images.length - 1;
+  const canNavigateCarousel = images.length > 1;
+
+  useEffect(() => {
+    if (currentImageIndex < images.length) return;
+    setCurrentImageIndex(0);
+  }, [currentImageIndex, images.length]);
+
+  useEffect(() => {
+    if (hasUserInteractedWithCarousel || !canNavigateCarousel) return;
+
+    const intervalId = window.setInterval(() => {
+      setCurrentImageIndex((index) => (index + 1) % images.length);
+    }, NOTIFICATION_CAROUSEL_INTERVAL_MS);
+
+    return () => window.clearInterval(intervalId);
+  }, [canNavigateCarousel, hasUserInteractedWithCarousel, images.length]);
 
   const handlePrevious = () => {
-    setCurrentImageIndex((index) => Math.max(index - 1, 0));
+    if (!canNavigateCarousel) return;
+    setHasUserInteractedWithCarousel(true);
+    setCurrentImageIndex(
+      (index) => (index - 1 + images.length) % images.length,
+    );
   };
 
   const handleNext = () => {
-    setCurrentImageIndex((index) => Math.min(index + 1, images.length - 1));
+    if (!canNavigateCarousel) return;
+    setHasUserInteractedWithCarousel(true);
+    setCurrentImageIndex((index) => (index + 1) % images.length);
   };
 
   return (
@@ -125,9 +148,7 @@ export const ContextualNotifications = ({
                 <IconButton
                   key={button.key}
                   aria-label={button.label}
-                  disabled={
-                    button.key === "previous" ? !canGoPrevious : !canGoNext
-                  }
+                  disabled={!canNavigateCarousel}
                   onClick={
                     button.key === "previous" ? handlePrevious : handleNext
                   }

@@ -72,12 +72,12 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
               <ProjectOverviewSection  />
               <CaseStudyOverviewSection data={{ caseStudy }} />
 
-              {/* 
+              
              
            
               <DesignSystemSection data={{ caseStudy }} />
               <NextStepsSection data={{ nextSteps }} /> 
-               */}
+               
             </div>
         </div>
     )
