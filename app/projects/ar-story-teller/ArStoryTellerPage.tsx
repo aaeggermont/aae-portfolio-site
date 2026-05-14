@@ -7,7 +7,7 @@ import { TeamSection } from './components/sections/TeamSection';
 import { ProjectOverviewSection } from './components/sections/ProjectOverviewSection'; 
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
 import { NotificationsSection } from './components/sections/NotificationsSection';
-import { DesignSystemSection } from './components/sections/DesignSystemSection';
+import { DesignSystemSection } from './sections/DesignSystemSection';
 import { NextStepsSection } from './components/sections/NextStepsSection';
 import { useSetAtom } from "jotai";
 import { useEffect, type CSSProperties } from "react";
