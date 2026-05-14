@@ -129,6 +129,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         <section className={styles['project-container']}>
 
             {/* Design System intro con fondo decorativo */}
+            {/*
             <div
                 style={{
                     backgroundImage: `url(${DesignSystemBackground.src})`,
@@ -158,8 +159,10 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     data-aos-anchor-placement="top-center"
                 />
             </div>
+            */}
 
             {/* User Research Journey */}
+            {/*
             <ParagraphBlock
                 subTitle1={userResearchJourney.title}
                 paragraphs={userResearchJourney.paragraphs}
@@ -175,8 +178,10 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
+            */}
 
             {/* Methods [0..2]: solo texto */}
+            {/*
             {([0, 1, 2] as const).map((i) => (
                 <ParagraphBlock
                     key={i}
@@ -189,8 +194,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     wordsLimit={i === 2 ? 22 : 43}
                 />
             ))}
-
+            */}
             {/* Method [3]: texto + bullets */}
+            {/*
             <ParagraphBlock
                 subTitle2={userResearchJourney.methods[3].title}
                 paragraphs={userResearchJourney.methods[3].paragraphs}
@@ -206,8 +212,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
-
+            */}
             {/* Method [4]: texto + bullets */}
+            {/*
             <ParagraphBlock
                 subTitle2={userResearchJourney.methods[4].title}
                 paragraphs={userResearchJourney.methods[4].paragraphs}
@@ -221,8 +228,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
-
+            */}
             {/* Method [5]: texto + imagen */}
+            {/*
             <ParagraphBlock
                 subTitle2={userResearchJourney.methods[5].title}
                 paragraphs={userResearchJourney.methods[5].paragraphs}
@@ -237,8 +245,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
-
+            */}
             {/* Developing Specs */}
+            {/*
             <ParagraphBlock
                 subTitle1={developingSpecs.title}
                 paragraphs={developingSpecs.paragraphs}
@@ -278,8 +287,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     data-aos-anchor-placement="top-center"
                 />
             </div>
-
+            */}
             {/* Scenario-Based Design */}
+            {/*
             <ParagraphBlock
                 subTitle1={scenarioBaseDesign.title}
                 paragraphs={scenarioBaseDesign.paragraphs}
@@ -301,8 +311,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             /> */}
-
+        
             {/* Wireframes */}
+            {/*
             <ParagraphBlock
                 subTitle1={wireframes.title}
                 paragraphs={[]}
@@ -347,8 +358,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
-
+            */}
             {/* Software Prototypes */}
+            {/*
             <ParagraphBlock
                 subTitle2={softwarePrototypes.title}
                 paragraphs={softwarePrototypes.paragraphs}
@@ -358,8 +370,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 showReadMore={true}
                 wordsLimit={28}
             />
-
+            */}
             {/* Usability Testing */}
+            {/*
             <ParagraphBlock
                 title={usabilityTesting.title}
                 paragraphs={usabilityTesting.paragraphs}
@@ -393,6 +406,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-duration="1000"
                 data-aos-anchor-placement="top-center"
             />
+            */}
         </section>
     );
 }
