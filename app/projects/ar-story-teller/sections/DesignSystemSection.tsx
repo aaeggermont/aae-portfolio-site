@@ -1,13 +1,14 @@
 'use client';
-import ParagraphBlock from '../ParagraphBlock';
-import ParagraphImg from '../ParagraphImg';
-import BulletPoints from '../BulletPoints';
-import IlllustrationGallery from '../IllustrationGallery';
-import IllustrationDiagram from '../IllustrationDiagram';
+import ParagraphBlock from '../components/ParagraphBlock';
+import ParagraphImg from '../components/ParagraphImg';
+import BulletPoints from '../components/BulletPoints';
+import IlllustrationGallery from '../components/IllustrationGallery';
+import IllustrationDiagram from '../components/IllustrationDiagram';
 import { StaticImageData } from 'next/image';
-import styles from '../../ArStoryTeller.module.scss';
+import styles from '../ArStoryTeller.module.scss';
+import { SectionTitle } from '../components/SectionTitle';
 
-import DesignSystemBackground from '../../Images/DesignSystemBackground.png';
+import DesignSystemBackground from '../Images/DesignSystemBackground.png';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -127,6 +128,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
 
     return (
         <section className={styles['project-container']}>
+            <SectionTitle title={designSystem.title} />
 
             {/* Design System intro con fondo decorativo */}
             {/*
