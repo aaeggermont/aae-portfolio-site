@@ -22,71 +22,38 @@ export function ParagraphImg({ alt = '', imagesSrc = [], description, title, ...
     const getImagePath = (index: number) => {
         if (typeof imagesSrc[index] === 'string') {
             return imagesSrc[index];
-        } else {
-            return imagesSrc[index]?.src;
         }
+        return imagesSrc[index]?.src;
     };
 
-    const desktopImg = getImagePath(0);
-    const tabletImg = getImagePath(1);
-    const mobileImg = getImagePath(2);
+    const objectPath =
+        screenDevice.isDesktopOrLaptop
+            ? getImagePath(0)
+            : screenDevice.isTablet
+              ? getImagePath(1)
+              : getImagePath(2);
 
-    if (screenDevice.isDesktopOrLaptop) {
-        if (!desktopImg) return null;
-        return (
-            <>
-                <div {...props} className="storyteller-paragraphimg">
-                    <ProjectImage
-                        objectPath={desktopImg}
-                        alt={alt}
-                        style={{
-                            width: '100px',
-                            height: 'auto',
-                            alignSelf: 'center',
-                            paddingTop: '3rem',
-                        }}
-                    />
-                    {/* <div className="description"><p>{description}</p></div> */}
-                </div>
-            </>
-        );
-    } else if (screenDevice.isTablet) {
-        if (!tabletImg) return null;
-        return (
-            <div {...props} className="storyteller-paragraphimg">
-                <ProjectImage
-                    objectPath={tabletImg}
-                    alt={alt}
-                    style={{
-                        width: '100px',
-                        height: 'auto',
-                        alignSelf: 'center',
-                        paddingTop: '2.5rem',
-                    }}
-                />
-                {/* <div className="description">{description}</div> */}
-            </div>
-        );
-    } else if (screenDevice.isMobile) {
-        if (!mobileImg) return null;
-        return (
-            <div {...props} className="storyteller-paragraphimg">
-                <ProjectImage
-                    objectPath={mobileImg}
-                    alt={alt}
-                    style={{
-                        width: '100px',
-                        height: 'auto',
-                        paddingTop: '3rem',
-                    }}
-                />
-                {title ? <div className="title">{title}</div> : null}
-                {/* <div className="description">{description}</div> */}
-            </div>
-        );
+    if (!objectPath) {
+        return null;
     }
 
-    return null;
+    const hasCaption = Boolean(title?.trim()) || Boolean(description?.trim());
+
+    return (
+        <div {...props} className="storyteller-paragraphimg">
+            <div className="storyteller-paragraphimg__media">
+                <ProjectImage objectPath={objectPath} alt={alt} className="storyteller-paragraphimg__image" />
+            </div>
+            {hasCaption ? (
+                <div className="storyteller-paragraphimg__labels">
+                    {title?.trim() ? <p className="storyteller-paragraphimg__title">{title.trim()}</p> : null}
+                    {description?.trim() ? (
+                        <p className="storyteller-paragraphimg__description">{description.trim()}</p>
+                    ) : null}
+                </div>
+            ) : null}
+        </div>
+    );
 }
 
 export default ParagraphImg;

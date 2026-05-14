@@ -95,6 +95,8 @@ interface DesignSystem {
     title: string;
     paragraphs: string[];
     alt: string;
+    imageTitle: string;
+    imageDescription: string;
     images: StaticImageData[];
     description: string;
     userResearchJourney: UserResearchJourney;
@@ -129,6 +131,22 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
     return (
         <section className={styles['project-container']}>
             <SectionTitle title={designSystem.title} />
+            <ParagraphBlock
+                paragraphs={designSystem.paragraphs}
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-anchor-placement="top-center"
+            />
+            <ParagraphImg
+                imagesSrc={designSystem.images}
+                alt={designSystem.alt}
+                title={designSystem.imageTitle}
+                description={designSystem.imageDescription}
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                data-aos-anchor-placement="top-center"
+                style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
+            />
 
             {/* Design System intro con fondo decorativo */}
             {/*

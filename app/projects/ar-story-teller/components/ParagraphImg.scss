@@ -1,3 +1,6 @@
+/* Caption typography: Source Sans 3. Title — 24 / 22 / 20 px; description — 24 / 22 / 18 px
+   (description steps down to paragraph-scale on mobile). */
+
 @media #{$desktop} {
     .storyteller-paragraphimg {
         margin: auto;
@@ -5,81 +8,123 @@
         flex-direction: column;
         justify-content: center;
         align-content: center;
-        width: 80%;
+        align-items: center;
+        width: 100%;
 
-        .title {
-            font-family: poppins;
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #010A24;
-            padding-top: 6rem;
-            text-align: center;
-
-        }
-
-        .description {
-
-            padding-top: 3rem;
+        &__media {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: 100%;
-            padding-right: 10%;
-            padding-left: 10%;
-
-            p {
-                text-align: center;
-            }
+            //background-color: aqua;
         }
 
+        &__image {
+            width: 100%;
+            height: auto;
+            align-self: center;
+        }
 
+        &__labels {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 80%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
 
-        .text-paragraph {
-            font-family: poppins;
-            font-size: 22px;
+        &__title {
+            margin: 0;
+            color: #03133c;
+            text-align: center;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            padding-top: 1.25rem;
+            
+        }
+
+        &__description {
+            margin: 0;
+            color: #03133c;
+            text-align: left;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 20px;
+            font-style: normal;
             font-weight: 400;
-            color: #102764;
-            background-color: green;
+            line-height: normal;
+            padding-top: 0.75rem;
+            padding-left: 10%;
+            padding-right: 10%;
         }
     }
 }
 
-
-@media  #{$tablet} {
+@media #{$tablet} {
     .storyteller-paragraphimg {
         margin: auto;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-content: center;
-        .title {
-            font-family: poppins;
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #010A24;
-            padding-top: 6rem;
-            text-align: center;
+        align-items: center;
 
+        &__media {
+            padding-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
 
-        .description {
-            text-align: center;
-            padding-top: 3rem;
-            padding-right: 15%;
-            padding-left: 15%;
+        &__image {
+            width: 100%;
+            height: auto;
+            align-self: center;
         }
 
+        &__labels {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+        }
 
+        &__title {
+            margin: 0;
+            color: #03133c;
+            text-align: center;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            padding-top: 1.25rem;
+        }
 
-        .text-paragraph {
-            font-family: poppins;
-            font-size: 22px;
+        &__description {
+            margin: 0;
+            color: #03133c;
+            text-align: center;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 19px;
+            font-style: normal;
             font-weight: 400;
-            color: #102764;
-            background-color: green;
+            line-height: normal;
+            padding-top: 0.75rem;
+            padding-left: 15%;
+            padding-right: 15%;
         }
     }
 }
 
 @media #{$mobile} {
-    .storyteller-paragraphimg  {
+    .storyteller-paragraphimg {
         margin: auto;
         padding: 0 5%;
         display: flex;
@@ -89,36 +134,48 @@
         width: 100%;
         box-sizing: border-box;
 
-        .title {
-            text-align: center;
-            font-family: poppins;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #102764;
-            padding-top: 2rem;
-            padding-bottom: 1rem;
-
+        &__media {
+            padding-top: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
         }
 
-        .description {
-            font-family: poppins;
-            font-size: 0.8rem;
-            font-weight: 400;
-            color: #102764;
-            text-align: center;
-            padding-top: 1.5rem;
-
-        }
-
-        .text-paragraph {
-            font-family: poppins;
-            font-size: 16px;
-            font-weight: 400;
-            color: #102764;
-        }
-
-        img {
+        &__image {
             width: 100%;
+            height: auto;
+        }
+
+        &__labels {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 80%;
+        }
+
+        &__title {
+            margin: 0;
+            color: #03133c;
+            text-align: center;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+            padding-top: 1rem;
+        }
+
+        &__description {
+            margin: 0;
+            color: #03133c;
+            text-align: center;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            padding-top: 0.5rem;
         }
     }
 }
