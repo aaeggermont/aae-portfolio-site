@@ -6,8 +6,10 @@ import IlllustrationGallery from '../components/IllustrationGallery';
 import IllustrationDiagram from '../components/IllustrationDiagram';
 import { StaticImageData } from 'next/image';
 import styles from '../ArStoryTeller.module.scss';
+import dsSectionStyles from './DesignSystemSection.module.scss';
 import { SectionTitle } from '../components/SectionTitle';
-
+import { SectionSubTitle } from '../components/SectionSubTitle';
+import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCarousel';
 import DesignSystemBackground from '../Images/DesignSystemBackground.png';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -23,6 +25,16 @@ interface ResearchMethod {
     bulletpoints?: BulletPointItem[];
     alt?: string;
     images?: StaticImageData[];
+}
+
+interface ResearchMethodCard {
+    title: string;
+    overview?: string[];
+    summary?: string;
+    approach?: string;
+    keyTakeaway?: string;
+    designImplications?: string;
+    keyInsights?: string[];
 }
 
 interface UserResearchJourney {
@@ -105,6 +117,7 @@ interface DesignSystem {
     wireframes: Wireframes;
     softwarePrototypes: SoftwarePrototypes;
     usabilityTesting: UsabilityTesting;
+    researchMethods?: ResearchMethodCard[];
 }
 
 interface DesignSystemSectionProps {
@@ -126,6 +139,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         wireframes,
         softwarePrototypes,
         usabilityTesting,
+        researchMethods,
     } = designSystem;
 
     return (
@@ -147,6 +161,22 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 data-aos-anchor-placement="top-center"
                 style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
             />
+
+            {/* Understanding Guest Needs — full-bleed background band */}
+            <div
+                className={dsSectionStyles.guestNeedsBleed}
+                aria-label="Understanding Guest Needs"
+            >
+                <div className={dsSectionStyles.guestNeedsBleedInner}>
+                    <SectionSubTitle title={userResearchJourney.title} />
+                    <ParagraphBlock
+                        paragraphs={userResearchJourney.paragraphs}
+                    />
+                    {researchMethods?.length ? (
+                        <UserResearchMethodsCarousel methods={researchMethods} />
+                    ) : null}
+                </div>
+            </div>
 
             {/* Design System intro con fondo decorativo */}
             {/*
