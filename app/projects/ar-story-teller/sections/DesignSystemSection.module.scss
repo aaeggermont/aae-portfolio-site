@@ -1,14 +1,20 @@
-/* Full-bleed band inside `.project-content` / `.project-container` — same breakout idea as
-   `.case-study-banner` in `CaseStudyOverviewSection.scss`: negative margins align the box
-   to the viewport edges without `100vw` (avoids scrollbar-induced horizontal overflow). */
+/* Full-bleed band: grey must span the viewport under `.project-container`. The
+   `left: 50%` + `margin-left: -50vw` + `width: 100vw` pattern anchors the strip to the
+   viewport’s left edge from a centered parent (more reliable here than `translateX(-50%)`
+   + `max-width: 100vw`, which can still leave a sliver on some layouts). */
 
 .guestNeedsBleed {
     background-color: #f5f5f7;
     /* Temporary block height — replace with content-driven min-height when the subsection fills in. */
     min-height: 800px;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
     box-sizing: border-box;
+    position: relative;
+    left: 50%;
+    margin-left: -50vw;
+    width: 100vw;
+    max-width: none;
+    /* Contain any accidental horizontal overflow from descendants (avoids body “shifting”). */
+    overflow-x: hidden;
 }
 
 @media #{$mobile} {

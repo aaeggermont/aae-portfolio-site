@@ -31,6 +31,16 @@ export interface UserResearchMethodsCarouselProps {
   methods: UserResearchMethodsCarouselItem[];
 }
 
+function readScrollStepPx(track: HTMLDivElement): number {
+  const first = track.querySelector<HTMLElement>("[data-carousel-card]");
+  if (!first) return 400;
+  const w = first.getBoundingClientRect().width;
+  const styles = getComputedStyle(track);
+  const raw = styles.columnGap || styles.gap || "0";
+  const gap = Number.parseFloat(raw) || 0;
+  return w + gap;
+}
+
 export function UserResearchMethodsCarousel({
   methods,
 }: UserResearchMethodsCarouselProps) {
@@ -42,10 +52,11 @@ export function UserResearchMethodsCarousel({
     const el = scrollRef.current;
     if (!el) return;
     const { scrollLeft, scrollWidth, clientWidth } = el;
-    setCanScrollPrev(scrollLeft > SCROLL_EDGE_EPSILON);
-    setCanScrollNext(
-      scrollLeft + clientWidth < scrollWidth - SCROLL_EDGE_EPSILON,
-    );
+    const nextPrev = scrollLeft > SCROLL_EDGE_EPSILON;
+    const nextNext =
+      scrollLeft + clientWidth < scrollWidth - SCROLL_EDGE_EPSILON;
+    setCanScrollPrev((p) => (p === nextPrev ? p : nextPrev));
+    setCanScrollNext((p) => (p === nextNext ? p : nextNext));
   }, []);
 
   useEffect(() => {
@@ -54,61 +65,41 @@ export function UserResearchMethodsCarousel({
 
   useEffect(() => {
     const el = scrollRef.current;
+    if (el) {
+      el.scrollLeft = 0;
+    }
+    updateScrollHints();
+  }, [methods.length, updateScrollHints]);
+
+  useEffect(() => {
+    const el = scrollRef.current;
     if (!el) return;
 
-    el.addEventListener("scroll", updateScrollHints, { passive: true });
-    const ro = new ResizeObserver(() => updateScrollHints());
-    ro.observe(el);
-
+    const onScroll = () => updateScrollHints();
+    el.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", updateScrollHints);
 
     return () => {
-      el.removeEventListener("scroll", updateScrollHints);
-      ro.disconnect();
+      el.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", updateScrollHints);
     };
   }, [methods.length, updateScrollHints]);
 
-  const handlePrevious = () => {
+  const scrollByStep = (direction: 1 | -1) => {
     const track = scrollRef.current;
-    if (!track || !canScrollPrev) return;
+    if (!track) return;
+    const step = readScrollStepPx(track);
+    track.scrollBy({ left: direction * step, behavior: "smooth" });
+  };
 
-    const view = track.getBoundingClientRect();
-    const cards = Array.from(
-      track.querySelectorAll<HTMLElement>("[data-carousel-card]"),
-    ).reverse();
-
-    for (const card of cards) {
-      const r = card.getBoundingClientRect();
-      if (r.left < view.left - SCROLL_EDGE_EPSILON) {
-        card.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "end",
-        });
-        return;
-      }
-    }
+  const handlePrevious = () => {
+    if (!canScrollPrev) return;
+    scrollByStep(-1);
   };
 
   const handleNext = () => {
-    const track = scrollRef.current;
-    if (!track || !canScrollNext) return;
-
-    const view = track.getBoundingClientRect();
-    const cards = track.querySelectorAll<HTMLElement>("[data-carousel-card]");
-
-    for (const card of cards) {
-      const r = card.getBoundingClientRect();
-      if (r.right > view.right + SCROLL_EDGE_EPSILON) {
-        card.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "start",
-        });
-        return;
-      }
-    }
+    if (!canScrollNext) return;
+    scrollByStep(1);
   };
 
   if (!methods.length) {
@@ -122,38 +113,51 @@ export function UserResearchMethodsCarousel({
       sx={{ width: "100%" }}
     >
       <Stack spacing={3} alignItems="stretch" sx={{ width: "100%" }}>
+        {/* Apple-style: stay in the padded column for a stable layout; only cancel the
+           inner’s right padding so the row can scroll flush to the grey band’s right edge.
+           Avoid `50vw` width math here — it was widening the document and fighting
+           ResizeObserver-driven state updates (freeze on large screens). */}
         <Box
-          ref={scrollRef}
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "nowrap",
-            gap: { xs: 2, sm: 3 },
-            overflowX: "auto",
-            overflowY: "hidden",
-            width: "100%",
-            scrollBehavior: "smooth",
-            WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "thin",
-            pb: 0.5,
+            boxSizing: "border-box",
+            minWidth: 0,
+            marginRight: "calc(-1 * var(--layout-margin))",
+            width: "calc(100% + var(--layout-margin))",
           }}
         >
-          {methods.map((method, index) => (
-            <Box
-              key={`${method.title}-${index}`}
-              data-carousel-card
-              sx={{
-                flex: "0 0 auto",
-                width: { xs: 300, sm: 360, md: 400 },
-                maxWidth: "100%",
-              }}
-            >
-              <UserResearchMethodCard
-                title={method.title}
-                summary={method.summary}
-              />
-            </Box>
-          ))}
+          <Box
+            ref={scrollRef}
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "nowrap",
+              gap: { xs: 2, sm: 3 },
+              overflowX: "auto",
+              overflowY: "hidden",
+              width: "100%",
+              scrollBehavior: "smooth",
+              WebkitOverflowScrolling: "touch",
+              scrollbarWidth: "thin",
+              pb: 0.5,
+            }}
+          >
+            {methods.map((method, index) => (
+              <Box
+                key={`${method.title}-${index}`}
+                data-carousel-card
+                sx={{
+                  flex: "0 0 auto",
+                  width: { xs: 300, sm: 360, md: 400 },
+                  maxWidth: "100%",
+                }}
+              >
+                <UserResearchMethodCard
+                  title={method.title}
+                  summary={method.summary}
+                />
+              </Box>
+            ))}
+          </Box>
         </Box>
         <Stack
           direction="row"
