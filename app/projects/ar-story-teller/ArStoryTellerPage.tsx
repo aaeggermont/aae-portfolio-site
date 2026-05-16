@@ -16,13 +16,15 @@ import { headerState } from '@/components/Header/HeaderState';
 import { DocumentData } from 'firebase-admin/firestore';
 import {
     LAYOUT_DIMENSIONS,
+    PANEL_BLOCK_PADDINGS,
     SECTION_GAPS,
     type LayoutDimensions,
+    type PanelBlockPaddings,
     type SectionGaps,
 } from './layoutConfig';
 
-export { LAYOUT_DIMENSIONS, SECTION_GAPS };
-export type { LayoutDimensions, SectionGaps };
+export { LAYOUT_DIMENSIONS, PANEL_BLOCK_PADDINGS, SECTION_GAPS };
+export type { LayoutDimensions, PanelBlockPaddings, SectionGaps };
 
 type ProjectDoc = DocumentData;
 

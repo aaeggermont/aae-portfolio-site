@@ -12,6 +12,7 @@ import {
 import ProjectImage from '@/lib/media/ProjectImage';
 import { StaticImageData } from 'next/image';
 import styles from '../../ArStoryTeller.module.scss';
+import { SectionSubTitle} from '../SectionSubTitle';
 import { LAYOUT_DIMENSIONS } from '../../layoutConfig';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -182,12 +183,19 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
             />
 
             {ARAsNarrativeTool ? (
-                <ArAsNarrative
-                    title={ARAsNarrativeTool.title}
-                    paragraphs={ARAsNarrativeTool.paragraphs}
-                    imageSrc={ARAsNarrativeTool.imageSrc}
-                    alt={ARAsNarrativeTool.alt}
-                />
+                <div>
+                    <SectionSubTitle
+                        title={ARAsNarrativeTool.title}
+                        paddingTop="2rem"
+                        paddingBottom="2rem"
+                    />
+                    <ArAsNarrative
+                        title={ARAsNarrativeTool.title}
+                        paragraphs={ARAsNarrativeTool.paragraphs}
+                        imageSrc={ARAsNarrativeTool.imageSrc}
+                        alt={ARAsNarrativeTool.alt}
+                    />
+                </div>
             ) : null}
 
             <MagicExperiencesSection data={{ caseStudy }} />

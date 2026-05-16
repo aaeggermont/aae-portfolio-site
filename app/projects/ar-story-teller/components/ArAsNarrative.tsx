@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import ProjectImage from "@/lib/media/ProjectImage";
 import {
+  PANEL_BLOCK_PADDINGS,
   LAYOUT_DIMENSIONS,
   cssLengthToPx,
   getUsableLayoutWidth,
@@ -15,12 +16,16 @@ interface ArAsNarrativeProps {
   alt: string;
 }
 
-/* Intrinsic ratio for the right-column image — used by `next/image` (via `ProjectImage`)
-   to reserve layout space and avoid first-paint shift. CSS overrides the rendered size
-   to be fluid (`width: 100%; height: auto`), so the actual displayed aspect follows the
-   loaded asset. Update if your asset is significantly off this ratio. */
-const AR_NARRATIVE_IMAGE_INTRINSIC_WIDTH = 1280;
-const AR_NARRATIVE_IMAGE_INTRINSIC_HEIGHT = 960;
+/* Intrinsic size for `next/image` — matches design ratio (454×319) so layout reserves
+   the correct aspect; CSS controls responsive display width. */
+const AR_NARRATIVE_IMAGE_INTRINSIC_WIDTH = 454;
+const AR_NARRATIVE_IMAGE_INTRINSIC_HEIGHT = 319;
+
+/** Max rendered width when stacked (tablet). Keeps proportion ≈400×281 at same ratio. */
+const AR_NARRATIVE_IMAGE_MAX_WIDTH_TABLET_PX = 400;
+/** Design-spec desktop display width. Height follows aspect (319/454 of width). */
+const AR_NARRATIVE_IMAGE_MAX_WIDTH_DESKTOP_PX = 454;
+
 const AR_NARRATIVE_DESKTOP_STACK_GAP_PX = 64;
 const AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH = `${
   (getUsableLayoutWidth("desktop") - AR_NARRATIVE_DESKTOP_STACK_GAP_PX) / 2
@@ -29,10 +34,10 @@ const AR_NARRATIVE_IMAGE_SIZES = [
   `(max-width: 767px) calc(100vw - ${
     cssLengthToPx(LAYOUT_DIMENSIONS.mobile.margin) * 2
   }px)`,
-  `(max-width: 1023px) calc(100vw - ${
+  `(max-width: 1023px) min(calc(100vw - ${
     cssLengthToPx(LAYOUT_DIMENSIONS.tablet.margin) * 2
-  }px)`,
-  AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH,
+  }px), ${AR_NARRATIVE_IMAGE_MAX_WIDTH_TABLET_PX}px)`,
+  `${AR_NARRATIVE_IMAGE_MAX_WIDTH_DESKTOP_PX}px`,
 ].join(", ");
 
 /* The "row" layout kicks in at the project's desktop boundary (1024px) rather than MUI's
@@ -40,6 +45,11 @@ const AR_NARRATIVE_IMAGE_SIZES = [
    the right-column image would otherwise crowd the title/description in that range.
    See `lib/responsive/breakpoints.ts` for the source-of-truth boundaries. */
 const DESKTOP_BREAKPOINT_MQ = "@media (min-width: 1024px)";
+
+/* Tablet-only: image stays stacked; cap width so it does not dominate between title copy.
+   Mobile uses full row width inside section padding (no extra cap). */
+const TABLET_STACKED_MQ =
+  "@media (min-width: 768px) and (max-width: 1023px)";
 
 const ArAsNarrative = ({
   title,
@@ -54,8 +64,16 @@ const ArAsNarrative = ({
         bgcolor: "#f4f5f6",
         borderRadius: { xs: 4, md: "30px" },
         overflow: "hidden",
-        px: { xs: 3, sm: 4, md: 6 },
-        py: { xs: 3, sm: 4, md: 6 },
+        px: PANEL_BLOCK_PADDINGS.x.mobile,
+        py: PANEL_BLOCK_PADDINGS.y.mobile,
+        [TABLET_STACKED_MQ]: {
+          px: PANEL_BLOCK_PADDINGS.x.tablet,
+          py: PANEL_BLOCK_PADDINGS.y.tablet,
+        },
+        [DESKTOP_BREAKPOINT_MQ]: {
+          px: PANEL_BLOCK_PADDINGS.x.desktop,
+          py: PANEL_BLOCK_PADDINGS.y.desktop,
+        },
         width: "100%",
       }}
     >
@@ -66,6 +84,7 @@ const ArAsNarrative = ({
           gap: 4,
           [DESKTOP_BREAKPOINT_MQ]: {
             flexDirection: "row",
+            alignItems: "center",
             gap: 8,
           },
         }}
@@ -80,27 +99,14 @@ const ArAsNarrative = ({
             },
           }}
         >
-          <Typography
-            component="h2"
-            sx={{
-              color: "#03133c",
-              fontWeight: 800,
-              fontSize: { xs: "1.5rem", sm: "1.5rem", md: "1.75rem" },
-              lineHeight: 1.1,
-              textAlign: "center",
-              [DESKTOP_BREAKPOINT_MQ]: {
-                textAlign: "left",
-              },
-            }}
-          >
-            {title}
-          </Typography>
           {paragraphs.map((paragraph, idx) => (
             <Typography
               key={idx}
               component="p"
               sx={{
                 color: "#002464",
+                fontFamily:
+                  'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
                 fontWeight: 500,
                 fontSize: { xs: "1.5rem", sm: "1.2rem", md: "1.5rem" },
                 lineHeight: 1.35,
@@ -115,8 +121,16 @@ const ArAsNarrative = ({
             flex: 1,
             width: "100%",
             maxWidth: "100%",
+            /* Stacked layouts: center image when narrower than the content width (tablet cap). */
+            alignSelf: "center",
+            [TABLET_STACKED_MQ]: {
+              maxWidth: AR_NARRATIVE_IMAGE_MAX_WIDTH_TABLET_PX,
+              width: `min(100%, ${AR_NARRATIVE_IMAGE_MAX_WIDTH_TABLET_PX}px)`,
+            },
             [DESKTOP_BREAKPOINT_MQ]: {
-              maxWidth: AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH,
+              maxWidth: AR_NARRATIVE_IMAGE_MAX_WIDTH_DESKTOP_PX,
+              width: "100%",
+              alignSelf: "auto",
             },
           }}
         >
@@ -126,9 +140,6 @@ const ArAsNarrative = ({
             width={AR_NARRATIVE_IMAGE_INTRINSIC_WIDTH}
             height={AR_NARRATIVE_IMAGE_INTRINSIC_HEIGHT}
             borderRadius="24px"
-            /* `sizes` mirrors the layout: full viewport width while the image sits in its
-               own row (column-stacked), capped near the column max once it shares a row
-               with the text at the desktop boundary. */
             sizes={AR_NARRATIVE_IMAGE_SIZES}
             style={{ display: "block", width: "100%", height: "auto" }}
           />

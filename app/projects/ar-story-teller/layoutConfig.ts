@@ -27,8 +27,30 @@ export const LAYOUT_DIMENSIONS = {
     desktop: { maxWidth: '1260px', margin: '80px' },
 } as const;
 
+/**
+ * Padding for inset panel blocks (rounded grey sections, narrative panels, etc.).
+ * Vertical values use the case study breakpoints (`variables.scss`): mobile (<768px),
+ * tablet (768–1023px), desktop (1024px+).
+ *
+ * Horizontal values mirror MUI spacing units **3 / 4 / 6** (24 / 32 / 48px at theme
+ * `spacing` 8px) applied with the same breakpoint bands for consistency with `py`.
+ */
+export const PANEL_BLOCK_PADDINGS = {
+    y: {
+        mobile: '56px',
+        tablet: '72px',
+        desktop: '90px',
+    },
+    x: {
+        mobile: '24px',
+        tablet: '32px',
+        desktop: '48px',
+    },
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
+export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 
 export const cssLengthToPx = (value: string): number => Number.parseFloat(value);
 
