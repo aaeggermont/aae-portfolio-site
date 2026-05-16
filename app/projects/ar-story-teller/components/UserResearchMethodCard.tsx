@@ -1,6 +1,10 @@
+"use client";
+
+import { useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, ButtonBase, Stack, Typography } from "@mui/material";
 import type { JSX } from "react";
+import ResearchMethodDialog from "./ResearchMethodDialog";
 
 export interface UserResearchMethodCardProps {
   title: string;
@@ -13,102 +17,112 @@ export function UserResearchMethodCard({
   summary,
   actionLabel = "Read insights",
 }: UserResearchMethodCardProps): JSX.Element {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const summaryText = summary?.trim() ?? "";
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        width: "100%",
-      }}
-    >
-      <Stack
-        spacing={6}
+    <>
+      <Box
         sx={{
+          display: "flex",
+          justifyContent: "center",
           width: "100%",
-          maxWidth: 400,
-          minHeight: 316,
-          bgcolor: "#fff",
-          borderRadius: "40px",
-          overflow: "hidden",
-          px: 4,
-          pt: 6,
-          pb: 4,
-          boxSizing: "border-box",
         }}
       >
-        <Typography
-          component="h3"
+        <Stack
+          spacing={6}
           sx={{
-            color: "#03133C",
-            fontFamily:
-              "var(--font-satoshi), var(--font-poppins), sans-serif",
-            fontSize: { xs: "20px", sm: "22px", md: "24px" },
-            fontStyle: "normal",
-            fontWeight: 700,
-            lineHeight: "normal",
+            width: "100%",
+            maxWidth: 400,
+            minHeight: 316,
+            bgcolor: "#fff",
+            borderRadius: "40px",
+            overflow: "hidden",
+            px: 4,
+            pt: 6,
+            pb: 4,
+            boxSizing: "border-box",
           }}
         >
-          {title}
-        </Typography>
-        <Box sx={{ flexGrow: 1 }}>
-          {summaryText ? (
-            <Typography
-              component="p"
-              sx={{
-                fontSize: { xs: "16px", sm: "16px", md: "16px" },
-                fontFamily: "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
-                lineHeight: 1.45,
-                fontWeight: 400,
-                color: "#000",
-                letterSpacing: 0,
-              }}
-            >
-              {summaryText}
-            </Typography>
-          ) : null}
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <ButtonBase
-            aria-label={actionLabel}
+          <Typography
+            component="h3"
             sx={{
-              borderRadius: 999,
+              color: "#03133C",
+              fontFamily:
+                "var(--font-satoshi), var(--font-poppins), sans-serif",
+              fontSize: { xs: "20px", sm: "22px", md: "24px" },
+              fontStyle: "normal",
+              fontWeight: 700,
+              lineHeight: "normal",
             }}
           >
-            <Stack direction="row" spacing={1.5} alignItems="center">
-              <Box
-                sx={{
-                  width: 20,
-                  height: 20,
-                  borderRadius: "50%",
-                  bgcolor: "#000",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                }}
-              >
-                <AddIcon sx={{ color: "#fff", fontSize: 16 }} />
-              </Box>
+            {title}
+          </Typography>
+          <Box sx={{ flexGrow: 1 }}>
+            {summaryText ? (
               <Typography
-                component="span"
+                component="p"
                 sx={{
                   fontSize: { xs: "16px", sm: "16px", md: "16px" },
-                  fontFamily: "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
-                  lineHeight: 1.25,
-                  fontWeight: 500,
+                  fontFamily:
+                    "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
+                  lineHeight: 1.45,
+                  fontWeight: 400,
                   color: "#000",
                   letterSpacing: 0,
                 }}
               >
-                {actionLabel}
+                {summaryText}
               </Typography>
-            </Stack>
-          </ButtonBase>
-        </Box>
-      </Stack>
-    </Box>
+            ) : null}
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <ButtonBase
+              aria-label={actionLabel}
+              onClick={() => setDialogOpen(true)}
+              sx={{
+                borderRadius: 999,
+              }}
+            >
+              <Stack direction="row" spacing={1.5} alignItems="center">
+                <Box
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: "50%",
+                    bgcolor: "#000",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <AddIcon sx={{ color: "#fff", fontSize: 16 }} />
+                </Box>
+                <Typography
+                  component="span"
+                  sx={{
+                    fontSize: { xs: "16px", sm: "16px", md: "16px" },
+                    fontFamily:
+                      "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
+                    lineHeight: 1.25,
+                    fontWeight: 500,
+                    color: "#000",
+                    letterSpacing: 0,
+                  }}
+                >
+                  {actionLabel}
+                </Typography>
+              </Stack>
+            </ButtonBase>
+          </Box>
+        </Stack>
+      </Box>
+      <ResearchMethodDialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+      />
+    </>
   );
 }
 
