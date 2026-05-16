@@ -41,11 +41,13 @@ export function UserResearchMethodCard({
         <Typography
           component="h3"
           sx={{
-            fontSize: 32,
-            lineHeight: 1.15,
+            color: "#03133C",
+            fontFamily:
+              "var(--font-satoshi), var(--font-poppins), sans-serif",
+            fontSize: { xs: "20px", sm: "22px", md: "24px" },
+            fontStyle: "normal",
             fontWeight: 700,
-            color: "#000",
-            letterSpacing: 0,
+            lineHeight: "normal",
           }}
         >
           {title}
@@ -55,7 +57,8 @@ export function UserResearchMethodCard({
             <Typography
               component="p"
               sx={{
-                fontSize: 16,
+                fontSize: { xs: "16px", sm: "16px", md: "16px" },
+                fontFamily: "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
                 lineHeight: 1.45,
                 fontWeight: 400,
                 color: "#000",
@@ -91,7 +94,8 @@ export function UserResearchMethodCard({
               <Typography
                 component="span"
                 sx={{
-                  fontSize: 16,
+                  fontSize: { xs: "16px", sm: "16px", md: "16px" },
+                  fontFamily: "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
                   lineHeight: 1.25,
                   fontWeight: 500,
                   color: "#000",

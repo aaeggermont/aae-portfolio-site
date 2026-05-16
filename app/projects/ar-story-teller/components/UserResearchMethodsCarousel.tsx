@@ -110,60 +110,69 @@ export function UserResearchMethodsCarousel({
     <Box
       role="region"
       aria-label="Research methods"
-      sx={{ width: "100%" }}
+      sx={{ width: "100%", boxSizing: "border-box" }}
     >
       <Stack spacing={3} alignItems="stretch" sx={{ width: "100%" }}>
-        {/* Apple-style: stay in the padded column for a stable layout; only cancel the
-           inner’s right padding so the row can scroll flush to the grey band’s right edge.
-           Avoid `50vw` width math here — it was widening the document and fighting
-           ResizeObserver-driven state updates (freeze on large screens). */}
+        {/* Leading gutter matches `--guest-needs-content-gutter` on `.guestNeedsCarouselStrip`
+           / `.guestNeedsBleed` (see `DesignSystemSection.module.scss`). First-card alignment
+           with the copy column can be revisited with a small layout pass if needed. */}
         <Box
+          ref={scrollRef}
           sx={{
-            boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            gap: { xs: 2, sm: 3 },
+            overflowX: "auto",
+            overflowY: "hidden",
+            width: "100%",
             minWidth: 0,
-            marginRight: "calc(-1 * var(--layout-margin))",
-            width: "calc(100% + var(--layout-margin))",
+            boxSizing: "border-box",
+            scrollBehavior: "smooth",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "thin",
+            scrollSnapType: "x proximity",
+            pb: 0.5,
           }}
         >
           <Box
-            ref={scrollRef}
+            aria-hidden
             sx={{
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "nowrap",
-              gap: { xs: 2, sm: 3 },
-              overflowX: "auto",
-              overflowY: "hidden",
-              width: "100%",
-              scrollBehavior: "smooth",
-              WebkitOverflowScrolling: "touch",
-              scrollbarWidth: "thin",
-              pb: 0.5,
+              flex: "0 0 auto",
+              flexShrink: 0,
+              width: "var(--guest-needs-content-gutter, var(--layout-margin))",
+              minWidth:
+                "var(--guest-needs-content-gutter, var(--layout-margin))",
             }}
-          >
-            {methods.map((method, index) => (
-              <Box
-                key={`${method.title}-${index}`}
-                data-carousel-card
-                sx={{
-                  flex: "0 0 auto",
-                  width: { xs: 300, sm: 360, md: 400 },
-                  maxWidth: "100%",
-                }}
-              >
-                <UserResearchMethodCard
-                  title={method.title}
-                  summary={method.summary}
-                />
-              </Box>
-            ))}
-          </Box>
+          />
+          {methods.map((method, index) => (
+            <Box
+              key={`${method.title}-${index}`}
+              data-carousel-card
+              sx={{
+                flex: "0 0 auto",
+                width: { xs: 300, sm: 360, md: 400 },
+                maxWidth: "100%",
+                scrollSnapAlign: "start",
+              }}
+            >
+              <UserResearchMethodCard
+                title={method.title}
+                summary={method.summary}
+              />
+            </Box>
+          ))}
         </Box>
         <Stack
           direction="row"
           spacing={1}
           justifyContent="flex-end"
-          sx={{ width: "100%" }}
+          sx={{
+            width: "100%",
+            boxSizing: "border-box",
+            paddingInline:
+              "var(--guest-needs-content-gutter, var(--layout-margin))",
+          }}
         >
           {navigationButtons.map((button) => (
             <IconButton

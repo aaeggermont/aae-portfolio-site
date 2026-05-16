@@ -170,12 +170,32 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 <div className={dsSectionStyles.guestNeedsBleedInner}>
                     <SectionSubTitle title={userResearchJourney.title} />
                     <ParagraphBlock
-                        paragraphs={userResearchJourney.paragraphs}
+                        paragraphs={userResearchJourney.paragraphs.slice(0, 1)}
                     />
-                    {researchMethods?.length ? (
+                     {researchMethods?.length ? (
+                    <div className={dsSectionStyles.guestNeedsCarouselStrip}>
                         <UserResearchMethodsCarousel methods={researchMethods} />
-                    ) : null}
+                    </div>
+                ) : null}
+
+                    <ParagraphBlock
+                        paragraphs={userResearchJourney.paragraphs.slice(1, 2)}
+                    />
+
+                    <ParagraphImg
+                        imagesSrc={userResearchJourney.images}
+                        alt={designSystem.alt}
+                        data-aos="fade-up"
+                        data-aos-duration="1000"
+                        data-aos-anchor-placement="top-center"
+                        style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
+                    />
                 </div>
+               
+
+               
+
+                
             </div>
 
             {/* Design System intro con fondo decorativo */}
