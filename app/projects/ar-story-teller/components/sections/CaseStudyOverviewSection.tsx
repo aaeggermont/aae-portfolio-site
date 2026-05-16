@@ -201,12 +201,20 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
             <MagicExperiencesSection data={{ caseStudy }} />
 
             {notificationsAttrac ? (
-                <ContextualNotifications
-                    title={notificationsAttrac.title}
-                    paragraphs={notificationsAttrac.paragraphs}
-                    images={notificationsAttrac.images}
-                    alt={notificationsAttrac.alt}
-                />
+                <div>
+                    <SectionSubTitle
+                        title={notificationsAttrac.title}
+                        paddingTop="2rem"
+                        paddingBottom="2rem"
+                    />
+                    <ContextualNotifications
+                        title={notificationsAttrac.title}
+                        paragraphs={notificationsAttrac.paragraphs}
+                        images={notificationsAttrac.images}
+                        alt={notificationsAttrac.alt}
+                    />
+                </div>
+               
             ) : null}
         </section>
     );

@@ -6,6 +6,7 @@ import {
   cssLengthToPx,
   getUsableLayoutWidth,
 } from "../layoutConfig";
+import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 
 interface ArAsNarrativeProps {
   title: string;
@@ -31,25 +32,20 @@ const AR_NARRATIVE_DESKTOP_COLUMN_MAX_WIDTH = `${
   (getUsableLayoutWidth("desktop") - AR_NARRATIVE_DESKTOP_STACK_GAP_PX) / 2
 }px`;
 const AR_NARRATIVE_IMAGE_SIZES = [
-  `(max-width: 767px) calc(100vw - ${
+  `(max-width: ${breakpointPx.mobileMax}px) calc(100vw - ${
     cssLengthToPx(LAYOUT_DIMENSIONS.mobile.margin) * 2
   }px)`,
-  `(max-width: 1023px) min(calc(100vw - ${
+  `(max-width: ${breakpointPx.tabletMax}px) min(calc(100vw - ${
     cssLengthToPx(LAYOUT_DIMENSIONS.tablet.margin) * 2
   }px), ${AR_NARRATIVE_IMAGE_MAX_WIDTH_TABLET_PX}px)`,
   `${AR_NARRATIVE_IMAGE_MAX_WIDTH_DESKTOP_PX}px`,
 ].join(", ");
 
-/* The "row" layout kicks in at the project's desktop boundary (1024px) rather than MUI's
-   default `md` breakpoint (900px). Tablet sizes (768–1023px) stay column-stacked because
-   the right-column image would otherwise crowd the title/description in that range.
-   See `lib/responsive/breakpoints.ts` for the source-of-truth boundaries. */
-const DESKTOP_BREAKPOINT_MQ = "@media (min-width: 1024px)";
+/* Row layout at desktop — bands from `lib/responsive/breakpoints.ts`. */
+const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 
-/* Tablet-only: image stays stacked; cap width so it does not dominate between title copy.
-   Mobile uses full row width inside section padding (no extra cap). */
-const TABLET_STACKED_MQ =
-  "@media (min-width: 768px) and (max-width: 1023px)";
+/* Tablet-only: stacked image; same band as `breakpointMediaQuery.tabletOnly`. */
+const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
 
 const ArAsNarrative = ({
   title,
