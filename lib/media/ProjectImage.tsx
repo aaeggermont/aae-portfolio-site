@@ -23,6 +23,8 @@ type ProjectImageProps = {
   /** Optional CSS `border-radius` (number → px, or any CSS string like `'1rem'`, `'50%'`).
    *  `style.borderRadius` overrides this when both are set. */
   borderRadius?: React.CSSProperties["borderRadius"];
+  /** When false, Next.js may resize remote images and honor `sizes` (requires `images.remotePatterns`). Default true preserves existing behavior. */
+  unoptimized?: boolean;
 };
 
 
@@ -37,6 +39,7 @@ export default function ProjectImage({
   priority = false,
   fullViewportLoading = false,
   borderRadius,
+  unoptimized = true,
 }: ProjectImageProps) {
   const { projectKey, visibility } = useProjectAccess();
   console.log("Project Access Context:", { projectKey, visibility });
@@ -67,7 +70,7 @@ export default function ProjectImage({
         style={mergedStyle}
         sizes={sizes}
         priority={priority}
-        unoptimized
+        unoptimized={unoptimized}
       />
     );
   }
