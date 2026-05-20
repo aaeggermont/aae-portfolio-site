@@ -2,7 +2,7 @@
 firebase.js
 firebase.ts
 .secrets/
-
+.Media_Assets/
 # dependencies
 /node_modules
 /.pnp
