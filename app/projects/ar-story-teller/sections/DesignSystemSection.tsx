@@ -10,6 +10,7 @@ import dsSectionStyles from './DesignSystemSection.module.scss';
 import { SectionTitle } from '../components/SectionTitle';
 import { SectionSubTitle } from '../components/SectionSubTitle';
 import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCarousel';
+import type { ResearchMethodCardData } from '../types/researchMethodCard';
 import DesignSystemBackground from '../Images/DesignSystemBackground.png';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -25,16 +26,6 @@ interface ResearchMethod {
     bulletpoints?: BulletPointItem[];
     alt?: string;
     images?: StaticImageData[];
-}
-
-interface ResearchMethodCard {
-    title: string;
-    overview?: string[];
-    summary?: string;
-    approach?: string;
-    keyTakeaway?: string;
-    designImplications?: string;
-    keyInsights?: string[];
 }
 
 interface UserResearchJourney {
@@ -117,7 +108,7 @@ interface DesignSystem {
     wireframes: Wireframes;
     softwarePrototypes: SoftwarePrototypes;
     usabilityTesting: UsabilityTesting;
-    researchMethods?: ResearchMethodCard[];
+    researchMethods?: ResearchMethodCardData[];
 }
 
 interface DesignSystemSectionProps {

@@ -5,20 +5,19 @@ import AddIcon from "@mui/icons-material/Add";
 import { Box, ButtonBase, Stack, Typography } from "@mui/material";
 import type { JSX } from "react";
 import ResearchMethodDialog from "./ResearchMethodDialog";
+import type { ResearchMethodCardData } from "../types/researchMethodCard";
 
 export interface UserResearchMethodCardProps {
-  title: string;
-  summary?: string;
+  method: ResearchMethodCardData;
   actionLabel?: string;
 }
 
 export function UserResearchMethodCard({
-  title,
-  summary,
+  method,
   actionLabel = "Read insights",
 }: UserResearchMethodCardProps): JSX.Element {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const summaryText = summary?.trim() ?? "";
+  const summaryText = method.summary?.trim() ?? "";
 
   return (
     <>
@@ -56,7 +55,7 @@ export function UserResearchMethodCard({
               lineHeight: "normal",
             }}
           >
-            {title}
+            {method.title}
           </Typography>
           <Box sx={{ flexGrow: 1 }}>
             {summaryText ? (
@@ -121,6 +120,7 @@ export function UserResearchMethodCard({
       <ResearchMethodDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
+        method={method}
       />
     </>
   );

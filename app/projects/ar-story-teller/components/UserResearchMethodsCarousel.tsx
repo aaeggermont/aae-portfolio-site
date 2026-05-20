@@ -5,6 +5,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, IconButton, Stack } from "@mui/material";
 import UserResearchMethodCard from "./UserResearchMethodCard";
+import type { ResearchMethodCardData } from "../types/researchMethodCard";
 
 /** Matches `ContextualNotifications` — shared prev/next control styling. */
 const navigationButtons = [
@@ -22,13 +23,8 @@ const navigationButtons = [
 
 const SCROLL_EDGE_EPSILON = 4;
 
-export interface UserResearchMethodsCarouselItem {
-  title: string;
-  summary?: string;
-}
-
 export interface UserResearchMethodsCarouselProps {
-  methods: UserResearchMethodsCarouselItem[];
+  methods: ResearchMethodCardData[];
 }
 
 function readScrollStepPx(track: HTMLDivElement): number {
@@ -156,10 +152,7 @@ export function UserResearchMethodsCarousel({
                 scrollSnapAlign: "start",
               }}
             >
-              <UserResearchMethodCard
-                title={method.title}
-                summary={method.summary}
-              />
+              <UserResearchMethodCard method={method} />
             </Box>
           ))}
         </Box>
