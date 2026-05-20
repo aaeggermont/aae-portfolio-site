@@ -12,6 +12,7 @@ import { SectionSubTitle } from '../components/SectionSubTitle';
 import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCarousel';
 import type { ResearchMethodCardData } from '../types/researchMethodCard';
 import DesignSystemBackground from '../Images/DesignSystemBackground.png';
+import {InteractionDesignPrinciples} from '../components/InteractionDesignPrinciples';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -46,10 +47,24 @@ interface SpecMethod {
     description?: string;
 }
 
+interface FeatureSpecification {
+    title: string;
+    description?: string;
+    /** Legacy seed typo — prefer `description`. */
+    desciption?: string;
+}
+
+interface FeaturesAndSpecificationsBlock {
+    title: string;
+    featuresAndSpecifications: FeatureSpecification[];
+}
+
 interface DevelopingSpecs {
     title: string;
     paragraphs: string[];
-    methods: SpecMethod[];
+    images?: { objectPath: string; alt: string }[];
+    featuresAndSpecifications?: FeaturesAndSpecificationsBlock;
+    methods?: SpecMethod[];
 }
 
 interface Storyboarding {
@@ -109,6 +124,18 @@ interface DesignSystem {
     softwarePrototypes: SoftwarePrototypes;
     usabilityTesting: UsabilityTesting;
     researchMethods?: ResearchMethodCardData[];
+}
+
+interface InteractionDesignPrinciples {
+    title: string;
+    paragraphs: string[];
+    images: { objectPath: string; alt: string; }[];
+    featuresAndSpecifications: FeaturesAndSpecifications[];
+}
+
+interface FeaturesAndSpecifications {
+    title: string;
+    description: string;
 }
 
 interface DesignSystemSectionProps {
@@ -187,6 +214,33 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                
 
                 
+            </div>
+
+            {/* Developing Specifications — full-bleed white band */}
+            <div
+                className={dsSectionStyles.developingSpecsBleed}
+                aria-label="Developing Specifications"
+            >
+                <div className={dsSectionStyles.developingSpecsBleedInner}>
+                    <SectionSubTitle title={developingSpecs.title} />
+                    <ParagraphBlock paragraphs={developingSpecs.paragraphs} />
+                    {developingSpecs.featuresAndSpecifications
+                        ?.featuresAndSpecifications?.length ? (
+
+                            
+                        <InteractionDesignPrinciples
+                            title={
+                                developingSpecs.featuresAndSpecifications.title
+                            }
+                            features={
+                                developingSpecs.featuresAndSpecifications
+                                    .featuresAndSpecifications
+                            }
+                            images={developingSpecs.images}
+                        />
+                    ) : null}
+                    
+                </div>
             </div>
 
             {/* Design System intro con fondo decorativo */}

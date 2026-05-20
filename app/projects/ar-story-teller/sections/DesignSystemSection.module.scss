@@ -1,60 +1,33 @@
-/* Full-bleed band: grey spans the viewport under `.project-container`. Breakout uses
-   `width: 100vw` + `margin-left: calc(50% - 50vw)` so the band aligns from padded parents
-   (see CSS-Tricks “full-width containers in limited width parents”). */
+/* Full-bleed bands under `.project-container`. Breakout uses `width: 100vw` +
+   `margin-left: calc(50% - 50vw)` (CSS-Tricks “full-width containers in limited width parents”). */
 
-.guestNeedsBleed {
-    background-color: #f5f5f7;
-    /* Temporary block height — replace with content-driven min-height when the subsection fills in. */
-    //min-height: 800px;
+%designSystemFullBleedBand {
     box-sizing: border-box;
     position: relative;
-    /* Full-bleed from a padded / capped parent: `50%` is half the *parent* width, `50vw`
-       half the viewport — this pulls the band flush to the viewport (see CSS-Tricks
-       “breakout”). `left: 50%; margin-left: -50vw` only lines up when the parent spans
-       the full viewport, so the carousel gutter math and the copy column could disagree. */
     width: 100vw;
     max-width: none;
     margin-left: calc(50% - 50vw);
-    /* Contain any accidental horizontal overflow from descendants (avoids body “shifting”). */
     overflow-x: hidden;
-    /* Matches `.guestNeedsBleedInner` horizontal inset; carousel uses this as a leading
-       flex spacer so the scrollport can stay full-bleed while the first card lines up with copy. */
-    --guest-needs-content-gutter: var(--layout-margin);
 }
 
-@media #{$mobile} {
-    .guestNeedsBleed {
-        /* Tighter than desktop — keeps the band proportional on short viewports */
+%designSystemFullBleedBandSpacing {
+    @media #{$mobile} {
         padding-top: 56px;
         margin-top: 56px;
     }
-}
 
-@media #{$tablet} {
-    .guestNeedsBleed {
-        /* ~80% of desktop (100px) for a similar rhythm without dominating tablet height */
+    @media #{$tablet} {
         padding-top: 80px;
         margin-top: 80px;
-        --guest-needs-content-gutter: calc(
-            (100vw - min(100vw, 1024px)) / 2 + var(--layout-margin)
-        );
     }
-}
 
-@media #{$desktop} {
-    .guestNeedsBleed {
+    @media #{$desktop} {
         padding-top: 100px;
         margin-top: 100px;
-        --guest-needs-content-gutter: calc(
-            (100vw - min(100vw, 1260px)) / 2 + var(--layout-margin)
-        );
     }
 }
 
-/* Re-aligns with `.project-content` (see `layoutConfig.ts` / `ArStoryTellerPage` inline vars):
-   same max-width + horizontal gutters so subsection content lines up with the rest of the page.
-   Vertical rhythm: gap between each direct child block (desktop 64px; tablet 48px; mobile 40px). */
-.guestNeedsBleedInner {
+%designSystemBleedInner {
     max-width: var(--layout-max-width);
     margin-left: auto;
     margin-right: auto;
@@ -65,19 +38,51 @@
     display: flex;
     flex-direction: column;
     gap: 40px;
+
+    @media #{$tablet} {
+        gap: 48px;
+    }
+
+    @media #{$desktop} {
+        gap: 64px;
+    }
+}
+
+.guestNeedsBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f5f5f7;
+    --guest-needs-content-gutter: var(--layout-margin);
 }
 
 @media #{$tablet} {
-    .guestNeedsBleedInner {
-        /* ~75% of desktop (64px) — comfortable separation without stacking too tall */
-        gap: 48px;
+    .guestNeedsBleed {
+        --guest-needs-content-gutter: calc(
+            (100vw - min(100vw, 1024px)) / 2 + var(--layout-margin)
+        );
     }
 }
 
 @media #{$desktop} {
-    .guestNeedsBleedInner {
-        gap: 64px;
+    .guestNeedsBleed {
+        --guest-needs-content-gutter: calc(
+            (100vw - min(100vw, 1260px)) / 2 + var(--layout-margin)
+        );
     }
+}
+
+.guestNeedsBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+.developingSpecsBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+}
+
+.developingSpecsBleedInner {
+    @extend %designSystemBleedInner;
 }
 
 /* Carousel strip: defines `--guest-needs-content-gutter` for the research-methods rail
