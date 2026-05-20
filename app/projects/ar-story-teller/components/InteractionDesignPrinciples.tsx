@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import ProjectImage from "@/lib/media/ProjectImage";
+import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 
 export interface FeatureSpecification {
   title: string;
@@ -53,6 +54,22 @@ const ILLUSTRATION_SECONDARY_MAX_WIDTH_PX = Math.round(411 * 0.75);
 const ILLUSTRATION_INTRINSIC_HEIGHT_PX = Math.round(320 * 0.75);
 const ILLUSTRATION_PRIMARY_CAPTION_MAX_WIDTH_PX = Math.round(409 * 0.75);
 const ILLUSTRATION_SECONDARY_CAPTION_MAX_WIDTH_PX = Math.round(383 * 0.75);
+
+/** Row layout only at project desktop (1024px+); mobile + tablet stack accordion then illustrations. */
+const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
+
+/** White illustration card — identical on mobile + tablet; desktop overrides below. */
+const STACKED_ILLUSTRATION_PAPER = {
+  borderRadius: "32px",
+  padding: 3,
+} as const;
+
+/** Vertical gap between accordion block and illustration card when stacked. */
+const STACKED_COLUMN_GAP = {
+  mobile: "32px",
+  tablet: "40px",
+  desktop: "48px",
+} as const;
 
 export const InteractionDesignPrinciples = ({
   title = "Interaction Design Principles & Specifications",
@@ -106,15 +123,32 @@ export const InteractionDesignPrinciples = ({
       >
         
       <Stack
-        direction={{ xs: "column", md: "row" }}
-        justifyContent="space-between"
-        alignItems="flex-start"
-        spacing={{ xs: 4, md: 6 }}
+        sx={{
+          flexDirection: "column",
+          alignItems: "stretch",
+          justifyContent: "flex-start",
+          gap: {
+            xs: STACKED_COLUMN_GAP.mobile,
+            sm: STACKED_COLUMN_GAP.tablet,
+          },
+          [DESKTOP_LAYOUT_MQ]: {
+            flexDirection: "row",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: STACKED_COLUMN_GAP.desktop,
+          },
+        }}
       >
-
         <Box
           component="aside"
-          sx={{ width: { xs: "100%", md: 402 }, flexShrink: 0 }}
+          sx={{
+            width: "100%",
+            flexShrink: 0,
+            [DESKTOP_LAYOUT_MQ]: {
+              width: 402,
+              maxWidth: "42%",
+            },
+          }}
         >
           <List disablePadding>
             {features.map((item, index) => {
@@ -179,7 +213,10 @@ export const InteractionDesignPrinciples = ({
                             fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
                             lineHeight: 1.4,
                             letterSpacing: 0,
-                            maxWidth: 360,
+                            maxWidth: "100%",
+                            [DESKTOP_LAYOUT_MQ]: {
+                              maxWidth: 360,
+                            },
                           }}
                         >
                           {description}
@@ -197,9 +234,19 @@ export const InteractionDesignPrinciples = ({
           elevation={0}
           sx={{
             bgcolor: "#fff",
-            borderRadius: "44px",
-            width: { xs: "100%", md: 460 },
-            p: { xs: 3, sm: 4, md: "35.46px 17.73px" },
+            width: "100%",
+            maxWidth: "498px",
+            flexShrink: 0,
+            alignSelf: "center",
+            borderRadius: STACKED_ILLUSTRATION_PAPER.borderRadius,
+            p: STACKED_ILLUSTRATION_PAPER.padding,
+            [DESKTOP_LAYOUT_MQ]: {
+              borderRadius: "44px",
+              alignSelf: "center",
+              p: "35.46px 17.73px",
+              width: 468,
+              maxWidth: "52%",
+            },
           }}
         >
           <Stack alignItems="center" spacing={3}>
@@ -216,18 +263,19 @@ export const InteractionDesignPrinciples = ({
                 alignItems="center"
                 sx={{
                   width: "100%",
-                  maxWidth: {
-                    xs: "100%",
-                    md: illustrationMaxWidthPx,
+                  maxWidth: "100%",
+                  [DESKTOP_LAYOUT_MQ]: {
+                    maxWidth: illustrationMaxWidthPx,
                   },
                 }}
               >
                 <Box
                   sx={{
                     width: "100%",
-                    maxWidth: {
-                      xs: "100%",
-                      md: illustrationMaxWidthPx,
+                    maxWidth: "100%",
+                    mx: "auto",
+                    [DESKTOP_LAYOUT_MQ]: {
+                      maxWidth: illustrationMaxWidthPx,
                     },
                   }}
                 >
@@ -237,12 +285,16 @@ export const InteractionDesignPrinciples = ({
                     width={illustrationMaxWidthPx}
                     height={ILLUSTRATION_INTRINSIC_HEIGHT_PX}
                     unoptimized={false}
-                    sizes={`(max-width: 1023px) 100vw, ${illustrationMaxWidthPx}px`}
+                    sizes={[
+                      `(max-width: ${breakpointPx.mobileMax}px) 100vw`,
+                      `(max-width: ${breakpointPx.tabletMax}px) 90vw`,
+                      `${illustrationMaxWidthPx}px`,
+                    ].join(", ")}
                     style={{
                       display: "block",
                       width: "100%",
                       height: "auto",
-                      maxWidth: illustrationMaxWidthPx,
+                      maxWidth: "100%",
                     }}
                   />
                 </Box>
@@ -254,10 +306,15 @@ export const InteractionDesignPrinciples = ({
                     fontSize: "16px",
                     lineHeight: 1.35,
                     color: "#000",
-                    maxWidth:
-                      index === 0
-                        ? ILLUSTRATION_PRIMARY_CAPTION_MAX_WIDTH_PX
-                        : ILLUSTRATION_SECONDARY_CAPTION_MAX_WIDTH_PX,
+                    maxWidth: "100%",
+                    textAlign: "center",
+                    [DESKTOP_LAYOUT_MQ]: {
+                      maxWidth:
+                        index === 0
+                          ? ILLUSTRATION_PRIMARY_CAPTION_MAX_WIDTH_PX
+                          : ILLUSTRATION_SECONDARY_CAPTION_MAX_WIDTH_PX,
+                      textAlign: "left",
+                    },
                   }}
                 >
                   {image.alt}
@@ -265,7 +322,16 @@ export const InteractionDesignPrinciples = ({
               </Stack>
             );
             })}
-            <Stack spacing={1} sx={{ width: "100%", maxWidth: 320 }}>
+            <Stack
+              spacing={1}
+              sx={{
+                width: "100%",
+                maxWidth: "100%",
+                [DESKTOP_LAYOUT_MQ]: {
+                  maxWidth: 320,
+                },
+              }}
+            >
               <Stack direction="row" spacing={2} justifyContent="space-between">
                 <Stack
                   direction="row"
