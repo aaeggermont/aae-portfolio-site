@@ -102,6 +102,10 @@ export const InteractionDesignPrinciples = ({
           lineHeight: "normal !important",
           letterSpacing: 0,
           m: 0,
+          textAlign: "center",
+          [breakpointMediaQuery.tabletUp]: {
+            textAlign: "left",
+          },
         }}
       >
         {title}

@@ -68,6 +68,10 @@ export const UserModeInteractions = ({
           fontSize: { xs: "1.9rem", md: "2rem" },
           lineHeight: 1.15,
           m: 0,
+          textAlign: "center",
+          [breakpointMediaQuery.tabletUp]: {
+            textAlign: "left",
+          },
         }}
       >
         {title}
@@ -96,18 +100,65 @@ export const UserModeInteractions = ({
                     sm: INTERACTION_MODE_IMAGE_COPY_GAP.tablet,
                   },
                   [DESKTOP_LAYOUT_MQ]: {
-                    flexDirection: imageFirst ? "row" : "row-reverse",
+                    flexDirection: "row",
+                    alignItems: "center",
                     gap: INTERACTION_MODE_IMAGE_COPY_GAP.desktop,
                   },
                 }}
               >
+                <Stack
+                  spacing={3}
+                  sx={{
+                    order: 1,
+                    flex: 1,
+                    width: "100%",
+                    maxWidth: "100%",
+                    [DESKTOP_LAYOUT_MQ]: {
+                      order: imageFirst ? 2 : 1,
+                      maxWidth: 532,
+                    },
+                  }}
+                >
+                  <Typography
+                    component="h3"
+                    sx={{
+                      color: "#000",
+                      fontFamily:
+                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
+                      fontWeight: 700,
+                      fontSize: { xs: "1.5rem", md: "1.8rem" },
+                      lineHeight: 1.25,
+                      textAlign: "center",
+                      [breakpointMediaQuery.tabletUp]: {
+                        textAlign: "left",
+                      },
+                    }}
+                  >
+                    {item.title}
+                  </Typography>
+                  <Typography
+                    component="p"
+                    sx={{
+                      color: "#000",
+                      fontFamily:
+                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
+                      fontWeight: 400,
+                      fontSize: { xs: "1rem", md: "1.125rem" },
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {item.description}
+                  </Typography>
+                </Stack>
                 <Box
                   sx={{
+                    order: 2,
                     width: "100%",
                     maxWidth: INTERACTION_MODE_IMAGE_MAX_WIDTH_PX,
                     flexShrink: 0,
                     mx: "auto",
                     [DESKTOP_LAYOUT_MQ]: {
+                      order: imageFirst ? 1 : 2,
                       mx: 0,
                     },
                   }}
@@ -130,44 +181,6 @@ export const UserModeInteractions = ({
                     }}
                   />
                 </Box>
-                <Stack
-                  spacing={3}
-                  sx={{
-                    flex: 1,
-                    width: "100%",
-                    maxWidth: "100%",
-                    [DESKTOP_LAYOUT_MQ]: {
-                      maxWidth: 532,
-                    },
-                  }}
-                >
-                  <Typography
-                    component="h3"
-                    sx={{
-                      color: "#000",
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontWeight: 700,
-                      fontSize: { xs: "1.5rem", md: "1.8rem" },
-                      lineHeight: 1.25,
-                    }}
-                  >
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    component="p"
-                    sx={{
-                      color: "#000",
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontWeight: 400,
-                      fontSize: { xs: "1rem", md: "1.125rem" },
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {item.description}
-                  </Typography>
-                </Stack>
               </Stack>
             );
           })}
