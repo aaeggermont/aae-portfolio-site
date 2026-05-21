@@ -1,9 +1,9 @@
 "use client";
 
+import AdjustIcon from "@mui/icons-material/Adjust";
+import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import polygon5 from "@mui/icons-material/Star";
-import vector8 from "@mui/icons-material/Star";
 import {
   Box,
   Collapse,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import ProjectImage from "@/lib/media/ProjectImage";
+import { PANEL_HEADER_GAP } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 
 export interface FeatureSpecification {
@@ -36,13 +37,6 @@ export interface InteractionDesignPrinciplesProps {
   features: FeatureSpecification[];
   images?: InteractionDesignImage[];
 }
-
-/** Space between the panel heading and the grey content block (matches bleed-inner rhythm). */
-const PANEL_HEADER_GAP = {
-  mobile: "40px",
-  tablet: "48px",
-  desktop: "64px",
-} as const;
 
 function featureDescription(feature: FeatureSpecification): string {
   return (feature.description ?? feature.desciption ?? "").trim();
@@ -351,11 +345,9 @@ export const InteractionDesignPrinciples = ({
                       flexShrink: 0,
                     }}
                   >
-                    <Box
-                      component="img"
-                      src={vector8}
-                      alt="Target object icon"
-                      sx={{ width: 20, height: 20, display: "block" }}
+                    <AdjustIcon
+                      aria-hidden
+                      sx={{ fontSize: 20, color: "#000" }}
                     />
                   </Box>
                   <Typography
@@ -454,11 +446,13 @@ export const InteractionDesignPrinciples = ({
                       flexShrink: 0,
                     }}
                   >
-                    <Box
-                      component="img"
-                      src={polygon5}
-                      alt="Camera point of view icon"
-                      sx={{ width: 26, height: 22, display: "block" }}
+                    <ChangeHistoryIcon
+                      aria-hidden
+                      sx={{
+                        fontSize: 26,
+                        color: "#000",
+                        transform: "rotate(180deg)",
+                      }}
                     />
                   </Box>
                   <Typography

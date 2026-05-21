@@ -28,6 +28,7 @@ export type BreakpointPx = typeof breakpointPx;
  * case-study bands must match SCSS (`variables.scss`).
  */
 export const breakpointMediaQuery = {
+  tabletUp: `@media (min-width: ${breakpointPx.tabletMin}px)`,
   tabletOnly: `@media (min-width: ${breakpointPx.tabletMin}px) and (max-width: ${breakpointPx.tabletMax}px)`,
   desktopUp: `@media (min-width: ${breakpointPx.desktopMin}px)`,
 } as const;

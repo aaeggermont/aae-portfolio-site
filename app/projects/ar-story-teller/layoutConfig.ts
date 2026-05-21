@@ -48,9 +48,28 @@ export const PANEL_BLOCK_PADDINGS = {
     },
 } as const;
 
+/**
+ * Vertical gap between a subsection heading (h1/h2) and the grey panel below it.
+ * Used by `InteractionDesignPrinciples`, `UserModeInteractions`, etc.
+ */
+export const PANEL_HEADER_GAP = {
+    mobile: '40px',
+    tablet: '48px',
+    desktop: '64px',
+} as const;
+
+/** Horizontal gap between mode image and title/description in `UserModeInteractions`. */
+export const INTERACTION_MODE_IMAGE_COPY_GAP = {
+    mobile: '24px',
+    tablet: '48px',
+    desktop: '105px',
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
+export type PanelHeaderGap = typeof PANEL_HEADER_GAP;
+export type InteractionModeImageCopyGap = typeof INTERACTION_MODE_IMAGE_COPY_GAP;
 
 export const cssLengthToPx = (value: string): number => Number.parseFloat(value);
 

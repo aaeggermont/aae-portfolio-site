@@ -13,6 +13,7 @@ import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCa
 import type { ResearchMethodCardData } from '../types/researchMethodCard';
 import DesignSystemBackground from '../Images/DesignSystemBackground.png';
 import {InteractionDesignPrinciples} from '../components/InteractionDesignPrinciples';
+import { UserModeInteractions } from '../components/UserModeInteractions';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -64,6 +65,7 @@ interface DevelopingSpecs {
     paragraphs: string[];
     images?: { objectPath: string; alt: string }[];
     featuresAndSpecifications?: FeaturesAndSpecificationsBlock;
+    interactionDesignModeSpecifications?: InteractionModeSpecs;
     methods?: SpecMethod[];
 }
 
@@ -126,6 +128,18 @@ interface DesignSystem {
     researchMethods?: ResearchMethodCardData[];
 }
 
+interface InteractionModeSpecs {
+    title: string;
+    modes: InteractionModeSpec[];
+}
+
+interface InteractionModeSpec {
+    title: string;
+    description: string;
+    image: { objectPath: string; alt: string; };
+}
+
+
 interface InteractionDesignPrinciples {
     title: string;
     paragraphs: string[];
@@ -137,6 +151,9 @@ interface FeaturesAndSpecifications {
     title: string;
     description: string;
 }
+
+
+
 
 interface DesignSystemSectionProps {
     data: {
@@ -159,6 +176,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         usabilityTesting,
         researchMethods,
     } = designSystem;
+
+    const interactionModeSpecs =
+        developingSpecs.interactionDesignModeSpecifications;
 
     return (
         <section className={styles['project-container']}>
@@ -239,7 +259,12 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             images={developingSpecs.images}
                         />
                     ) : null}
-                    
+                    {interactionModeSpecs?.modes?.length ? (
+                        <UserModeInteractions
+                            title={interactionModeSpecs.title}
+                            modes={interactionModeSpecs.modes}
+                        />
+                    ) : null}
                 </div>
             </div>
 
