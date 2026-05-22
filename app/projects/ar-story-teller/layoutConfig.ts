@@ -65,11 +65,19 @@ export const INTERACTION_MODE_IMAGE_COPY_GAP = {
     desktop: '105px',
 } as const;
 
+/** Horizontal space between main carousel slides in `Storyboard` (Embla track). */
+export const STORYBOARD_SLIDE_GAP = {
+    mobile: '16px',
+    tablet: '64px',
+    desktop: '128px',
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 export type PanelHeaderGap = typeof PANEL_HEADER_GAP;
 export type InteractionModeImageCopyGap = typeof INTERACTION_MODE_IMAGE_COPY_GAP;
+export type StoryboardSlideGap = typeof STORYBOARD_SLIDE_GAP;
 
 export const cssLengthToPx = (value: string): number => Number.parseFloat(value);
 
@@ -79,3 +87,15 @@ export const getUsableLayoutWidth = (
     const { maxWidth, margin } = LAYOUT_DIMENSIONS[breakpoint];
     return cssLengthToPx(maxWidth) - cssLengthToPx(margin) * 2;
 };
+
+/** Desktop usable content width (`1260 − 2 × 80`) — shared panel cap across case study. */
+export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth('desktop');
+
+type PanelPaddingBreakpoint = keyof PanelBlockPaddings['x'];
+
+/** Content width inside a capped panel after horizontal `PANEL_BLOCK_PADDINGS`. */
+export const getPanelInnerWidthPx = (
+    breakpoint: PanelPaddingBreakpoint,
+    panelMaxWidthPx: number = PANEL_CONTENT_MAX_WIDTH_PX,
+): number =>
+    panelMaxWidthPx - cssLengthToPx(PANEL_BLOCK_PADDINGS.x[breakpoint]) * 2;

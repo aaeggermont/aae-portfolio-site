@@ -14,6 +14,7 @@ import type { ResearchMethodCardData } from '../types/researchMethodCard';
 import DesignSystemBackground from '../Images/DesignSystemBackground.png';
 import {InteractionDesignPrinciples} from '../components/InteractionDesignPrinciples';
 import { UserModeInteractions } from '../components/UserModeInteractions';
+import { Storyboard } from '../components/Storyboard';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -67,6 +68,30 @@ interface DevelopingSpecs {
     featuresAndSpecifications?: FeaturesAndSpecificationsBlock;
     interactionDesignModeSpecifications?: InteractionModeSpecs;
     methods?: SpecMethod[];
+}
+
+/** Firestore: `envisionUseCase.storyboard.storyboardSlides[]` */
+interface StoryboardSlideInput {
+    alt: string;
+    title: string;
+    image: string;
+    description: string;
+}
+
+/** Mapped for `Storyboard` carousel (`ProjectImage` expects `objectPath` + `alt`). */
+export interface StoryboardSlide {
+    title: string;
+    description: string;
+    image: { objectPath: string; alt: string };
+}
+
+interface EnvisionUseCase {
+    title: string;
+    paragraphs?: string[];
+    storyboard?: {
+        title: string;
+        storyboardSlides: StoryboardSlideInput[];
+    };
 }
 
 interface Storyboarding {
@@ -126,6 +151,7 @@ interface DesignSystem {
     softwarePrototypes: SoftwarePrototypes;
     usabilityTesting: UsabilityTesting;
     researchMethods?: ResearchMethodCardData[];
+    envisionUseCase?: EnvisionUseCase;
 }
 
 interface InteractionModeSpecs {
@@ -138,7 +164,6 @@ interface InteractionModeSpec {
     description: string;
     image: { objectPath: string; alt: string; };
 }
-
 
 interface InteractionDesignPrinciples {
     title: string;
@@ -175,10 +200,23 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         softwarePrototypes,
         usabilityTesting,
         researchMethods,
+        envisionUseCase,
     } = designSystem;
 
     const interactionModeSpecs =
         developingSpecs.interactionDesignModeSpecifications;
+
+    const storyboard = envisionUseCase?.storyboard;
+    const storyboardSlides: StoryboardSlide[] = (
+        storyboard?.storyboardSlides ?? []
+    ).map((slide) => ({
+        title: slide.title,
+        description: slide.description,
+        image: {
+            objectPath: slide.image,
+            alt: slide.alt || slide.title,
+        },
+    }));
 
     return (
         <section className={styles['project-container']}>
@@ -264,6 +302,32 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             title={interactionModeSpecs.title}
                             modes={interactionModeSpecs.modes}
                         />
+                    ) : null}
+                </div>
+            </div>
+
+            {/* Envision the Use Case — full-bleed grey band (same as Guest Needs) */}
+            <div
+                className={dsSectionStyles.envisionUseCaseBleed}
+                aria-label="Envision the Use Case"
+            >
+                <div className={dsSectionStyles.envisionUseCaseBleedInner}>
+                    <SectionSubTitle
+                        title={envisionUseCase?.title ?? 'Envision the Use Case'}
+                    />
+                    {envisionUseCase?.paragraphs?.length ? (
+                        <ParagraphBlock paragraphs={envisionUseCase.paragraphs} />
+                    ) : null}
+                    {storyboardSlides.length > 0 ? (
+                        <div className={dsSectionStyles.envisionStoryboard}>
+                            <Storyboard
+                                title={
+                                    storyboard?.title ??
+                                    'Story Boarding the A.R. Experience'
+                                }
+                                slides={storyboardSlides}
+                            />
+                        </div>
                     ) : null}
                 </div>
             </div>

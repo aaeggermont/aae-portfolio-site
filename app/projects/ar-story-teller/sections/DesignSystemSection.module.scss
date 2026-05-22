@@ -75,6 +75,33 @@
     @extend %designSystemBleedInner;
 }
 
+.envisionUseCaseBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f5f5f7;
+}
+
+.envisionUseCaseBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+.envisionStoryboard {
+    width: 100%;
+    margin-top: 40px;
+}
+
+@media #{$tablet} {
+    .envisionStoryboard {
+        margin-top: 48px;
+    }
+}
+
+@media #{$desktop} {
+    .envisionStoryboard {
+        margin-top: 56px;
+    }
+}
+
 .developingSpecsBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
