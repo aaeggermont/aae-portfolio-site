@@ -5,7 +5,6 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box } from "@mui/material";
 import useEmblaCarousel from "embla-carousel-react";
-import AutoScroll from "embla-carousel-auto-scroll";
 import type { EmblaCarouselType } from "embla-carousel";
 import ProjectImage from "@/lib/media/ProjectImage";
 import {
@@ -18,13 +17,13 @@ import {
   LAYOUT_DIMENSIONS,
   PANEL_BLOCK_PADDINGS,
   PANEL_CONTENT_MAX_WIDTH_PX,
-  STORYBOARD_SLIDE_GAP,
+  STORYBOARD_MAIN_IMAGE_DESKTOP,
 } from "../layoutConfig";
 import type { StoryboardSlide } from "../sections/DesignSystemSection";
 import styles from "./Storyboard.module.scss";
 
-const MAIN_IMAGE_INTRINSIC_WIDTH = 960;
-const MAIN_IMAGE_INTRINSIC_HEIGHT = 540;
+const MAIN_IMAGE_INTRINSIC_WIDTH = STORYBOARD_MAIN_IMAGE_DESKTOP.maxWidthPx;
+const MAIN_IMAGE_INTRINSIC_HEIGHT = STORYBOARD_MAIN_IMAGE_DESKTOP.maxHeightPx;
 const THUMB_IMAGE_SIZE = 144;
 
 const MAIN_IMAGE_SIZES = [
@@ -36,25 +35,10 @@ const MAIN_IMAGE_SIZES = [
     cssLengthToPx(LAYOUT_DIMENSIONS.tablet.margin) * 2 +
     cssLengthToPx(PANEL_BLOCK_PADDINGS.x.tablet) * 2
   }px), ${getPanelInnerWidthPx("tablet")}px)`,
-  `${getPanelInnerWidthPx("desktop")}px`,
+  `${STORYBOARD_MAIN_IMAGE_DESKTOP.maxWidthPx}px`,
 ].join(", ");
 
-/** Max rendered height at desktop inner width (16:9), capped for viewport comfort. */
-const MAIN_IMAGE_MAX_HEIGHT_DESKTOP_PX = Math.min(
-  540,
-  Math.round((getPanelInnerWidthPx("desktop") * 9) / 16),
-);
-
 const THUMB_IMAGE_SIZES = `(max-width: ${breakpointPx.tabletMax}px) 72px, 72px`;
-
-/** Auto Scroll: continuous motion; pauses on interaction (arrows, thumbs, keyboard). */
-const AUTO_SCROLL_OPTIONS = {
-  speed: 0.65,
-  startDelay: 1200,
-  stopOnInteraction: true,
-  stopOnMouseEnter: true,
-  stopOnFocusIn: true,
-} as const;
 
 export interface StoryboardProps {
   title: string;
@@ -63,14 +47,22 @@ export interface StoryboardProps {
 
 export function Storyboard({ title, slides }: StoryboardProps) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const thumbRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [thumbsCanScrollPrev, setThumbsCanScrollPrev] = useState(false);
+  const [thumbsCanScrollNext, setThumbsCanScrollNext] = useState(false);
 
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { loop: true, align: "center", duration: 28 },
-    [AutoScroll(AUTO_SCROLL_OPTIONS)],
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: false,
+    align: "start",
+    duration: 28,
+  });
+
+  const [thumbsEmblaRef, thumbsEmblaApi] = useEmblaCarousel({
+    containScroll: "keepSnaps",
+    align: "center",
+    dragFree: false,
+  });
 
   const onSelect = useCallback((api: EmblaCarouselType | undefined) => {
     if (!api) return;
@@ -92,26 +84,56 @@ export function Storyboard({ title, slides }: StoryboardProps) {
     emblaApi?.scrollNext();
   }, [emblaApi]);
 
+  const updateThumbsNavState = useCallback((api: EmblaCarouselType | undefined) => {
+    if (!api) return;
+    setThumbsCanScrollPrev(api.canScrollPrev());
+    setThumbsCanScrollNext(api.canScrollNext());
+  }, []);
+
+  const scrollThumbsPrev = useCallback(() => {
+    thumbsEmblaApi?.scrollPrev();
+  }, [thumbsEmblaApi]);
+
+  const scrollThumbsNext = useCallback(() => {
+    thumbsEmblaApi?.scrollNext();
+  }, [thumbsEmblaApi]);
+
   useEffect(() => {
     if (!emblaApi) return;
 
-    onSelect(emblaApi);
-    setScrollSnaps(emblaApi.scrollSnapList());
-    emblaApi.on("reInit", onSelect).on("select", onSelect);
+    const snapToFirstSlide = () => {
+      emblaApi.scrollTo(0, true);
+      onSelect(emblaApi);
+      setScrollSnaps(emblaApi.scrollSnapList());
+    };
+
+    snapToFirstSlide();
+    emblaApi.on("init", snapToFirstSlide).on("reInit", snapToFirstSlide);
+    emblaApi.on("select", onSelect);
 
     return () => {
-      emblaApi.off("reInit", onSelect).off("select", onSelect);
+      emblaApi.off("init", snapToFirstSlide);
+      emblaApi.off("reInit", snapToFirstSlide);
+      emblaApi.off("select", onSelect);
     };
   }, [emblaApi, onSelect, slides.length]);
 
   useEffect(() => {
-    const thumb = thumbRefs.current[selectedIndex];
-    thumb?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
-    });
-  }, [selectedIndex]);
+    if (!thumbsEmblaApi) return;
+
+    updateThumbsNavState(thumbsEmblaApi);
+    thumbsEmblaApi.on("reInit", updateThumbsNavState).on("select", updateThumbsNavState);
+
+    return () => {
+      thumbsEmblaApi.off("reInit", updateThumbsNavState);
+      thumbsEmblaApi.off("select", updateThumbsNavState);
+    };
+  }, [thumbsEmblaApi, updateThumbsNavState, slides.length]);
+
+  useEffect(() => {
+    if (!thumbsEmblaApi) return;
+    thumbsEmblaApi.scrollTo(selectedIndex);
+  }, [selectedIndex, thumbsEmblaApi]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -164,25 +186,24 @@ export function Storyboard({ title, slides }: StoryboardProps) {
         </button>
 
         <Box
-          ref={emblaRef}
-          className={styles.embla}
+          className={styles.emblaPanel}
           sx={{
             px: PANEL_BLOCK_PADDINGS.x.mobile,
             py: PANEL_BLOCK_PADDINGS.y.mobile,
-            ["--storyboard-slide-gap" as string]: STORYBOARD_SLIDE_GAP.mobile,
             [breakpointMediaQuery.tabletUp]: {
               px: PANEL_BLOCK_PADDINGS.x.tablet,
               py: PANEL_BLOCK_PADDINGS.y.tablet,
-              ["--storyboard-slide-gap" as string]: STORYBOARD_SLIDE_GAP.tablet,
             },
             [breakpointMediaQuery.desktopUp]: {
               px: PANEL_BLOCK_PADDINGS.x.desktop,
               py: PANEL_BLOCK_PADDINGS.y.desktop,
-              ["--storyboard-slide-gap" as string]: STORYBOARD_SLIDE_GAP.desktop,
+              ["--storyboard-image-max-width" as string]: `${STORYBOARD_MAIN_IMAGE_DESKTOP.maxWidthPx}px`,
+              ["--storyboard-image-max-height" as string]: `${STORYBOARD_MAIN_IMAGE_DESKTOP.maxHeightPx}px`,
             },
           }}
         >
-          <div className={styles.embla__container}>
+          <div ref={emblaRef} className={styles.emblaViewport}>
+            <div className={styles.embla__container}>
             {slides.map((slide, index) => (
               <div
                 className={styles.embla__slide}
@@ -193,23 +214,18 @@ export function Storyboard({ title, slides }: StoryboardProps) {
               >
                 <div className={styles.slideInner}>
                   <div className={styles.slideImageFrame}>
-                    <ProjectImage
-                      objectPath={slide.image.objectPath}
-                      alt={slide.image.alt}
-                      width={MAIN_IMAGE_INTRINSIC_WIDTH}
-                      height={MAIN_IMAGE_INTRINSIC_HEIGHT}
-                      unoptimized={false}
-                      sizes={MAIN_IMAGE_SIZES}
-                      priority={index === 0}
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        height: "auto",
-                        maxWidth: "100%",
-                        maxHeight: `min(56vh, ${MAIN_IMAGE_MAX_HEIGHT_DESKTOP_PX}px)`,
-                        objectFit: "contain",
-                      }}
-                    />
+                    <div className={styles.slideImageWrap}>
+                      <ProjectImage
+                        objectPath={slide.image.objectPath}
+                        alt={slide.image.alt}
+                        width={MAIN_IMAGE_INTRINSIC_WIDTH}
+                        height={MAIN_IMAGE_INTRINSIC_HEIGHT}
+                        unoptimized
+                        sizes={MAIN_IMAGE_SIZES}
+                        priority={index === 0}
+                        className={styles.slideImage}
+                      />
+                    </div>
                   </div>
                   <div className={styles.slideCaption}>
                     <p className={styles.slideTitle}>{slide.title}</p>
@@ -218,6 +234,7 @@ export function Storyboard({ title, slides }: StoryboardProps) {
                 </div>
               </div>
             ))}
+            </div>
           </div>
         </Box>
 
@@ -232,44 +249,67 @@ export function Storyboard({ title, slides }: StoryboardProps) {
       </div>
 
       <div className={styles.thumbsRegion} aria-label="Storyboard thumbnails">
-        <div className={styles.thumbsViewport}>
-          <div className={styles.thumbsList} role="tablist">
-            {slides.map((slide, index) => {
-              const isSelected = index === selectedIndex;
+        <div className={styles.thumbsCarouselWrap}>
+          <button
+            type="button"
+            className={`${styles.thumbsNavButton} ${styles.thumbsNavButtonPrev}`}
+            aria-label="Scroll thumbnails back"
+            onClick={scrollThumbsPrev}
+            disabled={!thumbsCanScrollPrev}
+          >
+            <ArrowBackIosNewIcon sx={{ fontSize: 16 }} aria-hidden />
+          </button>
 
-              return (
-                <button
-                  key={`thumb-${slide.image.objectPath}-${index}`}
-                  ref={(el) => {
-                    thumbRefs.current[index] = el;
-                  }}
-                  type="button"
-                  role="tab"
-                  aria-selected={isSelected}
-                  aria-label={`Go to slide ${index + 1}: ${slide.title}`}
-                  className={`${styles.thumbButton} ${
-                    isSelected ? styles.thumbButtonSelected : ""
-                  }`}
-                  onClick={() => scrollTo(index)}
-                >
-                  <ProjectImage
-                    objectPath={slide.image.objectPath}
-                    alt=""
-                    width={THUMB_IMAGE_SIZE}
-                    height={THUMB_IMAGE_SIZE}
-                    unoptimized={false}
-                    sizes={THUMB_IMAGE_SIZES}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      height: "auto",
-                    }}
-                    className={styles.thumbImage}
-                  />
-                </button>
-              );
-            })}
+          <div ref={thumbsEmblaRef} className={styles.thumbsEmbla}>
+            <div className={styles.thumbsEmbla__container} role="tablist">
+              {slides.map((slide, index) => {
+                const isSelected = index === selectedIndex;
+
+                return (
+                  <div
+                    key={`thumb-${slide.image.objectPath}-${index}`}
+                    className={styles.thumbsEmbla__slide}
+                  >
+                    <button
+                      type="button"
+                      role="tab"
+                      aria-selected={isSelected}
+                      aria-label={`Go to slide ${index + 1}: ${slide.title}`}
+                      className={`${styles.thumbButton} ${
+                        isSelected ? styles.thumbButtonSelected : ""
+                      }`}
+                      onClick={() => scrollTo(index)}
+                    >
+                      <ProjectImage
+                        objectPath={slide.image.objectPath}
+                        alt=""
+                        width={THUMB_IMAGE_SIZE}
+                        height={THUMB_IMAGE_SIZE}
+                        unoptimized={false}
+                        sizes={THUMB_IMAGE_SIZES}
+                        style={{
+                          display: "block",
+                          width: "100%",
+                          height: "auto",
+                        }}
+                        className={styles.thumbImage}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
+
+          <button
+            type="button"
+            className={`${styles.thumbsNavButton} ${styles.thumbsNavButtonNext}`}
+            aria-label="Scroll thumbnails forward"
+            onClick={scrollThumbsNext}
+            disabled={!thumbsCanScrollNext}
+          >
+            <ArrowForwardIosIcon sx={{ fontSize: 16 }} aria-hidden />
+          </button>
         </div>
         <p className={styles.srOnly} aria-live="polite">
           Slide {selectedIndex + 1} of {slideCount}: {slides[selectedIndex]?.title}

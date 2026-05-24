@@ -72,6 +72,12 @@ export const STORYBOARD_SLIDE_GAP = {
     desktop: '128px',
 } as const;
 
+/** Main storyboard slide image bounds at desktop (1024px+). */
+export const STORYBOARD_MAIN_IMAGE_DESKTOP = {
+    maxWidthPx: 600,
+    maxHeightPx: 418,
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
