@@ -1,3 +1,29 @@
+/* SubTitle1/2 via ParagraphBlock: mobile centered, tablet+ left-aligned */
+.paragraph-block__subtitle {
+    .st-subtitle1-container .subtitle-paragraph,
+    .st-subtitle2-container .subtitle-paragraph {
+        text-align: center;
+    }
+}
+
+@media #{$tablet} {
+    .paragraph-block__subtitle {
+        .st-subtitle1-container .subtitle-paragraph,
+        .st-subtitle2-container .subtitle-paragraph {
+            text-align: left;
+        }
+    }
+}
+
+@media #{$desktop} {
+    .paragraph-block__subtitle {
+        .st-subtitle1-container .subtitle-paragraph,
+        .st-subtitle2-container .subtitle-paragraph {
+            text-align: left;
+        }
+    }
+}
+
 @media #{$desktop} {
     .st-paragraph-block {
         margin: auto;

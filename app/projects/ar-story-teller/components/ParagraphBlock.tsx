@@ -4,8 +4,8 @@ import TitleParagraph from './TitleParagraph';
 import ParagraphText from './ParagraphText';
 import SubTitle1 from './SubTitle1';
 import SubTitle2 from './SubTitle2';
-import './ParagraphBlock.scss';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
+import './ParagraphBlock.scss';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -91,8 +91,16 @@ export function ParagraphBlock({
     return (
         <div {...props}>
             {title === undefined ? null : <TitleParagraph title={title} />}
-            {subTitle1 === undefined ? null : <SubTitle1 subTitle={subTitle1} />}
-            {subTitle2 === undefined ? null : <SubTitle2 subTitle={subTitle2} />}
+            {subTitle1 === undefined ? null : (
+                <div className="paragraph-block__subtitle">
+                    <SubTitle1 subTitle={subTitle1} />
+                </div>
+            )}
+            {subTitle2 === undefined ? null : (
+                <div className="paragraph-block__subtitle">
+                    <SubTitle2 subTitle={subTitle2} />
+                </div>
+            )}
             {paragraphsRender}
             <div className={screenDevice.isMobile ? 'storyteller-xsxm-paragraph-block' : 'st-paragraph-block'}>
                 {showReadMore ? (
