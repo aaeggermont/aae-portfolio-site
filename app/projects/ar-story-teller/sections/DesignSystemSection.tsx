@@ -110,6 +110,8 @@ interface ScenarioBaseDesign {
 interface PrototypingImage {
     objectPath: string;
     alt: string;
+    annotation?: string;
+    annotationInstruction?: string;
 }
 
 interface PrototypingMethod {
@@ -214,6 +216,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         developingSpecs.interactionDesignModeSpecifications;
 
     const prototypingMethod0 = prototyping?.methods?.[0];
+    const prototypingMethod1 = prototyping?.methods?.[1];
 
     const storyboard = envisionUseCase?.storyboard;
     const storyboardSlides: StoryboardSlide[] = (
@@ -369,6 +372,15 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                                 secondaryImage={
                                     prototypingMethod0.images?.[1]
                                 }
+                            />
+                        </>
+                    ) : null}
+                    {prototypingMethod1 ? (
+                        <>
+                            <ParagraphBlock subTitle2={prototypingMethod1.title} />
+                            <PrototypingMethodPanel
+                                paragraphs={prototypingMethod1.paragraphs}
+                                copyImage={prototypingMethod1.images?.[0]}
                             />
                         </>
                     ) : null}

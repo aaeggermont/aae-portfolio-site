@@ -1,9 +1,11 @@
 "use client";
 
-import { Box, Stack } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import type { ReactNode } from "react";
+import ParagraphBlock from "./ParagraphBlock";
 import ProjectImage from "@/lib/media/ProjectImage";
-import { breakpointPx } from "@/lib/responsive/breakpoints";
+import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
+import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 import {
   cssLengthToPx,
   getPanelInnerWidthPx,
@@ -36,6 +38,8 @@ const PANEL_IMAGE_DISPLAY_STYLE = {
 export interface PrototypingPanelImage {
   objectPath: string;
   alt: string;
+  annotation?: string;
+  annotationInstruction?: string;
 }
 
 /** Grey inset panel — matches `UserModeInteractions` content container (1100px cap). */
@@ -50,6 +54,39 @@ const GREY_PANEL_SURFACE_SX = {
 /** Spatial interaction diagram — landscape intrinsic ratio for layout reserve. */
 const SPATIAL_IMAGE_INTRINSIC_WIDTH = 960;
 const SPATIAL_IMAGE_INTRINSIC_HEIGHT = 540;
+
+/** Wire-flow diagram — landscape intrinsic ratio for layout reserve. */
+const WIREFLOW_IMAGE_INTRINSIC_WIDTH = 900;
+const WIREFLOW_IMAGE_INTRINSIC_HEIGHT = 560;
+
+const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
+
+const IMAGE_ANNOTATION_SX = {
+  fontFamily:
+    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
+  fontWeight: 400,
+  color: "#000",
+  lineHeight: 1.35,
+  textAlign: "center",
+  width: "100%",
+  m: 0,
+} as const;
+
+/** Matches `InteractionDesignPrinciples` stacked / row column gap. */
+const SPLIT_COLUMN_GAP = {
+  mobile: "32px",
+  tablet: "40px",
+  desktop: "48px",
+} as const;
+
+const WIREFLOW_LIGHTBOX_ID = "ar-story-teller-wireflow";
+
+const WIREFLOW_INLINE_IMAGE_STYLE = {
+  display: "block",
+  width: `${PANEL_IMAGE_DISPLAY_SCALE * 100}%`,
+  height: "auto",
+  maxWidth: `${PANEL_IMAGE_DISPLAY_SCALE * 100}%`,
+} as const;
 
 function PanelImageFigure({
   image,
@@ -81,8 +118,113 @@ function PanelImageFigure({
   );
 }
 
+function CopyImageSplitLayout({
+  paragraphs,
+  image,
+}: {
+  paragraphs?: string[];
+  image?: PrototypingPanelImage;
+}) {
+  return (
+    <Stack
+      sx={{
+        flexDirection: "column",
+        alignItems: "stretch",
+        gap: {
+          xs: SPLIT_COLUMN_GAP.mobile,
+          sm: SPLIT_COLUMN_GAP.tablet,
+        },
+        [DESKTOP_LAYOUT_MQ]: {
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: SPLIT_COLUMN_GAP.desktop,
+        },
+      }}
+    >
+      {paragraphs?.length ? (
+        <Box
+          sx={{
+            width: "100%",
+            flexShrink: 0,
+            [DESKTOP_LAYOUT_MQ]: {
+              width: 402,
+              maxWidth: "42%",
+            },
+          }}
+        >
+          <ParagraphBlock paragraphs={paragraphs} />
+        </Box>
+      ) : null}
+      {image ? (
+        <Paper
+          component="section"
+          elevation={0}
+          aria-label={image.alt}
+          sx={{
+            bgcolor: "#fff",
+            width: "100%",
+            maxWidth: 498,
+            flexShrink: 0,
+            alignSelf: "center",
+            borderRadius: { xs: 4, md: "44px" },
+            p: { xs: 3, sm: 4, md: "35px 18px" },
+            [DESKTOP_LAYOUT_MQ]: {
+              width: 468,
+              maxWidth: "52%",
+              alignSelf: "center",
+            },
+          }}
+        >
+          <Stack alignItems="center" spacing={2} sx={{ width: "100%" }}>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <ProjectImageLightbox
+                objectPath={image.objectPath}
+                alt={image.alt}
+                lightboxId={WIREFLOW_LIGHTBOX_ID}
+                width={WIREFLOW_IMAGE_INTRINSIC_WIDTH}
+                height={WIREFLOW_IMAGE_INTRINSIC_HEIGHT}
+                style={WIREFLOW_INLINE_IMAGE_STYLE}
+              />
+            </Box>
+            {image.annotation || image.annotationInstruction ? (
+              <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
+                {image.annotation ? (
+                  <Typography
+                    component="p"
+                    sx={{ ...IMAGE_ANNOTATION_SX, fontSize: "1rem" }}
+                  >
+                    {image.annotation}
+                  </Typography>
+                ) : null}
+                {image.annotationInstruction ? (
+                  <Typography
+                    component="p"
+                    sx={{ ...IMAGE_ANNOTATION_SX, fontSize: "0.875rem" }}
+                  >
+                    {image.annotationInstruction}
+                  </Typography>
+                ) : null}
+              </Stack>
+            ) : null}
+          </Stack>
+        </Paper>
+      ) : null}
+    </Stack>
+  );
+}
+
 export interface PrototypingMethodPanelProps {
   children?: ReactNode;
+  /** Copy left / image right (Wire-Flow panel). */
+  paragraphs?: string[];
+  copyImage?: PrototypingPanelImage;
   /** First image in the panel (e.g. mobile wireframe). */
   primaryImage?: PrototypingPanelImage;
   /** Second image, stacked below the primary (e.g. spatial interaction model). */
@@ -91,10 +233,13 @@ export interface PrototypingMethodPanelProps {
 
 export function PrototypingMethodPanel({
   children,
+  paragraphs,
+  copyImage,
   primaryImage,
   secondaryImage,
 }: PrototypingMethodPanelProps) {
-  const hasPanelImages = Boolean(primaryImage || secondaryImage);
+  const hasCopyImageSplit = Boolean(paragraphs?.length || copyImage);
+  const hasStackedImages = Boolean(primaryImage || secondaryImage);
 
   return (
     <Stack
@@ -106,10 +251,16 @@ export function PrototypingMethodPanel({
       }}
     >
       <Box sx={GREY_PANEL_SURFACE_SX}>
-        {hasPanelImages ? (
+        {hasCopyImageSplit ? (
+          <CopyImageSplitLayout paragraphs={paragraphs} image={copyImage} />
+        ) : null}
+        {hasStackedImages ? (
           <Stack
             spacing={{ xs: 3, sm: 4, md: 5 }}
-            sx={{ mb: children ? { xs: 3, sm: 4, md: 5 } : 0 }}
+            sx={{
+              mb: children ? { xs: 3, sm: 4, md: 5 } : 0,
+              mt: hasCopyImageSplit ? { xs: 3, sm: 4, md: 5 } : 0,
+            }}
           >
             {primaryImage ? (
               <PanelImageFigure
