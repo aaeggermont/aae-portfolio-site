@@ -217,6 +217,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
 
     const prototypingMethod0 = prototyping?.methods?.[0];
     const prototypingMethod1 = prototyping?.methods?.[1];
+    const prototypingMethod2 = prototyping?.methods?.[2];
 
     const storyboard = envisionUseCase?.storyboard;
     const storyboardSlides: StoryboardSlide[] = (
@@ -383,6 +384,15 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod1.paragraphs}
                                 copyImage={prototypingMethod1.images?.[0]}
+                            />
+                        </>
+                    ) : null}
+                    {prototypingMethod2 ? (
+                        <>
+                            <SectionSubTitle title={prototypingMethod2.title} />
+                            <PrototypingMethodPanel
+                                paragraphs={prototypingMethod2.paragraphs}
+                                carouselImages={prototypingMethod2.images}
                             />
                         </>
                     ) : null}

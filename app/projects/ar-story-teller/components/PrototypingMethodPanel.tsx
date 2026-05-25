@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import ParagraphBlock from "./ParagraphBlock";
 import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
+import { PrototypingImageCarousel } from "./PrototypingImageCarousel";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 import {
   cssLengthToPx,
@@ -79,6 +80,10 @@ const SPLIT_COLUMN_GAP = {
   desktop: "48px",
 } as const;
 
+/** Software Prototypes copy / carousel split (desktop). */
+const CAROUSEL_SPLIT_COPY_WIDTH = `calc((100% - ${SPLIT_COLUMN_GAP.desktop}) * 0.65)`;
+const CAROUSEL_SPLIT_MEDIA_WIDTH = `calc((100% - ${SPLIT_COLUMN_GAP.desktop}) * 0.35)`;
+
 const WIREFLOW_LIGHTBOX_ID = "ar-story-teller-wireflow";
 
 const WIREFLOW_INLINE_IMAGE_STYLE = {
@@ -121,10 +126,15 @@ function PanelImageFigure({
 function CopyImageSplitLayout({
   paragraphs,
   image,
+  carouselImages,
 }: {
   paragraphs?: string[];
   image?: PrototypingPanelImage;
+  carouselImages?: PrototypingPanelImage[];
 }) {
+  const hasCarousel = Boolean(carouselImages?.length);
+  const hasRightColumn = Boolean(image || hasCarousel);
+
   return (
     <Stack
       sx={{
@@ -137,7 +147,7 @@ function CopyImageSplitLayout({
         [DESKTOP_LAYOUT_MQ]: {
           flexDirection: "row",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: hasCarousel ? "flex-start" : "space-between",
           gap: SPLIT_COLUMN_GAP.desktop,
         },
       }}
@@ -147,13 +157,44 @@ function CopyImageSplitLayout({
           sx={{
             width: "100%",
             flexShrink: 0,
-            [DESKTOP_LAYOUT_MQ]: {
-              width: 402,
-              maxWidth: "42%",
-            },
+            [DESKTOP_LAYOUT_MQ]: hasCarousel
+              ? {
+                  flex: `0 0 ${CAROUSEL_SPLIT_COPY_WIDTH}`,
+                  width: CAROUSEL_SPLIT_COPY_WIDTH,
+                  maxWidth: CAROUSEL_SPLIT_COPY_WIDTH,
+                  minWidth: 0,
+                }
+              : hasRightColumn
+                ? {
+                    width: 402,
+                    maxWidth: "42%",
+                  }
+                : {
+                    width: "100%",
+                    maxWidth: "100%",
+                  },
           }}
         >
           <ParagraphBlock paragraphs={paragraphs} />
+        </Box>
+      ) : null}
+      {hasCarousel && carouselImages ? (
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: 498,
+            flexShrink: 0,
+            alignSelf: "center",
+            [DESKTOP_LAYOUT_MQ]: {
+              flex: `0 0 ${CAROUSEL_SPLIT_MEDIA_WIDTH}`,
+              width: CAROUSEL_SPLIT_MEDIA_WIDTH,
+              maxWidth: CAROUSEL_SPLIT_MEDIA_WIDTH,
+              minWidth: 0,
+              alignSelf: "center",
+            },
+          }}
+        >
+          <PrototypingImageCarousel images={carouselImages} />
         </Box>
       ) : null}
       {image ? (
@@ -225,6 +266,8 @@ export interface PrototypingMethodPanelProps {
   /** Copy left / image right (Wire-Flow panel). */
   paragraphs?: string[];
   copyImage?: PrototypingPanelImage;
+  /** Copy left / carousel right (Software Prototypes panel). */
+  carouselImages?: PrototypingPanelImage[];
   /** First image in the panel (e.g. mobile wireframe). */
   primaryImage?: PrototypingPanelImage;
   /** Second image, stacked below the primary (e.g. spatial interaction model). */
@@ -235,10 +278,13 @@ export function PrototypingMethodPanel({
   children,
   paragraphs,
   copyImage,
+  carouselImages,
   primaryImage,
   secondaryImage,
 }: PrototypingMethodPanelProps) {
-  const hasCopyImageSplit = Boolean(paragraphs?.length || copyImage);
+  const hasCopyImageSplit = Boolean(
+    paragraphs?.length || copyImage || carouselImages?.length,
+  );
   const hasStackedImages = Boolean(primaryImage || secondaryImage);
 
   return (
@@ -252,7 +298,11 @@ export function PrototypingMethodPanel({
     >
       <Box sx={GREY_PANEL_SURFACE_SX}>
         {hasCopyImageSplit ? (
-          <CopyImageSplitLayout paragraphs={paragraphs} image={copyImage} />
+          <CopyImageSplitLayout
+            paragraphs={paragraphs}
+            image={copyImage}
+            carouselImages={carouselImages}
+          />
         ) : null}
         {hasStackedImages ? (
           <Stack
