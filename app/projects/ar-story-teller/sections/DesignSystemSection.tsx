@@ -15,6 +15,7 @@ import DesignSystemBackground from '../Images/DesignSystemBackground.png';
 import {InteractionDesignPrinciples} from '../components/InteractionDesignPrinciples';
 import { UserModeInteractions } from '../components/UserModeInteractions';
 import { Storyboard } from '../components/Storyboard';
+import { PrototypingMethodPanel } from '../components/PrototypingMethodPanel';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -106,17 +107,23 @@ interface ScenarioBaseDesign {
     alt: string;
 }
 
-interface WireframeMethod {
+interface PrototypingImage {
+    objectPath: string;
+    alt: string;
+}
+
+interface PrototypingMethod {
     title: string;
     alt: string;
     paragraphs?: string[];
-    description?: string;
-    images: StaticImageData[];
+    images: PrototypingImage[];
 }
 
-interface Wireframes {
+/** Firestore: `designSystem.prototyping` (see seed). */
+interface Prototyping {
     title: string;
-    methods: WireframeMethod[];
+    paragraphs?: string[];
+    methods?: PrototypingMethod[];
 }
 
 interface SoftwarePrototypes {
@@ -147,7 +154,7 @@ interface DesignSystem {
     userResearchJourney: UserResearchJourney;
     developingSpecs: DevelopingSpecs;
     scenarioBaseDesign: ScenarioBaseDesign;
-    wireframes: Wireframes;
+    prototyping?: Prototyping;
     softwarePrototypes: SoftwarePrototypes;
     usabilityTesting: UsabilityTesting;
     researchMethods?: ResearchMethodCardData[];
@@ -196,7 +203,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         userResearchJourney,
         developingSpecs,
         scenarioBaseDesign,
-        wireframes,
+        prototyping,
         softwarePrototypes,
         usabilityTesting,
         researchMethods,
@@ -205,6 +212,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
 
     const interactionModeSpecs =
         developingSpecs.interactionDesignModeSpecifications;
+
+    const prototypingMethod0 = prototyping?.methods?.[0];
 
     const storyboard = envisionUseCase?.storyboard;
     const storyboardSlides: StoryboardSlide[] = (
@@ -328,6 +337,40 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                                 slides={storyboardSlides}
                             />
                         </div>
+                    ) : null}
+                </div>
+            </div>
+
+            {/* Prototyping — full-bleed white band (`designSystem.prototyping`) */}
+            <div
+                className={dsSectionStyles.prototypingBleed}
+                aria-label="Wireframe and Software Prototypes"
+            >
+                <div className={dsSectionStyles.prototypingBleedInner}>
+                    <SectionSubTitle
+                        title={
+                            prototyping?.title ??
+                            'Wireframe & Software Prototypes'
+                        }
+                    />
+                    {prototyping?.paragraphs?.length ? (
+                        <ParagraphBlock paragraphs={prototyping.paragraphs} />
+                    ) : null}
+                    {prototypingMethod0 ? (
+                        <>
+                            <ParagraphBlock
+                                subTitle2={prototypingMethod0.title}
+                                paragraphs={prototypingMethod0.paragraphs}
+                            />
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototypingMethod0.images?.[0]
+                                }
+                                secondaryImage={
+                                    prototypingMethod0.images?.[1]
+                                }
+                            />
+                        </>
                     ) : null}
                 </div>
             </div>

@@ -113,6 +113,17 @@
     @extend %designSystemBleedInner;
 }
 
+/* Wireframing & Prototyping — full-bleed white band (after Envision / storyboard). */
+.prototypingBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+}
+
+.prototypingBleedInner {
+    @extend %designSystemBleedInner;
+}
+
 /* Carousel strip: defines `--guest-needs-content-gutter` for the research-methods rail
    (leading spacer + nav padding in `UserResearchMethodsCarousel`). */
 .guestNeedsCarouselStrip {
