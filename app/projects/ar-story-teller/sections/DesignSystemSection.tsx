@@ -361,10 +361,12 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                     {prototypingMethod0 ? (
                         <>
-                            <ParagraphBlock
-                                subTitle2={prototypingMethod0.title}
-                                paragraphs={prototypingMethod0.paragraphs}
-                            />
+                            <SectionSubTitle title={prototypingMethod0.title} />
+                            {prototypingMethod0.paragraphs?.length ? (
+                                <ParagraphBlock
+                                    paragraphs={prototypingMethod0.paragraphs}
+                                />
+                            ) : null}
                             <PrototypingMethodPanel
                                 primaryImage={
                                     prototypingMethod0.images?.[0]
@@ -377,7 +379,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                     {prototypingMethod1 ? (
                         <>
-                            <ParagraphBlock subTitle2={prototypingMethod1.title} />
+                            <SectionSubTitle title={prototypingMethod1.title} />
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod1.paragraphs}
                                 copyImage={prototypingMethod1.images?.[0]}
