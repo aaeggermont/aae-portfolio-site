@@ -1,52 +1,122 @@
-// app/(public)/ar-story-teller/page.tsx
 "use client";
 
-import { useEffect, useState } from 'react';
-import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
-import ProjectImage from "@/lib/media/ProjectImage";
-import fsReference from '../../../../firebase';
-import { getDoc, doc, DocumentData } from "firebase/firestore";
+import { useCallback, useEffect, useRef, useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { doc, getDoc, type DocumentData } from "firebase/firestore";
+
 import { ArStoryTellerPage } from "@/app/projects/ar-story-teller/ArStoryTellerPage";
+import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
+import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
+import { useProjectAccess } from "@/lib/access/ProjectAccessContext";
+import { preloadArStoryTellerHeroAssets } from "@/app/projects/ar-story-teller/lib/preloadArStoryTellerAssets";
+import type { ViewportBand } from "@/app/projects/ar-story-teller/lib/projectHeaderPreloadUrls";
+import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
+import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
+import fsReference from "@/firebase";
 
 type ProjectDoc = DocumentData;
 
-export default function ARStoryTellerRoute() {
+const FIRESTORE_DOC_ID = "project_1";
+
+function resolveViewportBand(
+  isMobile: boolean,
+  isTablet: boolean,
+  isDesktopOrLaptop: boolean,
+): ViewportBand {
+  if (isMobile) return "mobile";
+  if (isTablet) return "tablet";
+  if (isDesktopOrLaptop) return "desktop";
+  return "desktop";
+}
+
+function ArStoryTellerRouteContent() {
+  const { projectKey, visibility } = useProjectAccess();
+  const { isMobile, isTablet, isDesktopOrLaptop } = useResponsive();
+  const viewportBand = resolveViewportBand(
+    isMobile,
+    isTablet,
+    isDesktopOrLaptop,
+  );
+
   const [projectData, setProjectData] = useState<ProjectDoc | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
 
-  /* Firebase data fetching */
+  const firestoreLoadRef = useRef<Promise<ProjectDoc> | null>(null);
+  if (firestoreLoadRef.current === null) {
+    firestoreLoadRef.current = getDoc(
+      doc(fsReference, "projects_content", FIRESTORE_DOC_ID),
+    ).then((snap) => {
+      if (!snap.exists()) {
+        throw new Error(`Missing Firestore document: projects_content/${FIRESTORE_DOC_ID}`);
+      }
+      return snap.data();
+    });
+  }
+
+  const waitFor = useCallback(async () => {
+    const data = await firestoreLoadRef.current!;
+    setProjectData(data);
+    await preloadArStoryTellerHeroAssets({
+      projectKey,
+      visibility,
+      viewportBand,
+    });
+  }, [projectKey, visibility, viewportBand]);
+
   useEffect(() => {
-    const docRef = doc(fsReference, 'projects_content', 'project_1');
-    getDoc(docRef)
-      .then((doc) => {
-        if (!doc.exists()) {
-          setHasError(true);
-          return;
-        }
-        console.log("Document data:", doc.data());
-        setProjectData(doc.data());
-        setIsLoading(false);
-      })
-      .catch(() => setHasError(true));
-    },[]);
+    firestoreLoadRef.current?.catch(() => setHasError(true));
+  }, []);
 
-    if (isLoading) {
-        return <p>loading...</p>
-    }
-
+  useEffect(() => {
     if (hasError) {
-        return <p>Has error!</p>
+      document.body.style.overflow = "";
     }
+  }, [hasError]);
 
+  const { phase, isLocked, splashPhase, onFadeEnd } = useLoadingSplash({
+    waitFor,
+  });
 
+  if (hasError) {
+    return (
+      <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center", px: 2 }}>
+        <Typography variant="body1" color="text.secondary" textAlign="center">
+          Unable to load this project. Please try again later.
+        </Typography>
+      </Box>
+    );
+  }
+
+  const arStoryTellerContent = projectData?.content;
+
+  return (
+    <>
+      {arStoryTellerContent ? (
+        <div aria-hidden={isLocked} inert={isLocked ? true : undefined}>
+          <ArStoryTellerPage projectData={arStoryTellerContent} />
+        </div>
+      ) : null}
+
+      {phase !== "done" && !hasError && (
+        <LandingSplash
+          phase={splashPhase}
+          onFadeEnd={onFadeEnd}
+          label="Loading project"
+        />
+      )}
+    </>
+  );
+}
+
+export default function ARStoryTellerRoute() {
   return (
     <ProjectAccessGate
       projectId={4}
       projectKey="project_1"
       title="AR Story Teller"
     >
-      <ArStoryTellerPage projectData={projectData?.content} />
+      <ArStoryTellerRouteContent />
     </ProjectAccessGate>
   );
 }
