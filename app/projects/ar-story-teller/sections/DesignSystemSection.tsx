@@ -17,6 +17,7 @@ import { UserModeInteractions } from '../components/UserModeInteractions';
 import { Storyboard } from '../components/Storyboard';
 import { PrototypingMethodPanel } from '../components/PrototypingMethodPanel';
 import { UsabilityTestingPanel } from '../components/UsabilityTestingPanel';
+import { UsabilityFindingsInsights } from '../components/UsabilityFindingsInsights';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -140,11 +141,23 @@ interface ProcessSection {
     bulletpoints?: Array<string | BulletPointItem>;
 }
 
+interface UsabilityInsight {
+    insightTitle: string;
+    insightDescription: string;
+}
+
+interface FindingsInsights {
+    title: string;
+    insights?: UsabilityInsight[];
+}
+
 /** Firestore: `designSystem.usabilityTesting` (see seed). */
 interface UsabilityTesting {
     title: string;
     paragraphs?: string[];
     theProcess?: ProcessSection;
+    /** Seed field name: `FindingsInsights`. */
+    FindingsInsights?: FindingsInsights;
     dataAnalysis?: ProcessSection;
 }
 
@@ -434,6 +447,24 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                                 {usabilityProcessBullets.length ? (
                                     <UsabilityTestingPanel
                                         bulletPoints={usabilityProcessBullets}
+                                    />
+                                ) : null}
+                            </>
+                        ) : null}
+                        {usabilityTesting.FindingsInsights ? (
+                            <>
+                                <SectionSubTitle
+                                    title={
+                                        usabilityTesting.FindingsInsights.title
+                                    }
+                                />
+                                {usabilityTesting.FindingsInsights.insights
+                                    ?.length ? (
+                                    <UsabilityFindingsInsights
+                                        insights={
+                                            usabilityTesting.FindingsInsights
+                                                .insights
+                                        }
                                     />
                                 ) : null}
                             </>
