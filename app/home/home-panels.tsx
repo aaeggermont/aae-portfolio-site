@@ -14,7 +14,7 @@ import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
 import { Footer } from "@/components/Footer";
 import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import { preloadLandingImages } from "@/lib/home/preloadLandingAssets";
-import { useLoadingSplash } from "@/lib/ui/useLoadingSplash";
+import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
 
 gsap.registerPlugin(ScrollTrigger);
 
