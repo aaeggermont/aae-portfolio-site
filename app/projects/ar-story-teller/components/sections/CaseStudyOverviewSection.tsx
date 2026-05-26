@@ -10,6 +10,7 @@ import {
     type MagicExperiences,
 } from './MagicExperiencesSection';
 import ProjectImage from '@/lib/media/ProjectImage';
+import { CASE_STUDY_BANNER_OBJECT_PATH } from '@/app/projects/ar-story-teller/lib/criticalAssets';
 import { StaticImageData } from 'next/image';
 import styles from '../../ArStoryTeller.module.scss';
 import { SectionSubTitle} from '../SectionSubTitle';
@@ -54,9 +55,6 @@ interface CaseStudyOverviewSectionProps {
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-/** Firestore Storage object path for the case study banner. */
-const CASE_STUDY_BANNER_OBJECT_PATH =
-    'projects/project_4/TowerOfTerrorCaseStudyBanner.png';
 const CASE_STUDY_BANNER_ALT = 'Tower of Terror case study banner';
 
 /* Intrinsic ratio for the banner — used by `next/image` to reserve space and avoid layout
