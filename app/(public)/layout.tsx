@@ -1,7 +1,7 @@
-// app/(public)/layout.tsx
 import type { ReactNode } from "react";
 import ClientProviders from "@/lib/ClientProviders";
 import Header from "@/components/Header"; // optional, if you want a shared header
+import { LayoutMainComponent } from './layout-main-component';
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
@@ -10,9 +10,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         {/* Optional shared header */}
         {/* <Header /> */}
 
-        <main className="global-container flex-1 w-full min-w-0">
-          {children} 
-        </main>
+        <LayoutMainComponent>{children}</LayoutMainComponent>
       </div>
     </ClientProviders>
   );

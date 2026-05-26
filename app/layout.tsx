@@ -4,6 +4,7 @@ import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
 import { Poppins, Montserrat, Figtree } from "next/font/google";
+import localFont from "next/font/local";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { ConditionalFooter } from '@/components/ConditionalFooter';
@@ -34,6 +35,49 @@ const figtree = Figtree({
   display: "swap",
 });
 
+/* Satoshi — static cuts from `Fonts/WEB/fonts` (same as your design package), not Variable. */
+const satoshi = localFont({
+  src: [
+    { path: "./fonts/Satoshi-Light.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/Satoshi-LightItalic.woff2", weight: "300", style: "italic" },
+    { path: "./fonts/Satoshi-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Satoshi-Italic.woff2", weight: "400", style: "italic" },
+    { path: "./fonts/Satoshi-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/Satoshi-MediumItalic.woff2", weight: "500", style: "italic" },
+    { path: "./fonts/Satoshi-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/Satoshi-BoldItalic.woff2", weight: "700", style: "italic" },
+    { path: "./fonts/Satoshi-Black.woff2", weight: "900", style: "normal" },
+    { path: "./fonts/Satoshi-BlackItalic.woff2", weight: "900", style: "italic" },
+  ],
+  variable: "--font-satoshi",
+  display: "swap",
+});
+
+/* Source Sans 3 — static TTFs from `Source_Sans_3/static` in your Dropbox bundle.
+   Use `var(--font-source-sans-3)` in CSS. */
+const sourceSans3 = localFont({
+  src: [
+    { path: "./fonts/SourceSans3-ExtraLight.ttf", weight: "200", style: "normal" },
+    { path: "./fonts/SourceSans3-ExtraLightItalic.ttf", weight: "200", style: "italic" },
+    { path: "./fonts/SourceSans3-Light.ttf", weight: "300", style: "normal" },
+    { path: "./fonts/SourceSans3-LightItalic.ttf", weight: "300", style: "italic" },
+    { path: "./fonts/SourceSans3-Regular.ttf", weight: "400", style: "normal" },
+    { path: "./fonts/SourceSans3-Italic.ttf", weight: "400", style: "italic" },
+    { path: "./fonts/SourceSans3-Medium.ttf", weight: "500", style: "normal" },
+    { path: "./fonts/SourceSans3-MediumItalic.ttf", weight: "500", style: "italic" },
+    { path: "./fonts/SourceSans3-SemiBold.ttf", weight: "600", style: "normal" },
+    { path: "./fonts/SourceSans3-SemiBoldItalic.ttf", weight: "600", style: "italic" },
+    { path: "./fonts/SourceSans3-Bold.ttf", weight: "700", style: "normal" },
+    { path: "./fonts/SourceSans3-BoldItalic.ttf", weight: "700", style: "italic" },
+    { path: "./fonts/SourceSans3-ExtraBold.ttf", weight: "800", style: "normal" },
+    { path: "./fonts/SourceSans3-ExtraBoldItalic.ttf", weight: "800", style: "italic" },
+    { path: "./fonts/SourceSans3-Black.ttf", weight: "900", style: "normal" },
+    { path: "./fonts/SourceSans3-BlackItalic.ttf", weight: "900", style: "italic" },
+  ],
+  variable: "--font-source-sans-3",
+  display: "swap",
+});
+
 export const metadata = {
   title: "Antonio Eggermont – Portfolio",
   description: "Full-stack UX Engineer & AI/ML Specialist",
@@ -43,7 +87,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable}`}
       style={{ ["--page-canvas" as string]: PAGE_CANVAS }}
     >
       <Aos/>

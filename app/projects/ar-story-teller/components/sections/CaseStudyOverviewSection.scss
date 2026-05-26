@@ -1,0 +1,110 @@
+/* Internal section spacing. Mirrors the pattern in `ArStoryTeller.module.scss` and
+   `MagicExperiencesSection.scss`: a single `--case-study-overview-gap` is set per
+   breakpoint and applied as `margin-top` to every direct child after the first via
+   `> * + *`. Defaults below are kept aligned with `CASE_STUDY_OVERVIEW_GAPS` in
+   `CaseStudyOverviewSection.tsx` so the section still renders sensibly if the inline
+   style is ever removed. Override a single internal gap by setting
+   `--case-study-overview-gap-self` inline on a child. */
+.case-study-overview {
+    --case-study-overview-gap-mobile: 0rem;
+    --case-study-overview-gap-tablet: 0rem;
+    --case-study-overview-gap-desktop: 0rem;
+    --case-study-overview-gap: var(--case-study-overview-gap-mobile);
+
+    @media #{$tablet} {
+        --case-study-overview-gap: var(--case-study-overview-gap-tablet);
+    }
+
+    @media #{$desktop} {
+        --case-study-overview-gap: var(--case-study-overview-gap-desktop);
+    }
+
+    > * + * {
+        margin-top: var(
+            --case-study-overview-gap-self,
+            var(--case-study-overview-gap)
+        );
+    }
+}
+
+/* Case study section banner.
+
+   - Tablet & mobile (< $desktop-min): the banner stays inside the page's `.project-content`,
+     inheriting its horizontal padding (`clamp(1rem, 5vw, 2rem)`), so the image keeps the same
+     left/right margins as the rest of the page content.
+   - Desktop (>= $desktop-min): the banner becomes full-bleed by breaking out of the parent
+     via negative `vw`-relative margins. `50%` resolves against the parent's content width;
+     `50vw` is half the viewport. Their difference is the exact distance from the parent's
+     edge to the viewport edge — applying that as negative margins extends the box to the
+     viewport edges. Auto-computed width then fills the new horizontal space (no `100vw`
+     needed, so no scrollbar-induced horizontal overflow).
+
+   `position: relative` makes the wrapper the containing block for the title overlay. */
+.case-study-banner {
+    position: relative;
+    padding-top: 3rem;
+}
+
+@media screen and (min-width: $desktop-min) {
+    .case-study-banner {
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+    }
+}
+
+/* Image fills the full-bleed wrapper but is capped so it never upscales beyond its design
+   size; auto margins center it within the wrapper when capped. The cap tracks
+   `--layout-max-width-desktop` from `.project-content` so the banner stays in lock-step
+   with the page-wide desktop max-width set in `LAYOUT_DIMENSIONS`. Keep the `sizes` hint
+   on `<ProjectImage>` in sync with this value so srcset selection matches the rendered
+   width. */
+.case-study-banner__image {
+    display: block;
+    width: 100%;
+    max-width: var(--layout-max-width-desktop);
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Title overlay — anchored to the image (not the viewport). To keep alignment with the
+   image at every breakpoint, the overlay shares the image's `max-width` cap (which now
+   reads from the same `--layout-max-width-desktop` variable) and is centered within the
+   full-bleed wrapper via auto margins. Text is left-aligned with a small horizontal inset
+   so it doesn't sit flush against the image's left edge.
+
+   Hidden until React adds the `--loaded` modifier (after the image's `load` event fires),
+   then fades in. `pointer-events: none` so the overlay never blocks interactions on the
+   image. */
+.case-study-banner__title-overlay {
+    position: absolute;
+    top: 12%;
+    left: 0;
+    right: 0;
+    max-width: var(--layout-max-width-desktop);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    padding-left: clamp(1rem, 4vw, 2rem);
+    padding-right: clamp(1rem, 4vw, 2rem);
+    pointer-events: none;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 1800ms ease-out;
+}
+
+.case-study-banner__title-overlay--loaded {
+    opacity: 1;
+}
+
+/* Dedicated banner title styling; intentionally separate from the shared `BlockTitle`. */
+.case-study-banner__title {
+    margin: 0;
+    padding-top: 1.5rem;
+    padding-bottom: 0;
+    font-family: var(--font-poppins);
+    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-weight: 600;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}

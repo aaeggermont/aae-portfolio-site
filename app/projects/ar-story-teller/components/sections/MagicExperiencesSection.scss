@@ -1,0 +1,208 @@
+/* Magic Experiences row layout.
+
+   - Desktop: single row of 4 mockups (flex).
+   - Tablet:  2 × 2 grid of mockups (grid).
+   - Mobile:  horizontal scroll-snap carousel with prev/next buttons (flex + overflow).
+
+   On every breakpoint where we apply a layout container we also have to reset the per-item
+   `width: …%` and `margin: auto` from `ARMobileScreen.scss`, otherwise the card auto-centers
+   at a fraction of its track and the grid/flex sizing has nothing to size against. */
+
+.magic-experiences {
+    --magic-experiences-gap-mobile: 0rem;
+    --magic-experiences-gap-tablet: 0rem;
+    --magic-experiences-gap-desktop: 0rem;
+    --magic-experiences-gap: var(--magic-experiences-gap-mobile);
+
+    @media #{$tablet} {
+        --magic-experiences-gap: var(--magic-experiences-gap-tablet);
+    }
+
+    @media #{$desktop} {
+        --magic-experiences-gap: var(--magic-experiences-gap-desktop);
+    }
+
+    > * + * {
+        margin-top: var(
+            --magic-experiences-gap-self,
+            var(--magic-experiences-gap)
+        );
+    }
+}
+
+@media #{$desktop} {
+    .magic-experiences__row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2rem;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* `flex: 1 1 0` makes each mockup share the available space evenly.
+       `margin: 0` resets the base rule's `margin: auto`, which on a flex row's cross axis
+       silently overrides `align-items: flex-start` and vertically centers any card whose
+       intrinsic height is shorter than its row-mates — manifesting as one card sitting
+       a few pixels lower than the others. */
+    .magic-experiences__row .ar-mobile-screen-container {
+        width: auto;
+        flex: 1 1 0;
+        padding-top: 0;
+        margin: 0;
+    }
+
+    /* TEST — render the AR mobile mockup ~20% larger than baseline on desktop.
+       Bumps the image's CSS width from the component default (50%) up to 60% of the
+       card; height is `auto` and resolves against the next/image aspect-ratio hint,
+       so the image grows proportionally in both axes. `!important` overrides the
+       inline `width: 50%` set on the <img> via `style={imgStyle}` in `ARMobileScreen.tsx`.
+       Title/description and card layout are intentionally untouched, and AOS animations
+       still play because we are not rewriting the card's `transform`.
+       To dial: change the single percentage. To revert: delete this rule block. */
+    .magic-experiences__row .ar-mobile-screen-container__image {
+        width: 60% !important;
+    }
+}
+
+@media #{$tablet} {
+    /* 2 × 2 grid. With four children and `repeat(2, 1fr)`, items naturally flow into a
+       second row — no JS, no JSX changes, no per-child sizing math. `align-items: start`
+       keeps every card's top edge flush with its row-mate (same fix as the desktop flex
+       branch, just expressed in grid terms). */
+    .magic-experiences__row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        /* `stretch` (the grid default, made explicit for intent) sizes every card to the
+           full height of its row track, which equals the tallest card in that row. That
+           gives us free equal-height cards: every card's top *and* bottom edge lines up
+           with its row-mate's, even when descriptions wrap to different line counts.
+           (`start` would only align tops; `center` would let shorter cards drift toward
+           the middle of the track — the same family of bug as the desktop `margin: auto`
+           gotcha we fixed earlier.) */
+        align-items: stretch;
+        justify-items: center;
+        /* `gap: row-gap column-gap`. We tighten the *column* gap because the visible
+           "middle space" between the two images is dominated by in-card air around each
+           image (the image is `width: 60%` of the card on tablet — see override below);
+           the CSS gap is only a small contributor. Row-gap stays at 1rem so the two rows
+           still feel like separate rows rather than a wall of cards. */
+        gap: 1rem 0.25rem;
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+        /* Shrinks the grid tracks symmetrically so the in-card air around each image
+           drops, bringing the middle gap into proportion with the outer page margin.
+           Paired with the image-width bump (55% → 60%) on `__image` below so the
+           rendered image *pixel size* stays within ±4% of its previous value across the
+           tablet range — the geometry rebalances without resizing the artwork. */
+        padding-inline: 2rem;
+    }
+
+    .magic-experiences__row .ar-mobile-screen-container {
+        width: 100%;
+        margin: 0;
+        /* The grid above stretches each card to its row track height. Inside the card,
+           override the base tablet rule's `justify-content: center` (from `ARMobileScreen.scss`)
+           so the image stays anchored at the *top* of the card; any extra vertical space
+           caused by a row-mate's longer description spills out below the description
+           instead of pushing the image down. */
+        justify-content: flex-start;
+    }
+
+    /* Image-to-card width on tablet. Two jobs at once:
+       1. Bumps the image ~10% relative to the component default (50% → 60%).
+       2. Compensates for the row's `padding-inline: 2rem` above, which shrinks the grid
+          tracks. The two changes net out so the rendered image *pixel size* stays
+          within ±4% of its prior value across the tablet range, while in-card air
+          around the image drops by ~20% — that's what brings the perceived middle gap
+          into proportion with the outer page margin.
+       `!important` overrides the inline `width: 50%` set on the <img> via
+       `style={imgStyle}` in `ARMobileScreen.tsx`. */
+    .magic-experiences__row .ar-mobile-screen-container__image {
+        width: 60% !important;
+    }
+}
+
+@media #{$mobile} {
+    /* Horizontal scroll-snap carousel.
+
+       `overflow-x: auto` gives us free native swipe support on touch devices.
+       `scroll-snap-type: x mandatory` makes each release land on a card.
+       Scrollbar is hidden because the prev/next buttons are the canonical UI;
+       the visual peek of adjacent cards is what tells users "this scrolls". */
+    .magic-experiences__row {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        width: 100%;
+        margin: 0;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    /* Each card is a snap target. `flex: 0 0 85%` keeps the card a fixed fraction of the
+       carousel width regardless of the flex container's content; combined with
+       `scroll-snap-align: center`, the active card centers in view with a small peek of
+       its neighbors on either side — Apple's mobile pattern. */
+    .magic-experiences__row .ar-mobile-screen-container {
+        flex: 0 0 100%;
+        scroll-snap-align: center;
+        margin: 0;
+    }
+
+    /* Apple-style nav row: small round chevron buttons anchored at the right edge of
+       the section. Sits *outside* the scroll container so taps on the buttons can't be
+       eaten by an in-progress swipe gesture. */
+    .magic-experiences__nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+        margin-top: 0;
+        --magic-experiences-gap-self: 1.25rem;
+    }
+
+    .magic-experiences__nav-button {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: 0;
+        border-radius: 50%;
+        border: none;
+        background: rgba(16, 39, 100, 0.08);
+        color: #102764;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 200ms ease, opacity 200ms ease;
+
+        &:hover:not(:disabled),
+        &:focus-visible:not(:disabled) {
+            background: rgba(16, 39, 100, 0.14);
+        }
+
+        &:focus-visible {
+            outline: 2px solid #102764;
+            outline-offset: 2px;
+        }
+
+        &:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+    }
+}

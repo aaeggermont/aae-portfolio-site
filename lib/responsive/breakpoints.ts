@@ -22,3 +22,15 @@ export const breakpointPx = {
 } as const;
 
 export type BreakpointPx = typeof breakpointPx;
+
+/**
+ * `@media` strings derived from `breakpointPx` — use in MUI `sx` keys and anywhere the
+ * case-study bands must match SCSS (`variables.scss`).
+ */
+export const breakpointMediaQuery = {
+  tabletUp: `@media (min-width: ${breakpointPx.tabletMin}px)`,
+  tabletOnly: `@media (min-width: ${breakpointPx.tabletMin}px) and (max-width: ${breakpointPx.tabletMax}px)`,
+  desktopUp: `@media (min-width: ${breakpointPx.desktopMin}px)`,
+} as const;
+
+export type BreakpointMediaQuery = typeof breakpointMediaQuery;

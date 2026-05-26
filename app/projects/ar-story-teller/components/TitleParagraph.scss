@@ -1,0 +1,55 @@
+@media #{$desktop} {
+    .storyteller-laptop-paragraph-title {
+        padding-top: 8rem;
+        padding-bottom: 1.25rem;
+        text-align: center;
+
+        .title-paragraph {
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+    }
+}
+
+@media #{$tablet} {
+    .storyteller-lgmd-paragraph-title {
+        margin: auto;
+        padding-top: 3rem;
+
+        .title-paragraph {
+            padding-top: 1.5rem;
+            padding-bottom: 3rem;
+            text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+    }
+}
+
+
+@media #{$mobile} {
+    .storyteller-xsxm-paragraph-title {
+        margin: auto;
+        text-align: center;
+
+        .title-paragraph {
+            font-family: poppins;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #040B35;
+            padding-top: 20px;
+            padding-bottom: 10px;
+            text-align: center;
+            font-family: var(--font-poppins);
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+    }
+}
+

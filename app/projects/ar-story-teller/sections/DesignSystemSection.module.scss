@@ -1,0 +1,176 @@
+/* Full-bleed bands under `.project-container`. Breakout uses `width: 100vw` +
+   `margin-left: calc(50% - 50vw)` (CSS-Tricks “full-width containers in limited width parents”). */
+
+%designSystemFullBleedBand {
+    box-sizing: border-box;
+    position: relative;
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    overflow-x: hidden;
+}
+
+%designSystemFullBleedBandSpacing {
+    @media #{$mobile} {
+        padding-top: 56px;
+        margin-top: 56px;
+    }
+
+    @media #{$tablet} {
+        padding-top: 80px;
+        margin-top: 80px;
+    }
+
+    @media #{$desktop} {
+        padding-top: 100px;
+        margin-top: 100px;
+    }
+}
+
+%designSystemBleedInner {
+    max-width: var(--layout-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--layout-margin);
+    padding-right: var(--layout-margin);
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    @media #{$tablet} {
+        gap: 48px;
+    }
+
+    @media #{$desktop} {
+        gap: 64px;
+    }
+}
+
+.guestNeedsBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f5f5f7;
+    --guest-needs-content-gutter: var(--layout-margin);
+}
+
+@media #{$tablet} {
+    .guestNeedsBleed {
+        --guest-needs-content-gutter: calc(
+            (100vw - min(100vw, 1024px)) / 2 + var(--layout-margin)
+        );
+    }
+}
+
+@media #{$desktop} {
+    .guestNeedsBleed {
+        --guest-needs-content-gutter: calc(
+            (100vw - min(100vw, 1260px)) / 2 + var(--layout-margin)
+        );
+    }
+}
+
+.guestNeedsBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+.envisionUseCaseBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f5f5f7;
+    padding-bottom: 100px;
+}
+
+.envisionUseCaseBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+.envisionStoryboard {
+    width: 100%;
+    margin-top: 40px;
+}
+
+@media #{$tablet} {
+    .envisionStoryboard {
+        margin-top: 48px;
+    }
+}
+
+@media #{$desktop} {
+    .envisionStoryboard {
+        margin-top: 56px;
+    }
+}
+
+.developingSpecsBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+}
+
+.developingSpecsBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+/* Wireframing & Prototyping — full-bleed white band (after Envision / storyboard). */
+.prototypingBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+}
+
+.prototypingBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+/* Usability Testing & Evaluation — full-bleed grey band (same surface as Envision). */
+.usabilityTestingBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f5f5f7;
+    padding-bottom: 100px;
+}
+
+.usabilityTestingBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+/* Conclusions & Impact — final full-bleed white band. */
+.conclusionsImpactBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+    padding-bottom: 100px;
+}
+
+.conclusionsImpactBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+/* Carousel strip: defines `--guest-needs-content-gutter` for the research-methods rail
+   (leading spacer + nav padding in `UserResearchMethodsCarousel`). */
+.guestNeedsCarouselStrip {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 40px;
+    --guest-needs-content-gutter: var(--layout-margin);
+}
+
+@media #{$tablet} {
+    .guestNeedsCarouselStrip {
+        margin-top: 48px;
+        --guest-needs-content-gutter: calc(
+            (100vw - min(100vw, 1024px)) / 2 + var(--layout-margin)
+        );
+    }
+}
+
+@media #{$desktop} {
+    .guestNeedsCarouselStrip {
+        margin-top: 64px;
+        --guest-needs-content-gutter: calc(
+            (100vw - min(100vw, 1260px)) / 2 + var(--layout-margin)
+        );
+    }
+}

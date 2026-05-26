@@ -1,3 +1,8 @@
+.header_area {
+  position: relative;
+  z-index: 100;
+}
+
 /**
  * Caps inner header row to the same width as home panels on wide screens.
  * Combine with `global-container` on the wrapper — tablet/mobile margins unchanged.
@@ -20,7 +25,6 @@
 	}
 }
 
-/* Desktop nav: single breakpoint — avoids $desktop-max (3800px) “dead zone” where mobile stayed visible */
 .site_menu {
 	display: none;
 	justify-content: center;
@@ -126,7 +130,7 @@
 		padding: 5px;
 		border-radius: 100%;
 		background: $font-color-bold;
-    cursor: pointer;
+    	cursor: pointer;
 
 		.menu_icon{
 			width: 20px;
@@ -177,7 +181,7 @@
 	transform: translateX(-110%);
 	transition: .5s;
 
-  &.active{
+  	&.active{
 		transform: translateX(0);
 	}
 

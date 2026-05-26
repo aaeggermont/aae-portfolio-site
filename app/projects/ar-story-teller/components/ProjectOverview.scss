@@ -1,0 +1,211 @@
+/* Project Overview — three-up grid (desktop/tablet) and stacked rows (mobile).
+   Variables (`$desktop`, `$tablet`, `$mobile`, `$font-color-bold`, `$font-color-normal`)
+   come from `styles/variables.scss` via Next's `sassOptions.additionalData`. */
+
+.overview-container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    box-sizing: border-box;
+}
+
+.overview-title {
+    font-family: var(--font-poppins);
+    font-weight: 600;
+    color: #03133c;
+    text-align: center;
+    margin: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.overview-icon-img {
+    display: block;
+    width: 42px;
+    height: 42px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media #{$desktop} {
+    .overview-container {
+        padding-top: 8rem;
+    }
+
+    .overview-title {
+        font-size: 1.7rem;
+        color: #03133c;
+        padding-top: 1.25rem;
+        padding-bottom: 2rem;
+    }
+
+    .overview-columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1.5rem;
+        width: 100%;
+    }
+
+    .overview-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: center;
+
+        .overview-column-icon {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 0.75rem;
+        }
+
+        .overview-column-title {
+            font-family: var(--font-poppins);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: $font-color-bold;
+            padding-bottom: 0.5rem;
+        }
+
+        .overview-column-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            width: 100%;
+
+            li {
+                font-family: var(--font-poppins);
+                font-size: 1.1rem;
+                font-weight: 400;
+                color: $font-color-normal;
+            }
+        }
+    }
+}
+
+@media #{$tablet} {
+    .overview-container {
+        padding-top: 6rem;
+    }
+
+    .overview-title {
+        font-size: 1.6rem;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+
+    .overview-columns {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .overview-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1 1 0;
+        min-width: 0;
+        text-align: center;
+
+        .overview-column-icon {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 0.75rem;
+        }
+
+        .overview-column-title {
+            font-family: var(--font-poppins);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: $font-color-bold;
+            padding-bottom: 0.5rem;
+        }
+
+        .overview-column-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            width: 100%;
+
+            li {
+                font-family: var(--font-poppins);
+                font-size: 1rem;
+                font-weight: 400;
+                color: $font-color-normal;
+            }
+        }
+    }
+}
+
+@media #{$mobile} {
+    .overview-container--mobile {
+        padding-top: 4rem;
+    }
+
+    .overview-title {
+        font-size: 1.375rem;
+        padding-top: 1.25rem;
+        padding-bottom: 1rem;
+    }
+
+    .overview-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .overview-row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 1rem;
+        width: 100%;
+
+        .overview-row-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 0 0 35%;
+            text-align: center;
+        }
+
+        .overview-row-icon-label {
+            margin-top: 0.5rem;
+            font-family: var(--font-poppins);
+            font-size: 1rem;
+            font-weight: 600;
+            color: $font-color-bold;
+        }
+
+        .overview-row-items {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+
+            li {
+                font-family: var(--font-poppins);
+                font-size: 1rem;
+                font-weight: 400;
+                color: $font-color-normal;
+            }
+        }
+    }
+}

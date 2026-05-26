@@ -2,7 +2,7 @@
 firebase.js
 firebase.ts
 .secrets/
-
+.Media_Assets/
 # dependencies
 /node_modules
 /.pnp
@@ -53,3 +53,5 @@ media-assets/*
 # scripts
 /scripts
 
+# agent
+.agent

@@ -1,19 +1,16 @@
-// app/(public)/work/automatic-seater-assignments/page.tsx
+// app/(public)/ar-story-teller/page.tsx
 "use client";
 
-import React from "react";
 import { useEffect, useState } from 'react';
-import styles from "./automatic-seater-assignments.module.scss";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import ProjectImage from "@/lib/media/ProjectImage";
 import fsReference from '../../../../firebase';
-import { collection, where, getDoc, onSnapshot, orderBy, query, deleteDoc, doc, DocumentData } from "firebase/firestore";
-  
-const PROJECT_ID = 1;
-const PROJECT_KEY = "project_1";
+import { getDoc, doc, DocumentData } from "firebase/firestore";
+import { ArStoryTellerPage } from "@/app/projects/ar-story-teller/ArStoryTellerPage";
+
 type ProjectDoc = DocumentData;
 
-export default function ArStoryTellerPage() {
+export default function ARStoryTellerRoute() {
   const [projectData, setProjectData] = useState<ProjectDoc | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -49,21 +46,7 @@ export default function ArStoryTellerPage() {
       projectKey="project_1"
       title="AR Story Teller"
     >
-      <main className={styles.page}>
-        <div className={styles.container}>
-          <header className={styles.hero}>
-            <h1 className={styles.title}>AR Story Teller</h1>
-            <p>hello world</p>
-            <ProjectImage
-              objectPath="projects/project_1/BannerARDemo-Desktop.png"
-              alt="BannerARDemo-Desktop.png"
-              width={400}
-              height={600}
-              priority
-            />
-          </header>
-        </div>
-      </main>
+      <ArStoryTellerPage projectData={projectData?.content} />
     </ProjectAccessGate>
   );
 }

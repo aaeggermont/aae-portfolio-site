@@ -7,6 +7,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import { initLightboxJS } from "lightbox.js-react";
 import { ResponsiveQueryProvider } from "../lib/responsive/ResponsiveQueryProvider";
+import { ParallaxProvider } from "react-scroll-parallax";
+import { Provider as JotaiProvider } from 'jotai';
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
 
 const theme = createTheme({
@@ -38,11 +40,17 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AppRouterCacheProvider options={{ key: "mui" }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ResponsiveQueryProvider>{children}</ResponsiveQueryProvider>
-      </ThemeProvider>
-    </AppRouterCacheProvider>
+    <JotaiProvider>
+      <AppRouterCacheProvider options={{ key: "mui" }}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <ResponsiveQueryProvider>
+            <ParallaxProvider>
+              {children}
+            </ParallaxProvider>
+          </ResponsiveQueryProvider>
+        </ThemeProvider>
+      </AppRouterCacheProvider>
+    </JotaiProvider>
   );
 }

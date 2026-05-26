@@ -1,0 +1,294 @@
+/* Hero parallax — aspect ratios align with `ImageBanner` + `lib/responsive/breakpoints.ts`. */
+.project-header-parallax {
+  /* Static vertical shift for clouds — use top/height (not transform) so
+     `react-scroll-parallax` can own `transform` on `ParallaxBannerLayer`. */
+  --project-header-cloud-lift: 10px;
+
+  position: relative;
+  z-index: 0;
+  /* Transparent so the hero's blue→white gradient shows through; cloud layers stack above. */
+  isolation: isolate;
+  width: 100%;
+  overflow: hidden;
+  background-color: transparent;
+  aspect-ratio: 4 / 5;
+
+  @media screen and (min-width: $tablet-min) {
+    aspect-ratio: 16 / 9;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    aspect-ratio: 1.62 / 1;
+  }
+}
+
+.project-header-parallax__layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+/* Inner shift: avoids `transform` on nodes inside the parallax layer subtree. */
+.project-header-parallax__layer-shift {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--project-header-cloud-lift));
+  height: calc(100% + var(--project-header-cloud-lift));
+}
+
+.project-header-parallax__img {
+  object-fit: cover;
+  object-position: center bottom;
+}
+
+@media screen and (max-width: $mobile-max) {
+  .project-header-parallax__img--mobile-top {
+    object-position: center top;
+  }
+}
+
+/* Crowd strip vertical offset: `--people-in-line-initial-top` on `.storyteller-banner`, or `initialTop` on `PeopleInLineCrowd` (inline wins). */
+.storyteller-banner .people-in-line {
+  margin-top: var(--people-in-line-initial-top, 0);
+}
+
+/* Wrapper for `Parallax` around the crowd image (Option B — section scroll parallax). */
+.storyteller-banner .people-in-line__parallax {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Crowd illustration: centered, full asset visible (letterboxing ok). */
+.storyteller-banner .people-in-line__crowd {
+  display: block;
+  width: 90%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (min-width: $tablet-min) {
+  .storyteller-banner .people-in-line__crowd {
+    width: 60%;
+  }
+}
+
+/* Titles may come first in DOM for semantics; they still overlay via absolute + z-index. */
+.storyteller-banner__hero {
+  position: relative;
+  width: 100%;
+}
+
+.storyteller-banner__hero .banner-titles {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  box-sizing: border-box;
+  pointer-events: none;
+  /* Must stay absolute — do not set `position: relative` in breakpoint blocks below. */
+}
+
+.storyteller-banner__hero .banner-titles__inner {
+  pointer-events: auto;
+  width: 100%;
+}
+
+@media #{$desktop} {
+    /* Blue→white vertical gradient on the hero so the bottom of the parallax fades to the page
+       canvas (white). The crowd strip is pulled into the hero with a negative `initialTop`,
+       and its transparent PNG areas naturally reveal white instead of blue. */
+    .storyteller-banner__hero {
+        padding-top: 300px;
+        background: linear-gradient(to bottom, #153077 0%, #e5e9f3 55%, #ffffff 50%);
+    }
+
+    .storyteller-banner {
+        /* Tweak vertical offset of hero copy; does not use `position: relative`. */
+        --banner-titles-overlay-top: -60%;
+
+        .banner-titles {
+            top: var(--banner-titles-overlay-top);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            align-items: center;
+            justify-content: center;
+            padding-left: 10%;
+            padding-right: 0%;
+
+            .banner-text-title {
+                margin-bottom: 1.5rem;
+                font-size: clamp(1.875rem, 1.2vw + 1.15rem, 2.1rem);
+                font-family: var(--font-poppins);
+                color: #ffffff;
+                font-weight: 600;
+            }
+            p {
+                font-size: clamp(1.25rem, 1.05vw + 0.94rem, 1.4rem);
+                font-family: var(--font-poppins);
+                color: #ffbb00;
+                font-weight: 600;
+                width: 55%;
+            }
+        }
+
+        .people-in-line {
+            /* No background — keeps the PNG's transparent edges visible so the hero / page
+               canvas shows through (especially when `initialTop` pulls the strip upward). */
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            padding-top: 5%;
+        }
+    }
+}
+
+@media  #{$tablet} {
+    .storyteller-banner__hero {
+        padding-top: 200px;
+        background: linear-gradient(to bottom, #153077 0%, #153077 70%, #ffffff 100%);
+    }
+
+    .storyteller-banner {
+        --banner-titles-overlay-top: -90%;
+
+        .banner-titles {
+            top: var(--banner-titles-overlay-top);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            align-items: center;
+            justify-content: center;
+            padding-left: 10%;
+            padding-right: 2%;
+
+            .banner-text-title {
+                margin-bottom: 1.5rem;
+                font-size: 2rem;
+                font-family: var(--font-poppins);
+                color: #ffffff;
+                font-weight: 600;
+                width: 100%;
+            }
+            p {
+                font-size: 1.2rem;
+                font-family: var(--font-poppins);
+                color: #ffbb00;
+                font-weight: 500;
+                width: 80%;
+            }
+        }
+
+        .people-in-line {
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            padding-top: 5%;
+        }
+    }
+}
+
+@media #{$mobile} {
+    .storyteller-banner__hero {
+        padding-top: 100px;
+        background: linear-gradient(to bottom, #153077 0%, #153077 70%, #ffffff 100%);
+    }
+
+    .storyteller-banner {
+        --banner-titles-overlay-top: -40%;
+
+        .people-in-line {
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            padding-top: 5%;
+        }
+
+        .banner-titles {
+            top: var(--banner-titles-overlay-top);
+            bottom: 0;
+            left: 0;
+            right: 0;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-left: 2%;
+            padding-right: 2%;
+
+            .banner-text-title {
+                margin-bottom: 1.5rem;
+                font-size: 1.2rem;
+                font-family: var(--font-poppins);
+                color: #ffffff;
+                font-weight: 600;
+                width: 100%;
+                text-align: center;
+            }
+            p {
+                font-size: 1rem;
+                font-family: var(--font-poppins);
+                color: #ffbb00;
+                font-weight: 500;
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+}
+
+
+.component_container {
+    background-color: white;
+    top: 50%;
+    height: 1000px;
+    margin: auto;
+    max-width: 2500px;
+    position: relative;
+
+}
+
+.crowds-position {
+    position: relative;
+    margin-left: 5%;
+    top: 0%
+
+
+}
+
+.castle-position {
+    position: absolute;
+    top: -200px;
+    margin-left: 10%;
+    //left: 60%;
+
+}
+
+.project-description {
+    display: flex;
+    flex-direction: row;
+    align-content: end;
+    align-items: end;
+    justify-content: flex-end;
+    padding-right: 5rem;
+
+    .project-description-paragraph {
+        width: 750px;
+        font-size: 50px;
+        font-weight: 600;
+        color: #1B3C90;
+    }
+}
