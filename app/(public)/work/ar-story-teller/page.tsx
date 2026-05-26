@@ -1,23 +1,20 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { DocumentData } from "firebase/firestore";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { doc, getDoc, type DocumentData } from "firebase/firestore";
 
 import { ArStoryTellerPage } from "@/app/projects/ar-story-teller/ArStoryTellerPage";
+import { subscribeArStoryTellerProject } from "@/app/projects/ar-story-teller/lib/ar-story-teller.firestore";
+import { createProjectHeaderLayersReadyGate } from "@/app/projects/ar-story-teller/lib/projectHeaderLayersReady";
+import { preloadArStoryTellerCaseStudyBanner } from "@/app/projects/ar-story-teller/lib/preloadArStoryTellerAssets";
+import type { ViewportBand } from "@/app/projects/ar-story-teller/lib/projectHeaderPreloadUrls";
 import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import { useProjectAccess } from "@/lib/access/ProjectAccessContext";
-import { preloadArStoryTellerHeroAssets } from "@/app/projects/ar-story-teller/lib/preloadArStoryTellerAssets";
-import type { ViewportBand } from "@/app/projects/ar-story-teller/lib/projectHeaderPreloadUrls";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
-import fsReference from "@/firebase";
-
-type ProjectDoc = DocumentData;
-
-const FIRESTORE_DOC_ID = "project_1";
 
 function resolveViewportBand(
   isMobile: boolean,
@@ -39,33 +36,80 @@ function ArStoryTellerRouteContent() {
     isDesktopOrLaptop,
   );
 
-  const [projectData, setProjectData] = useState<ProjectDoc | null>(null);
+  const [content, setContent] = useState<unknown | null>(null);
   const [hasError, setHasError] = useState(false);
 
-  const firestoreLoadRef = useRef<Promise<ProjectDoc> | null>(null);
-  if (firestoreLoadRef.current === null) {
-    firestoreLoadRef.current = getDoc(
-      doc(fsReference, "projects_content", FIRESTORE_DOC_ID),
-    ).then((snap) => {
-      if (!snap.exists()) {
-        throw new Error(`Missing Firestore document: projects_content/${FIRESTORE_DOC_ID}`);
-      }
-      return snap.data();
+  const contentReadyRef = useRef<{
+    promise: Promise<void>;
+    resolve: () => void;
+    reject: (error: Error) => void;
+  } | null>(null);
+
+  if (contentReadyRef.current === null) {
+    let resolveReady!: () => void;
+    let rejectReady!: (error: Error) => void;
+    const promise = new Promise<void>((resolve, reject) => {
+      resolveReady = resolve;
+      rejectReady = reject;
     });
+    contentReadyRef.current = {
+      promise,
+      resolve: resolveReady,
+      reject: rejectReady,
+    };
   }
 
-  const waitFor = useCallback(async () => {
-    const data = await firestoreLoadRef.current!;
-    setProjectData(data);
-    await preloadArStoryTellerHeroAssets({
-      projectKey,
-      visibility,
-      viewportBand,
-    });
-  }, [projectKey, visibility, viewportBand]);
+  const headerLayersReadyRef = useRef(createProjectHeaderLayersReadyGate());
+  const prevViewportBandRef = useRef(viewportBand);
 
   useEffect(() => {
-    firestoreLoadRef.current?.catch(() => setHasError(true));
+    if (prevViewportBandRef.current === viewportBand) return;
+    prevViewportBandRef.current = viewportBand;
+    headerLayersReadyRef.current = createProjectHeaderLayersReadyGate();
+  }, [viewportBand]);
+
+  const bannerPreloadRef = useRef<Promise<void> | null>(null);
+
+  useEffect(() => {
+    bannerPreloadRef.current = preloadArStoryTellerCaseStudyBanner({
+      projectKey,
+      visibility,
+    });
+  }, [projectKey, visibility]);
+
+  useEffect(() => {
+    const ready = contentReadyRef.current!;
+
+    const unsubscribe = subscribeArStoryTellerProject(
+      (nextContent) => {
+        setContent(nextContent);
+        setHasError(false);
+        ready.resolve();
+      },
+      (error) => {
+        setHasError(true);
+        ready.reject(error);
+      },
+    );
+
+    return unsubscribe;
+  }, []);
+
+  const handleProjectHeaderLayersReady = useCallback(() => {
+    headerLayersReadyRef.current.markReady();
+  }, []);
+
+  const waitFor = useCallback(async () => {
+    await Promise.all([
+      contentReadyRef.current!.promise,
+      headerLayersReadyRef.current.promise,
+      bannerPreloadRef.current ??
+        preloadArStoryTellerCaseStudyBanner({ projectKey, visibility }),
+    ]);
+  }, [projectKey, visibility]);
+
+  const handleSplashError = useCallback(() => {
+    setHasError(true);
   }, []);
 
   useEffect(() => {
@@ -76,6 +120,7 @@ function ArStoryTellerRouteContent() {
 
   const { phase, isLocked, splashPhase, onFadeEnd } = useLoadingSplash({
     waitFor,
+    onError: handleSplashError,
   });
 
   if (hasError) {
@@ -88,15 +133,14 @@ function ArStoryTellerRouteContent() {
     );
   }
 
-  const arStoryTellerContent = projectData?.content;
-
   return (
     <>
-      {arStoryTellerContent ? (
-        <div aria-hidden={isLocked} inert={isLocked ? true : undefined}>
-          <ArStoryTellerPage projectData={arStoryTellerContent} />
-        </div>
-      ) : null}
+      <div aria-hidden={isLocked} inert={isLocked ? true : undefined}>
+        <ArStoryTellerPage
+          projectData={content as DocumentData}
+          onProjectHeaderLayersReady={handleProjectHeaderLayersReady}
+        />
+      </div>
 
       {phase !== "done" && !hasError && (
         <LandingSplash

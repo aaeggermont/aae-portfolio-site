@@ -6,11 +6,16 @@ import type { LandingSplashPhase } from "@/components/LandingSplash/LandingSplas
 export type LoadingSplashPhase = "loading" | "fading" | "done";
 
 const DEFAULT_MIN_SPLASH_MS = 880;
+const DEFAULT_TIMEOUT_MS = 10_000;
 
 type UseLoadingSplashOptions = {
   /** Route-specific readiness (Firestore, hero preloads, etc.). */
   waitFor: () => Promise<void>;
   minDurationMs?: number;
+  /** Max wait before fading in anyway (avoids a stuck splash). */
+  timeoutMs?: number;
+  /** Called when `waitFor` rejects; splash stays up and does not fade. */
+  onError?: (error: unknown) => void;
 };
 
 function delay(ms: number): Promise<void> {
@@ -24,10 +29,14 @@ function delay(ms: number): Promise<void> {
 export function useLoadingSplash({
   waitFor,
   minDurationMs = DEFAULT_MIN_SPLASH_MS,
+  timeoutMs = DEFAULT_TIMEOUT_MS,
+  onError,
 }: UseLoadingSplashOptions) {
   const [phase, setPhase] = useState<LoadingSplashPhase>("loading");
   const waitForRef = useRef(waitFor);
   waitForRef.current = waitFor;
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
 
   useLayoutEffect(() => {
     if (phase === "done") {
@@ -45,12 +54,16 @@ export function useLoadingSplash({
 
     void (async () => {
       try {
-        await Promise.all([
-          waitForRef.current(),
-          document.fonts.ready,
-          delay(minDurationMs),
+        await Promise.race([
+          Promise.all([
+            waitForRef.current(),
+            document.fonts.ready,
+            delay(minDurationMs),
+          ]),
+          delay(timeoutMs),
         ]);
-      } catch {
+      } catch (err) {
+        onErrorRef.current?.(err);
         return;
       } finally {
         if (cancelled) return;
@@ -65,7 +78,7 @@ export function useLoadingSplash({
     return () => {
       cancelled = true;
     };
-  }, [minDurationMs]);
+  }, [minDurationMs, timeoutMs]);
 
   const splashPhase: LandingSplashPhase = phase === "fading" ? "fading" : "loading";
 

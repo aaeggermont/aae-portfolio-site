@@ -1,18 +1,13 @@
 import { auth } from "@/firebase";
 import type { ProjectAccessContextValue } from "@/lib/access/ProjectAccessContext";
 import { buildPublicStorageUrl } from "@/lib/firebase/publicStorageUrl";
-import { preloadImages, preloadOne } from "@/lib/media/preloadImages";
+import { preloadOne } from "@/lib/media/preloadImages";
 
 import { CASE_STUDY_BANNER_OBJECT_PATH } from "./criticalAssets";
-import {
-  getProjectHeaderPreloadUrls,
-  type ViewportBand,
-} from "./projectHeaderPreloadUrls";
 
-type PreloadOptions = {
+type PreloadBannerOptions = {
   projectKey: string;
   visibility: ProjectAccessContextValue["visibility"];
-  viewportBand: ViewportBand;
 };
 
 async function preloadGatedMediaObject(
@@ -47,16 +42,14 @@ async function preloadGatedMediaObject(
   }
 }
 
-/** Above-the-fold hero assets for AR Story Teller (ProjectHeader + case study banner). */
-export async function preloadArStoryTellerHeroAssets({
+/** Case study hero banner (ProjectHeader layers load via mounted Next/Image). */
+export async function preloadArStoryTellerCaseStudyBanner({
   projectKey,
   visibility,
-  viewportBand,
-}: PreloadOptions): Promise<void> {
-  const headerUrls = getProjectHeaderPreloadUrls(viewportBand);
-
-  await Promise.all([
-    preloadImages(headerUrls),
-    preloadGatedMediaObject(projectKey, CASE_STUDY_BANNER_OBJECT_PATH, visibility),
-  ]);
+}: PreloadBannerOptions): Promise<void> {
+  await preloadGatedMediaObject(
+    projectKey,
+    CASE_STUDY_BANNER_OBJECT_PATH,
+    visibility,
+  );
 }
