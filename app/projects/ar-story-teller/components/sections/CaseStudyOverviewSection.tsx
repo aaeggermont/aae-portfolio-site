@@ -5,52 +5,18 @@ import ParagraphBlock from '../ParagraphBlock';
 import ParagraphImg from '../ParagraphImg';
 import ArAsNarrative from '../ArAsNarrative';
 import ContextualNotifications from '../ContextNotifications';
-import {
-    MagicExperiencesSection,
-    type MagicExperiences,
-} from './MagicExperiencesSection';
+import { MagicExperiencesSection } from './MagicExperiencesSection';
 import ProjectImage from '@/lib/media/ProjectImage';
 import { CASE_STUDY_BANNER_OBJECT_PATH } from '@/app/projects/ar-story-teller/lib/criticalAssets';
-import { StaticImageData } from 'next/image';
+import type { CaseStudyOverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import styles from '../../ArStoryTeller.module.scss';
 import { SectionSubTitle} from '../SectionSubTitle';
 import { LAYOUT_DIMENSIONS } from '../../layoutConfig';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface CaseStudyOverview {
-    title: string;
-    paragraphs: string[];
-}
-
-interface ARAsNarrativeTool {
-    title: string;
-    paragraphs: string[];
-    imageSrc: string;
-    alt: string;
-}
-
-interface NotificationsAttrac {
-    title: string;
-    paragraphs: string[];
-    images: string[];
-    alt: string;
-}
-
-interface CaseStudyData {
-    overview: CaseStudyOverview;
-    overviewImages: StaticImageData[];
-    overviewImagesAlt: string;
-    ARAsNarrativeTool: ARAsNarrativeTool;
-    notificationsAttrac: NotificationsAttrac;
-    magicExperiences: MagicExperiences;
-}
-
-
 interface CaseStudyOverviewSectionProps {
-    data: {
-        caseStudy: CaseStudyData;
-    };
+    data: CaseStudyOverviewSectionData;
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────

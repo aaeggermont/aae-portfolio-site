@@ -1,29 +1,14 @@
 import React from 'react';
 import OverviewParagraphBlock from '../OverviewParagraphBlock';
-import ParagraphImg from '../ParagraphImg';
-import { StaticImageData } from 'next/image';
 import styles from '../../ArStoryTeller.module.scss';
 import { SolutionDemo } from '../demo/SolutionDemo';
-import { ProjectOverview } from '../ProjectOverview';
+
+import type { OverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface OverviewBlock {
-    title: string;
-    paragraphs: string[];
-}
-
-interface SolutionData extends OverviewBlock {
-    images?: StaticImageData[];
-    alt?: string;
-}
-
 interface OverviewSectionProps {
-    data: {
-        designChallenge: OverviewBlock;
-        theProblem: OverviewBlock;
-        solution: SolutionData;
-    };
+    data: OverviewSectionData;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────

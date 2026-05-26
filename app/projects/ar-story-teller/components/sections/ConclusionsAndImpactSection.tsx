@@ -2,19 +2,11 @@
 
 import ParagraphBlock from "../ParagraphBlock";
 import { SectionTitle } from "../SectionTitle";
+import type { ConclusionsAndImpactSectionData } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
 import dsSectionStyles from "../../sections/DesignSystemSection.module.scss";
 
-interface ConclusionItem {
-  title: string;
-  paragraphs?: string[];
-}
-
 interface ConclusionsAndImpactSectionProps {
-  data: {
-    caseStudy?: {
-      conclusionsAndImpact?: ConclusionItem[];
-    };
-  };
+  data: ConclusionsAndImpactSectionData;
 }
 
 export function ConclusionsAndImpactSection({

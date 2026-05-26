@@ -19,7 +19,7 @@ import {
   PANEL_CONTENT_MAX_WIDTH_PX,
   STORYBOARD_MAIN_IMAGE_DESKTOP,
 } from "../layoutConfig";
-import type { StoryboardSlide } from "../sections/DesignSystemSection";
+import type { StoryboardSlide } from "../types/designSystemTypes";
 import styles from "./Storyboard.module.scss";
 
 const MAIN_IMAGE_INTRINSIC_WIDTH = STORYBOARD_MAIN_IMAGE_DESKTOP.maxWidthPx;

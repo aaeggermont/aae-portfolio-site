@@ -12,7 +12,7 @@ import { useSetAtom } from "jotai";
 import { useEffect, type CSSProperties } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
 import { headerState } from '@/components/Header/HeaderState';
-import { DocumentData } from 'firebase-admin/firestore';
+import type { ArStoryTellerContent } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import {
     LAYOUT_DIMENSIONS,
     PANEL_BLOCK_PADDINGS,
@@ -24,8 +24,6 @@ import {
 
 export { LAYOUT_DIMENSIONS, PANEL_BLOCK_PADDINGS, SECTION_GAPS };
 export type { LayoutDimensions, PanelBlockPaddings, SectionGaps };
-
-type ProjectDoc = DocumentData;
 
 const projectContentStyle: CSSProperties = {
     ['--section-gap-mobile' as string]: SECTION_GAPS.mobile,
@@ -40,7 +38,7 @@ const projectContentStyle: CSSProperties = {
 } as CSSProperties;
 
 type ArStoryTellerPageProps = {
-  projectData?: ProjectDoc | null;
+  projectData?: ArStoryTellerContent | null;
   onProjectHeaderLayersReady?: () => void;
 };
 

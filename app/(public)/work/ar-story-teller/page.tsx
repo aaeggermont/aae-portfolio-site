@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { DocumentData } from "firebase/firestore";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
@@ -14,6 +13,7 @@ import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
 import { useProjectAccess } from "@/lib/access/ProjectAccessContext";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
+import type { ArStoryTellerContent } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
 import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
 
 function resolveViewportBand(
@@ -36,7 +36,7 @@ function ArStoryTellerRouteContent() {
     isDesktopOrLaptop,
   );
 
-  const [content, setContent] = useState<unknown | null>(null);
+  const [content, setContent] = useState<ArStoryTellerContent | null>(null);
   const [hasError, setHasError] = useState(false);
 
   const contentReadyRef = useRef<{
@@ -137,7 +137,7 @@ function ArStoryTellerRouteContent() {
     <>
       <div aria-hidden={isLocked} inert={isLocked ? true : undefined}>
         <ArStoryTellerPage
-          projectData={content as DocumentData}
+          projectData={content}
           onProjectHeaderLayersReady={handleProjectHeaderLayersReady}
         />
       </div>
