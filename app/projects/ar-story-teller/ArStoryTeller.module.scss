@@ -111,14 +111,14 @@ $project-font-family: poppins;
 }
 
 @mixin stdesktop-section-subtitle1 {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.8rem;
     font-weight: 600;
     color: $project-font-color;
 }
 
 @mixin stdesktop-section-subtitle2 {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: $project-font-color;
@@ -173,7 +173,7 @@ $project-font-family: poppins;
 
 
 @mixin stlgmd-section-subtitle1 {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.4rem;
     font-weight: 600;
     color: $project-font-color;
@@ -181,7 +181,7 @@ $project-font-family: poppins;
 
 
 @mixin stlgmd-section-subtitle2 {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: $project-font-color;
@@ -234,7 +234,7 @@ $project-font-family: poppins;
 
 
 @mixin stsmsx-section-subtitle1 {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: $project-font-color;
@@ -242,7 +242,7 @@ $project-font-family: poppins;
 
 
 @mixin stsmsx-section-subtitle2 {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.2rem;
     font-weight: 600;
     color: $project-font-color;

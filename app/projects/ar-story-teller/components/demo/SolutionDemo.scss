@@ -23,7 +23,7 @@
 
         span {
             text-align: center;
-            font-family: var(--font-poppins);
+            font-family: var(--font-satoshi), sans-serif;
             font-size: 1.8rem;
             font-weight: 600;
             color: #03133C;
@@ -40,7 +40,7 @@
 }
 
 @mixin desktop-title-text {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 3rem;
     font-weight: 600;
     color: #102764;
@@ -62,7 +62,7 @@
 
 
 @mixin lgmd-title-text {
-    font-family: poppins;
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: #102764;

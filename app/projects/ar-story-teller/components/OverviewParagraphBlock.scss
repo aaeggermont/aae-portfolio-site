@@ -1,5 +1,5 @@
 @mixin desktop-title-text {
-    font-family: var(--font-poppins);
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: #03133C;
@@ -13,7 +13,7 @@
 }
 
 @mixin lgmd-title-text {
-    font-family: var(--font-poppins);
+    font-family: var(--font-satoshi), sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
     color: #03133C;
@@ -133,7 +133,7 @@
         justify-content: center;
         align-items: center;
         .storyteller-mdlg-paragraph-title {
-            font-family: var(--font-poppins);
+            font-family: var(--font-satoshi), sans-serif;
             font-size: 1.8rem;
             font-weight: 600;
             color: #102764;
@@ -162,7 +162,7 @@
         justify-content: center;
         align-items: center;
         .storyteller-mobile-paragraph-title {
-            font-family: var(--font-poppins);
+            font-family: var(--font-satoshi), sans-serif;
             font-size: 1.5rem;
             font-weight: 600;
             color: #102764;
