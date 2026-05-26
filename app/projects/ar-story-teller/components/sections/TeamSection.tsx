@@ -1,22 +1,12 @@
 import Team from '../Team';
 import styles from '../../ArStoryTeller.module.scss';
 
+import type { TeamSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface TeamMember {
-    name: string;
-    role: string;
-}
-
-interface TeamData {
-    title: string;
-    members: TeamMember[];
-}
-
 interface TeamSectionProps {
-    data: {
-        team: TeamData;
-    };
+    data: TeamSectionData;
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────

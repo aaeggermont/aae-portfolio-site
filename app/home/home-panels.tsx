@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -12,37 +12,23 @@ import LatestProjects from "./latest-projects";
 import ContactMe from "./contact-me";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
 import { Footer } from "@/components/Footer";
-import { LandingSplash } from "./LandingSplash";
+import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import { preloadLandingImages } from "@/lib/home/preloadLandingAssets";
+import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SCROLL_SEGMENTS_MULTIPLIER = 1; // one viewport height per panel transition
 
-/** Minimum time splash stays visible (avoids a subliminal flash) */
-const MIN_SPLASH_MS = 880;
-
-type SplashPhase = "loading" | "fading" | "done";
-
 function HomePanels() {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [splashPhase, setSplashPhase] = useState<SplashPhase>("loading");
-
-  useLayoutEffect(() => {
-    if (splashPhase === "done") {
-      document.body.style.overflow = "";
-      return;
-    }
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [splashPhase]);
+  const { phase, isLocked, splashPhase, onFadeEnd } = useLoadingSplash({
+    waitFor: preloadLandingImages,
+  });
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
 
-    let cancelled = false;
     let resizeCleanup: (() => void) | undefined;
 
     const ctx = gsap.context(() => {
@@ -147,39 +133,19 @@ function HomePanels() {
 
     ScrollTrigger.refresh();
 
-    void (async () => {
-      try {
-        await Promise.all([
-          preloadLandingImages(),
-          document.fonts.ready,
-          new Promise<void>((resolve) => setTimeout(resolve, MIN_SPLASH_MS)),
-        ]);
-      } finally {
-        if (cancelled) return;
-        requestAnimationFrame(() => {
-          if (!cancelled) {
-            setSplashPhase("fading");
-          }
-        });
-      }
-    })();
-
     return () => {
-      cancelled = true;
       resizeCleanup?.();
       ctx.revert();
     };
   }, []);
-
-  const shellLocked = splashPhase !== "done";
 
   return (
     <>
       <div
         ref={containerRef}
         className={styles.panelsContainer}
-        aria-hidden={shellLocked}
-        inert={shellLocked ? true : undefined}
+        aria-hidden={isLocked}
+        inert={isLocked ? true : undefined}
       >
         <section className={styles.panel} data-bg={PAGE_CANVAS}>
           <MainBanner />
@@ -208,11 +174,8 @@ function HomePanels() {
         </section>
       </div>
 
-      {splashPhase !== "done" && (
-        <LandingSplash
-          phase={splashPhase === "fading" ? "fading" : "loading"}
-          onFadeEnd={() => setSplashPhase("done")}
-        />
+      {phase !== "done" && (
+        <LandingSplash phase={splashPhase} onFadeEnd={onFadeEnd} />
       )}
     </>
   );

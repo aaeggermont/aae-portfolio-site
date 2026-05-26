@@ -1,18 +1,9 @@
 import { buildPublicStorageUrlWithBucket } from "@/lib/firebase/publicStorageUrl";
 import { HEADER_LOGO_PNG_STORAGE_PATH } from "@/lib/home/landingAssetPaths";
 import { SPLASH_LOGO_SRC } from "@/lib/home/splashLogo";
+import { preloadImages } from "@/lib/media/preloadImages";
 
 const LOCAL_LOGO_FALLBACK = "/images/topbar-header/AAE-SimpleLogo.svg";
-
-function preloadOne(src: string): Promise<void> {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const done = () => resolve();
-    img.onload = done;
-    img.onerror = done;
-    img.src = src;
-  });
-}
 
 /** URLs the header logo may use — preload so first paint after splash hits cache. */
 export function getHeaderLogoPreloadUrls(): string[] {
@@ -31,5 +22,5 @@ export function getHeaderLogoPreloadUrls(): string[] {
 }
 
 export async function preloadLandingImages(): Promise<void> {
-  await Promise.all(getHeaderLogoPreloadUrls().map(preloadOne));
+  await preloadImages(getHeaderLogoPreloadUrls());
 }

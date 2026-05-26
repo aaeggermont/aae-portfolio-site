@@ -6,14 +6,13 @@ import { OverviewSection } from './components/sections/OverviewSection';
 import { TeamSection } from './components/sections/TeamSection';
 import { ProjectOverviewSection } from './components/sections/ProjectOverviewSection'; 
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
-import { NotificationsSection } from './components/sections/NotificationsSection';
 import { DesignSystemSection } from './sections/DesignSystemSection';
 import ConclusionsAndImpactSection from './components/sections/ConclusionsAndImpactSection';
 import { useSetAtom } from "jotai";
 import { useEffect, type CSSProperties } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
 import { headerState } from '@/components/Header/HeaderState';
-import { DocumentData } from 'firebase-admin/firestore';
+import type { ArStoryTellerContent } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import {
     LAYOUT_DIMENSIONS,
     PANEL_BLOCK_PADDINGS,
@@ -26,13 +25,6 @@ import {
 export { LAYOUT_DIMENSIONS, PANEL_BLOCK_PADDINGS, SECTION_GAPS };
 export type { LayoutDimensions, PanelBlockPaddings, SectionGaps };
 
-type ProjectDoc = DocumentData;
-
-/* Cast helper — CSS custom properties aren't part of React's `CSSProperties` type, so
-   we widen the literal once at the boundary instead of sprinkling `as` casts inline.
-   Both spacing concerns (vertical gaps + horizontal layout dimensions) ride on the same
-   element (`.project-content`), so we emit a single style object rather than spreading
-   two. */
 const projectContentStyle: CSSProperties = {
     ['--section-gap-mobile' as string]: SECTION_GAPS.mobile,
     ['--section-gap-tablet' as string]: SECTION_GAPS.tablet,
@@ -45,39 +37,49 @@ const projectContentStyle: CSSProperties = {
     ['--layout-margin-desktop' as string]: LAYOUT_DIMENSIONS.desktop.margin,
 } as CSSProperties;
 
-export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDoc }) {
+type ArStoryTellerPageProps = {
+  projectData?: ArStoryTellerContent | null;
+  onProjectHeaderLayersReady?: () => void;
+};
+
+export function ArStoryTellerPage({
+  projectData = null,
+  onProjectHeaderLayersReady,
+}: ArStoryTellerPageProps) {
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
 
   useEffect(() => {
-    // 1. Al entrar a la ruta, establecemos los valores específicos de la página
     setLayoutState({ isFullWidth: true });
     setHeaderState({ position: 'absolute', isDark: true });
 
-    // 2. Al salir de la ruta (unmount), reseteamos los valores a los por defecto
     return () => {
       setLayoutState({ isFullWidth: false });
       setHeaderState({ position: 'relative', isDark: false });
     };
   }, [setLayoutState, setHeaderState]);
 
-  
+  const hasContent = projectData != null;
 
-  const { designChallenge, theProblem, solution, team, caseStudy, projectOverview} = projectData;
-
-    return (
-        <div>
-            <ProjectHeader />
-            <div className={styles['project-content']} style={projectContentStyle}>
-              <OverviewSection data={{ designChallenge, theProblem, solution }} />
-              <TeamSection data={{ team }} />
-              <ProjectOverviewSection  />
-              <CaseStudyOverviewSection data={{ caseStudy }} />
-
-              <DesignSystemSection data={{ caseStudy }} />
-              <ConclusionsAndImpactSection data={{ caseStudy }} />
-               
-            </div>
+  return (
+    <div>
+      <ProjectHeader onAllLayersReady={onProjectHeaderLayersReady} />
+      {hasContent ? (
+        <div className={styles['project-content']} style={projectContentStyle}>
+          <OverviewSection
+            data={{
+              designChallenge: projectData.designChallenge,
+              theProblem: projectData.theProblem,
+              solution: projectData.solution,
+            }}
+          />
+          <TeamSection data={{ team: projectData.team }} />
+          <ProjectOverviewSection />
+          <CaseStudyOverviewSection data={{ caseStudy: projectData.caseStudy }} />
+          <DesignSystemSection data={{ caseStudy: projectData.caseStudy }} />
+          <ConclusionsAndImpactSection data={{ caseStudy: projectData.caseStudy }} />
         </div>
-    )
+      ) : null}
+    </div>
+  );
 }
