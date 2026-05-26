@@ -16,6 +16,7 @@ import {InteractionDesignPrinciples} from '../components/InteractionDesignPrinci
 import { UserModeInteractions } from '../components/UserModeInteractions';
 import { Storyboard } from '../components/Storyboard';
 import { PrototypingMethodPanel } from '../components/PrototypingMethodPanel';
+import { UsabilityTestingPanel } from '../components/UsabilityTestingPanel';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -135,14 +136,16 @@ interface SoftwarePrototypes {
 
 interface ProcessSection {
     title: string;
-    bulletpoints: BulletPointItem[];
+    /** Firestore seed uses plain strings; legacy entries may use `{ text, icon }`. */
+    bulletpoints?: Array<string | BulletPointItem>;
 }
 
+/** Firestore: `designSystem.usabilityTesting` (see seed). */
 interface UsabilityTesting {
     title: string;
-    paragraphs: string[];
-    theProcess: ProcessSection;
-    dataAnalysis: ProcessSection;
+    paragraphs?: string[];
+    theProcess?: ProcessSection;
+    dataAnalysis?: ProcessSection;
 }
 
 interface DesignSystem {
@@ -158,7 +161,7 @@ interface DesignSystem {
     scenarioBaseDesign: ScenarioBaseDesign;
     prototyping?: Prototyping;
     softwarePrototypes: SoftwarePrototypes;
-    usabilityTesting: UsabilityTesting;
+    usabilityTesting?: UsabilityTesting;
     researchMethods?: ResearchMethodCardData[];
     envisionUseCase?: EnvisionUseCase;
 }
@@ -218,6 +221,12 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
     const prototypingMethod0 = prototyping?.methods?.[0];
     const prototypingMethod1 = prototyping?.methods?.[1];
     const prototypingMethod2 = prototyping?.methods?.[2];
+
+    const usabilityProcessBullets = (
+        usabilityTesting?.theProcess?.bulletpoints ?? []
+    ).map((item) =>
+        typeof item === 'string' ? { text: item } : item,
+    );
 
     const storyboard = envisionUseCase?.storyboard;
     const storyboardSlides: StoryboardSlide[] = (
@@ -398,6 +407,40 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                 </div>
             </div>
+
+            {/* Usability Testing & Evaluation — full-bleed grey band */}
+            {usabilityTesting ? (
+                <div
+                    className={dsSectionStyles.usabilityTestingBleed}
+                    aria-label="Usability Testing and Evaluation"
+                >
+                    <div className={dsSectionStyles.usabilityTestingBleedInner}>
+                        <SectionSubTitle
+                            title={
+                                usabilityTesting.title ??
+                                'Usability Testing & Evaluation'
+                            }
+                        />
+                        {usabilityTesting.paragraphs?.length ? (
+                            <ParagraphBlock
+                                paragraphs={usabilityTesting.paragraphs}
+                            />
+                        ) : null}
+                        {usabilityTesting.theProcess ? (
+                            <>
+                                <SectionSubTitle
+                                    title={usabilityTesting.theProcess.title}
+                                />
+                                {usabilityProcessBullets.length ? (
+                                    <UsabilityTestingPanel
+                                        bulletPoints={usabilityProcessBullets}
+                                    />
+                                ) : null}
+                            </>
+                        ) : null}
+                    </div>
+                </div>
+            ) : null}
 
             {/* Design System intro con fondo decorativo */}
             {/*

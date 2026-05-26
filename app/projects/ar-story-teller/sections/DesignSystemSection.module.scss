@@ -124,6 +124,17 @@
     @extend %designSystemBleedInner;
 }
 
+/* Usability Testing & Evaluation — full-bleed grey band (same surface as Envision). */
+.usabilityTestingBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f5f5f7;
+}
+
+.usabilityTestingBleedInner {
+    @extend %designSystemBleedInner;
+}
+
 /* Carousel strip: defines `--guest-needs-content-gutter` for the research-methods rail
    (leading spacer + nav padding in `UserResearchMethodsCarousel`). */
 .guestNeedsCarouselStrip {
