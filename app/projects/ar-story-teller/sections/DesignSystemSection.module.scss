@@ -136,6 +136,18 @@
     @extend %designSystemBleedInner;
 }
 
+/* Conclusions & Impact — final full-bleed white band. */
+.conclusionsImpactBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+    padding-bottom: 100px;
+}
+
+.conclusionsImpactBleedInner {
+    @extend %designSystemBleedInner;
+}
+
 /* Carousel strip: defines `--guest-needs-content-gutter` for the research-methods rail
    (leading spacer + nav padding in `UserResearchMethodsCarousel`). */
 .guestNeedsCarouselStrip {

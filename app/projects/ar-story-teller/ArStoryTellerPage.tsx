@@ -8,7 +8,7 @@ import { ProjectOverviewSection } from './components/sections/ProjectOverviewSec
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
 import { NotificationsSection } from './components/sections/NotificationsSection';
 import { DesignSystemSection } from './sections/DesignSystemSection';
-import { NextStepsSection } from './components/sections/NextStepsSection';
+import ConclusionsAndImpactSection from './components/sections/ConclusionsAndImpactSection';
 import { useSetAtom } from "jotai";
 import { useEffect, type CSSProperties } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
@@ -63,7 +63,7 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
 
   
 
-  const { designChallenge, theProblem, solution, team, nextSteps, caseStudy, projectOverview} = projectData;
+  const { designChallenge, theProblem, solution, team, caseStudy, projectOverview} = projectData;
 
     return (
         <div>
@@ -74,11 +74,8 @@ export function ArStoryTellerPage({ projectData = {} }: { projectData: ProjectDo
               <ProjectOverviewSection  />
               <CaseStudyOverviewSection data={{ caseStudy }} />
 
-              
-             
-           
               <DesignSystemSection data={{ caseStudy }} />
-              <NextStepsSection data={{ nextSteps }} /> 
+              <ConclusionsAndImpactSection data={{ caseStudy }} />
                
             </div>
         </div>
