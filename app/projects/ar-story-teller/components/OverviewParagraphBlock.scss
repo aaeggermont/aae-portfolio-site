@@ -1,13 +1,13 @@
 @mixin desktop-title-text {
     font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.5rem;
+    font-size: 40px;
     font-weight: 600;
     color: #03133C;
 }
 
 @mixin desktop-section-text {
-    font-family: var(--font-poppins);
-    font-size: 1.2rem;
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+    font-size: 1.5rem;
     font-weight: 400;
     color: #03133C;
 }
@@ -20,7 +20,7 @@
 }
 
 @mixin lgmd-section-text {
-    font-family: var(--font-poppins);
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
     font-size: 1.2rem;
     font-weight: 400;
     color: #03133C;
@@ -141,7 +141,7 @@
 
         .storyteller-mdlg-paragraph-text {
             padding-top: 2.5rem;
-            font-family: var(--font-poppins);
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
             font-size: 1.2rem;
             font-weight: 400;
             color: #102764;
@@ -171,7 +171,7 @@
 
         .storyteller-mobile-paragraph-text {
             padding-top: 2rem;
-            font-family: var(--font-poppins);
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
             font-size: 1rem;
             font-weight: 400;
             color: #102764;

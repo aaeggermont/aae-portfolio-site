@@ -24,15 +24,15 @@
         span {
             text-align: center;
             font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 40px;
+            font-weight: 700;
             color: #03133C;
         }
 
         p {
             padding-top: 2rem;
-            font-family: var(--font-poppins);
-            font-size: 1.2rem;
+            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+            font-size: 24px;
             font-weight: 400;
             color: #03133C;
         }
@@ -41,20 +41,20 @@
 
 @mixin desktop-title-text {
     font-family: var(--font-satoshi), sans-serif;
-    font-size: 3rem;
+    font-size: 40px;
     font-weight: 600;
     color: #102764;
 }
 
 @mixin desktop-section-text {
-    font-family: poppins;
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
     font-size: 2rem;
     font-weight: 400;
     color: #102764;
 }
 
 @mixin desktop-annotation-text {
-    font-family: poppins;
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
     font-size: 2rem;
     font-weight: 400;
     color: #102764;
@@ -63,14 +63,14 @@
 
 @mixin lgmd-title-text {
     font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.5rem;
+    font-size: 30px;
     font-weight: 600;
     color: #102764;
 }
 
 @mixin lgmd-section-text {
-    font-family: poppins;
-    font-size: 1.2rem;
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+    font-size: 24px;
     font-weight: 400;
     color: #102764;
 }

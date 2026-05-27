@@ -6,6 +6,8 @@ import type {
   MagicExperiences,
   NotificationsAttrac,
   OverviewBlock,
+  ProjectOverviewData,
+  ProjectOverviewColumn,
   SolutionBlock,
   TeamData,
   TeamMember,
@@ -140,6 +142,37 @@ function parseMagicExperiences(value: unknown, path: string): MagicExperiences {
   };
 }
 
+function parseProjectOverview(
+  value: unknown,
+  path: string,
+): ProjectOverviewData {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  if (!Array.isArray(value.columns)) {
+    throw new Error(`Invalid ${path}.columns: expected array`);
+  }
+
+  const columns: ProjectOverviewColumn[] = value.columns.map((column, index) => {
+    if (!isRecord(column)) {
+      throw new Error(`Invalid ${path}.columns[${index}]: expected object`);
+    }
+    if (!Array.isArray(column.items)) {
+      throw new Error(`Invalid ${path}.columns[${index}].items: expected array`);
+    }
+    return {
+      icon: requireString(column.icon, `${path}.columns[${index}].icon`),
+      title: requireString(column.title, `${path}.columns[${index}].title`),
+      items: parseStringArray(column.items, `${path}.columns[${index}].items`),
+    };
+  });
+
+  return {
+    title: requireString(value.title, `${path}.title`),
+    columns,
+  };
+}
+
 function parseCaseStudy(value: unknown, path: string): ArStoryTellerCaseStudy {
   if (!isRecord(value)) {
     throw new Error(`Invalid ${path}: expected object`);
@@ -212,6 +245,7 @@ export function parseArStoryTellerContent(raw: unknown): ArStoryTellerContent {
     theProblem: parseOverviewBlock(raw.theProblem, "theProblem"),
     solution: parseSolutionBlock(raw.solution, "solution"),
     team: parseTeamData(raw.team, "team"),
+    projectOverview: parseProjectOverview(raw.projectOverview, "projectOverview"),
     caseStudy: parseCaseStudy(raw.caseStudy, "caseStudy"),
   };
 }

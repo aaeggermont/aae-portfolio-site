@@ -43,7 +43,7 @@ export function OverviewParagraphBlock({
                             <SectionTitle
                                 title={title1}
                                 paddingTop={0}
-                                paddingBottom="1rem"
+                                paddingBottom="0.1rem"
                             />
                         ) : null}
                         <p>{paragraph1}</p>

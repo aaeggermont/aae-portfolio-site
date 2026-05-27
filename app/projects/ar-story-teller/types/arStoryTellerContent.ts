@@ -25,6 +25,19 @@ export type TeamData = {
   members: TeamMember[];
 };
 
+/** Firestore `content.projectOverview` — roles, timeline, category columns. */
+export type ProjectOverviewColumn = {
+  /** Storage object path, e.g. `projects/project_1/MyRolesIcon.png`. */
+  icon: string;
+  title: string;
+  items: string[];
+};
+
+export type ProjectOverviewData = {
+  title: string;
+  columns: ProjectOverviewColumn[];
+};
+
 export type CaseStudyOverview = {
   title: string;
   paragraphs: string[];
@@ -79,6 +92,7 @@ export type ArStoryTellerContent = {
   theProblem: OverviewBlock;
   solution: SolutionBlock;
   team: TeamData;
+  projectOverview: ProjectOverviewData;
   caseStudy: ArStoryTellerCaseStudy;
 };
 
@@ -88,6 +102,11 @@ export type OverviewSectionData = Pick<
 >;
 
 export type TeamSectionData = Pick<ArStoryTellerContent, "team">;
+
+export type ProjectOverviewSectionData = Pick<
+  ArStoryTellerContent,
+  "projectOverview"
+>;
 
 export type CaseStudyOverviewSectionData = Pick<
   ArStoryTellerContent,
