@@ -38,9 +38,12 @@ function chunkRowPairs(members: TeamMember[]): { left: TeamMember; right?: TeamM
 function MemberBlock({
   member,
   align,
+  stacked = false,
 }: {
   member: TeamMember;
   align: "left" | "right";
+  /** Mobile list: name above role, no row gutters */
+  stacked?: boolean;
 }) {
   const isRight = align === "right";
 
@@ -50,9 +53,9 @@ function MemberBlock({
         component="p"
         sx={{
           m: 0,
-          pt: 2,
-          pr: isRight ? 2 : 0,
-          pl: isRight ? 0 : 2,
+          pt: stacked ? 0 : 2,
+          pr: stacked || !isRight ? 0 : 2,
+          pl: stacked || isRight ? 0 : 2,
           ...bodyTextSx,
           fontWeight: 600,
         }}
@@ -63,8 +66,9 @@ function MemberBlock({
         component="p"
         sx={{
           m: 0,
-          pr: isRight ? 2 : 0,
-          pl: isRight ? 0 : 2,
+          mt: stacked ? 0.5 : 0,
+          pr: stacked || !isRight ? 0 : 2,
+          pl: stacked || isRight ? 0 : 2,
           ...bodyTextSx,
         }}
       >
@@ -124,38 +128,23 @@ const Team = ({ data }: TeamProps) => {
           width: "100%",
         }}
       >
-        {/* Mobile: name and role on one row per member */}
+        {/* Mobile: single column — name stacked above role per member */}
         <Stack
-          spacing={2}
+          spacing={3}
           sx={{
             display: "flex",
-            width: "90%",
-            maxWidth: 428,
-            mx: "auto",
+            width: "100%",
+            maxWidth: "100%",
             [TABLET_UP_MQ]: { display: "none" },
           }}
         >
           {members.map((member) => (
-            <Stack
+            <MemberBlock
               key={memberKey(member)}
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
-              spacing={2}
-            >
-              <Typography
-                component="p"
-                sx={{ m: 0, ...bodyTextSx, fontWeight: 600, textAlign: "left" }}
-              >
-                {member.name}
-              </Typography>
-              <Typography
-                component="p"
-                sx={{ m: 0, ...bodyTextSx, textAlign: "left", flexShrink: 0 }}
-              >
-                {member.role}
-              </Typography>
-            </Stack>
+              member={member}
+              align="left"
+              stacked
+            />
           ))}
         </Stack>
 
