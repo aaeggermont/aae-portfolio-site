@@ -1,5 +1,4 @@
 'use client';
-import type { ComponentPropsWithoutRef } from 'react';
 import './ProjectOverview.scss';
 import ProjectImage from '@/lib/media/ProjectImage';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
@@ -8,7 +7,7 @@ import type {
     ProjectOverviewData,
 } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 
-interface ProjectOverviewProps extends ComponentPropsWithoutRef<'div'> {
+interface ProjectOverviewProps {
     data: ProjectOverviewData;
 }
 
@@ -64,37 +63,61 @@ function OverviewRow({ item }: { item: ProjectOverviewColumn }) {
     );
 }
 
-export function ProjectOverview({ data, ...props }: ProjectOverviewProps) {
+function ProjectOverviewColumns({
+    title,
+    columns,
+}: {
+    title: string;
+    columns: ProjectOverviewColumn[];
+}) {
+    return (
+        <div className="overview-container">
+            <h2 className="overview-title">{title}</h2>
+            <div className="overview-columns">
+                {columns.map((item) => (
+                    <OverviewColumn key={item.title} item={item} />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+function ProjectOverviewRows({
+    title,
+    columns,
+}: {
+    title: string;
+    columns: ProjectOverviewColumn[];
+}) {
+    return (
+        <div className="overview-container overview-container--mobile">
+            <h2 className="overview-title">{title}</h2>
+            <div className="overview-rows">
+                {columns.map((item) => (
+                    <OverviewRow key={item.title} item={item} />
+                ))}
+            </div>
+        </div>
+    );
+}
+
+export function ProjectOverview({ data }: ProjectOverviewProps) {
     const screenDevice = useResponsive();
     const { title, columns } = data;
 
+    let content: React.ReactNode = null;
+
     if (screenDevice.isDesktopOrLaptop || screenDevice.isTablet) {
-        return (
-            <div {...props} className="overview-container">
-                <h2 className="overview-title">{title}</h2>
-                <div className="overview-columns">
-                    {columns.map((item) => (
-                        <OverviewColumn key={item.title} item={item} />
-                    ))}
-                </div>
-            </div>
-        );
+        content = <ProjectOverviewColumns title={title} columns={columns} />;
+    } else if (screenDevice.isMobile) {
+        content = <ProjectOverviewRows title={title} columns={columns} />;
     }
 
-    if (screenDevice.isMobile) {
-        return (
-            <div {...props} className="overview-container overview-container--mobile">
-                <h2 className="overview-title">{title}</h2>
-                <div className="overview-rows">
-                    {columns.map((item) => (
-                        <OverviewRow key={item.title} item={item} />
-                    ))}
-                </div>
-            </div>
-        );
+    if (!content) {
+        return null;
     }
 
-    return null;
+    return <section className="project-overview-pin">{content}</section>;
 }
 
 export default ProjectOverview;

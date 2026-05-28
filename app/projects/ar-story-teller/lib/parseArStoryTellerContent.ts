@@ -2,6 +2,7 @@ import type {
   ARAsNarrativeTool,
   ArStoryTellerCaseStudy,
   ArStoryTellerContent,
+  BusinessGoalsData,
   MagicExperience,
   MagicExperiences,
   NotificationsAttrac,
@@ -49,6 +50,20 @@ function parseSolutionBlock(value: unknown, path: string): SolutionBlock {
     solution.images = parseStringArray(value.images, `${path}.images`);
   }
   return solution;
+}
+
+function parseBusinessGoalsData(
+  value: unknown,
+  path: string,
+): BusinessGoalsData {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  return {
+    title: requireString(value.title, `${path}.title`),
+    intro: requireString(value.intro, `${path}.intro`),
+    goals: parseStringArray(value.goals, `${path}.goals`),
+  };
 }
 
 function parseTeamData(value: unknown, path: string): TeamData {
@@ -244,6 +259,7 @@ export function parseArStoryTellerContent(raw: unknown): ArStoryTellerContent {
     designChallenge: parseOverviewBlock(raw.designChallenge, "designChallenge"),
     theProblem: parseOverviewBlock(raw.theProblem, "theProblem"),
     solution: parseSolutionBlock(raw.solution, "solution"),
+    businessGoals: parseBusinessGoalsData(raw.businessGoals, "businessGoals"),
     team: parseTeamData(raw.team, "team"),
     projectOverview: parseProjectOverview(raw.projectOverview, "projectOverview"),
     caseStudy: parseCaseStudy(raw.caseStudy, "caseStudy"),

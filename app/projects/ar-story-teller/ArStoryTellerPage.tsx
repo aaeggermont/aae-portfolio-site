@@ -74,7 +74,7 @@ export function ArStoryTellerPage({
               solution: projectData.solution,
             }}
           />
-          <BusinessGoals />
+          <BusinessGoals data={projectData.businessGoals} />
           <TeamSection data={{ team: projectData.team }} />
           <ProjectOverviewSection data={{ projectOverview: projectData.projectOverview }} />
           <CaseStudyOverviewSection data={{ caseStudy: projectData.caseStudy }} />

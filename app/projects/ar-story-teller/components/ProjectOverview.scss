@@ -2,6 +2,11 @@
    Variables (`$desktop`, `$tablet`, `$mobile`, `$font-color-bold`, `$font-color-normal`)
    come from `styles/variables.scss` via Next's `sassOptions.additionalData`. */
 
+.project-overview-pin {
+    position: relative;
+    background: #ffffff;
+}
+
 /* Column heading scale — same rhythm as `SectionTitle` (40 / 34 / 28 px): ~15% down per step. */
 @mixin overview-column-title-type($font-size) {
     font-family: var(--font-satoshi), sans-serif;
@@ -48,8 +53,20 @@
 }
 
 @media #{$desktop} {
+    .project-overview-pin {
+        min-height: 170vh;
+    }
+
     .overview-container {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         padding-top: 8rem;
+        padding-bottom: 4rem;
     }
 
     .overview-title {
@@ -104,8 +121,20 @@
 }
 
 @media #{$tablet} {
+    .project-overview-pin {
+        min-height: 140vh;
+    }
+
     .overview-container {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         padding-top: 6rem;
+        padding-bottom: 4rem;
     }
 
     .overview-title {
@@ -159,6 +188,17 @@
 }
 
 @media #{$mobile} {
+    .project-overview-pin {
+        min-height: auto;
+    }
+
+    .overview-container {
+        position: static;
+        top: auto;
+        min-height: auto;
+        display: block;
+    }
+
     .overview-container--mobile {
         padding-top: 4rem;
     }
