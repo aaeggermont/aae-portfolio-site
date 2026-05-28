@@ -11,7 +11,10 @@ import { CASE_STUDY_BANNER_OBJECT_PATH } from '@/app/projects/ar-story-teller/li
 import type { CaseStudyOverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import styles from '../../ArStoryTeller.module.scss';
 import { SectionSubTitle} from '../SectionSubTitle';
-import { LAYOUT_DIMENSIONS } from '../../layoutConfig';
+import {
+    LAYOUT_DIMENSIONS,
+    PANEL_CONTENT_MAX_WIDTH_PX,
+} from '../../layoutConfig';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,7 +30,8 @@ const CASE_STUDY_BANNER_ALT = 'Tower of Terror case study banner';
    shift. Update if the actual asset's aspect differs significantly. */
 const CASE_STUDY_BANNER_INTRINSIC_WIDTH = 1920;
 const CASE_STUDY_BANNER_INTRINSIC_HEIGHT = 720;
-const CASE_STUDY_BANNER_SIZES = `(max-width: ${LAYOUT_DIMENSIONS.desktop.maxWidth}) 100vw, ${LAYOUT_DIMENSIONS.desktop.maxWidth}`;
+const CASE_STUDY_BANNER_MAX_WIDTH_PX = PANEL_CONTENT_MAX_WIDTH_PX;
+const CASE_STUDY_BANNER_SIZES = `(max-width: ${LAYOUT_DIMENSIONS.desktop.maxWidth}) 100vw, ${CASE_STUDY_BANNER_MAX_WIDTH_PX}px`;
 
 /**
  * Default vertical spacing between direct children of `CaseStudyOverviewSection`
@@ -45,8 +49,17 @@ const CASE_STUDY_BANNER_SIZES = `(max-width: ${LAYOUT_DIMENSIONS.desktop.maxWidt
  *
  * To override a single internal gap (e.g. tighter between paragraph block and
  * `ArAsNarrative`), set `--case-study-overview-gap-self` inline on that child.
+ *
+ * Banner → overview paragraphs use `--case-study-banner-paragraph-gap-*` (see below).
  */
 const CASE_STUDY_OVERVIEW_GAPS = {
+    mobile: '3rem',
+    tablet: '6rem',
+    desktop: '8rem',
+} as const;
+
+/** Vertical space between the case study banner image and `ParagraphBlock` only. */
+const CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS = {
     mobile: '3rem',
     tablet: '6rem',
     desktop: '8rem',
@@ -56,6 +69,13 @@ const caseStudyOverviewGapStyle: CSSProperties = {
     ['--case-study-overview-gap-mobile' as string]: CASE_STUDY_OVERVIEW_GAPS.mobile,
     ['--case-study-overview-gap-tablet' as string]: CASE_STUDY_OVERVIEW_GAPS.tablet,
     ['--case-study-overview-gap-desktop' as string]: CASE_STUDY_OVERVIEW_GAPS.desktop,
+    ['--case-study-banner-paragraph-gap-mobile' as string]:
+        CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS.mobile,
+    ['--case-study-banner-paragraph-gap-tablet' as string]:
+        CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS.tablet,
+    ['--case-study-banner-paragraph-gap-desktop' as string]:
+        CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS.desktop,
+    ['--case-study-banner-max-width' as string]: `${CASE_STUDY_BANNER_MAX_WIDTH_PX}px`,
 } as CSSProperties;
 
 function CaseStudyBannerTitle({ title }: { title: string }) {
@@ -133,9 +153,7 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
                     data-aos-anchor-placement="top-center"
                     data-aos-delay="10000"
                     >
-                    <CaseStudyBannerTitle 
-                      
-                    title={overview.title} />
+                    <CaseStudyBannerTitle title={overview.title} />
                 </div>
             </div>
 
