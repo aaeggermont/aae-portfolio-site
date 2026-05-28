@@ -9,23 +9,20 @@ const goals = [
 
 const BusinessGoals = () => {
   return (
-    <section
-      className="business-goals"
-      data-aos="fade-up"
-      data-aos-duration="1000"
-      data-aos-anchor-placement="top-center"
-    >
-      <h2 className="business-goals__title">Business Goals</h2>
-      <p className="business-goals__intro">
-        The business goals for AR Storyteller aim to balance "magic" and
-        measurable value while delivering immersive guest experiences with
-        scalable and sustainable outcomes.
-      </p>
-      <ul className="business-goals__list">
-        {goals.map((goal) => (
-          <li key={goal}>{goal}</li>
-        ))}
-      </ul>
+    <section className="business-goals-pin">
+      <div className="business-goals">
+        <h2 className="business-goals__title">Business Goals</h2>
+        <p className="business-goals__intro">
+          The business goals for AR Storyteller aim to balance "magic" and
+          measurable value while delivering immersive guest experiences with
+          scalable and sustainable outcomes.
+        </p>
+        <ul className="business-goals__list">
+          {goals.map((goal) => (
+            <li key={goal}>{goal}</li>
+          ))}
+        </ul>
+      </div>
     </section>
   );
 };

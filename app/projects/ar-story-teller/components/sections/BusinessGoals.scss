@@ -1,3 +1,8 @@
+.business-goals-pin {
+    position: relative;
+    background: #ffffff;
+}
+
 .business-goals {
     margin: auto;
     width: 80%;
@@ -42,7 +47,18 @@
 }
 
 @media #{$tablet} {
+    .business-goals-pin {
+        min-height: 140vh;
+    }
+
     .business-goals {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         width: 80%;
         padding-top: 4rem;
         padding-bottom: 4rem;
@@ -66,7 +82,13 @@
 }
 
 @media #{$mobile} {
+    .business-goals-pin {
+        min-height: auto;
+    }
+
     .business-goals {
+        position: static;
+        top: auto;
         width: 90%;
         padding-top: 2rem;
         padding-bottom: 2rem;
@@ -89,5 +111,21 @@
                 font-size: 18px;
             }
         }
+    }
+}
+
+@media #{$desktop} {
+    .business-goals-pin {
+        min-height: 170vh;
+    }
+
+    .business-goals {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
