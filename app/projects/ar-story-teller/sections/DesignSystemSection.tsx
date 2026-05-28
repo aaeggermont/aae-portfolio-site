@@ -101,9 +101,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     <ParagraphImg
                         imagesSrc={userResearchJourney.images}
                         alt={designSystem.alt}
-                        data-aos="fade-up"
-                        data-aos-duration="1000"
-                        data-aos-anchor-placement="top-center"
+                        widthPercent={80}
                         style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
                     />
                 </div>

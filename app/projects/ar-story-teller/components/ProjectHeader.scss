@@ -127,13 +127,13 @@
             .banner-text-title {
                 margin-bottom: 1.5rem;
                 font-size: clamp(1.875rem, 1.2vw + 1.15rem, 2.1rem);
-                font-family: var(--font-poppins);
+                font-family: var(--font-satoshi), sans-serif;
                 color: #ffffff;
                 font-weight: 600;
             }
             p {
                 font-size: clamp(1.25rem, 1.05vw + 0.94rem, 1.4rem);
-                font-family: var(--font-poppins);
+                font-family: var(--font-satoshi), sans-serif;
                 color: #ffbb00;
                 font-weight: 600;
                 width: 55%;
@@ -175,14 +175,14 @@
             .banner-text-title {
                 margin-bottom: 1.5rem;
                 font-size: 2rem;
-                font-family: var(--font-poppins);
+                font-family: var(--font-satoshi), sans-serif;
                 color: #ffffff;
                 font-weight: 600;
                 width: 100%;
             }
             p {
                 font-size: 1.2rem;
-                font-family: var(--font-poppins);
+                font-family: var(--font-satoshi), sans-serif;
                 color: #ffbb00;
                 font-weight: 500;
                 width: 80%;
@@ -232,7 +232,7 @@
             .banner-text-title {
                 margin-bottom: 1.5rem;
                 font-size: 1.2rem;
-                font-family: var(--font-poppins);
+                font-family: var(--font-satoshi), sans-serif;
                 color: #ffffff;
                 font-weight: 600;
                 width: 100%;
@@ -240,7 +240,7 @@
             }
             p {
                 font-size: 1rem;
-                font-family: var(--font-poppins);
+                font-family: var(--font-satoshi), sans-serif;
                 color: #ffbb00;
                 font-weight: 500;
                 width: 100%;

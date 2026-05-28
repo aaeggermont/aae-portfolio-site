@@ -1,5 +1,6 @@
 import React from 'react';
 import './OverviewParagraphBlock.scss';
+import { SectionTitle } from './SectionTitle';
 import WaitingPeopleDesktop from '../Images/WaitingPeople-DesktopLg.png';
 import WaitingPeopleLgMd from '../Images/WaitingPeople-LgMd.png';
 import WaitingPeopleSMSX from '../Images/WaitingPeople-SMSX.png';
@@ -38,13 +39,25 @@ export function OverviewParagraphBlock({
             >
                 <div className="project-summary-container">
                     <div className="storyteller-laptoplg-content-left">
-                        <span>{title1}</span>
+                        {title1 ? (
+                            <SectionTitle
+                                title={title1}
+                                paddingTop={0}
+                                paddingBottom="0.1rem"
+                            />
+                        ) : null}
                         <p>{paragraph1}</p>
                     </div>
                 </div>
                 <div className="project-summary-container">
                     <div className="storyteller-laptoplg-content-right">
-                        <span>{title2}</span>
+                        {title2 ? (
+                            <SectionTitle
+                                title={title2}
+                                paddingTop={0}
+                                paddingBottom="1rem"
+                            />
+                        ) : null}
                         <p>{paragraph2}</p>
                     </div>
                 </div>
@@ -62,13 +75,25 @@ export function OverviewParagraphBlock({
             >
                 <div className="project-summary-container">
                     <div className="content">
-                        <span>{title1}</span>
+                        {title1 ? (
+                            <SectionTitle
+                                title={title1}
+                                paddingTop={0}
+                                paddingBottom="1rem"
+                            />
+                        ) : null}
                         <p>{paragraph1}</p>
                     </div>
                 </div>
                 <div className="project-summary-container">
                     <div className="content">
-                        <span>{title2}</span>
+                        {title2 ? (
+                            <SectionTitle
+                                title={title2}
+                                paddingTop={0}
+                                paddingBottom="1rem"
+                            />
+                        ) : null}
                         <p>{paragraph2}</p>
                     </div>
                 </div>
@@ -86,13 +111,25 @@ export function OverviewParagraphBlock({
             >
                 <div className="storyteller-mobile-paragraph-container">
                     <div className="storyteller-mobile-content">
-                        <div className="storyteller-mobile-paragraph-title">{title1}</div>
+                        {title1 ? (
+                            <SectionTitle
+                                title={title1}
+                                paddingTop={0}
+                                paddingBottom="0.625rem"
+                            />
+                        ) : null}
                         <p className="storyteller-mobile-paragraph-text">{paragraph1}</p>
                     </div>
                 </div>
                 <div className="storyteller-mobile-paragraph-container">
                     <div className="storyteller-mobile-content">
-                        <div className="storyteller-mobile-paragraph-title">{title2}</div>
+                        {title2 ? (
+                            <SectionTitle
+                                title={title2}
+                                paddingTop={0}
+                                paddingBottom="0.625rem"
+                            />
+                        ) : null}
                         <p className="storyteller-mobile-paragraph-text">{paragraph2}</p>
                     </div>
                 </div>

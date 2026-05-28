@@ -2,6 +2,26 @@
    Variables (`$desktop`, `$tablet`, `$mobile`, `$font-color-bold`, `$font-color-normal`)
    come from `styles/variables.scss` via Next's `sassOptions.additionalData`. */
 
+/* Column heading scale — same rhythm as `SectionTitle` (40 / 34 / 28 px): ~15% down per step. */
+@mixin overview-column-title-type($font-size) {
+    font-family: var(--font-satoshi), sans-serif;
+    font-size: $font-size;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    color: $font-color-bold;
+}
+
+/* List copy — Source Sans 3; steps match `ParagraphText` ratio (24 / 22 / 18 px) from 27 px desktop. */
+@mixin overview-items-type($font-size) {
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+    font-size: $font-size;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: $font-color-normal;
+}
+
 .overview-container {
     margin-left: auto;
     margin-right: auto;
@@ -63,10 +83,7 @@
         }
 
         .overview-column-title {
-            font-family: var(--font-poppins);
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: $font-color-bold;
+            @include overview-column-title-type(27px);
             padding-bottom: 0.5rem;
         }
 
@@ -80,10 +97,7 @@
             width: 100%;
 
             li {
-                font-family: var(--font-poppins);
-                font-size: 1.1rem;
-                font-weight: 400;
-                color: $font-color-normal;
+                @include overview-items-type(22px);
             }
         }
     }
@@ -124,10 +138,7 @@
         }
 
         .overview-column-title {
-            font-family: var(--font-poppins);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: $font-color-bold;
+            @include overview-column-title-type(22px);
             padding-bottom: 0.5rem;
         }
 
@@ -141,10 +152,7 @@
             width: 100%;
 
             li {
-                font-family: var(--font-poppins);
-                font-size: 1rem;
-                font-weight: 400;
-                color: $font-color-normal;
+                @include overview-items-type(22px);
             }
         }
     }
@@ -156,9 +164,9 @@
     }
 
     .overview-title {
-        font-size: 1.375rem;
+        font-size: 22px;
         padding-top: 1.25rem;
-        padding-bottom: 1rem;
+        padding-bottom: 2rem;
     }
 
     .overview-rows {
@@ -184,10 +192,7 @@
 
         .overview-row-icon-label {
             margin-top: 0.5rem;
-            font-family: var(--font-poppins);
-            font-size: 1rem;
-            font-weight: 600;
-            color: $font-color-bold;
+            @include overview-column-title-type(18px);
         }
 
         .overview-row-items {
@@ -201,10 +206,7 @@
             gap: 0.25rem;
 
             li {
-                font-family: var(--font-poppins);
-                font-size: 1rem;
-                font-weight: 400;
-                color: $font-color-normal;
+                @include overview-items-type(20px);
             }
         }
     }

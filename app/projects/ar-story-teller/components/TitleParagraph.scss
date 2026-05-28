@@ -8,7 +8,7 @@
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
-            font-family: var(--font-poppins);
+            font-family: var(--font-satoshi), sans-serif;
             font-size: 1.8rem;
             font-weight: 600;
         }
@@ -25,7 +25,7 @@
             padding-top: 1.5rem;
             padding-bottom: 3rem;
             text-align: center;
-            font-family: var(--font-poppins);
+            font-family: var(--font-satoshi), sans-serif;
             font-size: 1.75rem;
             font-weight: 600;
         }
@@ -39,16 +39,13 @@
         text-align: center;
 
         .title-paragraph {
-            font-family: poppins;
+            font-family: var(--font-satoshi), sans-serif;
             font-size: 1.5rem;
             font-weight: 600;
             color: #040B35;
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
-            font-family: var(--font-poppins);
-            font-size: 1.5rem;
-            font-weight: 600;
         }
     }
 }
