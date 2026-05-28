@@ -13,6 +13,7 @@ import { useEffect, type CSSProperties } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
 import { headerState } from '@/components/Header/HeaderState';
 import type { ArStoryTellerContent } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
+import BusinessGoals from './components/sections/BusinessGoals';
 import {
     LAYOUT_DIMENSIONS,
     PANEL_BLOCK_PADDINGS,
@@ -73,8 +74,9 @@ export function ArStoryTellerPage({
               solution: projectData.solution,
             }}
           />
-          <TeamSection data={{ team: projectData.team }} />
+          <BusinessGoals data={projectData.businessGoals} />
           <ProjectOverviewSection data={{ projectOverview: projectData.projectOverview }} />
+          <TeamSection data={{ team: projectData.team }} />
           <CaseStudyOverviewSection data={{ caseStudy: projectData.caseStudy }} />
           <DesignSystemSection data={{ caseStudy: projectData.caseStudy }} />
           <ConclusionsAndImpactSection data={{ caseStudy: projectData.caseStudy }} />
