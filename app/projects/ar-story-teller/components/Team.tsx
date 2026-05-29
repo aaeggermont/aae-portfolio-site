@@ -14,7 +14,7 @@ const bodyTextSx = {
   fontFamily:
     'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
   fontWeight: 500,
-  fontSize: { xs: "1.5rem", sm: "1.2rem", md: "1.5rem" },
+  fontSize: { xs: "1.3rem", sm: "1.3rem", md: "1.5rem" },
   lineHeight: 1.35,
 } as const;
 
@@ -48,7 +48,7 @@ function MemberBlock({
   const isRight = align === "right";
 
   return (
-    <Box sx={{ textAlign: align }}>
+    <Box sx={{ textAlign: stacked ? "center" : align, width: stacked ? "100%" : undefined }}>
       <Typography
         component="p"
         sx={{
@@ -89,7 +89,7 @@ function MemberRow({
     <Stack
       direction="row"
       justifyContent="center"
-      alignItems="flex-start"
+      alignItems={{ xs: "center", sm: "center", md: "flex-start", lg: "flex-start" }}
       sx={{ width: "100%" }}
     >
       <Box sx={{ width: "40%", flexShrink: 0 }}>
@@ -131,6 +131,7 @@ const Team = ({ data }: TeamProps) => {
         {/* Mobile: single column — name stacked above role per member */}
         <Stack
           spacing={3}
+          alignItems="center"
           sx={{
             display: "flex",
             width: "100%",
