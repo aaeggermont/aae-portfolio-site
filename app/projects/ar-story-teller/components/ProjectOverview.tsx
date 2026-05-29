@@ -177,7 +177,7 @@ const ProjectOverview = ({ data }: ProjectOverviewProps) => {
           sx={{
             width: "100%",
             mx: "auto",
-            [TABLET_UP_MQ]: { width: "70%" },
+            [TABLET_UP_MQ]: { width: { xs: "100%", sm: "80%", md: "90%", lg: "90%" } },
           }}
         >
           {/* Mobile: icon + title beside list items */}
@@ -201,7 +201,7 @@ const ProjectOverview = ({ data }: ProjectOverviewProps) => {
             sx={{
               display: "none",
               width: "100%",
-              gap: { xs: 2, md: 3 },
+              gap: { xs: 2, md: 2.5},
               [TABLET_UP_MQ]: { display: "flex" },
             }}
           >
