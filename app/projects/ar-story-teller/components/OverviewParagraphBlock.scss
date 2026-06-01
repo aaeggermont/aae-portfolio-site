@@ -1,13 +1,13 @@
 @mixin desktop-title-text {
     font-family: var(--font-satoshi), sans-serif;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 600;
     color: #03133C;
 }
 
 @mixin desktop-section-text {
     font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 400;
     color: #03133C;
 }

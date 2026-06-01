@@ -14,7 +14,7 @@ const bodyTextSx = {
   fontFamily:
     'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
   fontWeight: 500,
-  fontSize: { xs: "1.3rem", sm: "1.3rem", md: "1.5rem" },
+  fontSize: { xs: "16px", sm: "20px", md: "20px" },
   lineHeight: 1.35,
 } as const;
 

@@ -12,22 +12,22 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import WorkIcon from "@mui/icons-material/Work";
 import MailIcon from "@mui/icons-material/Mail";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { HeaderProps } from '.';
+import type { HeaderLogoColorProps, HeaderProps } from ".";
 import { HeaderLogo } from './HeaderLogo';
 import { clsx } from 'clsx';
 
 export function HeaderMobile({
   isDark,
-  logoFontColor: logoFontColorProp,
+  logoPrimaryColor,
+  logoAccentColor,
   resumeHref,
-}: HeaderProps & { resumeHref: string }) {
+}: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
   const pathname = usePathname();
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
   let menuButtonBackground = "#496A8A";
   let hambMenuColor = "#ffffff";
-  const logoFontColor = logoFontColorProp || "#496A8A";
 
   if (isDark) {
     menuButtonBackground = "#ffffff";
@@ -53,9 +53,10 @@ export function HeaderMobile({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width='190'
-              height='50'
-              color={logoFontColor}
+              width="190"
+              height="50"
+              primaryColor={logoPrimaryColor}
+              accentColor={logoAccentColor}
             />
           </Link>
         </div>
@@ -101,9 +102,10 @@ export function HeaderMobile({
 
         <div className={styles.sidenav_header}>
           <HeaderLogo
-            width='190'
-            height='50'
-            color='#FFFFFF'
+            width="190"
+            height="50"
+            primaryColor={logoPrimaryColor}
+            accentColor={logoAccentColor}
           />
           <p>Antonio Aranda Eggermont</p>
         </div>

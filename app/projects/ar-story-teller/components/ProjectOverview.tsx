@@ -20,7 +20,7 @@ const bodyTextSx = {
   fontFamily:
     'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
   fontWeight: 400,
-  fontSize: { xs: "1.25rem", md: "1.375rem" },
+  fontSize: { xs: "16px", md: "20px" },
   lineHeight: 1.35,
 } as const;
 
@@ -30,7 +30,7 @@ const columnTitleSx = {
   fontWeight: 600,
   color: "#002464",
   lineHeight: 1.2,
-  fontSize: { xs: "1.125rem", md: "1.6875rem" },
+  fontSize: { xs: "18px", md: "22px" },
 } as const;
 
 interface ProjectOverviewProps {

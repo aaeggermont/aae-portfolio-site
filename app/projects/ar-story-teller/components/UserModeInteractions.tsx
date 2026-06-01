@@ -126,7 +126,7 @@ export const UserModeInteractions = ({
                       fontFamily:
                         'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
                       fontWeight: 700,
-                      fontSize: { xs: "1.5rem", md: "1.8rem" },
+                      fontSize: { xs: "20px", md: "24px" },
                       lineHeight: 1.25,
                       textAlign: "center",
                       [breakpointMediaQuery.tabletUp]: {
