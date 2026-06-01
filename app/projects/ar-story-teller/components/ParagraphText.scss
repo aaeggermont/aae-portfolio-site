@@ -16,7 +16,7 @@
         margin: auto;
         width: 100%;
         padding-top: 1rem;
-        @include paragraph-text-type(24px);
+        @include paragraph-text-type(20px);
     }
 }
 
@@ -25,7 +25,7 @@
         margin: auto;
         width: 100%;
         padding-top: 1rem;
-        @include paragraph-text-type(22px);
+        @include paragraph-text-type(20px);
     }
 }
 

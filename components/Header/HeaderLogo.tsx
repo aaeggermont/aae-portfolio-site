@@ -56,23 +56,23 @@ export function HeaderLogo({
   }, []);
 
   return (
-    <Image
-      className={className}
-      src={src}
-      alt={alt}
-      width={maxW}
-      height={maxH}
-      unoptimized
-      priority
-      sizes={`${maxW}px`}
-      onError={onError}
-      style={{
-        width: "auto",
-        height: "auto",
-        maxWidth: maxW,
-        maxHeight: maxH,
-        objectFit: "contain",
-      }}
-    />
+      <Image
+        className={className}
+        src={src}
+        alt={alt}
+        width={maxW}
+        height={maxH}
+        unoptimized
+        priority
+        sizes={`${maxW}px`}
+        onError={onError}
+        style={{
+          width: "auto",
+          height: "auto",
+          maxWidth: maxW,
+          maxHeight: maxH,
+          objectFit: "contain",
+        }}
+      />
   );
 }
