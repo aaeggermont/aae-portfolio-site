@@ -1,10 +1,9 @@
 "use client";
-// Import your SCSS so classNames still work
-import { HeaderMobile } from './HeaderMobile';
-import { HeaderDesktop } from './HeaderDesktop';
-import { headerState } from './HeaderState';
-import { useAtomValue } from 'jotai';
-import styles from './header.module.scss';
+import { HeaderMobile } from "./HeaderMobile";
+import { HeaderDesktop } from "./HeaderDesktop";
+import { headerState } from "./HeaderState";
+import { useAtomValue } from "jotai";
+import styles from "./header.module.scss";
 
 export type HeaderProps = {
   isDark?: boolean;
@@ -12,39 +11,47 @@ export type HeaderProps = {
   logoFontColor?: string;
 };
 
+export type HeaderLogoColorProps = {
+  logoPrimaryColor: string;
+  logoAccentColor?: string;
+};
+
 export default function Header({
   fontColor: fontColorProp,
   logoFontColor: logoFontColorProp,
 }: HeaderProps) {
-  const { isDark, position } = useAtomValue(headerState);
+  const { isDark, position, logoPrimaryColor, logoAccentColor } =
+    useAtomValue(headerState);
+
   let fontColor = fontColorProp || "#074c5f";
-  let logoFontColor = logoFontColorProp || "#074c5f";
+  const resolvedLogoPrimary =
+    logoPrimaryColor ??
+    (isDark ? "#ffffff" : logoFontColorProp || "#074c5f");
 
   if (isDark) {
     fontColor = "#ffffff";
-    logoFontColor = "#ffffff";
   }
+
+  const logoColors: HeaderLogoColorProps = {
+    logoPrimaryColor: resolvedLogoPrimary,
+    logoAccentColor,
+  };
 
   const resumeHref = "/resume/AntonioEggermontResume-2024.pdf";
 
   return (
-    <header
-      className={styles.header_area}
-      style={{ position }}>
+    <header className={styles.header_area} style={{ position }}>
       <div className="global-container">
-        {/* Mobile header */}
         <HeaderMobile
           isDark={isDark}
-          logoFontColor={logoFontColor}
           resumeHref={resumeHref}
+          {...logoColors}
         />
-
-        {/* Desktop header */}
         <HeaderDesktop
           isDark={isDark}
           fontColor={fontColor}
-          logoFontColor={logoFontColor}
           resumeHref={resumeHref}
+          {...logoColors}
         />
       </div>
     </header>

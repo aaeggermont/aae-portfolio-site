@@ -1,5 +1,5 @@
 import { usePathname } from 'next/navigation';
-import { HeaderProps } from '.';
+import type { HeaderLogoColorProps, HeaderProps } from ".";
 import Link from 'next/link';
 import { HeaderLogo } from './HeaderLogo';
 
@@ -7,9 +7,10 @@ import styles from './header.module.scss';
 
 export function HeaderDesktop({
   fontColor,
-  logoFontColor,
+  logoPrimaryColor,
+  logoAccentColor,
   resumeHref,
-}: HeaderProps & { resumeHref: string }) {
+}: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -29,9 +30,10 @@ export function HeaderDesktop({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width='190'
-              height='50'
-              color={logoFontColor || ''}
+              width="190"
+              height="50"
+              primaryColor={logoPrimaryColor}
+              accentColor={logoAccentColor}
             />
           </Link>
         </div>

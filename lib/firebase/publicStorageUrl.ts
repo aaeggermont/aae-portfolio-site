@@ -1,6 +1,6 @@
 /**
  * Public Firebase Storage download URLs (object must be readable by unauthenticated clients).
- * Path is the object path in the bucket, e.g. `site/AAE-SimpleLogo.svg`.
+ * Path is the object path in the bucket, e.g. `site/AAE-Logo.svg`.
  */
 
 export function stripLeadingSlash(path: string): string {

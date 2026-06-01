@@ -55,7 +55,10 @@
     text-decoration: none;
   }
 
-  img {
+  img,
+  svg {
+    display: block;
+    flex-shrink: 0;
     vertical-align: middle;
   }
 }
