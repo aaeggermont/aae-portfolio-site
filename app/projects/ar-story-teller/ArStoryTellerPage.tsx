@@ -11,7 +11,11 @@ import ConclusionsAndImpactSection from './components/sections/ConclusionsAndImp
 import { useSetAtom } from "jotai";
 import { useEffect, type CSSProperties } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
-import { headerState } from '@/components/Header/HeaderState';
+import {
+  defaultHeaderState,
+  headerState,
+} from "@/components/Header/HeaderState";
+import { AR_STORY_TELLER_HEADER_LOGO } from "./headerTheme";
 import type { ArStoryTellerContent } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import BusinessGoals from './components/sections/BusinessGoals';
 import {
@@ -52,11 +56,16 @@ export function ArStoryTellerPage({
 
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
-    setHeaderState({ position: 'absolute', isDark: true });
+    setHeaderState({
+      position: "absolute",
+      isDark: true,
+      logoPrimaryColor: "#D3D3D3",
+      logoAccentColor: AR_STORY_TELLER_HEADER_LOGO.accent,
+    });
 
     return () => {
       setLayoutState({ isFullWidth: false });
-      setHeaderState({ position: 'relative', isDark: false });
+      setHeaderState({ ...defaultHeaderState });
     };
   }, [setLayoutState, setHeaderState]);
 
