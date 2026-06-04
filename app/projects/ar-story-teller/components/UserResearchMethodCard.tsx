@@ -26,6 +26,7 @@ export function UserResearchMethodCard({
           display: "flex",
           justifyContent: "center",
           width: "100%",
+          height: "100%",
         }}
       >
         <Stack
@@ -33,7 +34,7 @@ export function UserResearchMethodCard({
           sx={{
             width: "100%",
             maxWidth: 400,
-            minHeight: 316,
+            height: "100%",
             bgcolor: "#fff",
             borderRadius: "40px",
             overflow: "hidden",
