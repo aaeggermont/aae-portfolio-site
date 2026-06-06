@@ -8,8 +8,10 @@ import gsap from "gsap";
 import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
-import Typewriter from 'typewriter-effect';
+import Typewriter from "typewriter-effect";
 import { backgroundFloatImages } from "./background-float-images";
+import { mainBannerFallback } from "./data/main-banner-data";
+import { subscribeMainBanner } from "./main-banner.firestore";
 
 function TypewriterComponent() {
   return (
@@ -44,7 +46,23 @@ function MainBanner() {
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
+  const [banner, setBanner] = useState(mainBannerFallback);
 
+  useEffect(() => {
+    const unsubscribe = subscribeMainBanner(
+      (bannerFromDb) => {
+        setBanner(bannerFromDb);
+      },
+      (error) => {
+        console.warn(
+          "[main-banner] Firestore realtime read failed; using local fallback data.",
+          error,
+        );
+      },
+    );
+
+    return unsubscribe;
+  }, []);
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
@@ -153,15 +171,9 @@ function MainBanner() {
           <TypewriterComponent key={`hero-${typewriterKey}`} />
         </h1>
 
-        <h2 className={styles.backgroundText}>
-          UX Engineer · Full-stack applications · AI-powered products
-        </h2>
+        <h2 className={styles.backgroundText}>{banner.title}</h2>
 
-        <p className={styles.description}>
-          I ship modern web applications and AI-powered experiences—from
-          discovery to production—using human-centered design and design
-          thinking. I focus on clarity, performance, and impact.
-        </p>
+        <p className={styles.description}>{banner.description}</p>
 
         {/* LinkedIn button – last row in the text block */}
         <div className={styles.linkedinWrapper}>
