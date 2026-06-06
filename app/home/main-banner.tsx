@@ -8,8 +8,9 @@ import gsap from "gsap";
 import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
-import Typewriter from 'typewriter-effect';
+import Typewriter from "typewriter-effect";
 import { backgroundFloatImages } from "./background-float-images";
+import type { MainBannerData } from "./data/main-banner-data";
 
 function TypewriterComponent() {
   return (
@@ -37,14 +38,17 @@ type FloaterConfig = {
 
 const FLOAT_COUNT = 14;
 
-function MainBanner() {
+type MainBannerProps = {
+  banner: MainBannerData;
+};
+
+function MainBanner({ banner }: MainBannerProps) {
   const textRef = useRef<HTMLDivElement | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
-
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
@@ -153,15 +157,9 @@ function MainBanner() {
           <TypewriterComponent key={`hero-${typewriterKey}`} />
         </h1>
 
-        <h2 className={styles.backgroundText}>
-          UX Engineer · Full-stack applications · AI-powered products
-        </h2>
+        <h2 className={styles.backgroundText}>{banner.title}</h2>
 
-        <p className={styles.description}>
-          I ship modern web applications and AI-powered experiences—from
-          discovery to production—using human-centered design and design
-          thinking. I focus on clarity, performance, and impact.
-        </p>
+        <p className={styles.description}>{banner.description}</p>
 
         {/* LinkedIn button – last row in the text block */}
         <div className={styles.linkedinWrapper}>

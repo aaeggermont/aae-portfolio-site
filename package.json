@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "seed:project-1": "tsx scripts/seed-project-1.ts",
-    "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts"
+    "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts",
+    "seed:main-banner": "tsx scripts/seed-main-banner.ts"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

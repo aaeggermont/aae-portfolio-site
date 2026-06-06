@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -15,6 +15,11 @@ import { Footer } from "@/components/Footer";
 import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import { preloadLandingImages } from "@/lib/home/preloadLandingAssets";
 import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
+import {
+  homePageFallback,
+  type HomePageData,
+} from "@/app/home/lib/home-page-data";
+import { subscribeHomePageData } from "@/app/home/lib/main-page.firestore";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -22,9 +27,16 @@ const SCROLL_SEGMENTS_MULTIPLIER = 1; // one viewport height per panel transitio
 
 function HomePanels() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [homePageData, setHomePageData] = useState<HomePageData>(homePageFallback);
   const { phase, isLocked, splashPhase, onFadeEnd } = useLoadingSplash({
     waitFor: preloadLandingImages,
   });
+
+  useEffect(() => {
+    return subscribeHomePageData((data) => {
+      setHomePageData(data);
+    });
+  }, []);
 
   useLayoutEffect(() => {
     if (!containerRef.current) return;
@@ -148,7 +160,7 @@ function HomePanels() {
         inert={isLocked ? true : undefined}
       >
         <section className={styles.panel} data-bg={PAGE_CANVAS}>
-          <MainBanner />
+          <MainBanner banner={homePageData.mainBanner} />
         </section>
 
         <section className={styles.panel} data-bg={PAGE_CANVAS}>
