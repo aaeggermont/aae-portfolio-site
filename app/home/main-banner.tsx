@@ -10,8 +10,7 @@ import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from "typewriter-effect";
 import { backgroundFloatImages } from "./background-float-images";
-import { mainBannerFallback } from "./data/main-banner-data";
-import { subscribeMainBanner } from "./main-banner.firestore";
+import type { MainBannerData } from "./data/main-banner-data";
 
 function TypewriterComponent() {
   return (
@@ -39,30 +38,17 @@ type FloaterConfig = {
 
 const FLOAT_COUNT = 14;
 
-function MainBanner() {
+type MainBannerProps = {
+  banner: MainBannerData;
+};
+
+function MainBanner({ banner }: MainBannerProps) {
   const textRef = useRef<HTMLDivElement | null>(null);
   const photoRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
-  const [banner, setBanner] = useState(mainBannerFallback);
-
-  useEffect(() => {
-    const unsubscribe = subscribeMainBanner(
-      (bannerFromDb) => {
-        setBanner(bannerFromDb);
-      },
-      (error) => {
-        console.warn(
-          "[main-banner] Firestore realtime read failed; using local fallback data.",
-          error,
-        );
-      },
-    );
-
-    return unsubscribe;
-  }, []);
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
