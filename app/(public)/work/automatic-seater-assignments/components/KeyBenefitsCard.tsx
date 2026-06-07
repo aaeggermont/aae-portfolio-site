@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
+import { aosFadeLeft } from "../aosProps";
 
 export type KeyBenefitsCardData = {
   title: string;
@@ -16,6 +17,7 @@ export const KeyBenefitsCard = ({ data }: Props) => {
 
   return (
     <Box
+      {...aosFadeLeft({ delay: 160 })}
       sx={{
         [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
           width: 386,

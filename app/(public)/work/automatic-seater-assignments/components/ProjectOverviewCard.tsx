@@ -4,6 +4,7 @@ import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { Box, Stack, Typography } from "@mui/material";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
+import { aosFadeRight } from "../aosProps";
 
 export type ProjectOverviewColumnIcon =
   | "designServices"
@@ -39,6 +40,7 @@ export const ProjectOverviewCard = ({ data }: Props) => {
 
   return (
     <Box
+      {...aosFadeRight({ delay: 80 })}
       sx={{
         [`@media (min-width: ${breakpointPx.mobileMin}px)`]: {
           maxHeight: 386,
