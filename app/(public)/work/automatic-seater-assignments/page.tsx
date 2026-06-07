@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import AOS from "aos";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -50,6 +51,13 @@ export default function AutomaticSeaterAssignmentsPage() {
 
   const viewportBand =
     isMobile ? "mobile" : isTablet ? "tablet" : isDesktopOrLaptop ? "desktop" : "unknown";
+
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      AOS.refresh();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [snapshotVersion, viewportBand]);
 
   return (
     <ProjectAccessGate
@@ -168,8 +176,12 @@ export default function AutomaticSeaterAssignmentsPage() {
                   alignItems: "stretch",
                 }}
               >
-                {project.researchMethods.map((block) => (
-                  <ResearchMethod key={block.id} data={block} />
+                {project.researchMethods.map((block, index) => (
+                  <ResearchMethod
+                    key={block.id}
+                    data={block}
+                    aosDelay={Math.min(index * 100, 300)}
+                  />
                 ))}
               </Stack>
 

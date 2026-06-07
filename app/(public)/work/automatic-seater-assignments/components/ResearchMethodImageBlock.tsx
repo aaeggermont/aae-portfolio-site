@@ -6,6 +6,7 @@ import { SlideshowLightbox } from "lightbox.js-react";
 import GatedImage from "@/lib/media/GatedImage";
 import { useSignedMediaUrl } from "@/lib/media/useSignedMediaUrl";
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
+import { aosFadeUp } from "../aosProps";
 
 export type ResearchMethodImageBlockData = Extract<
   ResearchCardContentBlock,
@@ -153,7 +154,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
       block.lightboxModalBackground ?? DEFAULT_LIGHTBOX_MODAL_BG;
 
     return (
-      <Stack spacing={1} px={2}>
+      <Stack spacing={1} px={2} {...aosFadeUp({ duration: 1100 })}>
         {blockTitle}
         <SlideshowLightbox
           framework="next"
@@ -188,7 +189,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
   }
 
   return (
-    <Stack spacing={1} px={2}>
+    <Stack spacing={1} px={2} {...aosFadeUp({ duration: 1100 })}>
       {blockTitle}
       <Box
         sx={{
