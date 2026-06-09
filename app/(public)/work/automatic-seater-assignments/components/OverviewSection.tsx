@@ -5,6 +5,7 @@ import {
   caseStudyContainerSx,
   caseStudySectionGutterSx,
 } from "../caseStudyLayout";
+import { aosFadeUp } from "../aosProps";
 
 export type OverviewSectionData = {
   title: string;
@@ -22,6 +23,7 @@ export const OverviewSection = ({ data }: Props) => {
   return (
     <Box
       component="section"
+      {...aosFadeUp()}
       sx={{
         ...caseStudySectionGutterSx,
         background,

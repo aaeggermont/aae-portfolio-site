@@ -3,6 +3,7 @@
 import Box from "@mui/material/Box";
 import GatedImage from "@/lib/media/GatedImage";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
+import { aosZoomIn } from "../aosProps";
 
 /** Preview figure max width per band (px) — aligns to `breakpointPx` ranges. */
 const PREVIEW_MAX_WIDTH_MOBILE_PX = 440;
@@ -42,6 +43,7 @@ export default function PreviewDemo({ data }: Props) {
   return (
     <Box
       component="figure"
+      {...aosZoomIn({ delay: 120, duration: 1100 })}
       sx={{
         position: "relative",
         margin: 0,

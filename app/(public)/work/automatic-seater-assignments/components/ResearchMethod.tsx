@@ -5,13 +5,15 @@ import { breakpointPx } from "@/lib/responsive/breakpoints";
 import { caseStudySectionGutterSx } from "../caseStudyLayout";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
+import { aosFadeUp } from "../aosProps";
 
 type Props = {
   /** One item from `automaticSeaterAssignmentsDataProject.researchMethods` (static today; Firestore later). */
   data: ResearchMethodBlockData;
+  aosDelay?: number;
 };
 
-export const ResearchMethod = ({ data }: Props) => {
+export const ResearchMethod = ({ data, aosDelay = 0 }: Props) => {
   const {
     kicker,
     title,
@@ -112,6 +114,7 @@ export const ResearchMethod = ({ data }: Props) => {
   return (
     <Box sx={caseStudySectionGutterSx}>
       <Box
+        {...aosFadeUp({ delay: aosDelay, duration: 900 })}
         sx={{
           width: "100%",
           maxWidth: { xs: 655, md: 815, lg: 960, xl: 960 },
