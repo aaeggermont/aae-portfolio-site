@@ -1,0 +1,66 @@
+import type { SxProps, Theme } from "@mui/material/styles";
+
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+
+/** Titles, subtitles, section headings — IBM Plex Sans. */
+export const FINDING_NEMO_TITLE_FONT =
+  'var(--font-ibm-plex-sans), "IBM Plex Sans", system-ui, sans-serif';
+
+/** Body copy, descriptions, captions — Source Sans 3. */
+export const FINDING_NEMO_BODY_FONT =
+  'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif';
+
+/**
+ * Finding Nemo responsive type scale (px).
+ * Breakpoints match `styles/variables.scss` / `lib/responsive/breakpoints.ts`.
+ */
+export const TYPOGRAPHY = {
+  heroTitle: { mobile: "36px", tablet: "44px", desktop: "52px" },
+  heroSubtitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
+  sectionTitle: { mobile: "28px", tablet: "32px", desktop: "36px" },
+  sectionDescription: { mobile: "18px", tablet: "20px", desktop: "22px" },
+  cardTitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
+  kpiNumber: { mobile: "32px", tablet: "36px", desktop: "40px" },
+  kpiLabel: { mobile: "18px", tablet: "18px", desktop: "20px" },
+  bodyText: { mobile: "17px", tablet: "18px", desktop: "18px" },
+  smallCaption: { mobile: "15px", tablet: "15px", desktop: "16px" },
+  diagramLabels: { mobile: "16px", tablet: "17px", desktop: "18px" },
+} as const;
+
+export type TypographyScaleKey = keyof typeof TYPOGRAPHY;
+
+export function titleTypeSx(
+  scaleKey: TypographyScaleKey,
+  extra?: SxProps<Theme>,
+): SxProps<Theme> {
+  const base: SxProps<Theme> = {
+    fontFamily: FINDING_NEMO_TITLE_FONT,
+    fontSize: TYPOGRAPHY[scaleKey].mobile,
+    [breakpointMediaQuery.tabletUp]: {
+      fontSize: TYPOGRAPHY[scaleKey].tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: TYPOGRAPHY[scaleKey].desktop,
+    },
+  };
+
+  return extra ? ([base, extra] as SxProps<Theme>) : base;
+}
+
+export function bodyTypeSx(
+  scaleKey: TypographyScaleKey,
+  extra?: SxProps<Theme>,
+): SxProps<Theme> {
+  const base: SxProps<Theme> = {
+    fontFamily: FINDING_NEMO_BODY_FONT,
+    fontSize: TYPOGRAPHY[scaleKey].mobile,
+    [breakpointMediaQuery.tabletUp]: {
+      fontSize: TYPOGRAPHY[scaleKey].tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: TYPOGRAPHY[scaleKey].desktop,
+    },
+  };
+
+  return extra ? ([base, extra] as SxProps<Theme>) : base;
+}
