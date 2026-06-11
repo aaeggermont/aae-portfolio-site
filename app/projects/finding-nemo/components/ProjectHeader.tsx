@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
 import { LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
@@ -7,9 +8,14 @@ import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
 
 type ProjectHeaderProps = {
   data: FindingNemoDataProjectDocument["projectHeader"];
+  onReady?: () => void;
 };
 
-export default function ProjectHeader({ data }: ProjectHeaderProps) {
+export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
+
   return (
     <Box
       component="section"
