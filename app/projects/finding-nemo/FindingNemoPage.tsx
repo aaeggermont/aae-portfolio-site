@@ -1,23 +1,18 @@
 "use client";
 
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+
+import Overview from "@/app/projects/finding-nemo/components/Overview";
+import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
+import { findingNemoDataProject } from "@/scripts/project-2.data";
 
 export function FindingNemoPage() {
+  const project = findingNemoDataProject;
+
   return (
-    <Box
-      component="main"
-      sx={{
-        minHeight: "60vh",
-        display: "grid",
-        placeItems: "center",
-        px: 2,
-        py: 8,
-      }}
-    >
-      <Typography variant="h4" component="h1" color="text.secondary">
-        Finding Nemo
-      </Typography>
+    <Box component="main">
+      <ProjectHeader data={project.projectHeader} />
+      <Overview data={project.overview} />
     </Box>
   );
 }
