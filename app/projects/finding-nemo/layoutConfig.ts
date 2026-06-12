@@ -48,6 +48,13 @@ export const PANEL_BLOCK_PADDINGS = {
   },
 } as const;
 
+/** Full-bleed section band backgrounds (edge-to-edge via `FullBleedBand`). */
+export const BAND_COLORS = {
+  /** #DEE8F3 @ 80% opacity */
+  businessOpportunities: "rgba(222, 232, 243, 0.8)",
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
+export type BandColors = typeof BAND_COLORS;
