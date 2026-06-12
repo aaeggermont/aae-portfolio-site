@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import { LAYOUT_DIMENSIONS, PANEL_BLOCK_PADDINGS } from "@/app/projects/finding-nemo/layoutConfig";
+import { FULL_BLEED_BAND_PADDINGS, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 type FullBleedBandProps = {
@@ -35,10 +35,12 @@ export default function FullBleedBand({
             overflowX: "hidden",
             boxSizing: "border-box",
             bgcolor: backgroundColor,
-            py: {
-              xs: PANEL_BLOCK_PADDINGS.y.mobile,
-              md: PANEL_BLOCK_PADDINGS.y.tablet,
-              lg: PANEL_BLOCK_PADDINGS.y.desktop,
+            py: FULL_BLEED_BAND_PADDINGS.y.mobile,
+            [breakpointMediaQuery.tabletUp]: {
+              py: FULL_BLEED_BAND_PADDINGS.y.tablet,
+            },
+            [breakpointMediaQuery.desktopUp]: {
+              py: FULL_BLEED_BAND_PADDINGS.y.desktop,
             },
           },
           ...(sx ? [sx] : []),
