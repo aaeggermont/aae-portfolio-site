@@ -4,7 +4,7 @@ import styles from './ArStoryTeller.module.scss';
 import { ProjectHeader } from './components/ProjectHeader';
 import { OverviewSection } from './components/sections/OverviewSection';
 import { TeamSection } from './components/sections/TeamSection';
-import { ProjectOverviewSection } from './components/sections/ProjectOverviewSection'; 
+import { ProjectOverviewSection } from './components/sections/ProjectOverviewSection';
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
 import { DesignSystemSection } from './sections/DesignSystemSection';
 import ConclusionsAndImpactSection from './components/sections/ConclusionsAndImpactSection';

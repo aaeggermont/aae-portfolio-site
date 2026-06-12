@@ -34,7 +34,9 @@ function readScrollStepPx(track: HTMLDivElement): number {
   const styles = getComputedStyle(track);
   const raw = styles.columnGap || styles.gap || "0";
   const gap = Number.parseFloat(raw) || 0;
-  return w + gap;
+  const cardStep = w + gap;
+  const visibleCards = Math.round(track.clientWidth / cardStep);
+  return cardStep * Math.max(1, visibleCards);
 }
 
 export function UserResearchMethodsCarousel({
@@ -106,9 +108,16 @@ export function UserResearchMethodsCarousel({
     <Box
       role="region"
       aria-label="Research methods"
-      sx={{ width: "100%", boxSizing: "border-box" }}
+      sx={{
+        width: "calc(100% + 2 * var(--guest-needs-content-gutter, var(--layout-margin)))",
+        marginLeft: "calc(-1 * var(--guest-needs-content-gutter, var(--layout-margin)))",
+        boxSizing: "border-box",
+      }}
     >
-      <Stack spacing={3} alignItems="stretch" sx={{ width: "100%" }}>
+      <Stack
+        spacing={3}
+        alignItems="stretch"
+        sx={{ width: "100%" }}>
         {/* Leading gutter matches `--guest-needs-content-gutter` on `.guestNeedsCarouselStrip`
            / `.guestNeedsBleed` (see `DesignSystemSection.module.scss`). First-card alignment
            with the copy column can be revisited with a small layout pass if needed. */}
@@ -118,7 +127,8 @@ export function UserResearchMethodsCarousel({
             display: "flex",
             flexDirection: "row",
             flexWrap: "nowrap",
-            gap: { xs: 2, sm: 3 },
+            alignItems: "stretch",
+            gap: { xs: 2, sm: 2, md: 3 },
             overflowX: "auto",
             overflowY: "hidden",
             width: "100%",
@@ -126,30 +136,30 @@ export function UserResearchMethodsCarousel({
             boxSizing: "border-box",
             scrollBehavior: "smooth",
             WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "thin",
+            scrollbarWidth: "none",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
             scrollSnapType: "x proximity",
             pb: 0.5,
+            paddingInline: "var(--guest-needs-content-gutter, var(--layout-margin))",
+            scrollPaddingInline: "var(--guest-needs-content-gutter, var(--layout-margin))",
           }}
         >
-          <Box
-            aria-hidden
-            sx={{
-              flex: "0 0 auto",
-              flexShrink: 0,
-              width: "var(--guest-needs-content-gutter, var(--layout-margin))",
-              minWidth:
-                "var(--guest-needs-content-gutter, var(--layout-margin))",
-            }}
-          />
           {methods.map((method, index) => (
             <Box
               key={`${method.title}-${index}`}
               data-carousel-card
               sx={{
                 flex: "0 0 auto",
-                width: { xs: 300, sm: 360, md: 400 },
+                width: {
+                  xs: "calc(100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)))",
+                  sm: "calc(100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)))",
+                  md: "calc((100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)) - 48px) / 3)",
+                },
                 maxWidth: "100%",
                 scrollSnapAlign: "start",
+                display: "flex",
               }}
             >
               <UserResearchMethodCard method={method} />
