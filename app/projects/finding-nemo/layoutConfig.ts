@@ -51,7 +51,7 @@ export const PANEL_BLOCK_PADDINGS = {
 /** Full-bleed section band backgrounds (edge-to-edge via `FullBleedBand`). */
 export const BAND_COLORS = {
   /** #DEE8F3 @ 80% opacity */
-  businessOpportunities: "rgba(222, 232, 243, 0.8)",
+  businessOpportunities: "rgba(222, 232, 243, 0.5)",
   /** #F3F3F3 — neutral panel (matches Overview / My Contributions) */
   neutralPanel: "#F3F3F3",
 } as const;

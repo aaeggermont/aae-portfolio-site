@@ -3,12 +3,15 @@
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
-import BusinessChallengeCard, {
+import ContentCard, {
   CHALLENGES_CARD_HEIGHT_PX,
-} from "@/app/projects/finding-nemo/components/BusinessChallengeCard";
+  PRIMARY_USERS_CARD_HEIGHT_PX,
+  PRIMARY_USERS_CARD_WIDTH_PX,
+} from "@/app/projects/finding-nemo/components/ContentCard";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
 import MyContributions from "@/app/projects/finding-nemo/components/MyContributions";
 import Overview from "@/app/projects/finding-nemo/components/Overview";
+import Persona from "@/app/projects/finding-nemo/components/Persona";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
 import {
@@ -47,6 +50,16 @@ const solutionOverviewImageBoxSx = {
   },
 } as const;
 
+const personaCardsRowSx = {
+  width: "100%",
+  display: "flex",
+  flexDirection: { xs: "column", md: "row" },
+  flexWrap: { xs: "nowrap", md: "wrap" },
+  justifyContent: "center",
+  alignItems: { xs: "center", md: "stretch" },
+  gap: { xs: 3, md: 3, lg: 4 },
+} as const;
+
 type FindingNemoPageProps = {
   project: FindingNemoProjectDocument | null;
   onProjectHeaderReady?: () => void;
@@ -76,7 +89,7 @@ export function FindingNemoPage({
               />
               <Box sx={challengeCardsRowSx}>
                 {project.businessOpportunities.cards.map((card) => (
-                  <BusinessChallengeCard
+                  <ContentCard
                     key={card.title}
                     title={card.title}
                     description={card.description}
@@ -102,7 +115,7 @@ export function FindingNemoPage({
               />
               <Box sx={challengeCardsRowSx}>
                 {project.challenges.cards.map((card) => (
-                  <BusinessChallengeCard
+                  <ContentCard
                     key={card.title}
                     title={card.title}
                     description={card.description}
@@ -143,10 +156,42 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
-            <SectionParagraph
-              title={project.primaryUsers.title}
-              body={project.primaryUsers.paragraphs}
-            />
+            <Stack spacing={{ xs: 4, md: 6 }}>
+              <SectionParagraph
+                title={project.primaryUsers.title}
+                body={project.primaryUsers.paragraphs}
+              />
+              <Box sx={challengeCardsRowSx}>
+                {project.primaryUsers.cards.map((card) => (
+                  <ContentCard
+                    key={card.title}
+                    title={card.title}
+                    description={card.description}
+                    widthPx={PRIMARY_USERS_CARD_WIDTH_PX}
+                    heightPx={PRIMARY_USERS_CARD_HEIGHT_PX}
+                  />
+                ))}
+              </Box>
+            </Stack>
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
+            >
+              <SectionParagraph title={project.personas.title} />
+              <Box sx={personaCardsRowSx}>
+                {project.personas.items.map((persona) => (
+                  <Persona key={persona.title} {...persona} />
+                ))}
+              </Box>
+            </Stack>
           </FullBleedBand>
         </>
       ) : null}
