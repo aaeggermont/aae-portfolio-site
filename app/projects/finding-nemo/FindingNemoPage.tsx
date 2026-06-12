@@ -142,6 +142,12 @@ export function FindingNemoPage({
               </Box>
             </Stack>
           </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
+            <SectionParagraph
+              title={project.primaryUsers.title}
+              body={project.primaryUsers.paragraphs}
+            />
+          </FullBleedBand>
         </>
       ) : null}
     </Box>
