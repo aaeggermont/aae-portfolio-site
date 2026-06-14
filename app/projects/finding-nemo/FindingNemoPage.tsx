@@ -336,6 +336,26 @@ export function FindingNemoPage({
                   </Stack>
                 </Stack>
               </Box>
+              <Box
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <PanelSection
+                  type="principles-image"
+                  title={project.systemWorkflowArchitecture.coreMvpComponents.title}
+                  principles={
+                    project.systemWorkflowArchitecture.coreMvpComponents.principles
+                  }
+                  image={project.systemWorkflowArchitecture.coreMvpComponents.image}
+                />
+              </Box>
             </Stack>
           </FullBleedBand>
         </>
