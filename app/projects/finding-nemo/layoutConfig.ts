@@ -87,6 +87,26 @@ export const MOBILE_EXPERIENCE_MOCKUP_GAPS = {
   desktop: "64px",
 } as const;
 
+/**
+ * Core Principles panel image — square display (473px desktop).
+ * Tablet ~90%, mobile ~75%.
+ */
+export const CORE_PRINCIPLES_IMAGE_DISPLAY = {
+  mobile: { width: 355, height: 355 },
+  tablet: { width: 426, height: 426 },
+  desktop: { width: 473, height: 473 },
+} as const;
+
+/**
+ * Vertical gap between `PanelSection` blocks (title + panel), and from section intro copy.
+ * Desktop 112px; tablet/mobile use the same 3 : 5 : 8 ratio (42 / 70 / 112px).
+ */
+export const PANEL_SECTION_GAPS = {
+  mobile: "42px",
+  tablet: "70px",
+  desktop: "112px",
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;

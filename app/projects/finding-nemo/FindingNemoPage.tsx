@@ -19,6 +19,7 @@ import SectionParagraph from "@/app/projects/finding-nemo/components/SectionPara
 import {
   BAND_COLORS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
+  PANEL_SECTION_GAPS,
   SECTION_GAPS,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
@@ -76,6 +77,16 @@ const mobileExperienceMockupsRowSx = {
   },
   [breakpointMediaQuery.desktopUp]: {
     gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.desktop,
+  },
+} as const;
+
+const panelSectionStackSx = {
+  gap: PANEL_SECTION_GAPS.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    gap: PANEL_SECTION_GAPS.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    gap: PANEL_SECTION_GAPS.desktop,
   },
 } as const;
 
@@ -226,7 +237,7 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
+            <Stack sx={panelSectionStackSx}>
               <SectionParagraph
                 title={project.conceptEvolution.title}
                 body={project.conceptEvolution.paragraphs}
