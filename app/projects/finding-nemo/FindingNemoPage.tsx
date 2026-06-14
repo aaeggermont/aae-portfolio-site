@@ -20,10 +20,12 @@ import SectionParagraph from "@/app/projects/finding-nemo/components/SectionPara
 import {
   BAND_COLORS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
+  PANEL_COLORS,
   PANEL_SECTION_GAPS,
   SECTION_GAPS,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
+  CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
 import type { FindingNemoProjectDocument } from "@/app/projects/finding-nemo/lib/finding-nemo.firestore";
 import { bodyTypeSx } from "@/app/projects/finding-nemo/typography";
@@ -96,6 +98,17 @@ const systemWorkflowImageBoxSx = {
   },
   [breakpointMediaQuery.desktopUp]: {
     width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.desktop.width}px`,
+  },
+} as const;
+
+const conceptualMvpArchitectureImageBoxSx = {
+  width: `${CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY.mobile.width}px`,
+  maxWidth: "100%",
+  [breakpointMediaQuery.tabletUp]: {
+    width: `${CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY.tablet.width}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    width: `${CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY.desktop.width}px`,
   },
 } as const;
 
@@ -345,6 +358,7 @@ export function FindingNemoPage({
                   project.systemWorkflowArchitecture.coreMvpComponents.principles
                 }
                 image={project.systemWorkflowArchitecture.coreMvpComponents.image}
+                panelBackgroundColor={PANEL_COLORS.coreMvpComponents}
               />
               <SectionParagraph
                 title={
@@ -365,7 +379,7 @@ export function FindingNemoPage({
                 <Stack
                   alignItems="center"
                   spacing={{ xs: 2, md: 2.5 }}
-                  sx={systemWorkflowImageBoxSx}
+                  sx={conceptualMvpArchitectureImageBoxSx}
                 >
                   <ProjectImageLightbox
                     objectPath={

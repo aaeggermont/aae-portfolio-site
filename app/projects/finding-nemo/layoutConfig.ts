@@ -56,6 +56,12 @@ export const BAND_COLORS = {
   neutralPanel: "#F3F3F3",
 } as const;
 
+/** Inset panel shell backgrounds (white panels inside full-bleed bands). */
+export const PANEL_COLORS = {
+  default: "#ffffff",
+  coreMvpComponents: "#E5EDF5",
+} as const;
+
 /**
  * Top/bottom padding for `FullBleedBand`.
  * Uses the same 3 : 5 : 8 rem scale as `SECTION_GAPS` (48 / 80 / 128px at 16px root).
@@ -117,11 +123,24 @@ export const SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY = {
   desktop: { width: 622, height: 795 },
 } as const;
 
+/**
+ * Conceptual MVP architecture illustration (800px desktop width; ~622:795 aspect ratio).
+ * Tablet ~90%, mobile ~75%.
+ */
+export const CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY = {
+  mobile: { width: 600, height: 767 },
+  tablet: { width: 720, height: 920 },
+  desktop: { width: 800, height: 1022 },
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 export type BandColors = typeof BAND_COLORS;
+export type PanelColors = typeof PANEL_COLORS;
 export type FullBleedBandPaddings = typeof FULL_BLEED_BAND_PADDINGS;
 export type SolutionOverviewImageDisplay = typeof SOLUTION_OVERVIEW_IMAGE_DISPLAY;
 export type SystemWorkflowIllustrationDisplay =
   typeof SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY;
+export type ConceptualMvpArchitectureIllustrationDisplay =
+  typeof CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY;
