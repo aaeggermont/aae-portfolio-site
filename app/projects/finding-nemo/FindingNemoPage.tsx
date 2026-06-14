@@ -85,6 +85,8 @@ const mobileExperienceMockupsRowSx = {
 } as const;
 
 const SYSTEM_WORKFLOW_LIGHTBOX_ID = "finding-nemo-system-workflow";
+const ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID =
+  "finding-nemo-architecture-technology";
 
 const systemWorkflowImageBoxSx = {
   width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.mobile.width}px`,
@@ -265,7 +267,7 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
+            <Stack sx={panelSectionStackSx}>
               <SectionParagraph
                 title={project.systemWorkflowArchitecture.title}
                 body={project.systemWorkflowArchitecture.paragraphs}
@@ -336,26 +338,105 @@ export function FindingNemoPage({
                   </Stack>
                 </Stack>
               </Box>
+              <PanelSection
+                type="principles-image"
+                title={project.systemWorkflowArchitecture.coreMvpComponents.title}
+                principles={
+                  project.systemWorkflowArchitecture.coreMvpComponents.principles
+                }
+                image={project.systemWorkflowArchitecture.coreMvpComponents.image}
+              />
+              <SectionParagraph
+                title={
+                  project.systemWorkflowArchitecture.conceptualMvpArchitecture.title
+                }
+                body={
+                  project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                    .paragraphs
+                }
+              />
               <Box
                 sx={{
-                  mt: SECTION_GAPS.mobile,
-                  [breakpointMediaQuery.tabletUp]: {
-                    mt: SECTION_GAPS.tablet,
-                  },
-                  [breakpointMediaQuery.desktopUp]: {
-                    mt: SECTION_GAPS.desktop,
-                  },
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
                 }}
               >
-                <PanelSection
-                  type="principles-image"
-                  title={project.systemWorkflowArchitecture.coreMvpComponents.title}
-                  principles={
-                    project.systemWorkflowArchitecture.coreMvpComponents.principles
-                  }
-                  image={project.systemWorkflowArchitecture.coreMvpComponents.image}
-                />
+                <Stack
+                  alignItems="center"
+                  spacing={{ xs: 2, md: 2.5 }}
+                  sx={systemWorkflowImageBoxSx}
+                >
+                  <ProjectImageLightbox
+                    objectPath={
+                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                        .illustration.objectPath
+                    }
+                    alt={
+                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                        .illustration.alt
+                    }
+                    lightboxId={ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID}
+                    width={
+                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                        .illustration.width
+                    }
+                    height={
+                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                        .illustration.height
+                    }
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      height: "auto",
+                      maxWidth: "100%",
+                    }}
+                  />
+                  <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
+                    <Typography
+                      component="p"
+                      sx={bodyTypeSx("smallCaption", {
+                        color: "common.black",
+                        fontWeight: 400,
+                        lineHeight: 1.5,
+                        textAlign: "center",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.annotation
+                      }
+                    </Typography>
+                    {project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                      .illustration.annotationInstruction ? (
+                      <Typography
+                        component="p"
+                        sx={bodyTypeSx("smallCaption", {
+                          color: "common.black",
+                          fontWeight: 400,
+                          lineHeight: 1.5,
+                          textAlign: "center",
+                          m: 0,
+                          opacity: 0.75,
+                        })}
+                      >
+                        {
+                          project.systemWorkflowArchitecture
+                            .conceptualMvpArchitecture.illustration
+                            .annotationInstruction
+                        }
+                      </Typography>
+                    ) : null}
+                  </Stack>
+                </Stack>
               </Box>
+              <SectionParagraph
+                body={
+                  project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                    .paragraphsAfterIllustration
+                }
+              />
             </Stack>
           </FullBleedBand>
         </>
