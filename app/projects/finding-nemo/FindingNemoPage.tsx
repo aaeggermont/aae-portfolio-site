@@ -12,6 +12,7 @@ import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand"
 import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
 import MyContributions from "@/app/projects/finding-nemo/components/MyContributions";
 import Overview from "@/app/projects/finding-nemo/components/Overview";
+import PanelSection from "@/app/projects/finding-nemo/components/PanelSection";
 import Persona from "@/app/projects/finding-nemo/components/Persona";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
@@ -222,6 +223,17 @@ export function FindingNemoPage({
                   <MobileExperienceMockup key={mockup.title} {...mockup} />
                 ))}
               </Box>
+            </Stack>
+          </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
+            <Stack spacing={{ xs: 4, md: 6 }}>
+              <SectionParagraph
+                title={project.conceptEvolution.title}
+                body={project.conceptEvolution.paragraphs}
+              />
+              {project.conceptEvolution.panels.map((panel) => (
+                <PanelSection key={panel.title} {...panel} />
+              ))}
             </Stack>
           </FullBleedBand>
         </>
