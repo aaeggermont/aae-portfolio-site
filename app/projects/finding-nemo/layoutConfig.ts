@@ -53,13 +53,22 @@ export const BAND_COLORS = {
   /** #DEE8F3 @ 80% opacity */
   businessOpportunities: "rgba(222, 232, 243, 0.5)",
   /** #F3F3F3 — neutral panel (matches Overview / My Contributions) */
-  neutralPanel: "#F3F3F3",
+  neutralPanel: "#FFFFFF",
 } as const;
 
 /** Inset panel shell backgrounds (white panels inside full-bleed bands). */
 export const PANEL_COLORS = {
   default: "#ffffff",
   coreMvpComponents: "#E5EDF5",
+} as const;
+
+/** Shared shell for inset white/colored panels (`PanelSection`, narrative panels). */
+export const PANEL_SHELL_SX = {
+  py: "96px",
+  px: { xs: 3, sm: 4, md: 6, lg: 8 },
+  borderRadius: "20px",
+  width: "100%",
+  maxWidth: "100%",
 } as const;
 
 /**

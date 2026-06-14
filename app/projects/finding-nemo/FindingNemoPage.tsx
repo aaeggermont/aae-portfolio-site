@@ -1,6 +1,8 @@
 "use client";
 
 import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
@@ -17,18 +19,20 @@ import PanelSection from "@/app/projects/finding-nemo/components/PanelSection";
 import Persona from "@/app/projects/finding-nemo/components/Persona";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
+import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import {
   BAND_COLORS,
+  LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
+  PANEL_SHELL_SX,
   SECTION_GAPS,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
   CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
 import type { FindingNemoProjectDocument } from "@/app/projects/finding-nemo/lib/finding-nemo.firestore";
-import { bodyTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
@@ -451,6 +455,84 @@ export function FindingNemoPage({
                     .paragraphsAfterIllustration
                 }
               />
+            </Stack>
+          </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
+            <Stack sx={panelSectionStackSx}>
+              <SectionParagraph title={project.expectedImpact.title} />
+              <Box
+                component="section"
+                sx={{
+                  ...PANEL_SHELL_SX,
+                  bgcolor: PANEL_COLORS.default,
+                }}
+              >
+                <SectionParagraph body={project.expectedImpact.paragraphs} />
+              </Box>
+              <Stack spacing={{ xs: 4, md: 6 }}>
+                <SectionParagraph
+                  title={project.reflectionsAndKeyLearnings.title}
+                />
+                <Box
+                  sx={{
+                    px: LAYOUT_DIMENSIONS.mobile.margin,
+                    [breakpointMediaQuery.tabletUp]: {
+                      px: LAYOUT_DIMENSIONS.tablet.margin,
+                    },
+                    [breakpointMediaQuery.desktopUp]: {
+                      px: LAYOUT_DIMENSIONS.desktop.margin,
+                    },
+                  }}
+                >
+                  <List
+                    sx={{
+                      width: "100%",
+                      my: 0,
+                      p: 0,
+                      listStyleType: "disc",
+                      listStylePosition: "outside",
+                      pl: { xs: 2.5, md: 3 },
+                    }}
+                  >
+                    {project.reflectionsAndKeyLearnings.items.map((item) => (
+                      <ListItem
+                        key={item.subtitle}
+                        disableGutters
+                        sx={{
+                          display: "list-item",
+                          py: { xs: 1.5, md: 2 },
+                          color: "common.black",
+                          "&:first-of-type": { pt: 0 },
+                        }}
+                      >
+                        <Stack spacing={1} sx={{ width: "100%" }}>
+                          <Typography
+                            component="h3"
+                            sx={titleTypeSx("personaSectionTitle", {
+                              fontWeight: 700,
+                              lineHeight: 1.2,
+                              color: "common.black",
+                            })}
+                          >
+                            {item.subtitle}
+                          </Typography>
+                          <Typography
+                            component="p"
+                            sx={bodyTypeSx("sectionDescription", {
+                              color: "common.black",
+                              fontWeight: 400,
+                              lineHeight: 1.5,
+                              m: 0,
+                            })}
+                          >
+                            {item.description}
+                          </Typography>
+                        </Stack>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Stack>
             </Stack>
           </FullBleedBand>
         </>

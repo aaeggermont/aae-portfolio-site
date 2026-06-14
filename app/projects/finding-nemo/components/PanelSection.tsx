@@ -2,6 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 
 import {
   CORE_PRINCIPLES_IMAGE_DISPLAY,
+  PANEL_SHELL_SX,
 } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
@@ -14,12 +15,8 @@ export type PanelSectionProps = FindingNemoPanelSectionItem & {
 };
 
 const panelShellSx = {
-  py: "96px",
-  px: { xs: 3, sm: 4, md: 6, lg: 8 },
+  ...PANEL_SHELL_SX,
   bgcolor: "#fff",
-  borderRadius: "20px",
-  width: "100%",
-  maxWidth: "100%",
 } as const;
 
 function panelShellSxWithBackground(backgroundColor?: string) {
