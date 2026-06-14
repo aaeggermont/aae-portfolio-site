@@ -2,6 +2,7 @@
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 import ContentCard, {
   CHALLENGES_CARD_HEIGHT_PX,
@@ -22,10 +23,13 @@ import {
   PANEL_SECTION_GAPS,
   SECTION_GAPS,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
+  SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
 import type { FindingNemoProjectDocument } from "@/app/projects/finding-nemo/lib/finding-nemo.firestore";
+import { bodyTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
+import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
 
 const challengeCardsRowSx = {
   width: "100%",
@@ -77,6 +81,19 @@ const mobileExperienceMockupsRowSx = {
   },
   [breakpointMediaQuery.desktopUp]: {
     gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.desktop,
+  },
+} as const;
+
+const SYSTEM_WORKFLOW_LIGHTBOX_ID = "finding-nemo-system-workflow";
+
+const systemWorkflowImageBoxSx = {
+  width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.mobile.width}px`,
+  maxWidth: "100%",
+  [breakpointMediaQuery.tabletUp]: {
+    width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.tablet.width}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.desktop.width}px`,
   },
 } as const;
 
@@ -245,6 +262,80 @@ export function FindingNemoPage({
               {project.conceptEvolution.panels.map((panel) => (
                 <PanelSection key={panel.title} {...panel} />
               ))}
+            </Stack>
+          </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
+            <Stack spacing={{ xs: 4, md: 6 }}>
+              <SectionParagraph
+                title={project.systemWorkflowArchitecture.title}
+                body={project.systemWorkflowArchitecture.paragraphs}
+              />
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Stack
+                  alignItems="center"
+                  spacing={{ xs: 2, md: 2.5 }}
+                  sx={systemWorkflowImageBoxSx}
+                >
+                  <ProjectImageLightbox
+                    objectPath={
+                      project.systemWorkflowArchitecture.illustration.objectPath
+                    }
+                    alt={project.systemWorkflowArchitecture.illustration.alt}
+                    lightboxId={SYSTEM_WORKFLOW_LIGHTBOX_ID}
+                    width={
+                      project.systemWorkflowArchitecture.illustration.width
+                    }
+                    height={
+                      project.systemWorkflowArchitecture.illustration.height
+                    }
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      height: "auto",
+                      maxWidth: "100%",
+                    }}
+                  />
+                  <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
+                    <Typography
+                      component="p"
+                      sx={bodyTypeSx("smallCaption", {
+                        color: "common.black",
+                        fontWeight: 400,
+                        lineHeight: 1.5,
+                        textAlign: "center",
+                        m: 0,
+                      })}
+                    >
+                      {project.systemWorkflowArchitecture.illustration.annotation}
+                    </Typography>
+                    {project.systemWorkflowArchitecture.illustration
+                      .annotationInstruction ? (
+                      <Typography
+                        component="p"
+                        sx={bodyTypeSx("smallCaption", {
+                          color: "common.black",
+                          fontWeight: 400,
+                          lineHeight: 1.5,
+                          textAlign: "center",
+                          m: 0,
+                          opacity: 0.75,
+                        })}
+                      >
+                        {
+                          project.systemWorkflowArchitecture.illustration
+                            .annotationInstruction
+                        }
+                      </Typography>
+                    ) : null}
+                  </Stack>
+                </Stack>
+              </Box>
             </Stack>
           </FullBleedBand>
         </>

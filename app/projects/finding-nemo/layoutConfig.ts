@@ -107,9 +107,21 @@ export const PANEL_SECTION_GAPS = {
   desktop: "112px",
 } as const;
 
+/**
+ * System workflow illustration display (622:795 aspect ratio).
+ * Desktop matches design spec; tablet ~90%, mobile ~75% (same scale as solution overview / core principles).
+ */
+export const SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY = {
+  mobile: { width: 467, height: 596 },
+  tablet: { width: 560, height: 716 },
+  desktop: { width: 622, height: 795 },
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 export type BandColors = typeof BAND_COLORS;
 export type FullBleedBandPaddings = typeof FULL_BLEED_BAND_PADDINGS;
 export type SolutionOverviewImageDisplay = typeof SOLUTION_OVERVIEW_IMAGE_DISPLAY;
+export type SystemWorkflowIllustrationDisplay =
+  typeof SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY;
