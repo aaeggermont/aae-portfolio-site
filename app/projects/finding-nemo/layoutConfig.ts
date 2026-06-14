@@ -74,6 +74,19 @@ export const SOLUTION_OVERVIEW_IMAGE_DISPLAY = {
   desktop: { width: 211, height: 430 },
 } as const;
 
+/** Mobile experience mockup display — same phone aspect ratio as solution overview diagram. */
+export const MOBILE_EXPERIENCE_MOCKUP_DISPLAY = SOLUTION_OVERVIEW_IMAGE_DISPLAY;
+
+/**
+ * Gap between mobile experience mockups in the flex row.
+ * Desktop 64px; tablet/mobile use the same 3 : 5 : 8 ratio (24 / 40 / 64px).
+ */
+export const MOBILE_EXPERIENCE_MOCKUP_GAPS = {
+  mobile: "24px",
+  tablet: "40px",
+  desktop: "64px",
+} as const;
+
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;

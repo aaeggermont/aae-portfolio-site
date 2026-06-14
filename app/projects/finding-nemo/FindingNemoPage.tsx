@@ -9,6 +9,7 @@ import ContentCard, {
   PRIMARY_USERS_CARD_WIDTH_PX,
 } from "@/app/projects/finding-nemo/components/ContentCard";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
+import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
 import MyContributions from "@/app/projects/finding-nemo/components/MyContributions";
 import Overview from "@/app/projects/finding-nemo/components/Overview";
 import Persona from "@/app/projects/finding-nemo/components/Persona";
@@ -16,6 +17,7 @@ import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader"
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
 import {
   BAND_COLORS,
+  MOBILE_EXPERIENCE_MOCKUP_GAPS,
   SECTION_GAPS,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
@@ -58,6 +60,22 @@ const personaCardsRowSx = {
   justifyContent: "center",
   alignItems: { xs: "center", md: "stretch" },
   gap: { xs: 3, md: 3, lg: 4 },
+} as const;
+
+const mobileExperienceMockupsRowSx = {
+  width: "100%",
+  display: "flex",
+  flexDirection: { xs: "column", md: "row" },
+  flexWrap: { xs: "nowrap", md: "wrap" },
+  justifyContent: "center",
+  alignItems: { xs: "center", md: "stretch" },
+  gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.desktop,
+  },
 } as const;
 
 type FindingNemoPageProps = {
@@ -189,6 +207,19 @@ export function FindingNemoPage({
               <Box sx={personaCardsRowSx}>
                 {project.personas.items.map((persona) => (
                   <Persona key={persona.title} {...persona} />
+                ))}
+              </Box>
+            </Stack>
+          </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
+            <Stack spacing={{ xs: 4, md: 6 }}>
+              <SectionParagraph
+                title={project.mobileExperienceConcepts.title}
+                body={project.mobileExperienceConcepts.paragraphs}
+              />
+              <Box sx={mobileExperienceMockupsRowSx}>
+                {project.mobileExperienceConcepts.mockups.map((mockup) => (
+                  <MobileExperienceMockup key={mockup.title} {...mockup} />
                 ))}
               </Box>
             </Stack>
