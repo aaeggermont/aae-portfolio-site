@@ -6,6 +6,7 @@ import {
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
+import KpiCardsRow from "@/app/projects/finding-nemo/components/KpiCardsRow";
 import type { FindingNemoPanelSectionItem } from "@/scripts/project-2.data";
 
 export type PanelSectionProps = FindingNemoPanelSectionItem;
@@ -175,14 +176,54 @@ function PrinciplesImagePanel({
   );
 }
 
+function TextPanel({
+  description,
+  kpiRows,
+}: Extract<FindingNemoPanelSectionItem, { type: "text" }>) {
+  return (
+    <Box component="section" sx={panelShellSx}>
+      <Stack spacing={{ xs: 5, md: 6 }}>
+        <Typography
+          component="p"
+          sx={bodyTypeSx("sectionDescription", {
+            color: "common.black",
+            fontWeight: 400,
+            lineHeight: 1.5,
+            m: 0,
+          })}
+        >
+          {description}
+        </Typography>
+        {kpiRows.map((row, rowIndex) => (
+          <Stack key={row.subtitle} spacing={{ xs: 3, md: 4 }}>
+            <Typography
+              component="h4"
+              sx={titleTypeSx("personaSectionTitle", {
+                fontWeight: 700,
+                lineHeight: 1.2,
+                color: "common.black",
+              })}
+            >
+              {row.subtitle}
+            </Typography>
+            <KpiCardsRow cards={row.cards} rowIndex={rowIndex} />
+          </Stack>
+        ))}
+      </Stack>
+    </Box>
+  );
+}
+
 export default function PanelSection(props: PanelSectionProps) {
   return (
     <Stack spacing={{ xs: 3, md: 4 }}>
       <PanelHeading title={props.title} />
       {props.type === "image-text" ? (
         <ImageTextPanel {...props} />
-      ) : (
+      ) : props.type === "principles-image" ? (
         <PrinciplesImagePanel {...props} />
+      ) : (
+        <TextPanel {...props} />
       )}
     </Stack>
   );

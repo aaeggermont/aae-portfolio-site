@@ -28,8 +28,10 @@ export const TYPOGRAPHY = {
   personaSectionTitle: { mobile: "17px", tablet: "19px", desktop: "20px" },
   /** `Persona` role description — Source Sans 3, fixed 16px all breakpoints. */
   personaRoleDescription: { mobile: "16px", tablet: "16px", desktop: "16px" },
-  kpiNumber: { mobile: "32px", tablet: "36px", desktop: "40px" },
-  kpiLabel: { mobile: "18px", tablet: "18px", desktop: "20px" },
+  /** `KpiCard` title — IBM Plex Sans Semibold. */
+  kpiCardTitle: { mobile: "18px", tablet: "19px", desktop: "20px" },
+  /** `KpiCard` description — Source Sans 3 Regular. */
+  kpiCardBody: { mobile: "16px", tablet: "17px", desktop: "18px" },
   bodyText: { mobile: "17px", tablet: "18px", desktop: "18px" },
   smallCaption: { mobile: "15px", tablet: "15px", desktop: "16px" },
   diagramLabels: { mobile: "16px", tablet: "17px", desktop: "18px" },
@@ -41,7 +43,7 @@ export function titleTypeSx(
   scaleKey: TypographyScaleKey,
   extra?: SxProps<Theme>,
 ): SxProps<Theme> {
-  const base: SxProps<Theme> = {
+  const responsive: SxProps<Theme> = {
     fontFamily: FINDING_NEMO_TITLE_FONT,
     fontSize: TYPOGRAPHY[scaleKey].mobile,
     [breakpointMediaQuery.tabletUp]: {
@@ -52,14 +54,16 @@ export function titleTypeSx(
     },
   };
 
-  return extra ? ([base, extra] as SxProps<Theme>) : base;
+  if (!extra) return responsive;
+
+  return { ...extra, ...responsive };
 }
 
 export function bodyTypeSx(
   scaleKey: TypographyScaleKey,
   extra?: SxProps<Theme>,
 ): SxProps<Theme> {
-  const base: SxProps<Theme> = {
+  const responsive: SxProps<Theme> = {
     fontFamily: FINDING_NEMO_BODY_FONT,
     fontSize: TYPOGRAPHY[scaleKey].mobile,
     [breakpointMediaQuery.tabletUp]: {
@@ -70,5 +74,7 @@ export function bodyTypeSx(
     },
   };
 
-  return extra ? ([base, extra] as SxProps<Theme>) : base;
+  if (!extra) return responsive;
+
+  return { ...extra, ...responsive };
 }
