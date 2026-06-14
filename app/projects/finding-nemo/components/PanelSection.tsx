@@ -9,7 +9,9 @@ import ProjectImage from "@/lib/media/ProjectImage";
 import KpiCardsRow from "@/app/projects/finding-nemo/components/KpiCardsRow";
 import type { FindingNemoPanelSectionItem } from "@/scripts/project-2.data";
 
-export type PanelSectionProps = FindingNemoPanelSectionItem;
+export type PanelSectionProps = FindingNemoPanelSectionItem & {
+  panelBackgroundColor?: string;
+};
 
 const panelShellSx = {
   py: "96px",
@@ -19,6 +21,12 @@ const panelShellSx = {
   width: "100%",
   maxWidth: "100%",
 } as const;
+
+function panelShellSxWithBackground(backgroundColor?: string) {
+  return backgroundColor
+    ? { ...panelShellSx, bgcolor: backgroundColor }
+    : panelShellSx;
+}
 
 const corePrinciplesImageSizes = [
   `(max-width: 767px) ${CORE_PRINCIPLES_IMAGE_DISPLAY.mobile.width}px`,
@@ -56,12 +64,15 @@ function PanelHeading({ title }: { title: string }) {
 function ImageTextPanel({
   description,
   image,
-}: Extract<FindingNemoPanelSectionItem, { type: "image-text" }>) {
+  panelBackgroundColor,
+}: Extract<FindingNemoPanelSectionItem, { type: "image-text" }> & {
+  panelBackgroundColor?: string;
+}) {
   return (
     <Box
       component="section"
       sx={{
-        ...panelShellSx,
+        ...panelShellSxWithBackground(panelBackgroundColor),
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
@@ -114,12 +125,15 @@ function ImageTextPanel({
 function PrinciplesImagePanel({
   principles,
   image,
-}: Extract<FindingNemoPanelSectionItem, { type: "principles-image" }>) {
+  panelBackgroundColor,
+}: Extract<FindingNemoPanelSectionItem, { type: "principles-image" }> & {
+  panelBackgroundColor?: string;
+}) {
   return (
     <Box
       component="section"
       sx={{
-        ...panelShellSx,
+        ...panelShellSxWithBackground(panelBackgroundColor),
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         flexWrap: "wrap",
@@ -179,9 +193,15 @@ function PrinciplesImagePanel({
 function TextPanel({
   description,
   kpiRows,
-}: Extract<FindingNemoPanelSectionItem, { type: "text" }>) {
+  panelBackgroundColor,
+}: Extract<FindingNemoPanelSectionItem, { type: "text" }> & {
+  panelBackgroundColor?: string;
+}) {
   return (
-    <Box component="section" sx={panelShellSx}>
+    <Box
+      component="section"
+      sx={panelShellSxWithBackground(panelBackgroundColor)}
+    >
       <Stack spacing={{ xs: 5, md: 6 }}>
         <Typography
           component="p"
@@ -215,15 +235,23 @@ function TextPanel({
 }
 
 export default function PanelSection(props: PanelSectionProps) {
+  const { panelBackgroundColor, ...panelProps } = props;
+
   return (
     <Stack spacing={{ xs: 3, md: 4 }}>
       <PanelHeading title={props.title} />
       {props.type === "image-text" ? (
-        <ImageTextPanel {...props} />
+        <ImageTextPanel
+          {...panelProps}
+          panelBackgroundColor={panelBackgroundColor}
+        />
       ) : props.type === "principles-image" ? (
-        <PrinciplesImagePanel {...props} />
+        <PrinciplesImagePanel
+          {...panelProps}
+          panelBackgroundColor={panelBackgroundColor}
+        />
       ) : (
-        <TextPanel {...props} />
+        <TextPanel {...panelProps} panelBackgroundColor={panelBackgroundColor} />
       )}
     </Stack>
   );
