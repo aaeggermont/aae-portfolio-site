@@ -48,6 +48,29 @@ export const PANEL_BLOCK_PADDINGS = {
   },
 } as const;
 
+/** Project hero band behind the absolute global nav (overlay model). */
+export const HEADER_BAND_COLOR = "#dde8f2" as const;
+
+/**
+ * Vertical clearance under the global top bar when `headerState.position` is
+ * `"absolute"` (AR Story Teller overlay model).
+ */
+export const PROJECT_HEADER_NAV_CLEARANCE = {
+  mobile: "80px",
+  tablet: "88px",
+  desktop: "96px",
+} as const;
+
+/**
+ * Padding below nav clearance on the project hero inner stack.
+ * Desktop is 40px less than tablet/mobile to balance overlay nav whitespace.
+ */
+export const PROJECT_HEADER_EXTRA_TOP_PADDING = {
+  mobile: "48px",
+  tablet: "48px",
+  desktop: "24px",
+} as const;
+
 /** Full-bleed section band backgrounds (edge-to-edge via `FullBleedBand`). */
 export const BAND_COLORS = {
   /** #DEE8F3 @ 80% opacity */

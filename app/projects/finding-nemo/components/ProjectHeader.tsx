@@ -4,6 +4,11 @@ import { useEffect } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 
+import {
+  HEADER_BAND_COLOR,
+  PROJECT_HEADER_EXTRA_TOP_PADDING,
+  PROJECT_HEADER_NAV_CLEARANCE,
+} from "@/app/projects/finding-nemo/layoutConfig";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
@@ -142,8 +147,14 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
     <Box
       component="section"
       sx={{
-        width: "100%",
-        bgcolor: "#dde8f2",
+        position: "relative",
+        width: "100vw",
+        maxWidth: "none",
+        ml: "calc(50% - 50vw)",
+        mr: "calc(50% - 50vw)",
+        overflowX: "hidden",
+        boxSizing: "border-box",
+        bgcolor: HEADER_BAND_COLOR,
       }}
     >
       <Stack
@@ -156,7 +167,12 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
           minHeight: { xs: "auto", lg: 450 },
           mx: "auto",
           px: { xs: 3, sm: 6, lg: 10 },
-          py: { xs: 6, lg: 8 },
+          pt: {
+            xs: `calc(${PROJECT_HEADER_NAV_CLEARANCE.mobile} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.mobile})`,
+            md: `calc(${PROJECT_HEADER_NAV_CLEARANCE.tablet} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.tablet})`,
+            lg: `calc(${PROJECT_HEADER_NAV_CLEARANCE.desktop} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.desktop})`,
+          },
+          pb: { xs: 6, lg: 8 },
           [breakpointMediaQuery.desktopUp]: {
             flexDirection: "row",
             alignItems: "center",

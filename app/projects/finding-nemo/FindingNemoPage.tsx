@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSetAtom } from "jotai";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -32,7 +34,13 @@ import {
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
   CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
+import { FINDING_NEMO_HEADER_LOGO } from "@/app/projects/finding-nemo/headerTheme";
 import type { FindingNemoProjectDocument } from "@/app/projects/finding-nemo/lib/finding-nemo.firestore";
+import { layoutState } from "@/app/(public)/layout-state";
+import {
+  defaultHeaderState,
+  headerState,
+} from "@/components/Header/HeaderState";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
@@ -135,7 +143,24 @@ export function FindingNemoPage({
   project,
   onProjectHeaderReady,
 }: FindingNemoPageProps) {
+  const setLayoutState = useSetAtom(layoutState);
+  const setHeaderState = useSetAtom(headerState);
   const hasProject = project != null;
+
+  useEffect(() => {
+    setLayoutState({ isFullWidth: true });
+    setHeaderState({
+      position: "absolute",
+      isDark: false,
+      logoPrimaryColor: FINDING_NEMO_HEADER_LOGO.primary,
+      logoAccentColor: FINDING_NEMO_HEADER_LOGO.accent,
+    });
+
+    return () => {
+      setLayoutState({ isFullWidth: false });
+      setHeaderState({ ...defaultHeaderState });
+    };
+  }, [setLayoutState, setHeaderState]);
 
   return (
     <Box component="main">
