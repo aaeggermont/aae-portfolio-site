@@ -1,0 +1,255 @@
+import { Box, Stack, Typography } from "@mui/material";
+
+import {
+  CORE_PRINCIPLES_IMAGE_DISPLAY,
+  PANEL_SHELL_SX,
+} from "@/app/projects/finding-nemo/layoutConfig";
+import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+import ProjectImage from "@/lib/media/ProjectImage";
+import KpiCardsRow from "@/app/projects/finding-nemo/components/KpiCardsRow";
+import type { FindingNemoPanelSectionItem } from "@/scripts/project-2.data";
+
+export type PanelSectionProps = FindingNemoPanelSectionItem & {
+  panelBackgroundColor?: string;
+};
+
+const panelShellSx = {
+  ...PANEL_SHELL_SX,
+  bgcolor: "#fff",
+} as const;
+
+function panelShellSxWithBackground(backgroundColor?: string) {
+  return backgroundColor
+    ? { ...panelShellSx, bgcolor: backgroundColor }
+    : panelShellSx;
+}
+
+const corePrinciplesImageSizes = [
+  `(max-width: 767px) ${CORE_PRINCIPLES_IMAGE_DISPLAY.mobile.width}px`,
+  `(max-width: 1023px) ${CORE_PRINCIPLES_IMAGE_DISPLAY.tablet.width}px`,
+  `${CORE_PRINCIPLES_IMAGE_DISPLAY.desktop.width}px`,
+].join(", ");
+
+const corePrinciplesImageBoxSx = {
+  width: `${CORE_PRINCIPLES_IMAGE_DISPLAY.mobile.width}px`,
+  maxWidth: "100%",
+  flexShrink: 0,
+  [breakpointMediaQuery.tabletUp]: {
+    width: `${CORE_PRINCIPLES_IMAGE_DISPLAY.tablet.width}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    width: `${CORE_PRINCIPLES_IMAGE_DISPLAY.desktop.width}px`,
+  },
+} as const;
+
+function PanelHeading({ title }: { title: string }) {
+  return (
+    <Typography
+      component="h3"
+      sx={titleTypeSx("cardTitle", {
+        fontWeight: 700,
+        lineHeight: 1.1,
+        color: "common.black",
+      })}
+    >
+      {title}
+    </Typography>
+  );
+}
+
+function ImageTextPanel({
+  description,
+  image,
+  panelBackgroundColor,
+}: Extract<FindingNemoPanelSectionItem, { type: "image-text" }> & {
+  panelBackgroundColor?: string;
+}) {
+  return (
+    <Box
+      component="section"
+      sx={{
+        ...panelShellSxWithBackground(panelBackgroundColor),
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        alignItems: "center",
+        gap: { xs: 4, md: 8 },
+      }}
+    >
+      <Stack
+        component="figure"
+        sx={{
+          m: 0,
+          flexShrink: 0,
+          width: { xs: "100%", md: "auto" },
+          maxWidth: { xs: 280, md: 280 },
+          alignItems: "center",
+        }}
+      >
+        <ProjectImage
+          objectPath={image.objectPath}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          style={{ display: "block", width: "100%", height: "auto" }}
+        />
+      </Stack>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          minWidth: 0,
+        }}
+      >
+        <Typography
+          component="p"
+          sx={bodyTypeSx("sectionDescription", {
+            color: "common.black",
+            fontWeight: 400,
+            lineHeight: 1.5,
+            maxWidth: 540,
+            m: 0,
+          })}
+        >
+          {description}
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+function PrinciplesImagePanel({
+  principles,
+  image,
+  panelBackgroundColor,
+}: Extract<FindingNemoPanelSectionItem, { type: "principles-image" }> & {
+  panelBackgroundColor?: string;
+}) {
+  return (
+    <Box
+      component="section"
+      sx={{
+        ...panelShellSxWithBackground(panelBackgroundColor),
+        display: "flex",
+        flexDirection: { xs: "column", md: "row" },
+        flexWrap: "wrap",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: { xs: 4, md: 8 },
+      }}
+    >
+      <Stack
+        spacing={3}
+        sx={{
+          flex: 1,
+          minWidth: { xs: "100%", md: 280 },
+          maxWidth: 540,
+        }}
+      >
+        {principles.map((principle) => (
+          <Stack key={principle.subtitle} spacing={1}>
+            <Typography
+              component="h4"
+              sx={titleTypeSx("personaSectionTitle", {
+                fontWeight: 700,
+                lineHeight: 1.2,
+                color: "common.black",
+              })}
+            >
+              {principle.subtitle}
+            </Typography>
+            <Typography
+              component="p"
+              sx={bodyTypeSx("contentCardBody", {
+                color: "common.black",
+                fontWeight: 400,
+                lineHeight: 1.6,
+                m: 0,
+              })}
+            >
+              {principle.description}
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
+      <Box sx={corePrinciplesImageBoxSx}>
+        <ProjectImage
+          objectPath={image.objectPath}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          sizes={corePrinciplesImageSizes}
+          style={{ display: "block", width: "100%", height: "auto" }}
+        />
+      </Box>
+    </Box>
+  );
+}
+
+function TextPanel({
+  description,
+  kpiRows,
+  panelBackgroundColor,
+}: Extract<FindingNemoPanelSectionItem, { type: "text" }> & {
+  panelBackgroundColor?: string;
+}) {
+  return (
+    <Box
+      component="section"
+      sx={panelShellSxWithBackground(panelBackgroundColor)}
+    >
+      <Stack spacing={{ xs: 5, md: 6 }}>
+        <Typography
+          component="p"
+          sx={bodyTypeSx("sectionDescription", {
+            color: "common.black",
+            fontWeight: 400,
+            lineHeight: 1.5,
+            m: 0,
+          })}
+        >
+          {description}
+        </Typography>
+        {kpiRows.map((row, rowIndex) => (
+          <Stack key={row.subtitle} spacing={{ xs: 3, md: 4 }}>
+            <Typography
+              component="h4"
+              sx={titleTypeSx("personaSectionTitle", {
+                fontWeight: 700,
+                lineHeight: 1.2,
+                color: "common.black",
+              })}
+            >
+              {row.subtitle}
+            </Typography>
+            <KpiCardsRow cards={row.cards} rowIndex={rowIndex} />
+          </Stack>
+        ))}
+      </Stack>
+    </Box>
+  );
+}
+
+export default function PanelSection(props: PanelSectionProps) {
+  const { panelBackgroundColor, title } = props;
+
+  return (
+    <Stack spacing={{ xs: 3, md: 4 }}>
+      <PanelHeading title={title} />
+      {props.type === "image-text" ? (
+        <ImageTextPanel
+          {...props}
+          panelBackgroundColor={panelBackgroundColor}
+        />
+      ) : props.type === "principles-image" ? (
+        <PrinciplesImagePanel
+          {...props}
+          panelBackgroundColor={panelBackgroundColor}
+        />
+      ) : (
+        <TextPanel {...props} panelBackgroundColor={panelBackgroundColor} />
+      )}
+    </Stack>
+  );
+}

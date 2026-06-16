@@ -3,10 +3,20 @@
 import { useEffect, useState } from "react";
 import { auth } from "@/firebase";
 
+type UseSignedMediaUrlOptions = {
+  /** When false, skips the signed-url request (e.g. public projects use direct Storage URLs). */
+  enabled?: boolean;
+};
+
 /**
  * Fetches a time-limited signed URL for a gated Storage object (same endpoint as `GatedImage`).
  */
-export function useSignedMediaUrl(projectKey: string, objectPath: string) {
+export function useSignedMediaUrl(
+  projectKey: string,
+  objectPath: string,
+  options?: UseSignedMediaUrlOptions,
+) {
+  const enabled = options?.enabled ?? true;
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,6 +24,12 @@ export function useSignedMediaUrl(projectKey: string, objectPath: string) {
     let alive = true;
     setError(null);
     setUrl(null);
+
+    if (!enabled) {
+      return () => {
+        alive = false;
+      };
+    }
 
     (async () => {
       const idToken = await auth.currentUser?.getIdToken().catch(() => undefined);
@@ -48,7 +64,7 @@ export function useSignedMediaUrl(projectKey: string, objectPath: string) {
     return () => {
       alive = false;
     };
-  }, [projectKey, objectPath]);
+  }, [projectKey, objectPath, enabled]);
 
   return { url, error };
 }

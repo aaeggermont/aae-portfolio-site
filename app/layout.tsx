@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
-import { Poppins, Montserrat, Figtree } from "next/font/google";
+import { IBM_Plex_Sans, Poppins, Montserrat, Figtree } from "next/font/google";
 import localFont from "next/font/local";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
@@ -24,6 +24,14 @@ const montserrat = Montserrat({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-montserrat",
+  display: "swap",
+});
+
+/* IBM Plex Sans — Finding Nemo case study titles & subtitles. */
+const ibmPlexSans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-ibm-plex-sans",
   display: "swap",
 });
 
@@ -87,7 +95,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable} ${ibmPlexSans.variable}`}
       style={{ ["--page-canvas" as string]: PAGE_CANVAS }}
     >
       <Aos/>

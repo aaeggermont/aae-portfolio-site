@@ -5,7 +5,7 @@ import { layoutState } from "./layout-state";
 import { ReactNode } from 'react';
 
 export function LayoutMainComponent({ children }: { children: ReactNode }) {
-    const isFullWidth = useAtomValue(layoutState);
+    const { isFullWidth } = useAtomValue(layoutState);
 
     return (
         <main
