@@ -2,8 +2,10 @@
 
 import { useEffect } from "react";
 import { Box, Stack, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
 
 type ProjectHeaderProps = {
@@ -11,12 +13,20 @@ type ProjectHeaderProps = {
   onReady?: () => void;
 };
 
+/** Fixed desktop artboard — inner stage scales down uniformly below desktop. */
+const STAGE = {
+  width: 556,
+  height: 388,
+  canvasLeft: 45,
+  canvasWidth: 511,
+} as const;
+
 const sceneLayers = [
   {
     key: "water-bubbles-background",
     imageKey: "waterBubbles" as const,
     alt: "Underwater scene",
-    width: { xs: 180, sm: 220, md: 344 },
+    width: 344,
     top: 0,
     left: 0,
     zIndex: 1,
@@ -25,30 +35,100 @@ const sceneLayers = [
     key: "water-bubbles-foreground",
     imageKey: "waterBubbles" as const,
     alt: "Fish scene",
-    width: { xs: 130, sm: 170, md: 254 },
-    top: { xs: 8, md: 15 },
-    left: { xs: 135, sm: 170, md: 257 },
+    width: 254,
+    top: 15,
+    left: 257,
     zIndex: 2,
   },
   {
     key: "nemo-fish",
     imageKey: "nemoFish" as const,
     alt: "Clownfish",
-    width: { xs: 58, sm: 80, md: 112 },
-    top: { xs: 70, sm: 96, md: 131 },
-    left: { xs: 130, sm: 168, md: 250 },
+    width: 112,
+    top: 131,
+    left: 250,
     zIndex: 3,
   },
 ] as const;
 
-/** Desktop overlay display width — matches Figma / Anima export alignment. */
-const boundingBoxOverlaySx = {
-  position: "absolute",
-  top: { xs: 2, md: 6 },
-  left: { xs: 10, sm: 20, md: 45 },
-  width: { xs: 250, sm: 340, md: 446 },
-  zIndex: 4,
-  pointerEvents: "none",
+/** Uniform shrink applied to the illustration shell (bubbles, Nemo, CV boxes). */
+const SCENE_DISPLAY_SCALE = 0.8;
+/** Extra scale on project tablet band (768–1023px). */
+const SCENE_TABLET_BOOST = 1.15;
+
+const SCENE_SHELL_BASE_WIDTH = {
+  xs: 290,
+  sm: 360,
+  tablet: 420,
+  lg: STAGE.width,
+} as const;
+
+function sceneShellWidth(base: number) {
+  return Math.round(base * SCENE_DISPLAY_SCALE);
+}
+
+function sceneShellHeight(displayWidth: number) {
+  return Math.round((displayWidth / STAGE.width) * STAGE.height);
+}
+
+const sceneShellWidths = {
+  xs: sceneShellWidth(SCENE_SHELL_BASE_WIDTH.xs),
+  sm: sceneShellWidth(SCENE_SHELL_BASE_WIDTH.sm),
+  lg: sceneShellWidth(SCENE_SHELL_BASE_WIDTH.lg),
+} as const;
+
+const tabletSceneShellWidth = Math.round(
+  sceneShellWidth(SCENE_SHELL_BASE_WIDTH.tablet) * SCENE_TABLET_BOOST,
+);
+
+const TABLET_ONLY_MQ = breakpointMediaQuery.tabletOnly;
+
+function sceneStageShellSx(): SxProps<Theme> {
+  return {
+    position: "relative",
+    flexShrink: 0,
+    width: {
+      xs: sceneShellWidths.xs,
+      sm: sceneShellWidths.sm,
+      lg: sceneShellWidths.lg,
+    },
+    height: {
+      xs: sceneShellHeight(sceneShellWidths.xs),
+      sm: sceneShellHeight(sceneShellWidths.sm),
+      lg: sceneShellHeight(sceneShellWidths.lg),
+    },
+    [TABLET_ONLY_MQ]: {
+      width: tabletSceneShellWidth,
+      height: sceneShellHeight(tabletSceneShellWidth),
+    },
+    mx: { xs: "auto", lg: 0 },
+  };
+}
+
+function sceneStageInnerSx(): SxProps<Theme> {
+  return {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: STAGE.width,
+    height: STAGE.height,
+    transformOrigin: "top left",
+    transform: {
+      xs: `scale(${sceneShellWidths.xs / STAGE.width})`,
+      sm: `scale(${sceneShellWidths.sm / STAGE.width})`,
+      lg: `scale(${sceneShellWidths.lg / STAGE.width})`,
+    },
+    [TABLET_ONLY_MQ]: {
+      transform: `scale(${tabletSceneShellWidth / STAGE.width})`,
+    },
+  };
+}
+
+/** Fluid type — min at ~360px viewport, max at tablet/desktop; scales between breakpoints. */
+const HEADER_FONT_SIZE = {
+  title: "clamp(28px, calc(22px + 1.47vw), 34px)",
+  subtitle: "clamp(18px, calc(15.5px + 0.68vw), 20px)",
+  award: "clamp(16px, calc(13.5px + 0.68vw), 18px)",
 } as const;
 
 export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
@@ -67,17 +147,20 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
       }}
     >
       <Stack
-        direction={{ xs: "column", md: "row" }}
+        direction="column"
         alignItems="center"
         justifyContent="space-between"
-        spacing={{ xs: 5, md: 8 }}
+        spacing={{ xs: 5, lg: 8 }}
         sx={{
           maxWidth: 1260,
-          minHeight: { xs: "auto", md: 450 },
+          minHeight: { xs: "auto", lg: 450 },
           mx: "auto",
-          px: { xs: 3, sm: 6, md: 10 },
-          py: { xs: 6, md: 8 },
-          overflow: "hidden",
+          px: { xs: 3, sm: 6, lg: 10 },
+          py: { xs: 6, lg: 8 },
+          [breakpointMediaQuery.desktopUp]: {
+            flexDirection: "row",
+            alignItems: "center",
+          },
         }}
       >
         <Stack
@@ -108,7 +191,7 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
             component="h1"
             sx={{
               color: "#022f5d",
-              fontSize: { xs: 28, sm: 34 },
+              fontSize: HEADER_FONT_SIZE.title,
               lineHeight: 1.15,
               fontWeight: 400,
               WebkitTextStroke: "1px #000000",
@@ -123,7 +206,7 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                 component="p"
                 sx={{
                   color: "#02305d",
-                  fontSize: { xs: 18, md: 20 },
+                  fontSize: HEADER_FONT_SIZE.subtitle,
                   lineHeight: 1.25,
                   fontWeight: 500,
                 }}
@@ -137,7 +220,7 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
               component="p"
               sx={{
                 color: "#02305d",
-                fontSize: { xs: 16, md: 18 },
+                fontSize: HEADER_FONT_SIZE.award,
                 lineHeight: 1.2,
                 fontWeight: 500,
               }}
@@ -153,7 +236,7 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                 component="p"
                 sx={{
                   color: "#02305d",
-                  fontSize: { xs: 16, md: 18 },
+                  fontSize: HEADER_FONT_SIZE.award,
                   lineHeight: 1.2,
                   fontWeight: 500,
                 }}
@@ -163,67 +246,70 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
             ))}
           </Stack>
         </Stack>
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            maxWidth: { xs: 320, sm: 420, md: 556 },
-            height: { xs: 220, sm: 290, md: 388 },
-            flexShrink: 0,
-          }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: 0,
-              left: { xs: 10, sm: 20, md: 45 },
-              width: { xs: 290, sm: 360, md: 511 },
-              height: "100%",
-            }}
-          >
-            {sceneLayers.map((layer) => {
-              const image = data[layer.imageKey];
-
-              return (
-                <Box
-                  key={layer.key}
-                  sx={{
-                    position: "absolute",
-                    top: layer.top,
-                    left: layer.left,
-                    width: layer.width,
-                    zIndex: layer.zIndex,
-                  }}
-                >
-                  <ProjectImage
-                    objectPath={image.objectPath}
-                    alt={layer.alt}
-                    width={image.width}
-                    height={image.height}
-                    priority
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </Box>
-              );
-            })}
-          </Box>
-          <Box sx={boundingBoxOverlaySx}>
-            <ProjectImage
-              objectPath={boundingBoxesOverlay.objectPath}
-              alt={boundingBoxesOverlay.alt}
-              width={boundingBoxesOverlay.width}
-              height={boundingBoxesOverlay.height}
-              priority
-              style={{
-                display: "block",
-                width: "100%",
-                height: "auto",
+        <Box sx={sceneStageShellSx()}>
+          <Box sx={sceneStageInnerSx()}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: STAGE.canvasLeft,
+                width: STAGE.canvasWidth,
+                height: STAGE.height,
               }}
-            />
+            >
+              {sceneLayers.map((layer) => {
+                const image = data[layer.imageKey];
+
+                return (
+                  <Box
+                    key={layer.key}
+                    sx={{
+                      position: "absolute",
+                      top: layer.top,
+                      left: layer.left,
+                      width: layer.width,
+                      zIndex: layer.zIndex,
+                    }}
+                  >
+                    <ProjectImage
+                      objectPath={image.objectPath}
+                      alt={layer.alt}
+                      width={image.width}
+                      height={image.height}
+                      priority
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </Box>
+                );
+              })}
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                top: 6,
+                left: STAGE.canvasLeft,
+                width: 446,
+                zIndex: 4,
+                pointerEvents: "none",
+              }}
+            >
+              <ProjectImage
+                objectPath={boundingBoxesOverlay.objectPath}
+                alt={boundingBoxesOverlay.alt}
+                width={boundingBoxesOverlay.width}
+                height={boundingBoxesOverlay.height}
+                priority
+                style={{
+                  display: "block",
+                  width: "100%",
+                  height: "auto",
+                }}
+              />
+            </Box>
           </Box>
         </Box>
       </Stack>
