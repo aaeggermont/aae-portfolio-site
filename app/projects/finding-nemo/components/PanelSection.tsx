@@ -232,23 +232,23 @@ function TextPanel({
 }
 
 export default function PanelSection(props: PanelSectionProps) {
-  const { panelBackgroundColor, ...panelProps } = props;
+  const { panelBackgroundColor, title } = props;
 
   return (
     <Stack spacing={{ xs: 3, md: 4 }}>
-      <PanelHeading title={props.title} />
+      <PanelHeading title={title} />
       {props.type === "image-text" ? (
         <ImageTextPanel
-          {...panelProps}
+          {...props}
           panelBackgroundColor={panelBackgroundColor}
         />
       ) : props.type === "principles-image" ? (
         <PrinciplesImagePanel
-          {...panelProps}
+          {...props}
           panelBackgroundColor={panelBackgroundColor}
         />
       ) : (
-        <TextPanel {...panelProps} panelBackgroundColor={panelBackgroundColor} />
+        <TextPanel {...props} panelBackgroundColor={panelBackgroundColor} />
       )}
     </Stack>
   );

@@ -42,10 +42,15 @@ export default function ProjectImageLightbox({
 }: ProjectImageLightboxProps) {
   const { projectKey, visibility } = useProjectAccess();
   const normalizedPath = stripLeadingSlash(objectPath);
-  const publicUrl =
-    visibility === "public" ? buildPublicStorageUrl(normalizedPath) : null;
-  const { url: signedUrl, error } = useSignedMediaUrl(projectKey, normalizedPath);
+  const isPublic = visibility === "public";
+  const publicUrl = isPublic ? buildPublicStorageUrl(normalizedPath) : null;
+  const { url: signedUrl, error: signedError } = useSignedMediaUrl(
+    projectKey,
+    normalizedPath,
+    { enabled: !isPublic },
+  );
   const url = publicUrl ?? signedUrl;
+  const error = publicUrl ? null : signedError;
   const modalBg = modalBackground;
 
   if (error) {
