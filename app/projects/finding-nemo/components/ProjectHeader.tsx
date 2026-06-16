@@ -53,13 +53,14 @@ const sceneLayers = [
     top: 131,
     left: 250,
     zIndex: 3,
+    flipHorizontal: true,
   },
 ] as const;
 
 /** Uniform shrink applied to the illustration shell (bubbles, Nemo, CV boxes). */
-const SCENE_DISPLAY_SCALE = 0.8;
+const SCENE_DISPLAY_SCALE = 0.75;
 /** Extra scale on project tablet band (768–1023px). */
-const SCENE_TABLET_BOOST = 1.15;
+const SCENE_TABLET_BOOST = 1.25;
 
 const SCENE_SHELL_BASE_WIDTH = {
   xs: 290,
@@ -285,6 +286,9 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                       left: layer.left,
                       width: layer.width,
                       zIndex: layer.zIndex,
+                      ...("flipHorizontal" in layer && layer.flipHorizontal
+                        ? { transform: "scaleX(-1)" }
+                        : {}),
                     }}
                   >
                     <ProjectImage
