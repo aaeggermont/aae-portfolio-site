@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import { LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
+import { INTRO_SECTIONS_BACKGROUND, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
@@ -22,7 +22,7 @@ export default function MyContributions({ data }: MyContributionsProps) {
     <Box
       component="section"
       sx={{
-        bgcolor: "#f3f3f3",
+        bgcolor: INTRO_SECTIONS_BACKGROUND,
         py: { xs: 10, md: 12, lg: 16 },
         px: LAYOUT_DIMENSIONS.mobile.margin,
         [breakpointMediaQuery.tabletUp]: {

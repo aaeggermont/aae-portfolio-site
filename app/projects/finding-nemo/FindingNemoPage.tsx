@@ -17,6 +17,7 @@ import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand"
 import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
 import MyContributions from "@/app/projects/finding-nemo/components/MyContributions";
 import Overview from "@/app/projects/finding-nemo/components/Overview";
+import ProblemDemoPanel from "@/app/projects/finding-nemo/components/ProbleDemoCarousel";
 import PanelSection from "@/app/projects/finding-nemo/components/PanelSection";
 import Persona from "@/app/projects/finding-nemo/components/Persona";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
@@ -171,6 +172,9 @@ export function FindingNemoPage({
             onReady={onProjectHeaderReady}
           />
           <Overview data={project.overview} />
+          {project.problemDemoPanel ? (
+            <ProblemDemoPanel data={project.problemDemoPanel} />
+          ) : null}
           <MyContributions data={project.myContributions} />
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
             <Stack spacing={{ xs: 4, md: 6 }}>
