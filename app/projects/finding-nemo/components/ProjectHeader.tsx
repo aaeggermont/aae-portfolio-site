@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
+
+import RecognitionDialog, {
+  recognitionAwardButtonSx,
+  recognitionLinkSx,
+} from "@/app/projects/finding-nemo/components/RecognitionDialog";
 
 import {
   HEADER_BAND_COLOR,
@@ -138,11 +143,35 @@ const HEADER_FONT_SIZE = {
 } as const;
 
 export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
+  const [recognitionOpen, setRecognitionOpen] = useState(false);
+
   useEffect(() => {
     onReady?.();
   }, [onReady]);
 
-  const { boundingBoxesOverlay } = data;
+  const { boundingBoxesOverlay, recognition } = data;
+
+  const { awardHeadlineLines, viewRecognitionLine } = useMemo(() => {
+    const headline: string[] = [];
+    let viewLine: string | undefined;
+
+    for (const line of data.awardLines) {
+      if (/view recognition/i.test(line)) {
+        viewLine = line;
+      } else {
+        headline.push(line);
+      }
+    }
+
+    return {
+      awardHeadlineLines: headline,
+      viewRecognitionLine: viewLine,
+    };
+  }, [data.awardLines]);
+
+  const recognitionDialogTitle = `🏆 ${awardHeadlineLines.join(" ")}`;
+  const openRecognition = () => setRecognitionOpen(true);
+  const closeRecognition = () => setRecognitionOpen(false);
 
   return (
     <Box
@@ -233,34 +262,99 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
             ))}
           </Stack>
           <Stack spacing={0.25} alignItems="center" sx={{ pt: 1 }}>
-            <Typography
-              component="p"
-              sx={{
-                color: "#02305d",
-                fontSize: HEADER_FONT_SIZE.award,
-                lineHeight: 1.2,
-                fontWeight: 500,
-              }}
-            >
-              <Box component="span" sx={{ fontWeight: 700, mr: 0.5 }}>
-                🏆
-              </Box>
-              {data.awardLines[0]}
-            </Typography>
-            {data.awardLines.slice(1).map((line) => (
-              <Typography
-                key={line}
-                component="p"
-                sx={{
-                  color: "#02305d",
-                  fontSize: HEADER_FONT_SIZE.award,
-                  lineHeight: 1.2,
-                  fontWeight: 500,
-                }}
-              >
-                {line}
-              </Typography>
-            ))}
+            {recognition ? (
+              <>
+                <Box
+                  component="button"
+                  type="button"
+                  onClick={openRecognition}
+                  aria-label="View datathon recognition details"
+                  sx={{
+                    ...recognitionAwardButtonSx,
+                    display: "inline-flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 0.25,
+                  }}
+                >
+                  <Typography
+                    component="span"
+                    sx={{
+                      color: "inherit",
+                      fontSize: HEADER_FONT_SIZE.award,
+                      lineHeight: 1.2,
+                      fontWeight: 500,
+                    }}
+                  >
+                    <Box component="span" sx={{ fontWeight: 700, mr: 0.5 }}>
+                      🏆
+                    </Box>
+                    {awardHeadlineLines[0]}
+                  </Typography>
+                  {awardHeadlineLines.slice(1).map((line) => (
+                    <Typography
+                      key={line}
+                      component="span"
+                      sx={{
+                        color: "inherit",
+                        fontSize: HEADER_FONT_SIZE.award,
+                        lineHeight: 1.2,
+                        fontWeight: 500,
+                      }}
+                    >
+                      {line}
+                    </Typography>
+                  ))}
+                </Box>
+                {viewRecognitionLine ? (
+                  <Box
+                    component="button"
+                    type="button"
+                    onClick={openRecognition}
+                    aria-label="View recognition"
+                    sx={{
+                      ...recognitionLinkSx,
+                      fontSize: HEADER_FONT_SIZE.award,
+                      lineHeight: 1.2,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {viewRecognitionLine}
+                  </Box>
+                ) : null}
+              </>
+            ) : (
+              <>
+                <Typography
+                  component="p"
+                  sx={{
+                    color: "#02305d",
+                    fontSize: HEADER_FONT_SIZE.award,
+                    lineHeight: 1.2,
+                    fontWeight: 500,
+                  }}
+                >
+                  <Box component="span" sx={{ fontWeight: 700, mr: 0.5 }}>
+                    🏆
+                  </Box>
+                  {data.awardLines[0]}
+                </Typography>
+                {data.awardLines.slice(1).map((line) => (
+                  <Typography
+                    key={line}
+                    component="p"
+                    sx={{
+                      color: "#02305d",
+                      fontSize: HEADER_FONT_SIZE.award,
+                      lineHeight: 1.2,
+                      fontWeight: 500,
+                    }}
+                  >
+                    {line}
+                  </Typography>
+                ))}
+              </>
+            )}
           </Stack>
         </Stack>
         <Box sx={sceneStageShellSx()}>
@@ -333,6 +427,14 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
           </Box>
         </Box>
       </Stack>
+      {recognition ? (
+        <RecognitionDialog
+          open={recognitionOpen}
+          onClose={closeRecognition}
+          title={recognitionDialogTitle}
+          data={recognition}
+        />
+      ) : null}
     </Box>
   );
 }
