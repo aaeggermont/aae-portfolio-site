@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 
-import { LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
+import { INTRO_SECTIONS_BACKGROUND, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
@@ -14,7 +14,7 @@ export default function OverviewSection({ data }: OverviewSectionProps) {
     <Box
       component="section"
       sx={{
-        bgcolor: "#f3f3f3",
+        bgcolor: INTRO_SECTIONS_BACKGROUND,
         py: { xs: 8, md: 10, lg: 12 },
         px: LAYOUT_DIMENSIONS.mobile.margin,
         [breakpointMediaQuery.tabletUp]: {
