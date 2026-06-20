@@ -7,20 +7,14 @@ import {
 } from "@/app/projects/finding-nemo/typography";
 import type { FindingNemoKpiCardItem } from "@/scripts/project-2.data";
 
+import {
+  INTERACTIVE_CARD_BG_COLOR,
+  interactiveCardHoverSx,
+} from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+
 export const KPI_CARD_WIDTH_PX = 300;
 export const KPI_CARD_HEIGHT_PX = 280;
-export const KPI_CARD_BG_COLOR = "#F2F6FA";
-
-const kpiCardHoverSx = {
-  boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",
-  transition:
-    "transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, opacity 0.22s ease",
-  "&:hover": {
-    transform: "translateY(-6px)",
-    boxShadow: "0 18px 45px rgba(0, 0, 0, 0.18)",
-    bgcolor: "#f7fbff",
-  },
-} as const;
+export const KPI_CARD_BG_COLOR = INTERACTIVE_CARD_BG_COLOR;
 
 export type KpiCardProps = FindingNemoKpiCardItem;
 
@@ -47,7 +41,7 @@ export default function KpiCard({ icon, title, description }: KpiCardProps) {
         borderRadius: "20px",
         overflow: "hidden",
         boxSizing: "border-box",
-        ...kpiCardHoverSx,
+        ...interactiveCardHoverSx,
       }}
     >
       <Box

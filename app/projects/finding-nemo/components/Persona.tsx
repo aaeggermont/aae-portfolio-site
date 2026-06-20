@@ -1,9 +1,15 @@
 import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
 
+import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import type { FindingNemoPersonaItem } from "@/scripts/project-2.data";
 
-export type PersonaProps = FindingNemoPersonaItem;
+export type PersonaProps = FindingNemoPersonaItem & {
+  /** White surface with shadow, hover lift, and scroll-reveal row support. */
+  interactive?: boolean;
+  /** Stretch to match sibling persona card height in a row. */
+  fillHeight?: boolean;
+};
 
 export default function Persona({
   title,
@@ -13,6 +19,8 @@ export default function Persona({
   goals,
   painPoints,
   quote,
+  interactive = false,
+  fillHeight = false,
 }: PersonaProps) {
   return (
     <Paper
@@ -21,6 +29,9 @@ export default function Persona({
       sx={{
         maxWidth: 490,
         width: "100%",
+        height: fillHeight ? "100%" : "auto",
+        display: fillHeight ? "flex" : "block",
+        flexDirection: fillHeight ? "column" : undefined,
         mx: "auto",
         px: 4,
         pt: 4,
@@ -28,9 +39,20 @@ export default function Persona({
         borderRadius: "15px",
         backgroundColor: "#fff",
         overflow: "hidden",
+        boxSizing: "border-box",
+        ...(interactive
+          ? {
+              ...interactiveCardHoverSx,
+              "&:hover": {
+                ...interactiveCardHoverSx["&:hover"],
+                bgcolor: "#fff",
+                backgroundColor: "#fff",
+              },
+            }
+          : {}),
       }}
     >
-      <Stack spacing={4}>
+      <Stack spacing={4} sx={fillHeight ? { flex: 1 } : undefined}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
           spacing={3}
@@ -119,7 +141,7 @@ export default function Persona({
             </Box>
           </Stack>
         ) : null}
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" sx={fillHeight ? { mt: "auto" } : undefined}>
           <Paper
             elevation={0}
             sx={{
