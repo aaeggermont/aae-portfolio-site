@@ -121,6 +121,9 @@ export const PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY = {
   desktop: { width: 524, height: 330 },
 } as const;
 
+/** Inset panel background for the problem demo carousel section. */
+export const PROBLEM_DEMO_PANEL_BACKGROUND = "#E8F0F8" as const;
+
 /** Problem demo panel — copy column width when side-by-side at desktop (1260px+). */
 export const PROBLEM_DEMO_PANEL_COPY_WIDTH = {
   desktop: 360,

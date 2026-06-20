@@ -10,6 +10,7 @@ import {
   LAYOUT_DIMENSIONS,
   PANEL_CONTENT_MAX_WIDTH_PX,
   PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY,
+  PROBLEM_DEMO_PANEL_BACKGROUND,
   PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX,
   PROBLEM_DEMO_PANEL_COPY_WIDTH,
   PROBLEM_DEMO_PANEL_GAP,
@@ -36,7 +37,7 @@ const carouselCaptionSx = {
   color: "#000",
   fontSize: captionFontSize.mobile,
   lineHeight: 1.3,
-  fontWeight: 400,
+  fontWeight: 600,
   textAlign: "center",
   flex: { xs: "1 1 auto", md: "0 1 auto" },
   px: 1,
@@ -209,7 +210,7 @@ export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
               width: "100%",
               maxWidth: PANEL_CONTENT_MAX_WIDTH_PX,
               mx: "auto",
-              bgcolor: "#f6faff",
+              bgcolor: PROBLEM_DEMO_PANEL_BACKGROUND,
               borderRadius: 5,
               px: { xs: 3, sm: 5, md: 8 },
               py: { xs: 4, sm: 5, md: 8 },
@@ -219,10 +220,9 @@ export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
               <Box component="article" sx={copyColumnSx}>
                 <Typography
                   component="p"
-                  sx={bodyTypeSx("bodyText", {
+                  sx={bodyTypeSx("sectionDescription", {
                     color: "common.black",
-                    fontSize: { xs: 20, md: 22 },
-                    lineHeight: 1.35,
+                    lineHeight: 1.5,
                     fontWeight: 400,
                     m: 0,
                   })}
