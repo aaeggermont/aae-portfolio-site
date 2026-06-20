@@ -28,6 +28,7 @@ import {
   BAND_COLORS,
   LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
+  PANEL_CONTENT_MAX_WIDTH_PX,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
   PANEL_SHELL_SX,
@@ -66,11 +67,13 @@ const solutionOverviewImageBoxSx = {
 
 const mobileExperienceMockupsRowSx = {
   width: "100%",
+  maxWidth: `${PANEL_CONTENT_MAX_WIDTH_PX}px`,
+  mx: "auto",
   display: "flex",
   flexDirection: { xs: "column", md: "row" },
-  flexWrap: { xs: "nowrap", md: "wrap" },
+  flexWrap: "wrap",
   justifyContent: "center",
-  alignItems: { xs: "center", md: "stretch" },
+  alignItems: { xs: "center", md: "flex-start" },
   gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.mobile,
   [breakpointMediaQuery.tabletUp]: {
     gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.tablet,
@@ -216,20 +219,41 @@ export function FindingNemoPage({
                   justifyContent: "center",
                 }}
               >
-                <Box sx={solutionOverviewImageBoxSx}>
-                  <ProjectImage
-                    objectPath={project.solutionOverview.image.objectPath}
-                    alt={project.solutionOverview.image.alt}
-                    width={project.solutionOverview.image.width}
-                    height={project.solutionOverview.image.height}
-                    sizes={solutionOverviewImageSizes}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      height: "auto",
-                    }}
-                  />
-                </Box>
+                <Stack
+                  alignItems="center"
+                  spacing={{ xs: 2, md: 2.5 }}
+                  sx={solutionOverviewImageBoxSx}
+                >
+                  <Box sx={{ width: "100%" }}>
+                    <ProjectImage
+                      objectPath={project.solutionOverview.image.objectPath}
+                      alt={project.solutionOverview.image.alt}
+                      width={project.solutionOverview.image.width}
+                      height={project.solutionOverview.image.height}
+                      sizes={solutionOverviewImageSizes}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        height: "auto",
+                      }}
+                    />
+                  </Box>
+                  {project.solutionOverview.image.annotation ? (
+                    <Typography
+                      component="p"
+                      sx={bodyTypeSx("smallCaption", {
+                        color: "common.black",
+                        fontWeight: 400,
+                        lineHeight: 1.5,
+                        textAlign: "center",
+                        m: 0,
+                        width: "100%",
+                      })}
+                    >
+                      {project.solutionOverview.image.annotation}
+                    </Typography>
+                  ) : null}
+                </Stack>
               </Box>
             </Stack>
           </FullBleedBand>
@@ -281,11 +305,31 @@ export function FindingNemoPage({
                 title={project.mobileExperienceConcepts.title}
                 body={project.mobileExperienceConcepts.paragraphs}
               />
-              <Box sx={mobileExperienceMockupsRowSx}>
-                {project.mobileExperienceConcepts.mockups.map((mockup) => (
-                  <MobileExperienceMockup key={mockup.title} {...mockup} />
-                ))}
-              </Box>
+              <Stack spacing={{ xs: 4, md: 6 }} sx={{ width: "100%" }}>
+                {project.mobileExperienceConcepts.mockups[0] ? (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <MobileExperienceMockup
+                      {...project.mobileExperienceConcepts.mockups[0]}
+                      variant="notification"
+                    />
+                  </Box>
+                ) : null}
+                {project.mobileExperienceConcepts.mockups.length > 1 ? (
+                  <Box sx={mobileExperienceMockupsRowSx}>
+                    {project.mobileExperienceConcepts.mockups
+                      .slice(1)
+                      .map((mockup) => (
+                        <MobileExperienceMockup key={mockup.title} {...mockup} />
+                      ))}
+                  </Box>
+                ) : null}
+              </Stack>
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>

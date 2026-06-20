@@ -164,26 +164,37 @@ export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1260 as const;
 export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 321 as const;
 
 /**
- * Solution overview diagram display size (maintains 211:430 aspect ratio).
- * Desktop matches design spec; tablet ~90%, mobile ~75%.
+ * Solution overview hi-fi mockup display (402:874 intrinsic aspect ratio).
+ * Desktop width scaled +30% from legacy 211px frame; tablet +30% from 190px; mobile ~75%.
  */
 export const SOLUTION_OVERVIEW_IMAGE_DISPLAY = {
-  mobile: { width: 158, height: 322 },
-  tablet: { width: 190, height: 387 },
-  desktop: { width: 211, height: 430 },
+  mobile: { width: 158, height: 343 },
+  tablet: { width: 284, height: 618 },
+  desktop: { width: 315, height: 685 },
 } as const;
 
-/** Mobile experience mockup display — same phone aspect ratio as solution overview diagram. */
-export const MOBILE_EXPERIENCE_MOCKUP_DISPLAY = SOLUTION_OVERVIEW_IMAGE_DISPLAY;
+/** Mobile experience mockup display — phone mockup row (402:874 hi-fi assets). */
+export const MOBILE_EXPERIENCE_MOCKUP_DISPLAY = {
+  mobile: { width: 158, height: 322 },
+  tablet: { width: 190, height: 387 },
+  desktop: { width: 240, height: 522 },
+} as const;
+
+/** Incident Alert notification banner (400:162 intrinsic; display ~60% of asset width). */
+export const MOBILE_EXPERIENCE_NOTIFICATION_DISPLAY = {
+  mobile: { width: 180, height: 73 },
+  tablet: { width: 216, height: 87 },
+  desktop: { width: 317, height: 128 },
+} as const;
 
 /**
  * Gap between mobile experience mockups in the flex row.
- * Desktop 64px; tablet/mobile use the same 3 : 5 : 8 ratio (24 / 40 / 64px).
+ * Desktop 46px fits 4 × 240px mockups in the 1100px band; tablet/mobile use 3 : 5 scale.
  */
 export const MOBILE_EXPERIENCE_MOCKUP_GAPS = {
   mobile: "24px",
   tablet: "40px",
-  desktop: "64px",
+  desktop: "46px",
 } as const;
 
 /**
