@@ -47,7 +47,7 @@ function PanelHeading({ title }: { title: string }) {
   return (
     <Typography
       component="h3"
-      sx={titleTypeSx("cardTitle", {
+      sx={titleTypeSx("sectionSubtitle", {
         fontWeight: 700,
         lineHeight: 1.1,
         color: "common.black",

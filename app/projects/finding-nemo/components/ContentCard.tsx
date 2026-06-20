@@ -1,6 +1,7 @@
 import { Card, CardContent, List, ListItem, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 
+import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 
 /** Fixed card width — consistent across mobile, tablet, and desktop. */
@@ -17,6 +18,8 @@ export type ContentCardProps = {
   widthPx?: number;
   /** Card height in px; defaults to 344. */
   heightPx?: number;
+  /** KPI-style surface, shadow, and hover lift (Defining Success cards). */
+  interactive?: boolean;
 };
 
 export default function ContentCard({
@@ -24,6 +27,7 @@ export default function ContentCard({
   description,
   widthPx = CARD_WIDTH_PX,
   heightPx = DEFAULT_CARD_HEIGHT_PX,
+  interactive = false,
 }: ContentCardProps) {
   const bulletItems = Array.isArray(description) ? description : null;
 
@@ -43,6 +47,15 @@ export default function ContentCard({
         borderRadius: "20px",
         bgcolor: "#fff",
         border: "1px solid transparent",
+        ...(interactive
+          ? {
+              ...interactiveCardHoverSx,
+              "&:hover": {
+                ...interactiveCardHoverSx["&:hover"],
+                bgcolor: "#fff",
+              },
+            }
+          : {}),
       }}
     >
       <CardContent
