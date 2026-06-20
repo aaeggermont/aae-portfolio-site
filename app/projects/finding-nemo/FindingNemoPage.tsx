@@ -177,17 +177,25 @@ export function FindingNemoPage({
           ) : null}
           <MyContributions data={project.myContributions} />
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
+            <SectionParagraph title={project.problemSpaceFraming.title} />
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: { xs: 3, md: 4.5 },
+              }}
+            >
               <SectionParagraph
-                title={project.businessOpportunities.title}
-                body={project.businessOpportunities.paragraphs}
+                title={project.challenges.title}
+                body={project.challenges.paragraphs}
+                titleVariant="subtitle"
               />
               <Box sx={challengeCardsRowSx}>
-                {project.businessOpportunities.cards.map((card) => (
+                {project.challenges.cards.map((card) => (
                   <ContentCard
                     key={card.title}
                     title={card.title}
                     description={card.description}
+                    heightPx={CHALLENGES_CARD_HEIGHT_PX}
                   />
                 ))}
               </Box>
@@ -205,16 +213,16 @@ export function FindingNemoPage({
               }}
             >
               <SectionParagraph
-                title={project.challenges.title}
-                body={project.challenges.paragraphs}
+                title={project.businessOpportunities.title}
+                body={project.businessOpportunities.paragraphs}
+                titleVariant="subtitle"
               />
               <Box sx={challengeCardsRowSx}>
-                {project.challenges.cards.map((card) => (
+                {project.businessOpportunities.cards.map((card) => (
                   <ContentCard
                     key={card.title}
                     title={card.title}
                     description={card.description}
-                    heightPx={CHALLENGES_CARD_HEIGHT_PX}
                   />
                 ))}
               </Box>
@@ -251,10 +259,17 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
+            <SectionParagraph title={project.understandingTheUsers.title} />
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: { xs: 3, md: 4.5 },
+              }}
+            >
               <SectionParagraph
                 title={project.primaryUsers.title}
                 body={project.primaryUsers.paragraphs}
+                titleVariant="subtitle"
               />
               <Box sx={challengeCardsRowSx}>
                 {project.primaryUsers.cards.map((card) => (
@@ -280,7 +295,11 @@ export function FindingNemoPage({
                 },
               }}
             >
-              <SectionParagraph title={project.personas.title} />
+              <SectionParagraph
+                title={project.personas.title}
+                body={project.personas.paragraphs}
+                titleVariant="subtitle"
+              />
               <Box sx={personaCardsRowSx}>
                 {project.personas.items.map((persona) => (
                   <Persona key={persona.title} {...persona} />

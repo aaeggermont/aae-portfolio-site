@@ -18,10 +18,12 @@ export const TYPOGRAPHY = {
   heroTitle: { mobile: "36px", tablet: "44px", desktop: "52px" },
   heroSubtitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
   sectionTitle: { mobile: "28px", tablet: "32px", desktop: "36px" },
+  /** h3 subtitles under a section title (e.g. Business Opportunities, panel headings). */
+  sectionSubtitle: { mobile: "22px", tablet: "24px", desktop: "26px" },
   sectionDescription: { mobile: "18px", tablet: "20px", desktop: "22px" },
   cardTitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
   /** `ContentCard` title — IBM Plex Sans Bold. */
-  contentCardTitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
+  contentCardTitle: { mobile: "18px", tablet: "20px", desktop: "22px" },
   /** `ContentCard` body / bullets — Source Sans 3 Regular. */
   contentCardBody: { mobile: "16px", tablet: "17px", desktop: "18px" },
   /** `Persona` Goals / Pain Points headings — IBM Plex Sans Bold. */
