@@ -6,6 +6,32 @@
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
+
+    /* Late-afternoon grade — tweak these to taste (see `.backgroundImage` below). */
+    --demo-bg-brightness: 0.65;
+    --demo-bg-contrast: 1.05;
+    --demo-bg-saturate: 1.12;
+    --demo-bg-sepia: 0.18;
+    --demo-bg-hue-rotate: 8deg;
+
+    /* Window glow placement — adjust to align over the first window pair. */
+    --window-glow-top: 21.5%;
+    --window-glow-left: 49.5%;
+    --window-glow-width: clamp(80px, 10.9%, 120px);
+    --window-glow-height: clamp(29px, 7.1%, 44px);
+
+    /* Girl ghost — figure box size + crop focal point on the 3000×3000 artboard. */
+    --girl-ghost-top: 25%;
+    --girl-ghost-left: 55.5%;
+    --girl-ghost-figure-width: 24.3px;
+    --girl-ghost-content-center-x: 48.97%;
+    --girl-ghost-content-center-y: 54.42%;
+    --girl-ghost-content-width-ratio: 0.069;
+    --girl-ghost-render-width: calc(
+        var(--girl-ghost-figure-width) / var(--girl-ghost-content-width-ratio)
+    );
+    --girl-ghost-figure-height: calc(var(--girl-ghost-figure-width) * 282 / 207);
+    --girl-ghost-opacity: 0.5;
 }
 
 @media (min-width: 768px) {
@@ -23,9 +49,164 @@
 .backgroundImage {
     position: absolute;
     inset: 0;
+    z-index: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    filter:
+        brightness(var(--demo-bg-brightness))
+        contrast(var(--demo-bg-contrast))
+        saturate(var(--demo-bg-saturate))
+        sepia(var(--demo-bg-sepia))
+        hue-rotate(var(--demo-bg-hue-rotate));
+}
+
+/* Warm sky-to-ground wash — complements the filter stack above. */
+.canvas::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 180, 80, 0.08) 0%,
+        rgba(255, 140, 40, 0.12) 100%
+    );
+    mix-blend-mode: soft-light;
+}
+
+.windowGlowWrap {
+    position: absolute;
+    z-index: 2;
+    top: var(--window-glow-top);
+    left: var(--window-glow-left);
+    width: var(--window-glow-width);
+    height: var(--window-glow-height);
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.9);
+    transform-origin: center center;
+    will-change: transform, opacity;
+
+    /* TEMP — sharp bounds for alignment; remove when glow is positioned. */
+    outline: 2px solid rgba(0, 0, 0, 0.85);
+    outline-offset: 1px;
+    border-radius: 50%;
+}
+
+.windowGlow {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(255, 196, 108, 0.95) 0%,
+        rgba(255, 210, 122, 0.55) 45%,
+        rgba(255, 196, 108, 0) 70%
+    );
+    filter: blur(18px);
+    mix-blend-mode: screen;
+}
+
+.girlGhostWrap {
+    position: absolute;
+    z-index: 4;
+    top: var(--girl-ghost-top);
+    left: var(--girl-ghost-left);
+    width: var(--girl-ghost-figure-width);
+    height: var(--girl-ghost-figure-height);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    will-change: transform, opacity;
+
+    /* TEMP — alignment bounds; remove when positioning is final. */
+    outline: 1px dashed rgba(255, 60, 60, 0.85);
+    outline-offset: 2px;
+}
+
+.girlGhostClip {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.girlGhostStage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: var(--girl-ghost-render-width);
+    transform: translate(
+        calc(-1 * var(--girl-ghost-content-center-x)),
+        calc(-1 * var(--girl-ghost-content-center-y))
+    );
+
+    /* GatedImage MUI Box */
+    > div {
+        width: 100%;
+    }
+}
+
+.girlGhost {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: none;
+}
+
+/* Upper-left sky placement — inset from edges, clear of tower architecture. */
+.notification {
+    position: absolute;
+    z-index: 3;
+    top: 8%;
+    left: 6%;
+    width: min(42%, 280px);
+    opacity: 0;
+    pointer-events: none;
+    filter:
+        drop-shadow(0 6px 18px rgba(3, 19, 60, 0.14))
+        drop-shadow(0 2px 6px rgba(3, 19, 60, 0.08));
+    will-change: transform, opacity;
+}
+
+@media (min-width: 768px) {
+    .notification {
+        top: 10%;
+        left: 7%;
+        width: min(32%, 300px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .notification {
+        width: min(28%, 320px);
+    }
+}
+
+.notificationImage {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notification {
+        will-change: auto;
+    }
+
+    .windowGlow {
+        will-change: auto;
+    }
+
+    .windowGlowWrap {
+        will-change: auto;
+    }
+
+    .girlGhostWrap {
+        will-change: auto;
+    }
 }
