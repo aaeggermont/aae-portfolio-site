@@ -1,7 +1,9 @@
 import React from 'react';
 import OverviewParagraphBlock from '../OverviewParagraphBlock';
+import SectionTitle from '../SectionTitle';
 import styles from '../../ArStoryTeller.module.scss';
-import { SolutionDemo } from '../demo/SolutionDemo';
+import { MainDemo } from '../main-demo/MainDemo';
+import './OverviewSection.scss';
 
 import type { OverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 
@@ -17,7 +19,7 @@ export function OverviewSection({ data }: OverviewSectionProps) {
     const { designChallenge, theProblem, solution } = data;
 
     return (
-        <section className={styles['project-container']}>
+        <section className={`${styles['project-container']} overviewSection`}>
 
             {/* SSR-stable wrapper so AOS can register at `init()` even though
                 `OverviewParagraphBlock` only renders content after `useResponsive` mounts.
@@ -36,10 +38,19 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                 />
             </div>
 
-            <SolutionDemo
-                title={solution.title}
-                paragraphs={solution.paragraphs}
-            />
+            <div className="overviewSection__solution">
+                {solution.title ? (
+                    <SectionTitle
+                        title={solution.title}
+                        data-aos="fade-up"
+                        data-aos-duration="1000"
+                        paddingTop="1.5rem"
+                        paddingBottom="2rem"
+                    />
+                ) : null}
+
+                <MainDemo />
+            </div>
 
         </section>
     );
