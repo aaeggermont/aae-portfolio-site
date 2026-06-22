@@ -86,6 +86,7 @@ type ParallaxCloudLayerProps = {
   objectFit?: CSSProperties['objectFit'];
   /** Override CSS `object-position`. Defaults to the value in `.project-header-parallax__img`. */
   objectPosition?: CSSProperties['objectPosition'];
+  initialTop?: CSSProperties['marginTop'];
 };
 
 function ParallaxCloudLayer({
@@ -99,6 +100,7 @@ function ParallaxCloudLayer({
   scaleOrigin = 'center bottom',
   objectFit,
   objectPosition,
+  initialTop,
 }: ParallaxCloudLayerProps) {
   const layerRef = useRef<HTMLDivElement>(null);
   useReportImageReady(layerRef, onLayerReady, src.src);
@@ -123,6 +125,7 @@ function ParallaxCloudLayer({
     }
     if (objectFit) style.objectFit = objectFit;
     if (objectPosition) style.objectPosition = objectPosition;
+    if (initialTop) style.marginTop = initialTop;
     return Object.keys(style).length > 0 ? style : undefined;
   })();
 
@@ -257,7 +260,7 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
             alt="Clouds Layer 3"
             speed={8}
             onLayerReady={onLayerReady}
-             objectFit="contain"
+            objectFit="contain"
             objectPosition="center 17%"
           />
           <ParallaxCloudLayer
@@ -275,11 +278,11 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
             speed={-3}
             onLayerReady={onLayerReady}
             objectFit="contain"
-            objectPosition="center 16%"
+            objectPosition="center 18%"
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-45%" speed={38} onLayerReady={onLayerReady} />
+      <PeopleInLineCrowd initialTop="-30%" speed={32} onLayerReady={onLayerReady} />
     </div>
   );
 }
@@ -317,7 +320,7 @@ function ProjectHeaderTablet({ onLayerReady }: HeaderVariantProps) {
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-19%" speed={8} onLayerReady={onLayerReady} />
+      <PeopleInLineCrowd initialTop="-10%" speed={8} onLayerReady={onLayerReady} />
     </div>
   );
 }
@@ -337,33 +340,37 @@ function ProjectHeaderMobile({ onLayerReady }: HeaderVariantProps) {
             speed={4}
             onLayerReady={onLayerReady}
             imgClassName={mobileTop}
+            initialTop="15%"
           />
           <ParallaxCloudLayer
             src={CloudsLayerMobile3}
             alt="Clouds Layer Mobile 3"
-            speed={2}
+            speed={0}
             onLayerReady={onLayerReady}
             imgClassName={mobileTop}
             layerLiftPx={50}
+            initialTop="12%"
           />
           <ParallaxCloudLayer
             src={CloudsLayerMobile2}
             alt="Clouds Layer Mobile 2"
-            speed={0}
+            speed={-2}
             onLayerReady={onLayerReady}
             imgClassName={mobileTop}
+            initialTop="15%"
           />
           <ParallaxCloudLayer
             src={CloudsLayerMobile1}
             alt="Clouds Layer Mobile 1"
-            speed={-2}
+            speed={-4}
             onLayerReady={onLayerReady}
             imgClassName={mobileTop}
+            initialTop="17%"
           />
         </ParallaxBanner>
       </div>
       <PeopleInLineCrowd
-        initialTop="-35%"
+        initialTop="-25%"
         speed={4}
         onLayerReady={onLayerReady}
       />
