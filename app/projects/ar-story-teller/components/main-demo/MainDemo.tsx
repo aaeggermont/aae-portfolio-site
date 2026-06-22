@@ -4,6 +4,7 @@ import { useRef } from 'react';
 
 import ProjectImage from '@/lib/media/ProjectImage';
 
+import { DemoVideo } from '../demo-video/DemoVideo';
 import styles from './MainDemo.module.scss';
 import { useMainDemoTimeline } from './useMainDemoTimeline';
 
@@ -60,14 +61,16 @@ export function MainDemo() {
     const notificationRef = useRef<HTMLDivElement>(null);
     const windowGlowRef = useRef<HTMLDivElement>(null);
     const girlGhostRef = useRef<HTMLDivElement>(null);
-    const iphoneFrameRef = useRef<HTMLDivElement>(null);
+    const iphoneDeviceRef = useRef<HTMLDivElement>(null);
+    const iphoneVideoRef = useRef<HTMLDivElement>(null);
 
     useMainDemoTimeline({
         canvasRef,
         notificationRef,
         windowGlowRef,
         girlGhostRef,
-        iphoneFrameRef,
+        iphoneDeviceRef,
+        iphoneVideoRef,
     });
 
     return (
@@ -114,18 +117,26 @@ export function MainDemo() {
             </div>
 
             <div
-                ref={iphoneFrameRef}
-                className={styles.iphoneFrameWrap}
+                ref={iphoneDeviceRef}
+                className={styles.iphoneDevice}
                 aria-hidden="true"
             >
-                <ProjectImage
-                    objectPath={MAIN_DEMO_IPHONE_FRAME_OBJECT_PATH}
-                    alt=""
-                    width={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_WIDTH}
-                    height={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_HEIGHT}
-                    sizes={mainDemoIphoneFrameSizes}
-                    className={styles.iphoneFrameImage}
-                />
+                <div ref={iphoneVideoRef} className={styles.iphoneScreen}>
+                    <DemoVideo
+                        className={styles.iphoneScreenVideoRoot}
+                        videoClassName={styles.iphoneScreenVideo}
+                    />
+                </div>
+                <div className={styles.iphoneFrameImageWrap}>
+                    <ProjectImage
+                        objectPath={MAIN_DEMO_IPHONE_FRAME_OBJECT_PATH}
+                        alt=""
+                        width={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_WIDTH}
+                        height={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_HEIGHT}
+                        sizes={mainDemoIphoneFrameSizes}
+                        className={styles.iphoneFrameImage}
+                    />
+                </div>
             </div>
 
             <div

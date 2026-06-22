@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import {
+    MAIN_DEMO_AR_VIDEO_TIMING,
     MAIN_DEMO_GIRL_GHOST_TIMING,
     MAIN_DEMO_IPHONE_FRAME_TIMING,
     MAIN_DEMO_NOTIFICATION_TIMING,
@@ -18,7 +19,8 @@ export type MainDemoTimelineElements = {
     notification: HTMLElement;
     windowGlow: HTMLElement;
     girlGhost: HTMLElement;
-    iphoneFrame: HTMLElement;
+    iphoneDevice: HTMLElement;
+    iphoneVideo: HTMLElement;
 };
 
 export type BuildMainDemoTimelineOptions = {
@@ -35,15 +37,21 @@ const LABELS = MAIN_DEMO_TIMELINE_LABELS;
  * 2. Notification fades in
  * 3. Window glow fades in and stays visible
  * 4. Girl ghost fades in
- * 5. iPhone frame reveals (portal into AR — content layer ships later)
- * 6. Camera zoom (placeholder — syncs to `cameraZoom` label)
- * 7. AR experience active (future)
+ * 5. iPhone frame reveals
+ * 6. AR video fades into the device screen
+ * 7. Camera zoom (placeholder — syncs to `cameraZoom` label)
  */
 export function buildMainDemoTimeline(
     elements: MainDemoTimelineElements,
     options: BuildMainDemoTimelineOptions = {},
 ): gsap.core.Timeline {
-    const { notification, windowGlow, girlGhost, iphoneFrame } = elements;
+    const {
+        notification,
+        windowGlow,
+        girlGhost,
+        iphoneDevice,
+        iphoneVideo,
+    } = elements;
     const { reducedMotion = false } = options;
     const { fadeInDuration, fadeOutDuration, fadeInYOffset } =
         MAIN_DEMO_NOTIFICATION_TIMING;
@@ -68,6 +76,10 @@ export function buildMainDemoTimeline(
         initialScale: iphoneInitialScale,
         initialYOffset: iphoneInitialYOffset,
     } = MAIN_DEMO_IPHONE_FRAME_TIMING;
+    const {
+        fadeInDuration: arVideoFadeInDuration,
+        fadeInEase: arVideoFadeInEase,
+    } = MAIN_DEMO_AR_VIDEO_TIMING;
 
     gsap.set(notification, { opacity: 0, y: fadeInYOffset });
     gsap.set(windowGlow, {
@@ -76,12 +88,13 @@ export function buildMainDemoTimeline(
         transformOrigin: 'center center',
     });
     gsap.set(girlGhost, { opacity: 0, y: girlFadeInYOffset });
-    gsap.set(iphoneFrame, {
+    gsap.set(iphoneDevice, {
         opacity: 0,
         scale: iphoneInitialScale,
         y: iphoneInitialYOffset,
         transformOrigin: 'center center',
     });
+    gsap.set(iphoneVideo, { opacity: 0 });
 
     const tl = gsap.timeline({ paused: true });
 
@@ -93,6 +106,7 @@ export function buildMainDemoTimeline(
     const glowFullyVisible = `${LABELS.windowGlow}+=${glowEntranceDuration}`;
     const girlGhostStart = `${glowFullyVisible}+=${delayAfterGlowVisible}`;
     const iphoneFrameStart = `${LABELS.girlGhost}+=${girlFadeInDuration + delayAfterGirlVisible}`;
+    const iphoneFrameFullyVisible = `${LABELS.iphoneFrame}+=${iphoneRevealDuration}`;
     const cameraZoomStart = `${LABELS.notificationVisible}+=${delayAfterNotification + windowGlowDuration}`;
 
     tl.to({}, { duration: initialDelay })
@@ -130,7 +144,7 @@ export function buildMainDemoTimeline(
         .addLabel(LABELS.iphoneFrame, iphoneFrameStart)
         .addLabel(LABELS.deviceReveal, iphoneFrameStart)
         .to(
-            iphoneFrame,
+            iphoneDevice,
             {
                 opacity: 1,
                 scale: 1,
@@ -148,6 +162,16 @@ export function buildMainDemoTimeline(
                 ease: 'power2.inOut',
             },
             LABELS.deviceReveal,
+        )
+        .addLabel(LABELS.arVideo, iphoneFrameFullyVisible)
+        .to(
+            iphoneVideo,
+            {
+                opacity: 1,
+                duration: arVideoFadeInDuration,
+                ease: arVideoFadeInEase,
+            },
+            LABELS.arVideo,
         )
         .addLabel(LABELS.cameraZoom, cameraZoomStart);
 

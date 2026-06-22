@@ -10,7 +10,8 @@ type MainDemoTimelineRefs = {
     notificationRef: RefObject<HTMLDivElement | null>;
     windowGlowRef: RefObject<HTMLDivElement | null>;
     girlGhostRef: RefObject<HTMLDivElement | null>;
-    iphoneFrameRef: RefObject<HTMLDivElement | null>;
+    iphoneDeviceRef: RefObject<HTMLDivElement | null>;
+    iphoneVideoRef: RefObject<HTMLDivElement | null>;
 };
 
 export function useMainDemoTimeline({
@@ -18,15 +19,24 @@ export function useMainDemoTimeline({
     notificationRef,
     windowGlowRef,
     girlGhostRef,
-    iphoneFrameRef,
+    iphoneDeviceRef,
+    iphoneVideoRef,
 }: MainDemoTimelineRefs): void {
     useLayoutEffect(() => {
         const canvas = canvasRef.current;
         const notification = notificationRef.current;
         const windowGlow = windowGlowRef.current;
         const girlGhost = girlGhostRef.current;
-        const iphoneFrame = iphoneFrameRef.current;
-        if (!canvas || !notification || !windowGlow || !girlGhost || !iphoneFrame) {
+        const iphoneDevice = iphoneDeviceRef.current;
+        const iphoneVideo = iphoneVideoRef.current;
+        if (
+            !canvas ||
+            !notification ||
+            !windowGlow ||
+            !girlGhost ||
+            !iphoneDevice ||
+            !iphoneVideo
+        ) {
             return;
         }
 
@@ -38,7 +48,14 @@ export function useMainDemoTimeline({
 
         const ctx = gsap.context(() => {
             scrollCleanup = playMainDemoTimelineOnScroll(
-                { canvas, notification, windowGlow, girlGhost, iphoneFrame },
+                {
+                    canvas,
+                    notification,
+                    windowGlow,
+                    girlGhost,
+                    iphoneDevice,
+                    iphoneVideo,
+                },
                 { reducedMotion },
             );
         }, canvas);
@@ -47,5 +64,12 @@ export function useMainDemoTimeline({
             scrollCleanup?.();
             ctx.revert();
         };
-    }, [canvasRef, notificationRef, windowGlowRef, girlGhostRef, iphoneFrameRef]);
+    }, [
+        canvasRef,
+        notificationRef,
+        windowGlowRef,
+        girlGhostRef,
+        iphoneDeviceRef,
+        iphoneVideoRef,
+    ]);
 }

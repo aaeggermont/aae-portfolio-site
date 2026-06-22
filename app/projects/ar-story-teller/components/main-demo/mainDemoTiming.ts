@@ -6,6 +6,7 @@ export const MAIN_DEMO_TIMELINE_LABELS = {
     windowGlowVisible: 'windowGlowVisible',
     girlGhost: 'girlGhost',
     iphoneFrame: 'iphoneFrame',
+    arVideo: 'arVideo',
     cameraZoom: 'cameraZoom',
     deviceReveal: 'deviceReveal',
 } as const;
@@ -60,6 +61,12 @@ export const MAIN_DEMO_IPHONE_FRAME_TIMING = {
     revealEase: 'power2.out',
     initialScale: 0.92,
     initialYOffset: 30,
+} as const;
+
+/** AR viewport video inside the iPhone screen — fades in after the frame reveal. */
+export const MAIN_DEMO_AR_VIDEO_TIMING = {
+    fadeInDuration: 1,
+    fadeInEase: 'power2.out',
 } as const;
 
 /** ScrollTrigger start — plays the timeline once when the canvas enters view. */

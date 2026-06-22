@@ -27,6 +27,7 @@ export function DemoVideo({
     loop = true,
     playsInline = true,
     preload = 'metadata',
+    controls = false,
     ...videoProps
 }: DemoVideoProps) {
     return (
@@ -40,6 +41,7 @@ export function DemoVideo({
                 loop={loop}
                 playsInline={playsInline}
                 preload={preload}
+                controls={controls}
                 aria-label={ariaLabel}
             />
         </div>

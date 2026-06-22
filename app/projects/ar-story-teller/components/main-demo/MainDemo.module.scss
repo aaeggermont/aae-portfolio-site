@@ -33,10 +33,17 @@
     --girl-ghost-figure-height: calc(var(--girl-ghost-figure-width) * 282 / 207);
     --girl-ghost-opacity: 0.5;
 
-    /* iPhone frame — portal over glowing windows / ghost area. */
+    /* iPhone device — portal over glowing windows / ghost area. */
     --iphone-frame-top: 8%;
     --iphone-frame-left: 40%;
     --iphone-frame-width: clamp(120px, 18%, 200px);
+
+    /* Screen clip inset within the frame PNG (785×1617 asset). */
+    --iphone-screen-inset-top: 0.2%;
+    --iphone-screen-inset-left: 0.4%;
+    --iphone-screen-inset-right: 0.4%;
+    --iphone-screen-inset-bottom: 0.3%;
+    --iphone-screen-radius: 13%;
 }
 
 @media (min-width: 768px) {
@@ -166,7 +173,7 @@
     max-width: none;
 }
 
-.iphoneFrameWrap {
+.iphoneDevice {
     position: absolute;
     z-index: 5;
     top: var(--iphone-frame-top);
@@ -175,8 +182,45 @@
     pointer-events: none;
     opacity: 0;
     will-change: transform, opacity;
+}
 
-    /* GatedImage MUI Box */
+.iphoneScreen {
+    position: absolute;
+    z-index: 0;
+    inset:
+        var(--iphone-screen-inset-top)
+        var(--iphone-screen-inset-right)
+        var(--iphone-screen-inset-bottom)
+        var(--iphone-screen-inset-left);
+    overflow: hidden;
+    border-radius: var(--iphone-screen-radius);
+    opacity: 0;
+    will-change: opacity;
+}
+
+.iphoneScreenVideoRoot {
+    width: 100%;
+    height: 100%;
+
+    > div {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.iphoneScreenVideo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.iphoneFrameImageWrap {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+
     > div {
         width: 100%;
     }
@@ -241,7 +285,11 @@
         will-change: auto;
     }
 
-    .iphoneFrameWrap {
+    .iphoneDevice {
+        will-change: auto;
+    }
+
+    .iphoneScreen {
         will-change: auto;
     }
 }
