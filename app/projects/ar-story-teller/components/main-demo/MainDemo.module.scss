@@ -32,17 +32,25 @@
     );
     --girl-ghost-figure-height: calc(var(--girl-ghost-figure-width) * 282 / 207);
     --girl-ghost-opacity: 0.5;
+
+    /* iPhone frame — portal over glowing windows / ghost area. */
+    --iphone-frame-top: 8%;
+    --iphone-frame-left: 40%;
+    --iphone-frame-width: clamp(120px, 18%, 200px);
 }
 
 @media (min-width: 768px) {
     .canvas {
         max-width: 900px;
+        --iphone-frame-width: clamp(140px, 20%, 210px);
+        --iphone-frame-left: 42%;
     }
 }
 
 @media (min-width: 1024px) {
     .canvas {
         max-width: 1100px;
+        --iphone-frame-width: clamp(160px, 18%, 220px);
     }
 }
 
@@ -158,6 +166,29 @@
     max-width: none;
 }
 
+.iphoneFrameWrap {
+    position: absolute;
+    z-index: 5;
+    top: var(--iphone-frame-top);
+    left: var(--iphone-frame-left);
+    width: var(--iphone-frame-width);
+    pointer-events: none;
+    opacity: 0;
+    will-change: transform, opacity;
+
+    /* GatedImage MUI Box */
+    > div {
+        width: 100%;
+    }
+}
+
+.iphoneFrameImage {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.32));
+}
+
 /* Upper-left sky placement — inset from edges, clear of tower architecture. */
 .notification {
     position: absolute;
@@ -207,6 +238,10 @@
     }
 
     .girlGhostWrap {
+        will-change: auto;
+    }
+
+    .iphoneFrameWrap {
         will-change: auto;
     }
 }

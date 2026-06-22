@@ -3,6 +3,7 @@ import OverviewParagraphBlock from '../OverviewParagraphBlock';
 import SectionTitle from '../SectionTitle';
 import styles from '../../ArStoryTeller.module.scss';
 import { MainDemo } from '../main-demo/MainDemo';
+import { DemoVideo } from '../demo-video/DemoVideo';
 import './OverviewSection.scss';
 
 import type { OverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
@@ -50,6 +51,11 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                 ) : null}
 
                 <MainDemo />
+
+                {/* TEMP — video playback test; remove or move into iPhone frame when ready. */}
+                <div className="overviewSection__videoTest">
+                    <DemoVideo />
+                </div>
             </div>
 
         </section>

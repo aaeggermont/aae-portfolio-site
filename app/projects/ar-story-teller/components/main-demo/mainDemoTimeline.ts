@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import {
     MAIN_DEMO_GIRL_GHOST_TIMING,
+    MAIN_DEMO_IPHONE_FRAME_TIMING,
     MAIN_DEMO_NOTIFICATION_TIMING,
     MAIN_DEMO_PHASE_TIMING,
     MAIN_DEMO_SCROLL_TRIGGER_START,
@@ -17,6 +18,7 @@ export type MainDemoTimelineElements = {
     notification: HTMLElement;
     windowGlow: HTMLElement;
     girlGhost: HTMLElement;
+    iphoneFrame: HTMLElement;
 };
 
 export type BuildMainDemoTimelineOptions = {
@@ -32,23 +34,20 @@ const LABELS = MAIN_DEMO_TIMELINE_LABELS;
  * 1. Component visible → static pause
  * 2. Notification fades in
  * 3. Window glow fades in and stays visible
- * 4. Girl ghost fades in (1s after glow is fully visible)
- * 5. Camera zoom (placeholder — syncs to `cameraZoom` label)
- * 6. Device reveal → notification fades out
+ * 4. Girl ghost fades in
+ * 5. iPhone frame reveals (portal into AR — content layer ships later)
+ * 6. Camera zoom (placeholder — syncs to `cameraZoom` label)
  * 7. AR experience active (future)
  */
 export function buildMainDemoTimeline(
-    { notification, windowGlow, girlGhost }: MainDemoTimelineElements,
+    elements: MainDemoTimelineElements,
     options: BuildMainDemoTimelineOptions = {},
 ): gsap.core.Timeline {
+    const { notification, windowGlow, girlGhost, iphoneFrame } = elements;
     const { reducedMotion = false } = options;
     const { fadeInDuration, fadeOutDuration, fadeInYOffset } =
         MAIN_DEMO_NOTIFICATION_TIMING;
-    const {
-        initialDelay,
-        windowGlowDuration,
-        cameraZoomDuration,
-    } = MAIN_DEMO_PHASE_TIMING;
+    const { initialDelay, windowGlowDuration } = MAIN_DEMO_PHASE_TIMING;
     const {
         delayAfterNotification,
         entranceDuration: glowEntranceDuration,
@@ -62,6 +61,13 @@ export function buildMainDemoTimeline(
         visibleOpacity: girlVisibleOpacity,
         fadeInYOffset: girlFadeInYOffset,
     } = MAIN_DEMO_GIRL_GHOST_TIMING;
+    const {
+        delayAfterGirlVisible,
+        revealDuration: iphoneRevealDuration,
+        revealEase: iphoneRevealEase,
+        initialScale: iphoneInitialScale,
+        initialYOffset: iphoneInitialYOffset,
+    } = MAIN_DEMO_IPHONE_FRAME_TIMING;
 
     gsap.set(notification, { opacity: 0, y: fadeInYOffset });
     gsap.set(windowGlow, {
@@ -70,6 +76,12 @@ export function buildMainDemoTimeline(
         transformOrigin: 'center center',
     });
     gsap.set(girlGhost, { opacity: 0, y: girlFadeInYOffset });
+    gsap.set(iphoneFrame, {
+        opacity: 0,
+        scale: iphoneInitialScale,
+        y: iphoneInitialYOffset,
+        transformOrigin: 'center center',
+    });
 
     const tl = gsap.timeline({ paused: true });
 
@@ -80,8 +92,8 @@ export function buildMainDemoTimeline(
     const glowStart = `${LABELS.notificationVisible}+=${delayAfterNotification}`;
     const glowFullyVisible = `${LABELS.windowGlow}+=${glowEntranceDuration}`;
     const girlGhostStart = `${glowFullyVisible}+=${delayAfterGlowVisible}`;
+    const iphoneFrameStart = `${LABELS.girlGhost}+=${girlFadeInDuration + delayAfterGirlVisible}`;
     const cameraZoomStart = `${LABELS.notificationVisible}+=${delayAfterNotification + windowGlowDuration}`;
-    const deviceRevealStart = `${LABELS.notificationVisible}+=${delayAfterNotification + windowGlowDuration + cameraZoomDuration}`;
 
     tl.to({}, { duration: initialDelay })
         .addLabel(LABELS.notificationEnter)
@@ -115,8 +127,19 @@ export function buildMainDemoTimeline(
             },
             LABELS.girlGhost,
         )
-        .addLabel(LABELS.cameraZoom, cameraZoomStart)
-        .addLabel(LABELS.deviceReveal, deviceRevealStart)
+        .addLabel(LABELS.iphoneFrame, iphoneFrameStart)
+        .addLabel(LABELS.deviceReveal, iphoneFrameStart)
+        .to(
+            iphoneFrame,
+            {
+                opacity: 1,
+                scale: 1,
+                y: 0,
+                duration: iphoneRevealDuration,
+                ease: iphoneRevealEase,
+            },
+            LABELS.iphoneFrame,
+        )
         .to(
             notification,
             {
@@ -125,7 +148,8 @@ export function buildMainDemoTimeline(
                 ease: 'power2.inOut',
             },
             LABELS.deviceReveal,
-        );
+        )
+        .addLabel(LABELS.cameraZoom, cameraZoomStart);
 
     return tl;
 }

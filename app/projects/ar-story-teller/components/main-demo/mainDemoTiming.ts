@@ -5,6 +5,7 @@ export const MAIN_DEMO_TIMELINE_LABELS = {
     windowGlow: 'windowGlow',
     windowGlowVisible: 'windowGlowVisible',
     girlGhost: 'girlGhost',
+    iphoneFrame: 'iphoneFrame',
     cameraZoom: 'cameraZoom',
     deviceReveal: 'deviceReveal',
 } as const;
@@ -49,6 +50,16 @@ export const MAIN_DEMO_GIRL_GHOST_TIMING = {
     /** Resting opacity once visible (matches `--girl-ghost-opacity` in SCSS). */
     visibleOpacity: 0.5,
     fadeInYOffset: 6,
+} as const;
+
+/** iPhone frame portal — appears after the ghost girl reveal. */
+export const MAIN_DEMO_IPHONE_FRAME_TIMING = {
+    /** Beat after ghost fade-in completes before the device appears. */
+    delayAfterGirlVisible: 0.5,
+    revealDuration: 1.35,
+    revealEase: 'power2.out',
+    initialScale: 0.92,
+    initialYOffset: 30,
 } as const;
 
 /** ScrollTrigger start — plays the timeline once when the canvas enters view. */
