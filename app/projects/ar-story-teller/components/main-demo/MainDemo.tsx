@@ -116,26 +116,28 @@ export function MainDemo() {
                 </div>
             </div>
 
-            <div
-                ref={iphoneDeviceRef}
-                className={styles.iphoneDevice}
-                aria-hidden="true"
-            >
-                <div ref={iphoneVideoRef} className={styles.iphoneScreen}>
-                    <DemoVideo
-                        className={styles.iphoneScreenVideoRoot}
-                        videoClassName={styles.iphoneScreenVideo}
-                    />
-                </div>
-                <div className={styles.iphoneFrameImageWrap}>
-                    <ProjectImage
-                        objectPath={MAIN_DEMO_IPHONE_FRAME_OBJECT_PATH}
-                        alt=""
-                        width={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_WIDTH}
-                        height={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_HEIGHT}
-                        sizes={mainDemoIphoneFrameSizes}
-                        className={styles.iphoneFrameImage}
-                    />
+            <div className={styles.iphoneDeviceWrap}>
+                <div
+                    ref={iphoneDeviceRef}
+                    className={styles.iphoneDevice}
+                    aria-hidden="true"
+                >
+                    <div ref={iphoneVideoRef} className={styles.iphoneScreen}>
+                        <DemoVideo
+                            className={styles.iphoneScreenVideoRoot}
+                            videoClassName={styles.iphoneScreenVideo}
+                        />
+                    </div>
+                    <div className={styles.iphoneFrameImageWrap}>
+                        <ProjectImage
+                            objectPath={MAIN_DEMO_IPHONE_FRAME_OBJECT_PATH}
+                            alt=""
+                            width={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_WIDTH}
+                            height={MAIN_DEMO_IPHONE_FRAME_INTRINSIC_HEIGHT}
+                            sizes={mainDemoIphoneFrameSizes}
+                            className={styles.iphoneFrameImage}
+                        />
+                    </div>
                 </div>
             </div>
 

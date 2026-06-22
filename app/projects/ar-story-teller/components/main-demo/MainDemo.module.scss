@@ -33,10 +33,9 @@
     --girl-ghost-figure-height: calc(var(--girl-ghost-figure-width) * 282 / 207);
     --girl-ghost-opacity: 0.5;
 
-    /* iPhone device — portal over glowing windows / ghost area. */
-    --iphone-frame-top: 8%;
+    /* iPhone device — centered vertically in canvas via `.iphoneDeviceWrap`. */
     --iphone-frame-left: 40%;
-    --iphone-frame-width: clamp(120px, 18%, 200px);
+    --iphone-frame-width: clamp(138px, 21%, 230px);
 
     /* Screen clip inset within the frame PNG (785×1617 asset). */
     --iphone-screen-inset-top: 0.2%;
@@ -49,7 +48,7 @@
 @media (min-width: 768px) {
     .canvas {
         max-width: 900px;
-        --iphone-frame-width: clamp(140px, 20%, 210px);
+        --iphone-frame-width: clamp(161px, 23%, 242px);
         --iphone-frame-left: 42%;
     }
 }
@@ -57,7 +56,7 @@
 @media (min-width: 1024px) {
     .canvas {
         max-width: 1100px;
-        --iphone-frame-width: clamp(160px, 18%, 220px);
+        --iphone-frame-width: clamp(184px, 21%, 253px);
     }
 }
 
@@ -173,12 +172,19 @@
     max-width: none;
 }
 
-.iphoneDevice {
+.iphoneDeviceWrap {
     position: absolute;
     z-index: 5;
-    top: var(--iphone-frame-top);
+    top: 50%;
     left: var(--iphone-frame-left);
     width: var(--iphone-frame-width);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.iphoneDevice {
+    position: relative;
+    width: 100%;
     pointer-events: none;
     opacity: 0;
     will-change: transform, opacity;
@@ -282,6 +288,10 @@
     }
 
     .girlGhostWrap {
+        will-change: auto;
+    }
+
+    .iphoneDeviceWrap {
         will-change: auto;
     }
 
