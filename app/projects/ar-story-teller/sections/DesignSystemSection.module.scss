@@ -32,6 +32,8 @@
 .guestNeedsBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
+    /* White space between the Design System intro and the first full-bleed band. */
+    margin-top: var(--section-gap);
     background-color: #f5f5f7;
     --guest-needs-content-gutter: var(--layout-margin);
 }
