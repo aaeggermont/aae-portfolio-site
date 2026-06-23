@@ -30,7 +30,7 @@ import {
 export { LAYOUT_DIMENSIONS, PANEL_BLOCK_PADDINGS, SECTION_GAPS };
 export type { LayoutDimensions, PanelBlockPaddings, SectionGaps };
 
-const projectContentStyle: CSSProperties = {
+const arStoryTellerPageStyle: CSSProperties = {
     ['--section-gap-mobile' as string]: SECTION_GAPS.mobile,
     ['--section-gap-tablet' as string]: SECTION_GAPS.tablet,
     ['--section-gap-desktop' as string]: SECTION_GAPS.desktop,
@@ -72,10 +72,10 @@ export function ArStoryTellerPage({
   const hasContent = projectData != null;
 
   return (
-    <div>
+    <div className={styles['project-page']} style={arStoryTellerPageStyle}>
       <ProjectHeader onAllLayersReady={onProjectHeaderLayersReady} />
       {hasContent ? (
-        <div className={styles['project-content']} style={projectContentStyle}>
+        <div className={styles['project-content']}>
           <OverviewSection
             data={{
               designChallenge: projectData.designChallenge,

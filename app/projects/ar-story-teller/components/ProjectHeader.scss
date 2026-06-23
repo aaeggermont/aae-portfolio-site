@@ -92,13 +92,34 @@
   z-index: 2;
   display: flex;
   box-sizing: border-box;
+  justify-content: center;
   pointer-events: none;
   /* Must stay absolute — do not set `position: relative` in breakpoint blocks below. */
 }
 
+/* Same horizontal grid as `.project-content` — inherits vars from `.project-page`. */
 .storyteller-banner__hero .banner-titles__inner {
   pointer-events: auto;
+  box-sizing: border-box;
   width: 100%;
+  max-width: var(--layout-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--layout-margin);
+  padding-right: var(--layout-margin);
+}
+
+@media #{$tablet} {
+  .storyteller-banner__hero .banner-text-subtitle {
+    max-width: 60%;
+    text-align: left;
+  }
+}
+
+@media #{$desktop} {
+  .storyteller-banner__hero .banner-text-subtitle {
+    max-width: 65%;
+  }
 }
 
 @media #{$desktop} {
@@ -120,9 +141,10 @@
             left: 0;
             right: 0;
             align-items: center;
-            justify-content: center;
-            padding-left: 10%;
-            padding-right: 0%;
+
+            .banner-titles__inner {
+                text-align: left;
+            }
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
@@ -136,7 +158,6 @@
                 font-family: var(--font-satoshi), sans-serif;
                 color: #ffbb00;
                 font-weight: 600;
-                width: 670px;
             }
         }
 
@@ -168,9 +189,10 @@
             left: 0;
             right: 0;
             align-items: center;
-            justify-content: center;
-            padding-left: 10%;
-            padding-right: 2%;
+
+            .banner-titles__inner {
+                text-align: left;
+            }
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
@@ -178,14 +200,12 @@
                 font-family: var(--font-satoshi), sans-serif;
                 color: #ffffff;
                 font-weight: 600;
-                width: 100%;
             }
             p {
                 font-size: 1.2rem;
                 font-family: var(--font-satoshi), sans-serif;
                 color: #ffbb00;
                 font-weight: 500;
-                width: 500px;
             }
         }
 
@@ -226,13 +246,12 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-left: 2%;
-            padding-right: 2%;
 
             .banner-titles__inner {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                text-align: center;
             }
 
             .banner-text-title {
@@ -242,17 +261,13 @@
                 color: #ffffff;
                 font-weight: 600;
                 width: 100%;
-                text-align: center;
             }
             p {
                 font-size: 1.4rem;
                 font-family: var(--font-satoshi), sans-serif;
                 color: #ffbb00;
                 font-weight: 500;
-                width: 80%;
                 max-width: 100%;
-                margin-inline: auto;
-                text-align: center;
             }
         }
     }

@@ -4,26 +4,9 @@
     //background-color: aqua;
 }
 
-/* Outer content wrapper for `ArStoryTellerPage`. Replaces the global `global-container`
-   so this case study can own its own horizontal cap and gutter scheme without affecting
-   other routes.
-
-   Two independent concerns ride on the same element:
-
-   1. Layout dimensions — `--layout-max-width-{mobile,tablet,desktop}` and
-      `--layout-margin-{mobile,tablet,desktop}`, set by `LAYOUT_DIMENSIONS` in
-      `ArStoryTellerPage.tsx`. The active values (`--layout-max-width` / `--layout-margin`)
-      are applied as `max-width` and horizontal padding on this wrapper, constraining every
-      descendant section automatically. Mobile is `none` (no cap) so phones fill their
-      viewport; tablet/desktop cap and center.
-   2. Section gaps — `--section-gap-{mobile,tablet,desktop}`, set by `SECTION_GAPS` in
-      `ArStoryTellerPage.tsx`. The active `--section-gap` is applied as `margin-top` to
-      every direct child after the first, with `--section-gap-self` as the per-section
-      escape hatch.
-
-   Defaults below mirror the constants in the TS file so the page still renders coherently
-   if the inline style is ever removed. */
-.project-content {
+/* Page root for `ArStoryTellerPage` — owns layout + section-gap CSS variables so the hero
+   banner text and `.project-content` share the same horizontal grid (`LAYOUT_DIMENSIONS`). */
+.project-page {
     /* Layout dimensions — fallback defaults; overridden by inline vars from React. */
     --layout-max-width-mobile: none;
     --layout-max-width-tablet: 1024px;
@@ -53,7 +36,10 @@
         --layout-margin: var(--layout-margin-desktop);
         --section-gap: var(--section-gap-desktop);
     }
+}
 
+/* Outer content wrapper — sections below the hero. */
+.project-content {
     max-width: var(--layout-max-width);
     margin-left: auto;
     margin-right: auto;
