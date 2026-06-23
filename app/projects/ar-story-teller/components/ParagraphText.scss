@@ -1,18 +1,24 @@
-/* Body copy — `typography.ts` → bodyText. */
+/* Body copy — `typography.ts` → bodyText. Stack gap owned by `.paragraph-block`. */
 @use '../typography' as typo;
 
 @mixin paragraph-text-type($font-size) {
     .text-paragraph {
         @include typo.ar-st-body-type;
         font-size: $font-size;
+        margin: 0;
     }
+}
+
+.paragraph-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--body-stack-gap);
 }
 
 @media #{$desktop} {
     .st-paragraph-text {
         margin: auto;
         width: 100%;
-        padding-top: 1rem;
         @include paragraph-text-type(20px);
     }
 }
@@ -21,7 +27,6 @@
     .st-paragraph-text {
         margin: auto;
         width: 100%;
-        padding-top: 1rem;
         @include paragraph-text-type(20px);
     }
 }
@@ -30,8 +35,9 @@
     .storyteller-xsxm-paragraph-text {
         margin: auto;
         width: 100%;
-        padding: 0 5%;
-        padding-top: 2rem;
+        padding-left: 5%;
+        padding-right: 5%;
+        box-sizing: border-box;
         @include paragraph-text-type(18px);
     }
 }

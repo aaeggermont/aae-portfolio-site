@@ -3,7 +3,6 @@ import OverviewParagraphBlock from '../OverviewParagraphBlock';
 import SectionTitle from '../SectionTitle';
 import styles from '../../ArStoryTeller.module.scss';
 import { MainDemo } from '../main-demo/MainDemo';
-import './OverviewSection.scss';
 
 import type { OverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 
@@ -19,12 +18,9 @@ export function OverviewSection({ data }: OverviewSectionProps) {
     const { designChallenge, theProblem, solution } = data;
 
     return (
-        <section className={`${styles['project-container']} overviewSection`}>
-
-            {/* SSR-stable wrapper so AOS can register at `init()` even though
-                `OverviewParagraphBlock` only renders content after `useResponsive` mounts.
-                Using default anchor-placement (`top-bottom`): triggers when wrapper top
-                enters viewport bottom — robust when the element sits just below the hero. */}
+        <section
+            className={`${styles['project-container']} ${styles['panel-section-stack']} overviewSection`}
+        >
             <div
                 data-aos="fade-up"
                 data-aos-duration="1000"
@@ -38,20 +34,16 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                 />
             </div>
 
-            <div className="overviewSection__solution">
+            <div className={styles['content-group']}>
                 {solution.title ? (
                     <SectionTitle
                         title={solution.title}
                         data-aos="fade-up"
                         data-aos-duration="1000"
-                        paddingTop="1.5rem"
-                        paddingBottom="2rem"
                     />
                 ) : null}
-
                 <MainDemo />
             </div>
-
         </section>
     );
 }

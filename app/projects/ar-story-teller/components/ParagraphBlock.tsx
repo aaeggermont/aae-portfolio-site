@@ -100,7 +100,7 @@ export function ParagraphBlock({
     ));
 
     return (
-        <div {...props}>
+        <div className="paragraph-block" {...props}>
             {title === undefined ? null : (
                 <div className="paragraph-block__title">
                     <Typography component="h2" sx={blockTitleSx}>

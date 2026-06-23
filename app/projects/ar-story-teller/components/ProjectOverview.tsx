@@ -8,6 +8,7 @@ import type {
   ProjectOverviewData,
 } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
 import { bodyTypeSx, titleTypeSx } from "../typography";
+import styles from "../ArStoryTeller.module.scss";
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
@@ -138,8 +139,8 @@ const ProjectOverview = ({ data }: ProjectOverviewProps) => {
   const headingId = "project-overview-heading";
 
   return (
-    <section aria-labelledby={headingId}>
-      <SectionTitle id={headingId} title={title} paddingBottom="2rem" />
+    <section aria-labelledby={headingId} className={styles['panel-subsection']}>
+      <SectionTitle id={headingId} title={title} />
       <Box
         sx={{
           bgcolor: "#f4f5f6",

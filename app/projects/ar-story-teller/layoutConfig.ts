@@ -15,6 +15,47 @@ export const SECTION_GAPS = {
 } as const;
 
 /**
+ * Top/bottom padding for full-bleed section bands (`DesignSystemSection`, etc.).
+ * Uses the same 3 : 5 : 8 rem scale as `SECTION_GAPS`.
+ */
+export const FULL_BLEED_BAND_PADDINGS = {
+    y: SECTION_GAPS,
+} as const;
+
+/**
+ * Vertical gap between major blocks inside a full-bleed band (subsection group → panel,
+ * paragraph block → carousel, etc.). Mirrors Finding Nemo `PANEL_SECTION_GAPS`.
+ */
+export const PANEL_SECTION_GAPS = {
+    mobile: '42px',
+    tablet: '70px',
+    desktop: '112px',
+} as const;
+
+/**
+ * Gap between a heading and immediately following content (subtitle → paragraph,
+ * section title → body). Mirrors Finding Nemo `PROBLEM_DEMO_PANEL_TITLE_GAP`.
+ */
+export const TITLE_CONTENT_GAP = {
+    mobile: '32px',
+    tablet: '40px',
+    desktop: '48px',
+} as const;
+
+/** Gap between consecutive paragraphs inside `ParagraphBlock`. */
+export const BODY_STACK_GAP = {
+    mobile: '16px',
+    tablet: '20px',
+    desktop: '20px',
+} as const;
+
+/**
+ * Tighter gap for carousel nav / compact UI rows below a content block.
+ * Alias of `TITLE_CONTENT_GAP` — use `--title-content-gap` in CSS when possible.
+ */
+export const COMPACT_BLOCK_GAP = TITLE_CONTENT_GAP;
+
+/**
  * Standardized usable content dimensions for the AR Story Teller case study.
  *
  * `.project-content` enforces these as `max-width` (outer container cap) and
@@ -79,6 +120,10 @@ export const STORYBOARD_MAIN_IMAGE_DESKTOP = {
 } as const;
 
 export type SectionGaps = typeof SECTION_GAPS;
+export type FullBleedBandPaddings = typeof FULL_BLEED_BAND_PADDINGS;
+export type PanelSectionGaps = typeof PANEL_SECTION_GAPS;
+export type TitleContentGap = typeof TITLE_CONTENT_GAP;
+export type BodyStackGap = typeof BODY_STACK_GAP;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 export type PanelHeaderGap = typeof PANEL_HEADER_GAP;

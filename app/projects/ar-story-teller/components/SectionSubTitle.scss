@@ -1,14 +1,21 @@
-/* Subsection heading — stepped below `SectionTitle` (see `typography.ts` → sectionSubTitle). */
+/* Subsection heading — typography only; spacing from `content-group` / `TITLE_CONTENT_GAP`. */
 @use '../typography' as typo;
+
+.section-sub-title {
+    padding: 0;
+    margin: 0;
+
+    .section-sub-title__label {
+        margin: 0;
+        @include typo.ar-st-title-type(700);
+    }
+}
 
 @media #{$desktop} {
     .section-sub-title {
-        padding-top: 2.5rem;
-        padding-bottom: 1rem;
         text-align: left;
 
         .section-sub-title__label {
-            @include typo.ar-st-title-type(700);
             font-size: 32px;
         }
     }
@@ -16,12 +23,9 @@
 
 @media #{$tablet} {
     .section-sub-title {
-        margin: auto;
-        padding-top: 2rem;
-        padding-bottom: 0.75rem;
+        text-align: center;
 
         .section-sub-title__label {
-            @include typo.ar-st-title-type(700);
             text-align: center;
             font-size: 28px;
         }
@@ -30,13 +34,9 @@
 
 @media #{$mobile} {
     .section-sub-title {
-        margin: auto;
         text-align: center;
-        padding-top: 1.5rem;
-        padding-bottom: 0.5rem;
 
         .section-sub-title__label {
-            @include typo.ar-st-title-type(700);
             text-align: center;
             font-size: 24px;
         }

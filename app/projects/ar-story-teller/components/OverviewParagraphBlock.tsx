@@ -50,25 +50,13 @@ export function OverviewParagraphBlock({
             >
                 <div className="project-summary-container">
                     <div className="storyteller-laptoplg-content-left">
-                        {title1 ? (
-                            <SectionTitle
-                                title={title1}
-                                paddingTop={0}
-                                paddingBottom="0.1rem"
-                            />
-                        ) : null}
+                        {title1 ? <SectionTitle title={title1} /> : null}
                         <OverviewBody paragraphs={paragraph1} />
                     </div>
                 </div>
                 <div className="project-summary-container">
                     <div className="storyteller-laptoplg-content-right">
-                        {title2 ? (
-                            <SectionTitle
-                                title={title2}
-                                paddingTop={0}
-                                paddingBottom="1rem"
-                            />
-                        ) : null}
+                        {title2 ? <SectionTitle title={title2} /> : null}
                         <OverviewBody paragraphs={paragraph2} />
                     </div>
                 </div>
@@ -86,25 +74,13 @@ export function OverviewParagraphBlock({
             >
                 <div className="project-summary-container">
                     <div className="content">
-                        {title1 ? (
-                            <SectionTitle
-                                title={title1}
-                                paddingTop={0}
-                                paddingBottom="1rem"
-                            />
-                        ) : null}
+                        {title1 ? <SectionTitle title={title1} /> : null}
                         <OverviewBody paragraphs={paragraph1} />
                     </div>
                 </div>
                 <div className="project-summary-container">
                     <div className="content">
-                        {title2 ? (
-                            <SectionTitle
-                                title={title2}
-                                paddingTop={0}
-                                paddingBottom="1rem"
-                            />
-                        ) : null}
+                        {title2 ? <SectionTitle title={title2} /> : null}
                         <OverviewBody paragraphs={paragraph2} />
                     </div>
                 </div>
@@ -122,25 +98,13 @@ export function OverviewParagraphBlock({
             >
                 <div className="storyteller-mobile-paragraph-container">
                     <div className="storyteller-mobile-content">
-                        {title1 ? (
-                            <SectionTitle
-                                title={title1}
-                                paddingTop={0}
-                                paddingBottom="0.625rem"
-                            />
-                        ) : null}
+                        {title1 ? <SectionTitle title={title1} /> : null}
                         <OverviewBody paragraphs={paragraph1} />
                     </div>
                 </div>
                 <div className="storyteller-mobile-paragraph-container">
                     <div className="storyteller-mobile-content">
-                        {title2 ? (
-                            <SectionTitle
-                                title={title2}
-                                paddingTop={0}
-                                paddingBottom="0.625rem"
-                            />
-                        ) : null}
+                        {title2 ? <SectionTitle title={title2} /> : null}
                         <OverviewBody paragraphs={paragraph2} />
                     </div>
                 </div>

@@ -60,23 +60,26 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
 
     return (
         <section className={styles['project-container']}>
-            <SectionTitle title={designSystem.title} />
-            <ParagraphBlock
-                paragraphs={designSystem.paragraphs}
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-anchor-placement="top-center"
-            />
-            <ParagraphImg
-                imagesSrc={designSystem.images}
-                alt={designSystem.alt}
-                title={designSystem.imageTitle}
-                description={designSystem.imageDescription}
-                data-aos="fade-up"
-                data-aos-duration="1000"
-                data-aos-anchor-placement="top-center"
-                style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
-            />
+            <div className={styles['panel-section-stack']}>
+                <div className={styles['content-group']}>
+                    <SectionTitle title={designSystem.title} />
+                    <ParagraphBlock
+                        paragraphs={designSystem.paragraphs}
+                        data-aos="fade-up"
+                        data-aos-duration="1000"
+                        data-aos-anchor-placement="top-center"
+                    />
+                </div>
+                <ParagraphImg
+                    imagesSrc={designSystem.images}
+                    alt={designSystem.alt}
+                    title={designSystem.imageTitle}
+                    description={designSystem.imageDescription}
+                    data-aos="fade-up"
+                    data-aos-duration="1000"
+                    data-aos-anchor-placement="top-center"
+                />
+            </div>
 
             {/* Understanding Guest Needs — full-bleed background band */}
             <div
@@ -84,25 +87,24 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 aria-label="Understanding Guest Needs"
             >
                 <div className={dsSectionStyles.guestNeedsBleedInner}>
-                    <SectionSubTitle title={userResearchJourney.title} />
-                    <ParagraphBlock
-                        paragraphs={userResearchJourney.paragraphs.slice(0, 1)}
-                    />
-                     {researchMethods?.length ? (
-                    <div className={dsSectionStyles.guestNeedsCarouselStrip}>
-                        <UserResearchMethodsCarousel methods={researchMethods} />
+                    <div className={styles['content-group']}>
+                        <SectionSubTitle title={userResearchJourney.title} />
+                        <ParagraphBlock
+                            paragraphs={userResearchJourney.paragraphs.slice(0, 1)}
+                        />
                     </div>
-                ) : null}
-
+                    {researchMethods?.length ? (
+                        <div className={dsSectionStyles.guestNeedsCarouselStrip}>
+                            <UserResearchMethodsCarousel methods={researchMethods} />
+                        </div>
+                    ) : null}
                     <ParagraphBlock
                         paragraphs={userResearchJourney.paragraphs.slice(1, 2)}
                     />
-
                     <ParagraphImg
                         imagesSrc={userResearchJourney.images}
                         alt={designSystem.alt}
                         widthPercent={80}
-                        style={{ paddingTop: '2rem', paddingBottom: '2rem' }}
                     />
                 </div>
             </div>
@@ -113,8 +115,10 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 aria-label="Developing Specifications"
             >
                 <div className={dsSectionStyles.developingSpecsBleedInner}>
-                    <SectionSubTitle title={developingSpecs.title} />
-                    <ParagraphBlock paragraphs={developingSpecs.paragraphs} />
+                    <div className={styles['content-group']}>
+                        <SectionSubTitle title={developingSpecs.title} />
+                        <ParagraphBlock paragraphs={developingSpecs.paragraphs} />
+                    </div>
                     {developingSpecs.featuresAndSpecifications
                         ?.featuresAndSpecifications?.length ? (
                         <InteractionDesignPrinciples
@@ -143,12 +147,14 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 aria-label="Envision the Use Case"
             >
                 <div className={dsSectionStyles.envisionUseCaseBleedInner}>
-                    <SectionSubTitle
-                        title={envisionUseCase?.title ?? 'Envision the Use Case'}
-                    />
-                    {envisionUseCase?.paragraphs?.length ? (
-                        <ParagraphBlock paragraphs={envisionUseCase.paragraphs} />
-                    ) : null}
+                    <div className={styles['content-group']}>
+                        <SectionSubTitle
+                            title={envisionUseCase?.title ?? 'Envision the Use Case'}
+                        />
+                        {envisionUseCase?.paragraphs?.length ? (
+                            <ParagraphBlock paragraphs={envisionUseCase.paragraphs} />
+                        ) : null}
+                    </div>
                     {storyboardSlides.length > 0 ? (
                         <div className={dsSectionStyles.envisionStoryboard}>
                             <Storyboard
@@ -169,50 +175,54 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 aria-label="Wireframe and Software Prototypes"
             >
                 <div className={dsSectionStyles.prototypingBleedInner}>
-                    <SectionSubTitle
-                        title={
-                            prototyping?.title ??
-                            'Wireframe & Software Prototypes'
-                        }
-                    />
-                    {prototyping?.paragraphs?.length ? (
-                        <ParagraphBlock paragraphs={prototyping.paragraphs} />
-                    ) : null}
+                    <div className={styles['content-group']}>
+                        <SectionSubTitle
+                            title={
+                                prototyping?.title ??
+                                'Wireframe & Software Prototypes'
+                            }
+                        />
+                        {prototyping?.paragraphs?.length ? (
+                            <ParagraphBlock paragraphs={prototyping.paragraphs} />
+                        ) : null}
+                    </div>
                     {prototypingMethod0 ? (
-                        <>
-                            <SectionSubTitle title={prototypingMethod0.title} />
-                            {prototypingMethod0.paragraphs?.length ? (
-                                <ParagraphBlock
-                                    paragraphs={prototypingMethod0.paragraphs}
-                                />
-                            ) : null}
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <SectionSubTitle title={prototypingMethod0.title} />
+                                {prototypingMethod0.paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={prototypingMethod0.paragraphs}
+                                    />
+                                ) : null}
+                            </div>
                             <PrototypingMethodPanel
-                                primaryImage={
-                                    prototypingMethod0.images?.[0]
-                                }
-                                secondaryImage={
-                                    prototypingMethod0.images?.[1]
-                                }
+                                primaryImage={prototypingMethod0.images?.[0]}
+                                secondaryImage={prototypingMethod0.images?.[1]}
                             />
-                        </>
+                        </div>
                     ) : null}
                     {prototypingMethod1 ? (
-                        <>
-                            <SectionSubTitle title={prototypingMethod1.title} />
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <SectionSubTitle title={prototypingMethod1.title} />
+                            </div>
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod1.paragraphs}
                                 copyImage={prototypingMethod1.images?.[0]}
                             />
-                        </>
+                        </div>
                     ) : null}
                     {prototypingMethod2 ? (
-                        <>
-                            <SectionSubTitle title={prototypingMethod2.title} />
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <SectionSubTitle title={prototypingMethod2.title} />
+                            </div>
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod2.paragraphs}
                                 carouselImages={prototypingMethod2.images}
                             />
-                        </>
+                        </div>
                     ) : null}
                 </div>
             </div>
@@ -224,36 +234,42 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     aria-label="Usability Testing and Evaluation"
                 >
                     <div className={dsSectionStyles.usabilityTestingBleedInner}>
-                        <SectionSubTitle
-                            title={
-                                usabilityTesting.title ??
-                                'Usability Testing & Evaluation'
-                            }
-                        />
-                        {usabilityTesting.paragraphs?.length ? (
-                            <ParagraphBlock
-                                paragraphs={usabilityTesting.paragraphs}
+                        <div className={styles['content-group']}>
+                            <SectionSubTitle
+                                title={
+                                    usabilityTesting.title ??
+                                    'Usability Testing & Evaluation'
+                                }
                             />
-                        ) : null}
-                        {usabilityTesting.theProcess ? (
-                            <>
-                                <SectionSubTitle
-                                    title={usabilityTesting.theProcess.title}
+                            {usabilityTesting.paragraphs?.length ? (
+                                <ParagraphBlock
+                                    paragraphs={usabilityTesting.paragraphs}
                                 />
+                            ) : null}
+                        </div>
+                        {usabilityTesting.theProcess ? (
+                            <div className={styles['panel-subsection']}>
+                                <div className={styles['content-group']}>
+                                    <SectionSubTitle
+                                        title={usabilityTesting.theProcess.title}
+                                    />
+                                </div>
                                 {usabilityProcessBullets.length ? (
                                     <UsabilityTestingPanel
                                         bulletPoints={usabilityProcessBullets}
                                     />
                                 ) : null}
-                            </>
+                            </div>
                         ) : null}
                         {usabilityTesting.FindingsInsights ? (
-                            <>
-                                <SectionSubTitle
-                                    title={
-                                        usabilityTesting.FindingsInsights.title
-                                    }
-                                />
+                            <div className={styles['panel-subsection']}>
+                                <div className={styles['content-group']}>
+                                    <SectionSubTitle
+                                        title={
+                                            usabilityTesting.FindingsInsights.title
+                                        }
+                                    />
+                                </div>
                                 {usabilityTesting.FindingsInsights.insights
                                     ?.length ? (
                                     <UsabilityFindingsInsights
@@ -263,7 +279,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                                         }
                                     />
                                 ) : null}
-                            </>
+                            </div>
                         ) : null}
                     </div>
                 </div>

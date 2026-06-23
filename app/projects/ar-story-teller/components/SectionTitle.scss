@@ -1,23 +1,26 @@
-/* Section title — self-contained styles for `SectionTitle`. Breakpoints match
-   `TitleParagraph.scss` / `styles/variables.scss` ($mobile, $tablet, $desktop).
-   Typography and spacing were copied from the old `TitleParagraph` + wrapper
-   classes for visual parity; adjust here only for section-title redesigns. */
+/* Section title — typography only; vertical rhythm from layout tokens (`TITLE_CONTENT_GAP`,
+   `PANEL_SECTION_GAPS`, `SECTION_GAPS`). */
+
+.section-title {
+    padding: 0;
+    margin: 0;
+
+    .section-title__label {
+        margin: 0;
+        color: #03133c;
+        font-family: var(--font-satoshi), sans-serif;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+}
 
 @media #{$desktop} {
     .section-title {
-        padding-top: 8rem;
-        padding-bottom: 1.25rem;
         text-align: left;
 
         .section-title__label {
-            padding-top: 1rem;
-            text-align: left;
-            color: #03133c; /* typography.ts → AR_STORY_TELLER_TEXT_COLOR */
-            font-family: var(--font-satoshi), sans-serif;
             font-size: 40px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
         }
     }
 }
@@ -25,19 +28,10 @@
 @media #{$tablet} {
     .section-title {
         margin: auto;
-        padding-top: 3rem;
+        text-align: center;
 
         .section-title__label {
-            padding-top: 1.5rem;
-            padding-bottom: 3rem;
-            text-align: center;
-            color: #03133c; /* typography.ts → AR_STORY_TELLER_TEXT_COLOR */
-            font-family: var(--font-satoshi), sans-serif;
-            /* ~15% under desktop (40px) — strong on tablet without matching desktop scale */
             font-size: 34px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
         }
     }
 }
@@ -48,16 +42,7 @@
         text-align: center;
 
         .section-title__label {
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-            color: #03133c; /* typography.ts → AR_STORY_TELLER_TEXT_COLOR */
-            font-family: var(--font-satoshi), sans-serif;
-            /* ~30% under desktop — readable in narrow columns; try 30px if this feels tight */
             font-size: 28px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
         }
     }
 }

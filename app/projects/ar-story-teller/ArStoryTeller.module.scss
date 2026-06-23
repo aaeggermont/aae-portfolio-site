@@ -25,16 +25,65 @@
     --section-gap-desktop: 8rem;
     --section-gap: var(--section-gap-mobile);
 
+    --full-bleed-band-padding-y-mobile: 3rem;
+    --full-bleed-band-padding-y-tablet: 5rem;
+    --full-bleed-band-padding-y-desktop: 8rem;
+    --full-bleed-band-padding-y: var(--full-bleed-band-padding-y-mobile);
+
+    --panel-section-gap-mobile: 42px;
+    --panel-section-gap-tablet: 70px;
+    --panel-section-gap-desktop: 112px;
+    --panel-section-gap: var(--panel-section-gap-mobile);
+
+    --title-content-gap-mobile: 32px;
+    --title-content-gap-tablet: 40px;
+    --title-content-gap-desktop: 48px;
+    --title-content-gap: var(--title-content-gap-mobile);
+
+    --body-stack-gap-mobile: 16px;
+    --body-stack-gap-tablet: 20px;
+    --body-stack-gap-desktop: 20px;
+    --body-stack-gap: var(--body-stack-gap-mobile);
+
     @media #{$tablet} {
         --layout-max-width: var(--layout-max-width-tablet);
         --layout-margin: var(--layout-margin-tablet);
         --section-gap: var(--section-gap-tablet);
+        --full-bleed-band-padding-y: var(--full-bleed-band-padding-y-tablet);
+        --panel-section-gap: var(--panel-section-gap-tablet);
+        --title-content-gap: var(--title-content-gap-tablet);
+        --body-stack-gap: var(--body-stack-gap-tablet);
     }
 
     @media #{$desktop} {
         --layout-max-width: var(--layout-max-width-desktop);
         --layout-margin: var(--layout-margin-desktop);
         --section-gap: var(--section-gap-desktop);
+        --full-bleed-band-padding-y: var(--full-bleed-band-padding-y-desktop);
+        --panel-section-gap: var(--panel-section-gap-desktop);
+        --title-content-gap: var(--title-content-gap-desktop);
+        --body-stack-gap: var(--body-stack-gap-desktop);
+    }
+}
+
+/* Heading + immediately following body — single `TITLE_CONTENT_GAP` owner. */
+.content-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--title-content-gap);
+}
+
+/* Panel subsection: title/copy group, then inset panel below. */
+.panel-subsection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--panel-section-gap);
+}
+
+/* Stack of major blocks — sibling margin (no flex gap doubling). */
+.panel-section-stack {
+    > * + * {
+        margin-top: var(--panel-section-gap-self, var(--panel-section-gap));
     }
 }
 

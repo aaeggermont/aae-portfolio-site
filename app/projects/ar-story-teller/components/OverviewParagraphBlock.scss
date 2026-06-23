@@ -1,13 +1,19 @@
-/* Layout only — body typography via `ParagraphText` / `typography.ts`. */
+/* Layout only — title→body rhythm via `.content-group` / `--title-content-gap`. */
+
+@mixin overview-content-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--title-content-gap);
+}
 
 @media #{$desktop} {
     .project-summary {
         margin-top: 200px;
     }
+
     .project-summary .project-summary-container {
         .storyteller-laptoplg-content-left {
-            display: flex;
-            flex-direction: column;
+            @include overview-content-column;
             justify-content: flex-start;
             max-width: 37%;
             min-width: 37%;
@@ -15,8 +21,7 @@
         }
 
         .storyteller-laptoplg-content-right {
-            display: flex;
-            flex-direction: column;
+            @include overview-content-column;
             justify-content: flex-end;
             max-width: 37%;
             min-width: 37%;
@@ -25,8 +30,7 @@
         }
 
         .storyteller-laptoplg-content-center {
-            display: flex;
-            flex-direction: column;
+            @include overview-content-column;
             justify-content: center;
             max-width: 65%;
             margin-right: auto;
@@ -41,9 +45,9 @@
         padding-top: 4rem;
         margin: auto;
         width: 80%;
+
         .content {
-            display: flex;
-            flex-direction: column;
+            @include overview-content-column;
             justify-content: center;
             align-items: center;
         }
@@ -51,29 +55,16 @@
 }
 
 @media #{$mobile} {
-}
+    .storyteller-mobile-paragraph-container {
+        max-width: 428px;
+        padding-top: 4rem;
+        margin: auto;
+        width: 80%;
 
-.storyteller-mdlg-paragraph-container {
-    padding-top: 4rem;
-    margin: auto;
-    width: 80%;
-    .storyteller-mdlg-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-}
-
-.storyteller-mobile-paragraph-container {
-    max-width: 428px;
-    padding-top: 4rem;
-    margin: auto;
-    width: 80%;
-    .storyteller-mobile-content {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        .storyteller-mobile-content {
+            @include overview-content-column;
+            justify-content: center;
+            align-items: center;
+        }
     }
 }

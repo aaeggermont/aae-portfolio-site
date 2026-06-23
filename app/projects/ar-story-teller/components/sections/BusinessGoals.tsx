@@ -4,6 +4,7 @@ import { PANEL_BLOCK_PADDINGS } from "../../layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { BusinessGoalsData } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
 import { bodyTypeSx } from "../../typography";
+import styles from "../../ArStoryTeller.module.scss";
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
@@ -17,12 +18,8 @@ const BusinessGoals = ({ data }: BusinessGoalsProps) => {
   const headingId = "business-goals-heading";
 
   return (
-    <section aria-labelledby={headingId}>
-      <SectionTitle
-        id={headingId}
-        title={title}
-        paddingBottom="2rem"
-      />
+    <section aria-labelledby={headingId} className={styles['panel-subsection']}>
+      <SectionTitle id={headingId} title={title} />
       <Box
         sx={{
           bgcolor: "#f4f5f6",

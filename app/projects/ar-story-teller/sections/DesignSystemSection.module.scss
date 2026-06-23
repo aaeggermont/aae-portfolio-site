@@ -11,20 +11,8 @@
 }
 
 %designSystemFullBleedBandSpacing {
-    @media #{$mobile} {
-        padding-top: 56px;
-        margin-top: 56px;
-    }
-
-    @media #{$tablet} {
-        padding-top: 80px;
-        margin-top: 80px;
-    }
-
-    @media #{$desktop} {
-        padding-top: 100px;
-        margin-top: 100px;
-    }
+    padding-top: var(--full-bleed-band-padding-y);
+    padding-bottom: var(--full-bleed-band-padding-y);
 }
 
 %designSystemBleedInner {
@@ -35,16 +23,9 @@
     padding-right: var(--layout-margin);
     width: 100%;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
 
-    @media #{$tablet} {
-        gap: 48px;
-    }
-
-    @media #{$desktop} {
-        gap: 64px;
+    > * + * {
+        margin-top: var(--panel-section-gap);
     }
 }
 
@@ -79,7 +60,6 @@
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
     background-color: #f5f5f7;
-    padding-bottom: 100px;
 }
 
 .envisionUseCaseBleedInner {
@@ -88,19 +68,6 @@
 
 .envisionStoryboard {
     width: 100%;
-    margin-top: 40px;
-}
-
-@media #{$tablet} {
-    .envisionStoryboard {
-        margin-top: 48px;
-    }
-}
-
-@media #{$desktop} {
-    .envisionStoryboard {
-        margin-top: 56px;
-    }
 }
 
 .developingSpecsBleed {
@@ -113,7 +80,6 @@
     @extend %designSystemBleedInner;
 }
 
-/* Wireframing & Prototyping — full-bleed white band (after Envision / storyboard). */
 .prototypingBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
@@ -124,24 +90,20 @@
     @extend %designSystemBleedInner;
 }
 
-/* Usability Testing & Evaluation — full-bleed grey band (same surface as Envision). */
 .usabilityTestingBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
     background-color: #f5f5f7;
-    padding-bottom: 100px;
 }
 
 .usabilityTestingBleedInner {
     @extend %designSystemBleedInner;
 }
 
-/* Conclusions & Impact — final full-bleed white band. */
 .conclusionsImpactBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
     background-color: #ffffff;
-    padding-bottom: 100px;
 }
 
 .conclusionsImpactBleedInner {
@@ -153,13 +115,11 @@
 .guestNeedsCarouselStrip {
     width: 100%;
     box-sizing: border-box;
-    margin-top: 40px;
     --guest-needs-content-gutter: var(--layout-margin);
 }
 
 @media #{$tablet} {
     .guestNeedsCarouselStrip {
-        margin-top: 48px;
         --guest-needs-content-gutter: calc(
             (100vw - min(100vw, 1024px)) / 2 + var(--layout-margin)
         );
@@ -168,7 +128,6 @@
 
 @media #{$desktop} {
     .guestNeedsCarouselStrip {
-        margin-top: 64px;
         --guest-needs-content-gutter: calc(
             (100vw - min(100vw, 1260px)) / 2 + var(--layout-margin)
         );
