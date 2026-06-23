@@ -14,6 +14,7 @@ import {
 import { useState } from "react";
 
 import { PANEL_CONTENT_MAX_WIDTH_PX } from "../layoutConfig";
+import { bodyTypeSx, titleTypeSx } from "../typography";
 
 const PANEL_SURFACE_SX = {
   width: "100%",
@@ -23,27 +24,17 @@ const PANEL_SURFACE_SX = {
   py: { xs: 4, sm: 5, md: 7.5 },
 } as const;
 
-const INSIGHT_TITLE_SX = {
-  fontFamily:
-    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-  fontSize: { xs: "1rem", md: "1.25rem", lg: "1.5rem" },
-  fontWeight: 600,
-  color: "#000",
+const INSIGHT_TITLE_SX = titleTypeSx("cardTitle", {
+  flex: 1,
   lineHeight: "normal !important",
   letterSpacing: 0,
-  flex: 1,
   maxWidth: "100%",
-} as const;
+});
 
-const INSIGHT_DESCRIPTION_SX = {
-  fontFamily: '"Source Sans 3", sans-serif',
-  fontWeight: 400,
-  color: "#000",
-  fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
-  lineHeight: 1.4,
+const INSIGHT_DESCRIPTION_SX = bodyTypeSx("smallBody", {
   letterSpacing: 0,
   maxWidth: "100%",
-} as const;
+});
 
 export interface UsabilityInsight {
   insightTitle: string;

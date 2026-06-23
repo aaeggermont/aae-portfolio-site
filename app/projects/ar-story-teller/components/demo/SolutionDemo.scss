@@ -1,4 +1,6 @@
 /* Responsive demo gif — fluid width with hard cap at 1024px regardless of breakpoint. */
+@use '../../typography' as typo;
+
 .solution-demo-image {
     display: block;
     width: 100%;
@@ -40,39 +42,33 @@
 }
 
 @mixin desktop-title-text {
-    font-family: var(--font-satoshi), sans-serif;
+    @include typo.ar-st-title-type(600);
     font-size: 40px;
-    font-weight: 600;
-    color: #102764;
 }
 
 @mixin desktop-section-text {
-    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-    font-size: 2rem;
-    font-weight: 400;
-    color: #102764;
+    @include typo.ar-st-body-type;
+    font-size: 20px;
 }
 
 @mixin desktop-annotation-text {
-    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-    font-size: 2rem;
-    font-weight: 400;
-    color: #102764;
+    @include typo.ar-st-body-type;
+    font-size: 20px;
 }
 
-
 @mixin lgmd-title-text {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 30px;
-    font-weight: 600;
-    color: #102764;
+    @include typo.ar-st-title-type(600);
+    font-size: 32px;
 }
 
 @mixin lgmd-section-text {
-    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-    font-size: 24px;
-    font-weight: 400;
-    color: #102764;
+    @include typo.ar-st-body-type;
+    font-size: 20px;
+}
+
+@mixin demo-placeholder-label {
+    @include typo.ar-st-title-type(700);
+    font-size: 3rem;
 }
 
 @media #{$desktop} {
@@ -102,10 +98,7 @@
             flex-direction: row;
             justify-content: center;
             .mobile-ar-image {
-                font-family: poppins;
-                font-size: 3rem;
-                font-weight: 600;
-                color: #102764;
+                @include demo-placeholder-label;
             }
 
         }
@@ -147,10 +140,7 @@
             align-items: center;
 
             .tablet-ar-image {
-                font-family: poppins;
-                font-size: 3rem;
-                font-weight: 600;
-                color: #102764;
+                @include demo-placeholder-label;
             }
 
         }
@@ -177,10 +167,7 @@
         align-items: center;
 
         .mobile-ar-image {
-            font-family: poppins;
-            font-size: 3rem;
-            font-weight: 600;
-            color: #102764;
+            @include demo-placeholder-label;
         }
 
     }
@@ -188,10 +175,8 @@
     .mobile-demo-description {
         width: 70%;
         padding-top: 2rem;
-        font-family: poppins;
-        font-size: 1rem;
-        font-weight: 400;
-        color: #102764;
+        @include typo.ar-st-body-type;
+        font-size: 18px;
     }
 }
 
