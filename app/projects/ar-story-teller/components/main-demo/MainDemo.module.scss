@@ -248,10 +248,12 @@
     width: min(42%, 280px);
     opacity: 0;
     pointer-events: none;
+    --notification-blur: 0px;
     filter:
+        blur(var(--notification-blur))
         drop-shadow(0 6px 18px rgba(3, 19, 60, 0.14))
         drop-shadow(0 2px 6px rgba(3, 19, 60, 0.08));
-    will-change: transform, opacity;
+    will-change: transform, opacity, filter;
 }
 
 @media (min-width: 768px) {

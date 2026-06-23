@@ -53,8 +53,16 @@ export function buildMainDemoTimeline(
         iphoneVideo,
     } = elements;
     const { reducedMotion = false } = options;
-    const { fadeInDuration, fadeOutDuration, fadeInYOffset } =
-        MAIN_DEMO_NOTIFICATION_TIMING;
+    const {
+        fadeInDuration,
+        fadeOutDuration,
+        fadeInEase,
+        fadeInYOffset,
+        initialBlurPx,
+        floatDistancePx,
+        floatCycleDuration,
+        floatEase,
+    } = MAIN_DEMO_NOTIFICATION_TIMING;
     const { initialDelay, windowGlowDuration } = MAIN_DEMO_PHASE_TIMING;
     const {
         delayAfterNotification,
@@ -81,7 +89,11 @@ export function buildMainDemoTimeline(
         fadeInEase: arVideoFadeInEase,
     } = MAIN_DEMO_AR_VIDEO_TIMING;
 
-    gsap.set(notification, { opacity: 0, y: fadeInYOffset });
+    gsap.set(notification, {
+        opacity: 0,
+        y: fadeInYOffset,
+        '--notification-blur': `${initialBlurPx}px`,
+    });
     gsap.set(windowGlow, {
         opacity: 0,
         scale: glowInitialScale,
@@ -114,10 +126,22 @@ export function buildMainDemoTimeline(
         .to(notification, {
             opacity: 1,
             y: 0,
+            '--notification-blur': '0px',
             duration: fadeInDuration,
-            ease: 'power2.out',
+            ease: fadeInEase,
         })
         .addLabel(LABELS.notificationVisible)
+        .to(
+            notification,
+            {
+                y: -floatDistancePx,
+                duration: floatCycleDuration / 2,
+                ease: floatEase,
+                yoyo: true,
+                repeat: -1,
+            },
+            LABELS.notificationVisible,
+        )
         .addLabel(LABELS.windowGlow, glowStart)
         .to(
             windowGlow,
@@ -160,6 +184,7 @@ export function buildMainDemoTimeline(
                 opacity: 0,
                 duration: fadeOutDuration,
                 ease: 'power2.inOut',
+                overwrite: 'auto',
             },
             LABELS.deviceReveal,
         )

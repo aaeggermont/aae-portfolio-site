@@ -25,12 +25,20 @@ export const MAIN_DEMO_PHASE_TIMING = {
 } as const;
 
 export const MAIN_DEMO_NOTIFICATION_TIMING = {
-    fadeInDuration: 1,
+    /** Notification-style reveal — deliberate, no scale. */
+    fadeInDuration: 0.5,
     fadeOutDuration: 1,
     /** Minimum fully-visible beat before fade-out at device reveal (5–6s target). */
     minVisibleDuration: 5.5,
-    /** Subtle upward entrance offset in px — calm, cinematic drift. */
-    fadeInYOffset: 14,
+    fadeInEase: 'power2.out',
+    /** Starts above rest — drifts down into place like a mobile notification. */
+    fadeInYOffset: -24,
+    /** Entrance defocus — resolves to sharp at rest. */
+    initialBlurPx: 8,
+    /** Gentle post-reveal suspension — vertical only, almost imperceptible. */
+    floatDistancePx: 3,
+    floatCycleDuration: 3.5,
+    floatEase: 'sine.inOut',
 } as const;
 
 /** First (left) window-pair glow — anchored to `windowGlow` timeline label. */
