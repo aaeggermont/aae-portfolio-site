@@ -1,6 +1,7 @@
 import React from 'react';
 import './OverviewParagraphBlock.scss';
 import { SectionTitle } from './SectionTitle';
+import ParagraphText from './ParagraphText';
 import WaitingPeopleDesktop from '../Images/WaitingPeople-DesktopLg.png';
 import WaitingPeopleLgMd from '../Images/WaitingPeople-LgMd.png';
 import WaitingPeopleSMSX from '../Images/WaitingPeople-SMSX.png';
@@ -11,16 +12,26 @@ import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 interface OverviewParagraphBlockProps {
     title1?: string;
     title2?: string;
-    paragraph1?: React.ReactNode;
-    paragraph2?: React.ReactNode;
+    paragraph1?: string[];
+    paragraph2?: string[];
     [key: string]: unknown;
+}
+
+function OverviewBody({ paragraphs }: { paragraphs: string[] }) {
+    return (
+        <>
+            {paragraphs.map((text, index) => (
+                <ParagraphText key={index} text={text} />
+            ))}
+        </>
+    );
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function OverviewParagraphBlock({
     title1, title2,
-    paragraph1, paragraph2,
+    paragraph1 = [], paragraph2 = [],
     ...props
 }: OverviewParagraphBlockProps) {
     const screenDevice = useResponsive();
@@ -46,7 +57,7 @@ export function OverviewParagraphBlock({
                                 paddingBottom="0.1rem"
                             />
                         ) : null}
-                        <p>{paragraph1}</p>
+                        <OverviewBody paragraphs={paragraph1} />
                     </div>
                 </div>
                 <div className="project-summary-container">
@@ -58,7 +69,7 @@ export function OverviewParagraphBlock({
                                 paddingBottom="1rem"
                             />
                         ) : null}
-                        <p>{paragraph2}</p>
+                        <OverviewBody paragraphs={paragraph2} />
                     </div>
                 </div>
             </div>
@@ -82,7 +93,7 @@ export function OverviewParagraphBlock({
                                 paddingBottom="1rem"
                             />
                         ) : null}
-                        <p>{paragraph1}</p>
+                        <OverviewBody paragraphs={paragraph1} />
                     </div>
                 </div>
                 <div className="project-summary-container">
@@ -94,7 +105,7 @@ export function OverviewParagraphBlock({
                                 paddingBottom="1rem"
                             />
                         ) : null}
-                        <p>{paragraph2}</p>
+                        <OverviewBody paragraphs={paragraph2} />
                     </div>
                 </div>
             </div>
@@ -118,7 +129,7 @@ export function OverviewParagraphBlock({
                                 paddingBottom="0.625rem"
                             />
                         ) : null}
-                        <p className="storyteller-mobile-paragraph-text">{paragraph1}</p>
+                        <OverviewBody paragraphs={paragraph1} />
                     </div>
                 </div>
                 <div className="storyteller-mobile-paragraph-container">
@@ -130,7 +141,7 @@ export function OverviewParagraphBlock({
                                 paddingBottom="0.625rem"
                             />
                         ) : null}
-                        <p className="storyteller-mobile-paragraph-text">{paragraph2}</p>
+                        <OverviewBody paragraphs={paragraph2} />
                     </div>
                 </div>
             </div>

@@ -1,13 +1,10 @@
-/* Paragraph type: Source Sans 3. Sizes — desktop 24px; tablet 22px; mobile 18px (step down for
-   line length + thumb reach; bump mobile to 19–20px if blocks feel small). */
+/* Body copy — `typography.ts` → bodyText. */
+@use '../typography' as typo;
+
 @mixin paragraph-text-type($font-size) {
     .text-paragraph {
-        color: #010a24;
-        font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+        @include typo.ar-st-body-type;
         font-size: $font-size;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
     }
 }
 
@@ -38,4 +35,3 @@
         @include paragraph-text-type(18px);
     }
 }
-

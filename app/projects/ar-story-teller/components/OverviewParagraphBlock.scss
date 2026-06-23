@@ -1,30 +1,4 @@
-@mixin desktop-title-text {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 30px;
-    font-weight: 600;
-    color: #03133C;
-}
-
-@mixin desktop-section-text {
-    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: #03133C;
-}
-
-@mixin lgmd-title-text {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #03133C;
-}
-
-@mixin lgmd-section-text {
-    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: #03133C;
-}
+/* Layout only — body typography via `ParagraphText` / `typography.ts`. */
 
 @media #{$desktop} {
     .project-summary {
@@ -38,14 +12,6 @@
             max-width: 37%;
             min-width: 37%;
             margin-left: 6rem;
-            span {
-                @include desktop-title-text;
-            }
-
-            p {
-                padding-top: 1rem;
-                @include desktop-section-text;
-            }
         }
 
         .storyteller-laptoplg-content-right {
@@ -56,16 +22,6 @@
             min-width: 37%;
             margin-right: 6rem;
             margin-left: auto;
-            //padding-top: 1rem;
-
-            span {
-                @include desktop-title-text;
-            }
-
-            p {
-                padding-top: 2rem;
-                @include desktop-section-text;
-            }
         }
 
         .storyteller-laptoplg-content-center {
@@ -73,25 +29,10 @@
             flex-direction: column;
             justify-content: center;
             max-width: 65%;
-            
-          
             margin-right: auto;
             margin-left: auto;
             padding-top: 10rem;
-
-            span {
-                text-align: center;
-                @include desktop-title-text;
-            }
-
-            p {
-                padding-top: 2rem;
-                @include desktop-section-text;
-            }
         }
-
-
-
     }
 }
 
@@ -105,48 +46,22 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            span {
-                @include lgmd-title-text;
-            }
-
-            p {
-                padding-top: 2.5rem;
-                @include lgmd-section-text;
-            }
         }
     }
 }
 
 @media #{$mobile} {
-
 }
 
 .storyteller-mdlg-paragraph-container {
-    //max-width: 1366px;
     padding-top: 4rem;
     margin: auto;
     width: 80%;
     .storyteller-mdlg-content {
-        // background-color: aqua;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        .storyteller-mdlg-paragraph-title {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #102764;
-        }
-
-        .storyteller-mdlg-paragraph-text {
-            padding-top: 2.5rem;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 1.2rem;
-            font-weight: 400;
-            color: #102764;
-
-        }
     }
 }
 
@@ -156,26 +71,9 @@
     margin: auto;
     width: 80%;
     .storyteller-mobile-content {
-        // background-color: aqua;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        .storyteller-mobile-paragraph-title {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #102764;
-            text-align: center;
-        }
-
-        .storyteller-mobile-paragraph-text {
-            padding-top: 2rem;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 1rem;
-            font-weight: 400;
-            color: #102764;
-
-        }
     }
 }

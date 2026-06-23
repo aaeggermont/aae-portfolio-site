@@ -3,19 +3,10 @@ import { SectionTitle } from "../SectionTitle";
 import { PANEL_BLOCK_PADDINGS } from "../../layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { BusinessGoalsData } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import { bodyTypeSx } from "../../typography";
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
-
-/** Body copy — typography tokens to be refined in a follow-up pass. */
-const bodyTextSx = {
-  color: "#002464",
-  fontFamily:
-    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-  fontWeight: 500,
-  fontSize: { xs: "16px", sm: "20px", md: "20px" },
-  lineHeight: 1.35,
-} as const;
 
 interface BusinessGoalsProps {
   data: BusinessGoalsData;
@@ -51,7 +42,7 @@ const BusinessGoals = ({ data }: BusinessGoalsProps) => {
         }}
       >
         <Stack spacing={2} sx={{ maxWidth: "100%" }}>
-          <Typography component="p" sx={{ m: 0, ...bodyTextSx }}>
+          <Typography component="p" sx={{ m: 0, ...bodyTypeSx("panelBody") }}>
             {intro}
           </Typography>
           <Box
@@ -67,7 +58,7 @@ const BusinessGoals = ({ data }: BusinessGoalsProps) => {
                 key={goal}
                 component="li"
                 sx={{
-                  ...bodyTextSx,
+                  ...bodyTypeSx("panelBody"),
                   display: "list-item",
                   "&:not(:first-of-type)": { mt: 1.5 },
                 }}

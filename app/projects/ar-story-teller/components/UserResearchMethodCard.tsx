@@ -6,6 +6,11 @@ import { Box, ButtonBase, Stack, Typography } from "@mui/material";
 import type { JSX } from "react";
 import ResearchMethodDialog from "./ResearchMethodDialog";
 import type { ResearchMethodCardData } from "../types/researchMethodCard";
+import { bodyTypeSx, titleTypeSx } from "../typography";
+
+const cardTitleSx = titleTypeSx("cardTitle");
+const cardSummarySx = bodyTypeSx("smallBody", { lineHeight: 1.45 });
+const cardActionSx = bodyTypeSx("smallBody", { fontWeight: 500, lineHeight: 1.25 });
 
 export interface UserResearchMethodCardProps {
   method: ResearchMethodCardData;
@@ -44,34 +49,12 @@ export function UserResearchMethodCard({
             boxSizing: "border-box",
           }}
         >
-          <Typography
-            component="h3"
-            sx={{
-              color: "#03133C",
-              fontFamily:
-                "var(--font-satoshi), var(--font-poppins), sans-serif",
-              fontSize: { xs: "20px", sm: "22px", md: "24px" },
-              fontStyle: "normal",
-              fontWeight: 700,
-              lineHeight: "normal",
-            }}
-          >
+          <Typography component="h3" sx={cardTitleSx}>
             {method.title}
           </Typography>
           <Box sx={{ flexGrow: 1 }}>
             {summaryText ? (
-              <Typography
-                component="p"
-                sx={{
-                  fontSize: { xs: "16px", sm: "16px", md: "16px" },
-                  fontFamily:
-                    "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
-                  lineHeight: 1.45,
-                  fontWeight: 400,
-                  color: "#000",
-                  letterSpacing: 0,
-                }}
-              >
+              <Typography component="p" sx={cardSummarySx}>
                 {summaryText}
               </Typography>
             ) : null}
@@ -99,18 +82,7 @@ export function UserResearchMethodCard({
                 >
                   <AddIcon sx={{ color: "#fff", fontSize: 16 }} />
                 </Box>
-                <Typography
-                  component="span"
-                  sx={{
-                    fontSize: { xs: "16px", sm: "16px", md: "16px" },
-                    fontFamily:
-                      "var(--font-source-sans-3), var(--font-montserrat), sans-serif",
-                    lineHeight: 1.25,
-                    fontWeight: 500,
-                    color: "#000",
-                    letterSpacing: 0,
-                  }}
-                >
+                <Typography component="span" sx={cardActionSx}>
                   {actionLabel}
                 </Typography>
               </Stack>

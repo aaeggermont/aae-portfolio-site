@@ -9,20 +9,15 @@ import BulletPointDesktop from "../Images/BulletPoint-Desktop.png";
 import BulletPointLgMd from "../Images/BulletPoint-LgMd.png";
 import BulletPointSmSx from "../Images/BulletPoint-SmSx.png";
 import { PANEL_CONTENT_MAX_WIDTH_PX } from "../layoutConfig";
+import { bodyTypeSx } from "../typography";
 
-/** Matches `InteractionDesignPrinciples` accordion body copy. */
-const BULLET_TEXT_SX = {
-  fontFamily: '"Source Sans 3", sans-serif',
-  fontWeight: 400,
-  color: "#000",
-  fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
-  lineHeight: 1.4,
+const bulletTextSx = bodyTypeSx("smallBody", {
   letterSpacing: 0,
   m: 0,
   flex: 1,
   minWidth: 0,
   maxWidth: "100%",
-} as const;
+});
 
 const PANEL_SURFACE_SX = {
   width: "100%",
@@ -64,7 +59,6 @@ function UsabilityBulletRow({
       spacing={{ xs: 1.5, md: 2 }}
       sx={{
         width: "100%",
-        fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
         pt: { xs: 2, md: 1.5 },
         "&:first-of-type": { pt: 0 },
       }}
@@ -92,7 +86,7 @@ function UsabilityBulletRow({
           }}
         />
       </Box>
-      <Typography component="p" sx={BULLET_TEXT_SX}>
+      <Typography component="p" sx={bulletTextSx}>
         {text}
       </Typography>
     </Stack>

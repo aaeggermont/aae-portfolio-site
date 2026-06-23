@@ -1,3 +1,5 @@
+@use '../../typography' as typo;
+
 /* Internal section spacing. Mirrors the pattern in `ArStoryTeller.module.scss` and
    `MagicExperiencesSection.scss`: a single `--case-study-overview-gap` is set per
    breakpoint and applied as `margin-top` to every direct child after the first via
@@ -101,9 +103,26 @@
     margin: 0;
     padding-top: 1.5rem;
     padding-bottom: 0;
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: clamp(1.3rem, 3vw, 2rem);
+    font-family: typo.$ar-st-title-font;
     font-weight: 600;
-    color: #ffffff;
+    color: typo.$ar-st-hero-title-color;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+@media #{$mobile} {
+    .case-study-banner__title {
+        font-size: 20px;
+    }
+}
+
+@media #{$tablet} {
+    .case-study-banner__title {
+        font-size: 24px;
+    }
+}
+
+@media #{$desktop} {
+    .case-study-banner__title {
+        font-size: 28px;
+    }
 }

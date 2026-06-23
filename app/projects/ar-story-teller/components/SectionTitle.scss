@@ -12,7 +12,7 @@
         .section-title__label {
             padding-top: 1rem;
             text-align: left;
-            color: #03133c;
+            color: #03133c; /* typography.ts → AR_STORY_TELLER_TEXT_COLOR */
             font-family: var(--font-satoshi), sans-serif;
             font-size: 40px;
             font-style: normal;
@@ -31,7 +31,7 @@
             padding-top: 1.5rem;
             padding-bottom: 3rem;
             text-align: center;
-            color: #03133c;
+            color: #03133c; /* typography.ts → AR_STORY_TELLER_TEXT_COLOR */
             font-family: var(--font-satoshi), sans-serif;
             /* ~15% under desktop (40px) — strong on tablet without matching desktop scale */
             font-size: 34px;
@@ -51,7 +51,7 @@
             padding-top: 20px;
             padding-bottom: 10px;
             text-align: center;
-            color: #03133c;
+            color: #03133c; /* typography.ts → AR_STORY_TELLER_TEXT_COLOR */
             font-family: var(--font-satoshi), sans-serif;
             /* ~30% under desktop — readable in narrow columns; try 30px if this feels tight */
             font-size: 28px;

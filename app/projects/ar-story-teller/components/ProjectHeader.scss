@@ -1,4 +1,5 @@
 /* Hero parallax — aspect ratios align with `ImageBanner` + `lib/responsive/breakpoints.ts`. */
+@use '../typography' as typo;
 .project-header-parallax {
   /* Static vertical shift for clouds — use top/height (not transform) so
      `react-scroll-parallax` can own `transform` on `ParallaxBannerLayer`. */
@@ -148,16 +149,17 @@
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: clamp(1.875rem, 1.2vw + 1.15rem, 2.5rem);
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffffff;
+                font-family: typo.$ar-st-title-font;
+                font-size: 40px;
+                color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
             }
             p {
-                font-size: clamp(1.25rem, 1.05vw + 0.54rem, 1.5rem);
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffbb00;
+                font-family: typo.$ar-st-title-font;
+                font-size: 24px;
+                color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 600;
+                max-width: 100%;
             }
         }
 
@@ -196,15 +198,15 @@
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 2rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffffff;
+                font-size: 32px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
             }
             p {
-                font-size: 1.2rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffbb00;
+                font-size: 20px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
             }
         }
@@ -256,16 +258,16 @@
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 1.7rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffffff;
+                font-size: 28px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
                 width: 100%;
             }
             p {
-                font-size: 1.4rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffbb00;
+                font-size: 20px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
                 max-width: 100%;
             }
