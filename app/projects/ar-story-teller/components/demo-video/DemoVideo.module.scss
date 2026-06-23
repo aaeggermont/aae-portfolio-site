@@ -1,0 +1,12 @@
+.root {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.video {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}

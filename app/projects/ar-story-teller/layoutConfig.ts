@@ -97,6 +97,15 @@ export const getUsableLayoutWidth = (
 /** Desktop usable content width (`1260 − 2 × 80`) — shared panel cap across case study. */
 export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth('desktop');
 
+/**
+ * Cinematic main demo canvas (16:9). Desktop 1100×620; tablet ~900×506.
+ * Mobile fills available width at the same aspect ratio.
+ */
+export const MAIN_DEMO_CANVAS = {
+    desktop: { width: 1100, height: 620 },
+    tablet: { width: 900, height: 506 },
+} as const;
+
 type PanelPaddingBreakpoint = keyof PanelBlockPaddings['x'];
 
 /** Content width inside a capped panel after horizontal `PANEL_BLOCK_PADDINGS`. */
