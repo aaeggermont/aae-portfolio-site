@@ -1,3 +1,17 @@
+@use '../typography' as typo;
+
+@mixin video-title-type($font-size) {
+    @include typo.ar-st-title-type(700);
+    font-size: $font-size;
+    text-align: center;
+}
+
+@mixin video-description-type($font-size) {
+    @include typo.ar-st-body-type;
+    font-size: $font-size;
+    text-align: center;
+}
+
 .storyteller-DesktopParagraphVideo {
     margin: auto;
     width: 70%;
@@ -11,33 +25,14 @@
     }
 
     .title {
-        font-family: poppins;
-        font-size: 2.2rem;
-        font-weight: 600;
-        color: #010A24;
+        @include video-title-type(26px);
         padding-top: 6rem;
-        text-align: center;
-   
     }
 
     .description {
-        font-family: poppins;
-        font-size: 1.7rem;
-        font-weight: 400;
-        color: #010A24;
-        text-align: center;
+        @include video-description-type(20px);
         padding-top: 3rem;
     }
-
-
-
-    .text-paragraph {
-        font-family: poppins;
-        font-size: 22px;
-        font-weight: 400;
-        color: #102764;
-        background-color: green;
-    }    
 }
 
 .storyteller-lgmdParagraphVideo {
@@ -46,36 +41,16 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    
 
     .title {
-        text-align: center;
-        font-family: poppins;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #102764;
+        @include video-title-type(24px);
         padding-top: 2rem;
         padding-bottom: 1rem;
-        
     }
 
     .description {
-    
-        font-family: poppins;
-        font-size: 1.2rem;
-        font-weight: 400;
-        color: #102764;
-        text-align: center;
+        @include video-description-type(20px);
     }
-
-    .text-paragraph {
-        padding-top: 400px;
-        font-family: poppins;
-        font-size: 48px;
-        font-weight: 400;
-        color: #102764;
-    }
-    
 }
 
 .storyteller-xssmParagraphVideo {
@@ -86,31 +61,13 @@
     width: 80%;
 
     .title {
-        text-align: center;
-        font-family: poppins;
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #102764;
+        @include video-title-type(22px);
         padding-top: 2rem;
         padding-bottom: 1rem;
-   
     }
 
     .description {
-        font-family: poppins;
-        font-size: 0.8rem;
-        font-weight: 400;
-        color: #102764;
-        text-align: center;
+        @include video-description-type(18px);
         padding-top: 1.5rem;
-       
     }
-
-    .text-paragraph {
-        font-family: poppins;
-        font-size: 16px;
-        font-weight: 400;
-        color: #102764;
-    }
-    
-}   
+}

@@ -1,49 +1,35 @@
+/* Legacy subtitle — aligned to `panelHeading` tokens. */
+@use '../typography' as typo;
+
+@mixin subtitle2-label($font-size) {
+    .subtitle-paragraph {
+        @include typo.ar-st-title-type(700);
+        font-size: $font-size;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+}
+
 @media #{$desktop} {
     .st-subtitle2-container {
         padding-top: 3rem;
         padding-bottom: 1.5rem;
-        .subtitle-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: $font-color-normal;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-        }
-
+        @include subtitle2-label(26px);
     }
 }
 
 @media #{$tablet} {
     .st-subtitle2-container {
         padding-top: 3rem;
-        .subtitle-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            color: $font-color-normal;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-        }
+        @include subtitle2-label(24px);
     }
 }
 
 @media #{$mobile} {
     .st-subtitle2-container {
-
         margin: auto;
         padding-top: 2rem;
-
-        .subtitle-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: $font-color-normal;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-        }
+        @include subtitle2-label(22px);
     }
 }

@@ -4,26 +4,9 @@
     //background-color: aqua;
 }
 
-/* Outer content wrapper for `ArStoryTellerPage`. Replaces the global `global-container`
-   so this case study can own its own horizontal cap and gutter scheme without affecting
-   other routes.
-
-   Two independent concerns ride on the same element:
-
-   1. Layout dimensions — `--layout-max-width-{mobile,tablet,desktop}` and
-      `--layout-margin-{mobile,tablet,desktop}`, set by `LAYOUT_DIMENSIONS` in
-      `ArStoryTellerPage.tsx`. The active values (`--layout-max-width` / `--layout-margin`)
-      are applied as `max-width` and horizontal padding on this wrapper, constraining every
-      descendant section automatically. Mobile is `none` (no cap) so phones fill their
-      viewport; tablet/desktop cap and center.
-   2. Section gaps — `--section-gap-{mobile,tablet,desktop}`, set by `SECTION_GAPS` in
-      `ArStoryTellerPage.tsx`. The active `--section-gap` is applied as `margin-top` to
-      every direct child after the first, with `--section-gap-self` as the per-section
-      escape hatch.
-
-   Defaults below mirror the constants in the TS file so the page still renders coherently
-   if the inline style is ever removed. */
-.project-content {
+/* Page root for `ArStoryTellerPage` — owns layout + section-gap CSS variables so the hero
+   banner text and `.project-content` share the same horizontal grid (`LAYOUT_DIMENSIONS`). */
+.project-page {
     /* Layout dimensions — fallback defaults; overridden by inline vars from React. */
     --layout-max-width-mobile: none;
     --layout-max-width-tablet: 1024px;
@@ -42,18 +25,70 @@
     --section-gap-desktop: 8rem;
     --section-gap: var(--section-gap-mobile);
 
+    --full-bleed-band-padding-y-mobile: 3rem;
+    --full-bleed-band-padding-y-tablet: 5rem;
+    --full-bleed-band-padding-y-desktop: 8rem;
+    --full-bleed-band-padding-y: var(--full-bleed-band-padding-y-mobile);
+
+    --panel-section-gap-mobile: 42px;
+    --panel-section-gap-tablet: 70px;
+    --panel-section-gap-desktop: 112px;
+    --panel-section-gap: var(--panel-section-gap-mobile);
+
+    --title-content-gap-mobile: 32px;
+    --title-content-gap-tablet: 40px;
+    --title-content-gap-desktop: 48px;
+    --title-content-gap: var(--title-content-gap-mobile);
+
+    --body-stack-gap-mobile: 16px;
+    --body-stack-gap-tablet: 20px;
+    --body-stack-gap-desktop: 20px;
+    --body-stack-gap: var(--body-stack-gap-mobile);
+
     @media #{$tablet} {
         --layout-max-width: var(--layout-max-width-tablet);
         --layout-margin: var(--layout-margin-tablet);
         --section-gap: var(--section-gap-tablet);
+        --full-bleed-band-padding-y: var(--full-bleed-band-padding-y-tablet);
+        --panel-section-gap: var(--panel-section-gap-tablet);
+        --title-content-gap: var(--title-content-gap-tablet);
+        --body-stack-gap: var(--body-stack-gap-tablet);
     }
 
     @media #{$desktop} {
         --layout-max-width: var(--layout-max-width-desktop);
         --layout-margin: var(--layout-margin-desktop);
         --section-gap: var(--section-gap-desktop);
+        --full-bleed-band-padding-y: var(--full-bleed-band-padding-y-desktop);
+        --panel-section-gap: var(--panel-section-gap-desktop);
+        --title-content-gap: var(--title-content-gap-desktop);
+        --body-stack-gap: var(--body-stack-gap-desktop);
     }
+}
 
+/* Heading + immediately following body — single `TITLE_CONTENT_GAP` owner. */
+.content-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--title-content-gap);
+}
+
+/* Heading → inset panel shell (`BusinessGoals`, `ArAsNarrative`, etc.). */
+.panel-subsection {
+    display: flex;
+    flex-direction: column;
+    gap: var(--title-content-gap);
+}
+
+/* Stack of major blocks — sibling margin (no flex gap doubling). */
+.panel-section-stack {
+    > * + * {
+        margin-top: var(--panel-section-gap-self, var(--panel-section-gap));
+    }
+}
+
+/* Outer content wrapper — sections below the hero. */
+.project-content {
     max-width: var(--layout-max-width);
     margin-left: auto;
     margin-right: auto;
@@ -69,22 +104,16 @@
     }
 }
 
-$project-font-color: #03133C;
-$project-font-family: poppins;
+$project-font-color: #03133c;
 
 @mixin desktop-width {
     max-width: 1230px;
     margin: auto;
-    // margin-left: 5rem;
-    // margin-bottom: 6rem;
 }
 
 @mixin lgmd-width {
     max-width: 950px;
-    // margin-bottom: 6rem;
     margin: auto;
-    // margin-left: 4%;
-    // margin-right: 4%;
 }
 
 @mixin smxs-width {
@@ -92,165 +121,4 @@ $project-font-family: poppins;
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 30px;
-}
-
-/* Desktop/Tablet Global Styles */
-
-@mixin stdesktop-block-title {
-    font-family: poppins;
-    font-size: 2rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-section-title {
-    font-family: poppins;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-section-subtitle1 {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-section-subtitle2 {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-paragraph-text {
-    font-family: poppins;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-mockup-title {
-    font-family: poppins;
-    font-size: 1.8rem;
-    font-weight: 500;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-mockup-desc {
-    font-family: poppins;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: $project-font-color;
-}
-
-@mixin stdesktop-image-annotation {
-    font-family: poppins;
-    font-size: 1rem;
-    font-weight: 400;
-    color: $project-font-color;
-}
-
-
-
-/* Tablet Global Styles */
-
-@mixin stlgmd-block-title {
-    font-family: poppins;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-
-@mixin stlgmd-section-title {
-    font-family: poppins;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-
-@mixin stlgmd-section-subtitle1 {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-
-@mixin stlgmd-section-subtitle2 {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-@mixin stlgmd-paragraph-text {
-    font-family: poppins;
-    font-size: 1.2rem;
-    font-weight: 400;
-    color: $project-font-color;
-}
-
-@mixin stlgmd-mockup-title {
-    font-family: poppins;
-    font-size: 1.4rem;
-    font-weight: 500;
-    color: $project-font-color;
-}
-
-@mixin stlgmd-mockup-desc {
-    font-family: poppins;
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: $project-font-color;
-}
-
-@mixin stmdlg-image-annotation {
-    font-family: poppins;
-    font-size: 0.8rem;
-    font-weight: 400;
-    color: $project-font-color;
-}
-
-/* Mobile Global Styles */
-
-@mixin stsmsx-block-title {
-    font-family: poppins;
-    font-size: 2rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-
-@mixin stsmsx-section-title {
-    font-family: poppins;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-
-@mixin stsmsx-section-subtitle1 {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-
-@mixin stsmsx-section-subtitle2 {
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: $project-font-color;
-}
-
-@mixin stsmsx-paragraph-text {
-    font-family: poppins;
-    font-size: 1rem;
-    font-weight: 400;
-    color: $project-font-color;
 }

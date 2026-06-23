@@ -7,6 +7,28 @@ import {
   PANEL_HEADER_GAP,
 } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
+import { bodyTypeSx, titleTypeSx } from "../typography";
+
+const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
+
+const panelHeadingSx = titleTypeSx("panelHeading", {
+  m: 0,
+  lineHeight: 1.15,
+  textAlign: "center",
+  [breakpointMediaQuery.tabletUp]: {
+    textAlign: "left",
+  },
+});
+
+const modeTitleSx = titleTypeSx("cardTitle", {
+  lineHeight: 1.25,
+  textAlign: "center",
+  [breakpointMediaQuery.tabletUp]: {
+    textAlign: "left",
+  },
+});
+
+const modeBodySx = bodyTypeSx("smallBody", { lineHeight: 1.6 });
 
 export interface InteractionModeImage {
   objectPath: string;
@@ -23,8 +45,6 @@ export interface UserModeInteractionsProps {
   title: string;
   modes: InteractionModeSpec[];
 }
-
-const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
 
 const INTERACTION_MODE_IMAGE_MAX_WIDTH_PX = 300;
 const INTERACTION_MODE_IMAGE_INTRINSIC_SIZE_PX = 300;
@@ -57,23 +77,7 @@ export const UserModeInteractions = ({
         },
       }}
     >
-      <Typography
-        component="h2"
-        variant="h4"
-        sx={{
-          color: "#03133c",
-          fontFamily:
-            'var(--font-satoshi), var(--font-poppins), system-ui, sans-serif',
-          fontWeight: 700,
-          fontSize: { xs: "1.9rem", md: "2rem" },
-          lineHeight: 1.15,
-          m: 0,
-          textAlign: "center",
-          [breakpointMediaQuery.tabletUp]: {
-            textAlign: "left",
-          },
-        }}
-      >
+      <Typography component="h2" variant="h4" sx={panelHeadingSx}>
         {title}
       </Typography>
       <Box
@@ -119,34 +123,10 @@ export const UserModeInteractions = ({
                     },
                   }}
                 >
-                  <Typography
-                    component="h3"
-                    sx={{
-                      color: "#000",
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontWeight: 700,
-                      fontSize: { xs: "20px", md: "24px" },
-                      lineHeight: 1.25,
-                      textAlign: "center",
-                      [breakpointMediaQuery.tabletUp]: {
-                        textAlign: "left",
-                      },
-                    }}
-                  >
+                  <Typography component="h3" sx={modeTitleSx}>
                     {item.title}
                   </Typography>
-                  <Typography
-                    component="p"
-                    sx={{
-                      color: "#000",
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontWeight: 400,
-                      fontSize: { xs: "1rem", md: "1.125rem" },
-                      lineHeight: 1.6,
-                    }}
-                  >
+                  <Typography component="p" sx={modeBodySx}>
                     {item.description}
                   </Typography>
                 </Stack>

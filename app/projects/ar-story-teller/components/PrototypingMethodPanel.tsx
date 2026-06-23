@@ -13,6 +13,7 @@ import {
   LAYOUT_DIMENSIONS,
   PANEL_CONTENT_MAX_WIDTH_PX,
 } from "../layoutConfig";
+import { bodyTypeSx } from "../typography";
 
 /** Mobile wireframe asset — intrinsic ratio for layout reserve. */
 const WIREFRAME_IMAGE_INTRINSIC_WIDTH = 390;
@@ -62,16 +63,11 @@ const WIREFLOW_IMAGE_INTRINSIC_HEIGHT = 560;
 
 const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
 
-const IMAGE_ANNOTATION_SX = {
-  fontFamily:
-    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-  fontWeight: 400,
-  color: "#000",
-  lineHeight: 1.35,
+const IMAGE_ANNOTATION_SX = bodyTypeSx("caption", {
   textAlign: "center",
   width: "100%",
   m: 0,
-} as const;
+});
 
 /** Matches `InteractionDesignPrinciples` stacked / row column gap. */
 const SPLIT_COLUMN_GAP = {
@@ -237,18 +233,12 @@ function CopyImageSplitLayout({
             {image.annotation || image.annotationInstruction ? (
               <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
                 {image.annotation ? (
-                  <Typography
-                    component="p"
-                    sx={{ ...IMAGE_ANNOTATION_SX, fontSize: "1rem" }}
-                  >
+                  <Typography component="p" sx={IMAGE_ANNOTATION_SX}>
                     {image.annotation}
                   </Typography>
                 ) : null}
                 {image.annotationInstruction ? (
-                  <Typography
-                    component="p"
-                    sx={{ ...IMAGE_ANNOTATION_SX, fontSize: "0.875rem" }}
-                  >
+                  <Typography component="p" sx={IMAGE_ANNOTATION_SX}>
                     {image.annotationInstruction}
                   </Typography>
                 ) : null}

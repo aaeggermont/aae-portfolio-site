@@ -1,0 +1,24 @@
+/* SCSS mirror of `typography.ts` — keep values in sync when tokens change. */
+
+$ar-st-text-color: #03133c;
+$ar-st-hero-title-color: #ffffff;
+$ar-st-hero-subtitle-color: #ffbb00;
+
+$ar-st-title-font: var(--font-satoshi), sans-serif;
+$ar-st-body-font: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+
+@mixin ar-st-body-type {
+    color: $ar-st-text-color;
+    font-family: $ar-st-body-font;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.35;
+}
+
+@mixin ar-st-title-type($weight: 700) {
+    color: $ar-st-text-color;
+    font-family: $ar-st-title-font;
+    font-style: normal;
+    font-weight: $weight;
+    line-height: normal;
+}

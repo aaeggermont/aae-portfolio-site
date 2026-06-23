@@ -1,18 +1,25 @@
+/* Legacy block title — aligned to `panelHeading` tokens. */
+@use '../typography' as typo;
+
+@mixin title-paragraph-label($font-size) {
+    .title-paragraph {
+        @include typo.ar-st-title-type(700);
+        font-size: $font-size;
+        text-align: center;
+    }
+}
+
 @media #{$desktop} {
     .storyteller-laptop-paragraph-title {
         padding-top: 8rem;
         padding-bottom: 1.25rem;
         text-align: center;
+        @include title-paragraph-label(26px);
 
         .title-paragraph {
             padding-top: 20px;
             padding-bottom: 10px;
-            text-align: center;
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.8rem;
-            font-weight: 600;
         }
-
     }
 }
 
@@ -20,33 +27,24 @@
     .storyteller-lgmd-paragraph-title {
         margin: auto;
         padding-top: 3rem;
+        @include title-paragraph-label(24px);
 
         .title-paragraph {
             padding-top: 1.5rem;
             padding-bottom: 3rem;
-            text-align: center;
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.75rem;
-            font-weight: 600;
         }
     }
 }
-
 
 @media #{$mobile} {
     .storyteller-xsxm-paragraph-title {
         margin: auto;
         text-align: center;
+        @include title-paragraph-label(22px);
 
         .title-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #040B35;
             padding-top: 20px;
             padding-bottom: 10px;
-            text-align: center;
         }
     }
 }
-

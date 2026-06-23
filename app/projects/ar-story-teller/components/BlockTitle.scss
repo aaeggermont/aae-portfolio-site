@@ -1,32 +1,29 @@
+/* Standalone block heading — `typography.ts` → sectionSubTitle. */
+@use '../typography' as typo;
+
+.block-title {
+    @include typo.ar-st-title-type(700);
+    text-align: center;
+}
+
 @media #{$desktop} {
     .block-title {
         padding-top: 5rem;
         padding-bottom: 3rem;
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 600;
-        color: $font-color-normal;
+        font-size: 32px;
     }
 }
 
 @media #{$tablet} {
     .block-title {
-        text-align: center;
         padding-top: 5rem;
         padding-bottom: 3rem;
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: $font-color-normal;
+        font-size: 28px;
     }
 }
-
 
 @media #{$mobile} {
     .block-title {
-        text-align: center;
-        font-size: 2rem;
-        font-weight: 600;
-        color: $font-color-normal;
+        font-size: 24px;
     }
 }
-

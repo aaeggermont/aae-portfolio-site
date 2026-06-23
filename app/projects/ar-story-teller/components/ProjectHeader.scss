@@ -1,4 +1,5 @@
 /* Hero parallax — aspect ratios align with `ImageBanner` + `lib/responsive/breakpoints.ts`. */
+@use '../typography' as typo;
 .project-header-parallax {
   /* Static vertical shift for clouds — use top/height (not transform) so
      `react-scroll-parallax` can own `transform` on `ParallaxBannerLayer`. */
@@ -92,13 +93,35 @@
   z-index: 2;
   display: flex;
   box-sizing: border-box;
+  justify-content: center;
   pointer-events: none;
   /* Must stay absolute — do not set `position: relative` in breakpoint blocks below. */
 }
 
+/* Same horizontal grid as `.project-content` — inherits vars from `.project-page`. */
 .storyteller-banner__hero .banner-titles__inner {
   pointer-events: auto;
+  box-sizing: border-box;
   width: 100%;
+  max-width: var(--layout-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--layout-margin);
+  padding-right: var(--layout-margin);
+}
+
+@media #{$tablet} {
+  .storyteller-banner__hero .banner-text-subtitle {
+    max-width: 65%;
+    text-align: left;
+  }
+}
+
+@media #{$desktop} {
+  .storyteller-banner__hero .banner-text-subtitle {
+    max-width: 65%;
+    text-align: left;
+  }
 }
 
 @media #{$desktop} {
@@ -120,23 +143,25 @@
             left: 0;
             right: 0;
             align-items: center;
-            justify-content: center;
-            padding-left: 10%;
-            padding-right: 0%;
+
+            .banner-titles__inner {
+                text-align: left;
+            }
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: clamp(1.875rem, 1.2vw + 1.15rem, 2.5rem);
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffffff;
+                font-family: typo.$ar-st-title-font;
+                font-size: 40px;
+                color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
             }
-            p {
-                font-size: clamp(1.25rem, 1.05vw + 0.54rem, 1.5rem);
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffbb00;
+            p,
+            .banner-text-subtitle {
+                font-family: typo.$ar-st-title-font;
+                font-size: 24px;
+                color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 600;
-                width: 670px;
+                max-width: 65%;
             }
         }
 
@@ -168,24 +193,25 @@
             left: 0;
             right: 0;
             align-items: center;
-            justify-content: center;
-            padding-left: 10%;
-            padding-right: 2%;
+
+            .banner-titles__inner {
+                text-align: left;
+            }
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 2rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffffff;
+                font-size: 32px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
-                width: 100%;
             }
-            p {
-                font-size: 1.2rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffbb00;
+            p,
+            .banner-text-subtitle {
+                font-size: 20px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
-                width: 500px;
+                max-width: 65%;
             }
         }
 
@@ -226,33 +252,28 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding-left: 2%;
-            padding-right: 2%;
 
             .banner-titles__inner {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                text-align: center;
             }
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 1.7rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffffff;
+                font-size: 28px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
                 width: 100%;
-                text-align: center;
             }
             p {
-                font-size: 1.4rem;
-                font-family: var(--font-satoshi), sans-serif;
-                color: #ffbb00;
+                font-size: 20px;
+                font-family: typo.$ar-st-title-font;
+                color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
-                width: 80%;
                 max-width: 100%;
-                margin-inline: auto;
-                text-align: center;
             }
         }
     }
