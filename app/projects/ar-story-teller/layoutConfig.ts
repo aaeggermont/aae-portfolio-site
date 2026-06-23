@@ -90,14 +90,11 @@ export const PANEL_BLOCK_PADDINGS = {
 } as const;
 
 /**
- * Vertical gap between a subsection heading (h1/h2) and the grey panel below it.
- * Used by `InteractionDesignPrinciples`, `UserModeInteractions`, etc.
+ * Vertical gap between an in-panel heading and the grey inset surface below it
+ * (`InteractionDesignPrinciples`, `UserModeInteractions`, etc.).
+ * Matches `TITLE_CONTENT_GAP` — same rhythm as section title → panel shell.
  */
-export const PANEL_HEADER_GAP = {
-    mobile: '40px',
-    tablet: '48px',
-    desktop: '64px',
-} as const;
+export const PANEL_HEADER_GAP = TITLE_CONTENT_GAP;
 
 /** Horizontal gap between mode image and title/description in `UserModeInteractions`. */
 export const INTERACTION_MODE_IMAGE_COPY_GAP = {

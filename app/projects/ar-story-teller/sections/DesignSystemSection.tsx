@@ -204,9 +204,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                     {prototypingMethod1 ? (
                         <div className={styles['panel-subsection']}>
-                            <div className={styles['content-group']}>
-                                <SectionSubTitle title={prototypingMethod1.title} />
-                            </div>
+                            <SectionSubTitle title={prototypingMethod1.title} />
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod1.paragraphs}
                                 copyImage={prototypingMethod1.images?.[0]}
@@ -215,9 +213,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                     {prototypingMethod2 ? (
                         <div className={styles['panel-subsection']}>
-                            <div className={styles['content-group']}>
-                                <SectionSubTitle title={prototypingMethod2.title} />
-                            </div>
+                            <SectionSubTitle title={prototypingMethod2.title} />
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod2.paragraphs}
                                 carouselImages={prototypingMethod2.images}
@@ -249,11 +245,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                         </div>
                         {usabilityTesting.theProcess ? (
                             <div className={styles['panel-subsection']}>
-                                <div className={styles['content-group']}>
-                                    <SectionSubTitle
-                                        title={usabilityTesting.theProcess.title}
-                                    />
-                                </div>
+                                <SectionSubTitle
+                                    title={usabilityTesting.theProcess.title}
+                                />
                                 {usabilityProcessBullets.length ? (
                                     <UsabilityTestingPanel
                                         bulletPoints={usabilityProcessBullets}
@@ -263,13 +257,11 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                         ) : null}
                         {usabilityTesting.FindingsInsights ? (
                             <div className={styles['panel-subsection']}>
-                                <div className={styles['content-group']}>
-                                    <SectionSubTitle
-                                        title={
-                                            usabilityTesting.FindingsInsights.title
-                                        }
-                                    />
-                                </div>
+                                <SectionSubTitle
+                                    title={
+                                        usabilityTesting.FindingsInsights.title
+                                    }
+                                />
                                 {usabilityTesting.FindingsInsights.insights
                                     ?.length ? (
                                     <UsabilityFindingsInsights

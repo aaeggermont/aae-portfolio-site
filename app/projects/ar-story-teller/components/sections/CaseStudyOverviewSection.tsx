@@ -111,9 +111,7 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
 
             {ARAsNarrativeTool ? (
                 <div className={styles['panel-subsection']}>
-                    <div className={styles['content-group']}>
-                        <SectionSubTitle title={ARAsNarrativeTool.title} />
-                    </div>
+                    <SectionSubTitle title={ARAsNarrativeTool.title} />
                     <ArAsNarrative
                         title={ARAsNarrativeTool.title}
                         paragraphs={ARAsNarrativeTool.paragraphs}
@@ -127,9 +125,7 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
 
             {notificationsAttrac ? (
                 <div className={styles['panel-subsection']}>
-                    <div className={styles['content-group']}>
-                        <SectionSubTitle title={notificationsAttrac.title} />
-                    </div>
+                    <SectionSubTitle title={notificationsAttrac.title} />
                     <ContextualNotifications
                         title={notificationsAttrac.title}
                         paragraphs={notificationsAttrac.paragraphs}
