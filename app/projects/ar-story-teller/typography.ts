@@ -29,9 +29,9 @@ export const TYPOGRAPHY = {
   heroSubtitle: { mobile: "20px", tablet: "20px", desktop: "24px" },
   /** Top-level section headings (`SectionTitle`). */
   sectionTitle: { mobile: "28px", tablet: "34px", desktop: "40px" },
-  /** Subsections under a section (`SectionSubTitle`, e.g. “AR As Narrative Tool”). */
+  /** Subsections under a section (`SectionSubTitle`, e.g. “Developing Specifications”). */
   sectionSubTitle: { mobile: "24px", tablet: "28px", desktop: "32px" },
-  /** In-panel section headings (interaction design, user modes, etc.). */
+  /** Nested subtitles (`PanelSubTitle`) and in-panel headings (interaction design, user modes). */
   panelHeading: { mobile: "22px", tablet: "24px", desktop: "26px" },
   /** Card / column titles (AR mockups, research cards, mode titles). */
   cardTitle: { mobile: "18px", tablet: "20px", desktop: "22px" },

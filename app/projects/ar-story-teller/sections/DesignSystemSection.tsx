@@ -5,6 +5,7 @@ import styles from '../ArStoryTeller.module.scss';
 import dsSectionStyles from './DesignSystemSection.module.scss';
 import { SectionTitle } from '../components/SectionTitle';
 import { SectionSubTitle } from '../components/SectionSubTitle';
+import { PanelSubTitle } from '../components/PanelSubTitle';
 import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCarousel';
 import { InteractionDesignPrinciples } from '../components/InteractionDesignPrinciples';
 import { UserModeInteractions } from '../components/UserModeInteractions';
@@ -189,7 +190,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     {prototypingMethod0 ? (
                         <div className={styles['panel-subsection']}>
                             <div className={styles['content-group']}>
-                                <SectionSubTitle title={prototypingMethod0.title} />
+                                <PanelSubTitle title={prototypingMethod0.title} />
                                 {prototypingMethod0.paragraphs?.length ? (
                                     <ParagraphBlock
                                         paragraphs={prototypingMethod0.paragraphs}
@@ -204,7 +205,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                     {prototypingMethod1 ? (
                         <div className={styles['panel-subsection']}>
-                            <SectionSubTitle title={prototypingMethod1.title} />
+                            <PanelSubTitle title={prototypingMethod1.title} />
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod1.paragraphs}
                                 copyImage={prototypingMethod1.images?.[0]}
@@ -213,7 +214,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     ) : null}
                     {prototypingMethod2 ? (
                         <div className={styles['panel-subsection']}>
-                            <SectionSubTitle title={prototypingMethod2.title} />
+                            <PanelSubTitle title={prototypingMethod2.title} />
                             <PrototypingMethodPanel
                                 paragraphs={prototypingMethod2.paragraphs}
                                 carouselImages={prototypingMethod2.images}
