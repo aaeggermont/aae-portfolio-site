@@ -112,7 +112,7 @@
 
 @media #{$tablet} {
   .storyteller-banner__hero .banner-text-subtitle {
-    max-width: 60%;
+    max-width: 65%;
     text-align: left;
   }
 }
@@ -120,6 +120,7 @@
 @media #{$desktop} {
   .storyteller-banner__hero .banner-text-subtitle {
     max-width: 65%;
+    text-align: left;
   }
 }
 
@@ -154,12 +155,13 @@
                 color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
             }
-            p {
+            p,
+            .banner-text-subtitle {
                 font-family: typo.$ar-st-title-font;
                 font-size: 24px;
                 color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 600;
-                max-width: 100%;
+                max-width: 65%;
             }
         }
 
@@ -203,11 +205,13 @@
                 color: typo.$ar-st-hero-title-color;
                 font-weight: 600;
             }
-            p {
+            p,
+            .banner-text-subtitle {
                 font-size: 20px;
                 font-family: typo.$ar-st-title-font;
                 color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
+                max-width: 65%;
             }
         }
 
