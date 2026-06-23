@@ -114,6 +114,8 @@ export type PrototypingMethod = {
   title: string;
   alt: string;
   paragraphs?: string[];
+  /** Expandable copy blocks (Software Prototypes panel). */
+  accordionSections?: FeatureSpecification[];
   images: PrototypingImage[];
 };
 

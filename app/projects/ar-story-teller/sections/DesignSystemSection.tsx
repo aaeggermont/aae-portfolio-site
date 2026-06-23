@@ -18,6 +18,7 @@ import {
 import { UsabilityFindingsInsights } from '../components/UsabilityFindingsInsights';
 import type { DesignSystemSectionData } from '../types/arStoryTellerContent';
 import type { StoryboardSlide } from '../types/designSystemTypes';
+import { resolveSoftwarePrototypesAccordionSections } from '../lib/softwarePrototypesAccordion';
 
 interface DesignSystemSectionProps {
     data: DesignSystemSectionData;
@@ -216,7 +217,9 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                         <div className={styles['panel-subsection']}>
                             <PanelSubTitle title={prototypingMethod2.title} />
                             <PrototypingMethodPanel
-                                paragraphs={prototypingMethod2.paragraphs}
+                                accordionSections={resolveSoftwarePrototypesAccordionSections(
+                                    prototypingMethod2.accordionSections,
+                                )}
                                 carouselImages={prototypingMethod2.images}
                             />
                         </div>
