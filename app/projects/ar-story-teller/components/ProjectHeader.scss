@@ -21,6 +21,10 @@
   @media screen and (min-width: $desktop-min) {
     aspect-ratio: 1.62 / 1;
   }
+
+  @media screen and (max-width: $mobile-max) {
+    height: calc(80vh - 75px);
+  }
 }
 
 .project-header-parallax__layer {
@@ -233,7 +237,7 @@
     }
 
     .storyteller-banner {
-        --banner-titles-overlay-top: -35%;
+        --banner-titles-overlay-top: -5%;
 
         .people-in-line {
             width: 100%;
