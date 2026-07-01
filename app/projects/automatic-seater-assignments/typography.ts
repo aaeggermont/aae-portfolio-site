@@ -30,6 +30,12 @@ export const AUTOMATIC_SEATER_CONTRIBUTIONS_TITLE_COLOR = "#003366";
 /** `MyContributions` card list copy. */
 export const AUTOMATIC_SEATER_CONTRIBUTIONS_BODY_COLOR = "#1F2937";
 
+/** `ChallengeCard` title and inline emphasis. */
+export const AUTOMATIC_SEATER_CHALLENGE_TITLE_COLOR = "#003366";
+
+/** `ChallengeCard` body copy. */
+export const AUTOMATIC_SEATER_CHALLENGE_BODY_COLOR = "#1F2937";
+
 /** Hero banner headline (frosted overlay). */
 export const AUTOMATIC_SEATER_HERO_TITLE_COLOR = "#f2f2f2";
 
@@ -57,6 +63,8 @@ export const TYPOGRAPHY = {
   sectionTitle: { mobile: "24px", tablet: "30px", desktop: "36px" },
   /** `MyContributions` card title. Desktop: 28px bold. */
   contributionsTitle: { mobile: "22px", tablet: "26px", desktop: "28px" },
+  /** `ChallengeCard` title. Desktop: 48px bold. */
+  challengeTitle: { mobile: "32px", tablet: "36px", desktop: "48px" },
   /** Research method kicker (e.g. “1. Understanding…”). */
   methodKicker: { mobile: "18px", tablet: "19px", desktop: "22px" },
   /** Research method block title. */
@@ -75,6 +83,8 @@ export const TYPOGRAPHY = {
   overviewBody: { mobile: "18px", tablet: "20px", desktop: "22px" },
   /** `MyContributions` numbered list items. Desktop: 18px medium. */
   contributionsItem: { mobile: "16px", tablet: "17px", desktop: "18px" },
+  /** `ChallengeCard` body paragraphs. Desktop: 32px medium. */
+  challengeBody: { mobile: "24px", tablet: "28px", desktop: "32px" },
   /** Long-form body on dark / gradient bands (legacy / other sections). */
   bodyText: { mobile: "18px", tablet: "20px", desktop: "26px" },
   /** Narrative / standard paragraph blocks on gradient band. */
@@ -101,6 +111,7 @@ export type TitleTypographyScaleKey = Extract<
   | "heroSubtitle"
   | "sectionTitle"
   | "contributionsTitle"
+  | "challengeTitle"
   | "methodKicker"
   | "methodTitle"
   | "cardTitle"
@@ -114,6 +125,7 @@ export type BodyTypographyScaleKey = Extract<
   TypographyScaleKey,
   | "overviewBody"
   | "contributionsItem"
+  | "challengeBody"
   | "bodyText"
   | "narrativeBody"
   | "solutionBody"
@@ -129,6 +141,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
   heroSubtitle: 500,
   sectionTitle: 700,
   contributionsTitle: 700,
+  challengeTitle: 700,
   methodKicker: 700,
   methodTitle: 700,
   cardTitle: 600,
@@ -141,6 +154,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
 const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
   overviewBody: 500,
   contributionsItem: 500,
+  challengeBody: 500,
   bodyText: 500,
   narrativeBody: 500,
   solutionBody: 400,
@@ -156,6 +170,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
   heroSubtitle: AUTOMATIC_SEATER_HERO_SUBTITLE_COLOR,
   sectionTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   contributionsTitle: AUTOMATIC_SEATER_CONTRIBUTIONS_TITLE_COLOR,
+  challengeTitle: AUTOMATIC_SEATER_CHALLENGE_TITLE_COLOR,
   cardTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   cardColumnLabel: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   figureTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -164,6 +179,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
 const BODY_COLOR: Partial<Record<BodyTypographyScaleKey, string>> = {
   overviewBody: AUTOMATIC_SEATER_OVERVIEW_BODY_COLOR,
   contributionsItem: AUTOMATIC_SEATER_CONTRIBUTIONS_BODY_COLOR,
+  challengeBody: AUTOMATIC_SEATER_CHALLENGE_BODY_COLOR,
   bodyText: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   narrativeBody: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   panelBody: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -201,7 +217,10 @@ export function titleTypeSx(
     fontFamily: AUTOMATIC_SEATER_TITLE_FONT,
     fontWeight: TITLE_FONT_WEIGHT[scaleKey],
     lineHeight:
-      scaleKey === "heroSubtitle" ? 1.25 : scaleKey === "heroTitle" || scaleKey === "contributionsTitle" ? 1.2 : "normal",
+      scaleKey === "heroSubtitle" ? 1.25
+      : scaleKey === "heroTitle" || scaleKey === "contributionsTitle" || scaleKey === "challengeTitle"
+        ? 1.2
+        : "normal",
     ...(TITLE_COLOR[scaleKey] ? { color: TITLE_COLOR[scaleKey] } : {}),
   }, extra);
 }
@@ -219,7 +238,9 @@ export function bodyTypeSx(
         ? 1.6
         : scaleKey === "contributionsItem"
           ? 1.4
-          : 1.35;
+          : scaleKey === "challengeBody"
+            ? 1.45
+            : 1.35;
 
   return buildResponsiveTypeSx(scaleKey, {
     fontFamily: AUTOMATIC_SEATER_BODY_FONT,

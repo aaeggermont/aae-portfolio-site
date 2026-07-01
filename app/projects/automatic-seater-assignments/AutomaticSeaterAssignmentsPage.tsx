@@ -10,6 +10,7 @@ import TestSignOutButton from "./components/Signout";
 import ImageBanner from "./components/ImageBanner";
 import OverviewSection from "./components/OverviewSection";
 import MyContributions from "./components/MyContributions";
+import ChallengeCard from "./components/ChallengeCard";
 import PreviewDemo from "./components/PreviewDemo";
 import MainSolutionParagraph from "./components/MainSolutionParagraph";
 import ProjectOverviewCard from "./components/ProjectOverviewCard";
@@ -54,6 +55,7 @@ export function AutomaticSeaterAssignmentsPage({
           <Stack spacing={6} alignItems="center" sx={{ width: "100%" }}>
             <OverviewSection data={project.overviewSection} />
             <MyContributions data={project.myContributions} />
+            <ChallengeCard data={project.challengeCard} />
           </Stack>
         </FullBleedBand>
 

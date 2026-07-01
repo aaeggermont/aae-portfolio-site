@@ -154,6 +154,30 @@ export const myContributionsListSx: SxProps<Theme> = {
   pl: 4,
 };
 
+/** Shared max-width for intro cards (`MyContributions`, `ChallengeCard`). */
+export const INTRO_CARD_MAX_WIDTH = MY_CONTRIBUTIONS_CARD_MAX_WIDTH;
+
+export function challengeCardSx(background: string): SxProps<Theme> {
+  return {
+    width: "100%",
+    maxWidth: INTRO_CARD_MAX_WIDTH.mobile,
+    mx: "auto",
+    px: { xs: 3, sm: 5, md: 6 },
+    py: { xs: 4, sm: 5, md: "50px" },
+    borderRadius: "32px",
+    overflow: "hidden",
+    borderTop: 1,
+    borderColor: "divider",
+    background,
+    [breakpointMediaQuery.tabletUp]: {
+      maxWidth: INTRO_CARD_MAX_WIDTH.tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      maxWidth: INTRO_CARD_MAX_WIDTH.desktop,
+    },
+  };
+}
+
 /**
  * Standard `Container` constraints for case-study content inside a full-bleed band.
  * Applies `LAYOUT_DIMENSIONS` max-width and horizontal margins per breakpoint.
