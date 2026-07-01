@@ -13,8 +13,6 @@ import MyContributions from "./components/MyContributions";
 import ChallengeCard from "./components/ChallengeCard";
 import PreviewDemo from "./components/PreviewDemo";
 import MainSolutionParagraph from "./components/MainSolutionParagraph";
-import ProjectOverviewCard from "./components/ProjectOverviewCard";
-import KeyBenefitsCard from "./components/KeyBenefitsCard";
 import StandardParagraphBlock from "./components/StandardParagraphBlock";
 import ResearchMethod from "./components/ResearchMethod";
 import { ResearchMethodImageBlock } from "./components/ResearchMethodImageBlock";
@@ -24,7 +22,6 @@ import {
   FULL_BLEED_BAND_PADDINGS,
   INTRO_SECTIONS_BACKGROUND,
   layoutContentContainerSx,
-  PANEL_CONTENT_MAX_WIDTH_PX,
 } from "./layoutConfig";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
@@ -59,7 +56,7 @@ export function AutomaticSeaterAssignmentsPage({
           </Stack>
         </FullBleedBand>
 
-        <FullBleedBand backgroundColor="#ffffff">
+        <FullBleedBand backgroundColor={INTRO_SECTIONS_BACKGROUND}>
           <Box
             sx={{
               width: "100%",
@@ -72,22 +69,6 @@ export function AutomaticSeaterAssignmentsPage({
           >
             <MainSolutionParagraph data={project.mainSolution} />
             <PreviewDemo data={project.previewDemo} />
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                alignItems: "center",
-                gap: 6,
-                justifyContent: "center",
-                width: "100%",
-                maxWidth: PANEL_CONTENT_MAX_WIDTH_PX,
-                mx: "auto",
-              }}
-            >
-              <ProjectOverviewCard data={project.projectOverviewCard} />
-              <KeyBenefitsCard data={project.keyBenefitsCard} />
-            </Box>
           </Box>
         </FullBleedBand>
 
