@@ -18,6 +18,12 @@ export const AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR = "#ffffff";
 /** Solution section title on the white content band. */
 export const AUTOMATIC_SEATER_SOLUTION_TITLE_COLOR = "#1d2d92";
 
+/** Overview section title on the blue gradient band. */
+export const AUTOMATIC_SEATER_OVERVIEW_TITLE_COLOR = "#003366";
+
+/** Overview section body copy. */
+export const AUTOMATIC_SEATER_OVERVIEW_BODY_COLOR = "#1F2937";
+
 /** Hero banner headline (frosted overlay). */
 export const AUTOMATIC_SEATER_HERO_TITLE_COLOR = "#f2f2f2";
 
@@ -57,7 +63,9 @@ export const TYPOGRAPHY = {
   personaTitle: { mobile: "16px", tablet: "16px", desktop: "19px" },
   /** Reusable component block title. */
   componentBlockTitle: { mobile: "16px", tablet: "16px", desktop: "20px" },
-  /** Overview intro paragraphs (dark full-bleed band). */
+  /** Overview intro paragraphs on the blue gradient band. */
+  overviewBody: { mobile: "18px", tablet: "20px", desktop: "22px" },
+  /** Long-form body on dark / gradient bands (legacy / other sections). */
   bodyText: { mobile: "18px", tablet: "20px", desktop: "26px" },
   /** Narrative / standard paragraph blocks on gradient band. */
   narrativeBody: { mobile: "16px", tablet: "18px", desktop: "20px" },
@@ -93,6 +101,7 @@ export type TitleTypographyScaleKey = Extract<
 
 export type BodyTypographyScaleKey = Extract<
   TypographyScaleKey,
+  | "overviewBody"
   | "bodyText"
   | "narrativeBody"
   | "solutionBody"
@@ -117,6 +126,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
 };
 
 const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
+  overviewBody: 500,
   bodyText: 500,
   narrativeBody: 500,
   solutionBody: 400,
@@ -137,6 +147,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
 };
 
 const BODY_COLOR: Partial<Record<BodyTypographyScaleKey, string>> = {
+  overviewBody: AUTOMATIC_SEATER_OVERVIEW_BODY_COLOR,
   bodyText: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   narrativeBody: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   panelBody: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -183,7 +194,13 @@ export function bodyTypeSx(
   extra?: SxProps<Theme>,
 ): SxProps<Theme> {
   const lineHeight =
-    scaleKey === "caption" ? 1.35 : scaleKey === "narrativeBody" || scaleKey === "bodyText" ? 1.6 : 1.35;
+    scaleKey === "caption"
+      ? 1.35
+      : scaleKey === "narrativeBody" ||
+          scaleKey === "bodyText" ||
+          scaleKey === "overviewBody"
+        ? 1.6
+        : 1.35;
 
   return buildResponsiveTypeSx(scaleKey, {
     fontFamily: AUTOMATIC_SEATER_BODY_FONT,

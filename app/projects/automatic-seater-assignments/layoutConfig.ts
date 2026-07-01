@@ -51,6 +51,29 @@ export const getUsableLayoutWidth = (
 export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth("desktop");
 
 /**
+ * Overview intro paragraph measure — scales with `overviewBody` typography (18 → 20 → 22px).
+ * Tablet value: 660 × (20 / 22) ≈ 600px. Mobile uses the layout column (`100%`).
+ */
+export const OVERVIEW_PARAGRAPH_MAX_WIDTH = {
+  mobile: "100%",
+  tablet: "600px",
+  desktop: "660px",
+} as const;
+
+/** Centered max-width for overview body copy. */
+export const overviewParagraphMaxWidthSx: SxProps<Theme> = {
+  width: "100%",
+  maxWidth: OVERVIEW_PARAGRAPH_MAX_WIDTH.mobile,
+  mx: "auto",
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: OVERVIEW_PARAGRAPH_MAX_WIDTH.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: OVERVIEW_PARAGRAPH_MAX_WIDTH.desktop,
+  },
+};
+
+/**
  * Standard `Container` constraints for case-study content inside a full-bleed band.
  * Applies `LAYOUT_DIMENSIONS` max-width and horizontal margins per breakpoint.
  */
