@@ -9,6 +9,7 @@ import styles from "./automatic-seater-assignments.module.scss";
 import TestSignOutButton from "./components/Signout";
 import ImageBanner from "./components/ImageBanner";
 import OverviewSection from "./components/OverviewSection";
+import MyContributions from "./components/MyContributions";
 import PreviewDemo from "./components/PreviewDemo";
 import MainSolutionParagraph from "./components/MainSolutionParagraph";
 import ProjectOverviewCard from "./components/ProjectOverviewCard";
@@ -20,6 +21,7 @@ import FullBleedBand from "./components/FullBleedBand";
 import type { AutomaticSeaterAssignmentsProjectDocument } from "./lib/automatic-seater-assignments.firestore";
 import {
   FULL_BLEED_BAND_PADDINGS,
+  INTRO_SECTIONS_BACKGROUND,
   layoutContentContainerSx,
   PANEL_CONTENT_MAX_WIDTH_PX,
 } from "./layoutConfig";
@@ -48,8 +50,11 @@ export function AutomaticSeaterAssignmentsPage({
           <ImageBanner data={project.imageBanner} />
         </FullBleedBand>
 
-        <FullBleedBand backgroundColor={project.overviewSection.background}>
-          <OverviewSection data={project.overviewSection} />
+        <FullBleedBand backgroundColor={INTRO_SECTIONS_BACKGROUND}>
+          <Stack spacing={6} alignItems="center" sx={{ width: "100%" }}>
+            <OverviewSection data={project.overviewSection} />
+            <MyContributions data={project.myContributions} />
+          </Stack>
         </FullBleedBand>
 
         <FullBleedBand backgroundColor="#ffffff">

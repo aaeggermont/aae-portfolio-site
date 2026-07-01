@@ -24,6 +24,12 @@ export const AUTOMATIC_SEATER_OVERVIEW_TITLE_COLOR = "#003366";
 /** Overview section body copy. */
 export const AUTOMATIC_SEATER_OVERVIEW_BODY_COLOR = "#1F2937";
 
+/** `MyContributions` card title. */
+export const AUTOMATIC_SEATER_CONTRIBUTIONS_TITLE_COLOR = "#003366";
+
+/** `MyContributions` card list copy. */
+export const AUTOMATIC_SEATER_CONTRIBUTIONS_BODY_COLOR = "#1F2937";
+
 /** Hero banner headline (frosted overlay). */
 export const AUTOMATIC_SEATER_HERO_TITLE_COLOR = "#f2f2f2";
 
@@ -49,6 +55,8 @@ export const TYPOGRAPHY = {
   heroSubtitle: { mobile: "15px", tablet: "22px", desktop: "24px" },
   /** Top-level section headings (overview, narrative blocks, solution title). */
   sectionTitle: { mobile: "24px", tablet: "30px", desktop: "36px" },
+  /** `MyContributions` card title. Desktop: 28px bold. */
+  contributionsTitle: { mobile: "22px", tablet: "26px", desktop: "28px" },
   /** Research method kicker (e.g. “1. Understanding…”). */
   methodKicker: { mobile: "18px", tablet: "19px", desktop: "22px" },
   /** Research method block title. */
@@ -65,6 +73,8 @@ export const TYPOGRAPHY = {
   componentBlockTitle: { mobile: "16px", tablet: "16px", desktop: "20px" },
   /** Overview intro paragraphs on the blue gradient band. */
   overviewBody: { mobile: "18px", tablet: "20px", desktop: "22px" },
+  /** `MyContributions` numbered list items. Desktop: 18px medium. */
+  contributionsItem: { mobile: "16px", tablet: "17px", desktop: "18px" },
   /** Long-form body on dark / gradient bands (legacy / other sections). */
   bodyText: { mobile: "18px", tablet: "20px", desktop: "26px" },
   /** Narrative / standard paragraph blocks on gradient band. */
@@ -90,6 +100,7 @@ export type TitleTypographyScaleKey = Extract<
   | "heroTitle"
   | "heroSubtitle"
   | "sectionTitle"
+  | "contributionsTitle"
   | "methodKicker"
   | "methodTitle"
   | "cardTitle"
@@ -102,6 +113,7 @@ export type TitleTypographyScaleKey = Extract<
 export type BodyTypographyScaleKey = Extract<
   TypographyScaleKey,
   | "overviewBody"
+  | "contributionsItem"
   | "bodyText"
   | "narrativeBody"
   | "solutionBody"
@@ -116,6 +128,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
   heroTitle: 700,
   heroSubtitle: 500,
   sectionTitle: 700,
+  contributionsTitle: 700,
   methodKicker: 700,
   methodTitle: 700,
   cardTitle: 600,
@@ -127,6 +140,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
 
 const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
   overviewBody: 500,
+  contributionsItem: 500,
   bodyText: 500,
   narrativeBody: 500,
   solutionBody: 400,
@@ -141,6 +155,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
   heroTitle: AUTOMATIC_SEATER_HERO_TITLE_COLOR,
   heroSubtitle: AUTOMATIC_SEATER_HERO_SUBTITLE_COLOR,
   sectionTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
+  contributionsTitle: AUTOMATIC_SEATER_CONTRIBUTIONS_TITLE_COLOR,
   cardTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   cardColumnLabel: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   figureTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -148,6 +163,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
 
 const BODY_COLOR: Partial<Record<BodyTypographyScaleKey, string>> = {
   overviewBody: AUTOMATIC_SEATER_OVERVIEW_BODY_COLOR,
+  contributionsItem: AUTOMATIC_SEATER_CONTRIBUTIONS_BODY_COLOR,
   bodyText: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   narrativeBody: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   panelBody: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -185,7 +201,7 @@ export function titleTypeSx(
     fontFamily: AUTOMATIC_SEATER_TITLE_FONT,
     fontWeight: TITLE_FONT_WEIGHT[scaleKey],
     lineHeight:
-      scaleKey === "heroSubtitle" ? 1.25 : scaleKey === "heroTitle" ? 1.2 : "normal",
+      scaleKey === "heroSubtitle" ? 1.25 : scaleKey === "heroTitle" || scaleKey === "contributionsTitle" ? 1.2 : "normal",
     ...(TITLE_COLOR[scaleKey] ? { color: TITLE_COLOR[scaleKey] } : {}),
   }, extra);
 }
@@ -201,7 +217,9 @@ export function bodyTypeSx(
           scaleKey === "bodyText" ||
           scaleKey === "overviewBody"
         ? 1.6
-        : 1.35;
+        : scaleKey === "contributionsItem"
+          ? 1.4
+          : 1.35;
 
   return buildResponsiveTypeSx(scaleKey, {
     fontFamily: AUTOMATIC_SEATER_BODY_FONT,

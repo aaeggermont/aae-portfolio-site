@@ -38,6 +38,9 @@ export const LAYOUT_DIMENSIONS = {
   desktop: { maxWidth: "1260px", margin: "80px" },
 } as const;
 
+/** Shared background for overview and my-contributions intro sections. */
+export const INTRO_SECTIONS_BACKGROUND = "#F5F7FA" as const;
+
 export const cssLengthToPx = (value: string): number => Number.parseFloat(value);
 
 export const getUsableLayoutWidth = (
@@ -115,6 +118,43 @@ export const imageBannerBandContentSx: SxProps<Theme> = {
 };
 
 /**
+ * Frosted contributions card — same measure as overview body copy (`660px` desktop).
+ */
+export const MY_CONTRIBUTIONS_CARD_MAX_WIDTH = OVERVIEW_PARAGRAPH_MAX_WIDTH;
+
+/** Centered numbered list inside the contributions card. */
+export const MY_CONTRIBUTIONS_LIST_MAX_WIDTH_PX = 420;
+
+export function myContributionsCardSx(background: string): SxProps<Theme> {
+  return {
+    width: "100%",
+    maxWidth: MY_CONTRIBUTIONS_CARD_MAX_WIDTH.mobile,
+    minHeight: { xs: "auto", sm: 355 },
+    mx: "auto",
+    px: { xs: 3, sm: 5, md: 6 },
+    py: { xs: 4, sm: 5, md: 6 },
+    borderRadius: "32px",
+    overflow: "hidden",
+    borderTop: "1px solid transparent",
+    background,
+    boxShadow: "0px 4px 14px rgba(0, 0, 0, 0.18)",
+    [breakpointMediaQuery.tabletUp]: {
+      maxWidth: MY_CONTRIBUTIONS_CARD_MAX_WIDTH.tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      maxWidth: MY_CONTRIBUTIONS_CARD_MAX_WIDTH.desktop,
+    },
+  };
+}
+
+export const myContributionsListSx: SxProps<Theme> = {
+  maxWidth: MY_CONTRIBUTIONS_LIST_MAX_WIDTH_PX,
+  mx: "auto",
+  listStyleType: "decimal",
+  pl: 4,
+};
+
+/**
  * Standard `Container` constraints for case-study content inside a full-bleed band.
  * Applies `LAYOUT_DIMENSIONS` max-width and horizontal margins per breakpoint.
  */
@@ -151,3 +191,4 @@ export const layoutSectionOuterSx: SxProps<Theme> = {
 export type SectionGaps = typeof SECTION_GAPS;
 export type FullBleedBandPaddings = typeof FULL_BLEED_BAND_PADDINGS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
+export type IntroSectionsBackground = typeof INTRO_SECTIONS_BACKGROUND;
