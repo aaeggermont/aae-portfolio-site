@@ -1,5 +1,7 @@
 import type { SxProps, Theme } from "@mui/material/styles";
 
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+
 /**
  * Vertical spacing between top-level section children inside the case study content band.
  *
@@ -26,33 +28,60 @@ export const FULL_BLEED_BAND_PADDINGS = {
 /**
  * Standardized usable content dimensions for the Automatic Seater Assignments case study.
  *
- * Section components apply `margin` as horizontal padding on the outer wrapper and
- * `maxWidth` on the inner `Container`. Mobile is intentionally uncapped so the page
- * fills larger phones.
+ * `.project-content` and `FullBleedBand` enforce these as `max-width` (outer container cap)
+ * and horizontal padding (inner side margins). Mobile is intentionally uncapped so the page
+ * fills larger phones while keeping 16px side margins.
  */
 export const LAYOUT_DIMENSIONS = {
-  mobile: { maxWidth: "none", margin: "32px" },
-  tablet: { maxWidth: "none", margin: "80px" },
+  mobile: { maxWidth: "none", margin: "16px" },
+  tablet: { maxWidth: "1024px", margin: "40px" },
   desktop: { maxWidth: "1260px", margin: "80px" },
 } as const;
 
-/** MUI `Container` max-width token for narrative / research sections. */
-export const CASE_STUDY_CONTAINER_MAX_WIDTH = "lg" as const;
+export const cssLengthToPx = (value: string): number => Number.parseFloat(value);
 
-/**
- * Shared horizontal rhythm for case-study sections.
- * Keep in sync: outer gutter + inner container padding.
- *
- * Values mirror theme spacing units **4 / 10** (32 / 80px at `spacing` 8px).
- */
-export const caseStudySectionGutterSx: SxProps<Theme> = {
-  width: "100%",
-  px: { xs: 4, md: 10 },
+export const getUsableLayoutWidth = (
+  breakpoint: "tablet" | "desktop",
+): number => {
+  const { maxWidth, margin } = LAYOUT_DIMENSIONS[breakpoint];
+  return cssLengthToPx(maxWidth) - cssLengthToPx(margin) * 2;
 };
 
-/** Inner `Container` horizontal padding — applied on top of `caseStudySectionGutterSx`. */
-export const caseStudyContainerSx: SxProps<Theme> = {
-  px: { xs: 2, sm: 3 },
+/** Desktop usable content width (`1260 − 2 × 80`) — shared inset panel cap. */
+export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth("desktop");
+
+/**
+ * Standard `Container` constraints for case-study content inside a full-bleed band.
+ * Applies `LAYOUT_DIMENSIONS` max-width and horizontal margins per breakpoint.
+ */
+export const layoutContentContainerSx: SxProps<Theme> = {
+  maxWidth: {
+    xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
+    md: LAYOUT_DIMENSIONS.tablet.maxWidth,
+    lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
+  },
+  px: LAYOUT_DIMENSIONS.mobile.margin,
+  [breakpointMediaQuery.tabletUp]: {
+    px: LAYOUT_DIMENSIONS.tablet.margin,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    px: LAYOUT_DIMENSIONS.desktop.margin,
+  },
+};
+
+/**
+ * Horizontal margins only — for sections that cap width on an inner `Container`
+ * (Finding Nemo overview pattern).
+ */
+export const layoutSectionOuterSx: SxProps<Theme> = {
+  width: "100%",
+  px: LAYOUT_DIMENSIONS.mobile.margin,
+  [breakpointMediaQuery.tabletUp]: {
+    px: LAYOUT_DIMENSIONS.tablet.margin,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    px: LAYOUT_DIMENSIONS.desktop.margin,
+  },
 };
 
 export type SectionGaps = typeof SECTION_GAPS;

@@ -1,8 +1,8 @@
 import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 
 import { breakpointPx } from "@/lib/responsive/breakpoints";
-import { caseStudySectionGutterSx } from "../layoutConfig";
+import { layoutContentContainerSx } from "../layoutConfig";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
 
@@ -110,7 +110,7 @@ export const ResearchMethod = ({ data }: Props) => {
   } as const;
 
   return (
-    <Box sx={caseStudySectionGutterSx}>
+    <Container maxWidth={false} sx={layoutContentContainerSx}>
       <Box
         sx={{
           width: "100%",
@@ -220,7 +220,7 @@ export const ResearchMethod = ({ data }: Props) => {
           ))}
         </Box>
       </Box>
-    </Box>
+    </Container>
   );
 };
 

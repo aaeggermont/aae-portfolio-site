@@ -4,9 +4,7 @@ import type { ResponsiveStyleValue } from "@mui/system";
 import type { ReadMoreWordConfig } from "../researchMethodTypes";
 
 import {
-  CASE_STUDY_CONTAINER_MAX_WIDTH,
-  caseStudyContainerSx,
-  caseStudySectionGutterSx,
+  layoutContentContainerSx,
 } from "../layoutConfig";
 
 export type StandardParagraphBlockProps = {
@@ -122,10 +120,7 @@ export function StandardParagraphBlock({
   } as const;
 
   return (
-    <Box
-      sx={{ ...caseStudySectionGutterSx, pt: paddingTop, pb: paddingBottom }}
-    >
-      <Container maxWidth={CASE_STUDY_CONTAINER_MAX_WIDTH} sx={caseStudyContainerSx}>
+    <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: paddingTop, pb: paddingBottom }}>
         <Stack alignItems="flex-start" spacing={4} sx={{ pb: 8 }}>
           {title ? (
             <Typography
@@ -253,8 +248,7 @@ export function StandardParagraphBlock({
             </Stack>
           ) : null}
         </Stack>
-      </Container>
-    </Box>
+    </Container>
   );
 }
 

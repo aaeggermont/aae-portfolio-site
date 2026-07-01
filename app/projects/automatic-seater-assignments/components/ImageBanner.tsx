@@ -1,8 +1,12 @@
 "use client";
 
 import { Box, Typography } from "@mui/material";
+
 import GatedImage from "@/lib/media/GatedImage";
-import { breakpointPx } from "@/lib/responsive/breakpoints";
+
+/** Intrinsic dimensions for `GatedImage` / Next `Image` (banner scales to 100% width). */
+const BANNER_INTRINSIC_WIDTH = 1260;
+const BANNER_INTRINSIC_HEIGHT = 778;
 
 export type ImageBannerData = {
   projectKey: string;
@@ -32,28 +36,21 @@ export default function ImageBanner({ data }: Props) {
   return (
     <Box
       component="section"
+      data-id="hero-banner"
       sx={{
         position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         width: "100%",
-        aspectRatio: "4 / 5",
-        overflow: "hidden",
-        backgroundColor: "#000",
-        [`@media (min-width: ${breakpointPx.tabletMin}px)`]: {
-          aspectRatio: "16 / 9",
-        },
-        [`@media (min-width: ${breakpointPx.desktopMin}px)`]: {
-          aspectRatio: "1.62 / 1",
-        },
       }}
     >
       <Box
         sx={{
-          position: "absolute",
-          inset: 0,
+          width: "100%",
           "& img": {
             width: "100%",
-            height: "100%",
-            objectFit: "cover",
+            height: "auto",
             display: "block",
           },
         }}
@@ -61,54 +58,52 @@ export default function ImageBanner({ data }: Props) {
         <GatedImage
           fullViewportLoading
           priority
-          mode="fill"
           projectKey={projectKey}
           objectPath={objectPath}
           alt={alt}
           sizes={sizes}
-          style={{ objectFit: "cover" }}
+          width={BANNER_INTRINSIC_WIDTH}
+          height={BANNER_INTRINSIC_HEIGHT}
+          style={{ width: "100%", height: "auto", objectFit: "cover" }}
         />
       </Box>
 
       <Box
+        component="header"
         sx={{
           position: "absolute",
-          bottom: "8%",
-          left: 0,
-          width: { xs: "100%", md: "100%" },
-          px: { xs: 2, md: 4 },
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
+          left: "50%",
+          bottom: 24,
+          transform: "translateX(-50%)",
+          width: "100%",
+          maxWidth: 620,
+          px: { xs: 2, sm: 3 },
+          py: { xs: 1.5, sm: 2 },
+          borderRadius: "10px",
+          backgroundColor: "rgba(52, 50, 50, 0.6)",
+          textAlign: "center",
         }}
       >
         <Typography
-          variant="h4"
           component="h1"
           sx={{
-            fontFamily: "'Poppins', Helvetica, sans-serif",
-            fontWeight: 600,
-            color: "white",
-            fontSize: { xs: "1.5rem", md: "2.5rem" },
-            textAlign: "center",
-            lineHeight: "normal",
-            letterSpacing: 0,
+            color: "#f2f2f2",
+            fontWeight: 700,
+            fontSize: { xs: 24, sm: 30, md: 34 },
+            lineHeight: 1.2,
           }}
         >
           {headline}
         </Typography>
 
         <Typography
-          variant="body1"
           component="p"
           sx={{
-            fontFamily: "'Poppins', Helvetica, sans-serif",
-            fontWeight: 600,
-            color: "white",
-            fontSize: { xs: "1rem", md: "1.125rem", lg: "1.5rem" },
-            textAlign: "center",
-            lineHeight: "normal",
-            letterSpacing: 0,
+            mt: 1,
+            color: "#ffffff",
+            fontWeight: 500,
+            fontSize: { xs: 18, sm: 22, md: 24 },
+            lineHeight: 1.3,
           }}
         >
           {taglineLine1}
