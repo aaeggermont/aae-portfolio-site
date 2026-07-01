@@ -7,8 +7,7 @@ import {
   CASE_STUDY_CONTAINER_MAX_WIDTH,
   caseStudyContainerSx,
   caseStudySectionGutterSx,
-} from "../caseStudyLayout";
-import { aosFadeUp } from "../aosProps";
+} from "../layoutConfig";
 
 export type StandardParagraphBlockProps = {
   title?: string;
@@ -124,7 +123,6 @@ export function StandardParagraphBlock({
 
   return (
     <Box
-      {...aosFadeUp()}
       sx={{ ...caseStudySectionGutterSx, pt: paddingTop, pb: paddingBottom }}
     >
       <Container maxWidth={CASE_STUDY_CONTAINER_MAX_WIDTH} sx={caseStudyContainerSx}>

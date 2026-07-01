@@ -1,6 +1,5 @@
 import { Stack, Typography } from "@mui/material";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
-import { aosFadeUp } from "../aosProps";
 
 /** Matches PreviewDemo / project content band (px). */
 const CONTENT_MAX_WIDTH_MOBILE_PX = 366;
@@ -25,7 +24,6 @@ export const MainSolutionParagraph = ({ data }: Props) => {
     <Stack
       spacing={4}
       alignItems="center"
-      {...aosFadeUp()}
       sx={{
         width: "100%",
         maxWidth: CONTENT_MAX_WIDTH_MOBILE_PX,

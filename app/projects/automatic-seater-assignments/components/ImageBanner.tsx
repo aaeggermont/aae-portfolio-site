@@ -3,7 +3,6 @@
 import { Box, Typography } from "@mui/material";
 import GatedImage from "@/lib/media/GatedImage";
 import { breakpointPx } from "@/lib/responsive/breakpoints";
-import { aosFadeUp } from "../aosProps";
 
 export type ImageBannerData = {
   projectKey: string;
@@ -86,7 +85,6 @@ export default function ImageBanner({ data }: Props) {
         <Typography
           variant="h4"
           component="h1"
-          {...aosFadeUp({ duration: 900 })}
           sx={{
             fontFamily: "'Poppins', Helvetica, sans-serif",
             fontWeight: 600,
@@ -103,7 +101,6 @@ export default function ImageBanner({ data }: Props) {
         <Typography
           variant="body1"
           component="p"
-          {...aosFadeUp({ delay: 150, duration: 900 })}
           sx={{
             fontFamily: "'Poppins', Helvetica, sans-serif",
             fontWeight: 600,

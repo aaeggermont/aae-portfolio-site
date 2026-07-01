@@ -11,6 +11,13 @@
   /* Horizontal clip lives on `.pageClipViewport` so full-bleed children still align to 100vw. */
   overflow-x: visible;
   //padding: 3.5rem 0 5rem;
+
+  /* AOS disabled for this project — neutralize any residual scroll animations */
+  [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 // Content width band per device — uses only $mobile-*, $tablet-*, $desktop-* from variables.scss
