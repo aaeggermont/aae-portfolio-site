@@ -6,9 +6,12 @@ import type { ReadMoreWordConfig } from "../researchMethodTypes";
 import {
   layoutContentContainerSx,
 } from "../layoutConfig";
+import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
+import { bodyTypeSx, titleTypeSx } from "../typography";
 
 export type StandardParagraphBlockProps = {
   title?: string;
+  subtitle?: string;
   paragraphs?: string[];
   paragraphReadMore?: ReadMoreWordConfig;
   bullets?: string[];
@@ -22,6 +25,7 @@ export type StandardParagraphBlockProps = {
 
 export function StandardParagraphBlock({
   title,
+  subtitle,
   paragraphs,
   paragraphReadMore,
   bullets,
@@ -29,18 +33,22 @@ export function StandardParagraphBlock({
   paddingTop,
   paddingBottom,
 }: StandardParagraphBlockProps) {
+  const { isMobile } = useResponsive();
+  /** Read-more truncation applies on mobile only; tablet/desktop show full copy. */
+  const activeParagraphReadMore = isMobile ? paragraphReadMore : undefined;
+
   const [expandedParagraphs, setExpandedParagraphs] = React.useState(false);
 
   React.useEffect(() => {
     setExpandedParagraphs(false);
-  }, [paragraphs, paragraphReadMore]);
+  }, [paragraphs, paragraphReadMore, isMobile]);
 
   const getLimitForParagraphIndex = (index: number): number | undefined => {
-    if (!paragraphReadMore) return undefined;
-    const mapLimit = paragraphReadMore.wordLimitsByParagraphIndex?.[index];
+    if (!activeParagraphReadMore) return undefined;
+    const mapLimit = activeParagraphReadMore.wordLimitsByParagraphIndex?.[index];
     if (typeof mapLimit === "number") return mapLimit;
-    if (index === 0) return paragraphReadMore.firstParagraphWords;
-    if (index === 1) return paragraphReadMore.secondParagraphWords;
+    if (index === 0) return activeParagraphReadMore.firstParagraphWords;
+    if (index === 1) return activeParagraphReadMore.secondParagraphWords;
     return undefined;
   };
 
@@ -52,8 +60,8 @@ export function StandardParagraphBlock({
 
   const displayedParagraphs = React.useMemo(() => {
     if (!paragraphs) return [];
-    if (expandedParagraphs || !paragraphReadMore) return paragraphs;
-    const triggerIndex = paragraphReadMore.expandTriggerParagraphIndex;
+    if (expandedParagraphs || !activeParagraphReadMore) return paragraphs;
+    const triggerIndex = activeParagraphReadMore.expandTriggerParagraphIndex;
     const collapsedSource =
       typeof triggerIndex === "number" && triggerIndex >= 0
         ? paragraphs.slice(0, Math.min(triggerIndex + 1, paragraphs.length))
@@ -63,11 +71,11 @@ export function StandardParagraphBlock({
       if (!limit || limit < 1) return paragraph;
       return truncateAtWordLimit(paragraph, limit);
     });
-  }, [paragraphs, expandedParagraphs, paragraphReadMore]);
+  }, [paragraphs, expandedParagraphs, activeParagraphReadMore]);
 
   const hasTruncatedParagraphs = React.useMemo(() => {
-    if (!paragraphs || !paragraphReadMore) return false;
-    const triggerIndex = paragraphReadMore.expandTriggerParagraphIndex;
+    if (!paragraphs || !activeParagraphReadMore) return false;
+    const triggerIndex = activeParagraphReadMore.expandTriggerParagraphIndex;
     const hasHiddenParagraphs =
       typeof triggerIndex === "number" &&
       triggerIndex >= 0 &&
@@ -77,34 +85,34 @@ export function StandardParagraphBlock({
       if (!limit || limit < 1) return false;
       return paragraph.trim().split(/\s+/).length > limit;
     }) || hasHiddenParagraphs;
-  }, [paragraphs, paragraphReadMore]);
+  }, [paragraphs, activeParagraphReadMore]);
 
   const truncatedParagraphFlags = React.useMemo(() => {
-    if (!paragraphs || !paragraphReadMore) return [] as boolean[];
+    if (!paragraphs || !activeParagraphReadMore) return [] as boolean[];
     return paragraphs.map((paragraph, index) => {
       const limit = getLimitForParagraphIndex(index);
       if (!limit || limit < 1) return false;
       return paragraph.trim().split(/\s+/).length > limit;
     });
-  }, [paragraphs, paragraphReadMore]);
+  }, [paragraphs, activeParagraphReadMore]);
 
   const expandTriggerParagraphIndex = React.useMemo(() => {
-    if (!paragraphReadMore) return -1;
-    if (typeof paragraphReadMore.expandTriggerParagraphIndex === "number") {
+    if (!activeParagraphReadMore) return -1;
+    if (typeof activeParagraphReadMore.expandTriggerParagraphIndex === "number") {
       const paragraphCount = paragraphs?.length ?? 0;
       if (paragraphCount === 0) return -1;
       return Math.max(
         0,
-        Math.min(paragraphReadMore.expandTriggerParagraphIndex, paragraphCount - 1),
+        Math.min(activeParagraphReadMore.expandTriggerParagraphIndex, paragraphCount - 1),
       );
     }
     return truncatedParagraphFlags.findIndex(Boolean);
-  }, [paragraphReadMore, truncatedParagraphFlags, paragraphs?.length]);
+  }, [activeParagraphReadMore, truncatedParagraphFlags, paragraphs?.length]);
 
-  const readToggleColor = paragraphReadMore?.textColor ?? "#ffffff";
-  const readToggleFontFamily = paragraphReadMore?.fontFamily ?? "'Poppins', Helvetica";
-  const readToggleFontWeight = paragraphReadMore?.fontWeight ?? 600;
-  const readToggleFontSize = paragraphReadMore?.fontSize ?? "inherit";
+  const readToggleColor = activeParagraphReadMore?.textColor ?? "#ffffff";
+  const readToggleFontFamily = activeParagraphReadMore?.fontFamily ?? "'Poppins', Helvetica";
+  const readToggleFontWeight = activeParagraphReadMore?.fontWeight ?? 600;
+  const readToggleFontSize = activeParagraphReadMore?.fontSize ?? "inherit";
   const readToggleTextSx = {
     border: "none",
     background: "transparent",
@@ -122,18 +130,27 @@ export function StandardParagraphBlock({
   return (
     <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: paddingTop, pb: paddingBottom }}>
         <Stack alignItems="flex-start" spacing={4} sx={{ pb: 8 }}>
-          {title ? (
-            <Typography
-              component="h2"
-              variant="h4"
-              fontFamily="'Poppins', Helvetica"
-              fontWeight="bold"
-              color="white"
-              textAlign="center"
-              alignSelf="stretch"
-            >
-              {title}
-            </Typography>
+          {title || subtitle ? (
+            <Stack spacing={1} alignSelf="stretch" alignItems="stretch">
+              {title ? (
+                <Typography
+                  component="h2"
+                  textAlign="center"
+                  sx={titleTypeSx("sectionTitle")}
+                >
+                  {title}
+                </Typography>
+              ) : null}
+              {subtitle ? (
+                <Typography
+                  component="p"
+                  textAlign="center"
+                  sx={bodyTypeSx("sectionSubtitle", { m: 0 })}
+                >
+                  {subtitle}
+                </Typography>
+              ) : null}
+            </Stack>
           ) : null}
           {paragraphs?.length ? (
             <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", width: "100%", gap: 3 }}>
@@ -159,7 +176,7 @@ export function StandardParagraphBlock({
                         onClick={() => setExpandedParagraphs(true)}
                         sx={readToggleTextSx}
                       >
-                        {paragraphReadMore?.buttonLabel ?? "Read more"}
+                        {activeParagraphReadMore?.buttonLabel ?? "Read more"}
                       </Box>
                     </>
                   ) : null}
@@ -175,7 +192,7 @@ export function StandardParagraphBlock({
                     ...readToggleTextSx,
                   }}
                 >
-                  {paragraphReadMore?.readLessButtonLabel ?? "Read less"}
+                  {activeParagraphReadMore?.readLessButtonLabel ?? "Read less"}
                 </Box>
               ) : null}
             </Box>
