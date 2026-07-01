@@ -1,5 +1,12 @@
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 
+import {
+  AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+  AUTOMATIC_SEATER_INTRO_CARD_TITLE_COLOR,
+  bodyTypeSx,
+  titleTypeSx,
+} from "../typography";
+
 const MY_CONTRIBUTIONS_CARD_BACKGROUND =
   "linear-gradient(109deg, rgba(230, 233, 238, 0.25) 13.84%, rgba(188, 197, 207, 0.25) 56.92%, rgba(142, 152, 164, 0.30) 78.46%, rgba(188, 197, 207, 0.60) 89.23%, #F2F4F7 100%)";
 
@@ -35,13 +42,10 @@ export default function MyContributions({ data }: Props) {
       <Typography
         component="h2"
         align="center"
-        sx={{
-          color: "#003366",
-          fontWeight: 700,
-          fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
-          lineHeight: 1.2,
+        sx={titleTypeSx("introCardTitle", {
+          color: AUTOMATIC_SEATER_INTRO_CARD_TITLE_COLOR,
           mb: { xs: 4, sm: 5, md: 6 },
-        }}
+        })}
       >
         {title}
       </Typography>
@@ -52,6 +56,7 @@ export default function MyContributions({ data }: Props) {
           mx: "auto",
           listStyleType: "decimal",
           pl: 4,
+          color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
         }}
       >
         {items.map((item) => (
@@ -66,12 +71,9 @@ export default function MyContributions({ data }: Props) {
             <ListItemText
               primary={item}
               primaryTypographyProps={{
-                sx: {
-                  color: "#1f2937",
-                  fontWeight: 500,
-                  fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                  lineHeight: 1.4,
-                },
+                sx: bodyTypeSx("introCardBody", {
+                  color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+                }),
               }}
             />
           </ListItem>

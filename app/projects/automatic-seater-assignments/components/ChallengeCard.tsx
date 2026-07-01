@@ -1,5 +1,12 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
+import {
+  AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+  AUTOMATIC_SEATER_INTRO_CARD_TITLE_COLOR,
+  bodyTypeSx,
+  titleTypeSx,
+} from "../typography";
+
 export type ChallengeCardData = {
   title: string;
   background: string;
@@ -39,12 +46,9 @@ export default function ChallengeCard({ data }: Props) {
           <Typography
             component="h2"
             align="center"
-            sx={{
-              color: "#003366",
-              fontWeight: 700,
-              fontSize: { xs: "2rem", sm: "2.25rem", md: "3rem" },
-              lineHeight: 1.2,
-            }}
+            sx={titleTypeSx("introCardTitle", {
+              color: AUTOMATIC_SEATER_INTRO_CARD_TITLE_COLOR,
+            })}
           >
             {title}
           </Typography>
@@ -52,25 +56,25 @@ export default function ChallengeCard({ data }: Props) {
         <Stack spacing={{ xs: 4, sm: 5 }} component="article">
           <Typography
             component="p"
-            sx={{
-              color: "#1f2937",
-              fontWeight: 500,
-              fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
-              lineHeight: 1.45,
-            }}
+            sx={bodyTypeSx("introCardBody", {
+              color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+            })}
           >
             {introParagraph}
           </Typography>
           <Typography
             component="p"
-            sx={{
-              color: "#1f2937",
-              fontWeight: 500,
-              fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
-              lineHeight: 1.45,
-            }}
+            sx={bodyTypeSx("introCardBody", {
+              color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+            })}
           >
-            <Box component="span" sx={{ color: "#003366", fontWeight: 700 }}>
+            <Box
+              component="span"
+              sx={bodyTypeSx("introCardBody", {
+                color: AUTOMATIC_SEATER_INTRO_CARD_TITLE_COLOR,
+                fontWeight: 700,
+              })}
+            >
               {question.emphasisPrefix}
             </Box>
             {question.text}
