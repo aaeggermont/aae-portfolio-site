@@ -3,6 +3,8 @@
 import { Box, Typography } from "@mui/material";
 
 import GatedImage from "@/lib/media/GatedImage";
+import { imageBannerBandContentSx, imageBannerOverlayMaxWidthSx } from "../layoutConfig";
+import { titleTypeSx } from "../typography";
 
 /** Intrinsic dimensions for `GatedImage` / Next `Image` (banner scales to 100% width). */
 const BANNER_INTRINSIC_WIDTH = 1260;
@@ -33,6 +35,8 @@ export default function ImageBanner({ data }: Props) {
     taglineLine2,
   } = data;
 
+  const tagline = [taglineLine1, taglineLine2].filter(Boolean).join(" ");
+
   return (
     <Box
       component="section"
@@ -42,7 +46,7 @@ export default function ImageBanner({ data }: Props) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        width: "100%",
+        ...imageBannerBandContentSx,
       }}
     >
       <Box
@@ -73,42 +77,35 @@ export default function ImageBanner({ data }: Props) {
         sx={{
           position: "absolute",
           left: "50%",
-          bottom: 24,
+          bottom: { xs: 12, sm: 24 },
           transform: "translateX(-50%)",
-          width: "100%",
-          maxWidth: 620,
-          px: { xs: 2, sm: 3 },
-          py: { xs: 1.5, sm: 2 },
+          ...imageBannerOverlayMaxWidthSx,
+          mx: { xs: 1, sm: 0 },
+          px: { xs: 1.25, sm: 3 },
+          py: { xs: 1, sm: 2 },
           borderRadius: "10px",
           backgroundColor: "rgba(52, 50, 50, 0.6)",
           textAlign: "center",
+          boxSizing: "border-box",
         }}
       >
         <Typography
           component="h1"
-          sx={{
-            color: "#f2f2f2",
-            fontWeight: 700,
-            fontSize: { xs: 24, sm: 30, md: 34 },
-            lineHeight: 1.2,
-          }}
+          sx={titleTypeSx("heroTitle", {
+            lineHeight: { xs: 1.15, sm: 1.2 },
+          })}
         >
           {headline}
         </Typography>
 
         <Typography
           component="p"
-          sx={{
-            mt: 1,
-            color: "#ffffff",
-            fontWeight: 500,
-            fontSize: { xs: 18, sm: 22, md: 24 },
-            lineHeight: 1.3,
-          }}
+          sx={titleTypeSx("heroSubtitle", {
+            mt: { xs: 0.75, sm: 1 },
+            lineHeight: { xs: 1.2, sm: 1.25 },
+          })}
         >
-          {taglineLine1}
-          <br />
-          {taglineLine2}
+          {tagline}
         </Typography>
       </Box>
     </Box>

@@ -43,10 +43,10 @@ export const AUTOMATIC_SEATER_EMPHASIS_COLOR = "#EDD84A";
  * - `desktop` -> 1024px+
  */
 export const TYPOGRAPHY = {
-  /** Hero banner headline (`ImageBanner`). */
-  heroTitle: { mobile: "24px", tablet: "30px", desktop: "34px" },
-  /** Hero banner tagline (`ImageBanner`). */
-  heroSubtitle: { mobile: "18px", tablet: "22px", desktop: "24px" },
+  /** Hero banner headline (`ImageBanner`). Desktop: 34px bold. */
+  heroTitle: { mobile: "20px", tablet: "30px", desktop: "34px" },
+  /** Hero banner tagline (`ImageBanner`). Desktop: 24px medium. */
+  heroSubtitle: { mobile: "15px", tablet: "22px", desktop: "24px" },
   /** Top-level section headings (overview, narrative blocks, solution title). */
   sectionTitle: { mobile: "24px", tablet: "30px", desktop: "36px" },
   /** Research method kicker (e.g. “1. Understanding…”). */
@@ -184,7 +184,8 @@ export function titleTypeSx(
   return buildResponsiveTypeSx(scaleKey, {
     fontFamily: AUTOMATIC_SEATER_TITLE_FONT,
     fontWeight: TITLE_FONT_WEIGHT[scaleKey],
-    lineHeight: scaleKey === "heroSubtitle" ? 1.3 : scaleKey === "heroTitle" ? 1.2 : "normal",
+    lineHeight:
+      scaleKey === "heroSubtitle" ? 1.25 : scaleKey === "heroTitle" ? 1.2 : "normal",
     ...(TITLE_COLOR[scaleKey] ? { color: TITLE_COLOR[scaleKey] } : {}),
   }, extra);
 }

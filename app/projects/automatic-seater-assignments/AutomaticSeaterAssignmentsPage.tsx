@@ -44,7 +44,7 @@ export function AutomaticSeaterAssignmentsPage({
         className={styles.page}
         data-viewport-band={viewportBand}
       >
-        <FullBleedBand withVerticalPadding={false}>
+        <FullBleedBand withVerticalPadding={false} constrainContent={false}>
           <ImageBanner data={project.imageBanner} />
         </FullBleedBand>
 

@@ -74,6 +74,47 @@ export const overviewParagraphMaxWidthSx: SxProps<Theme> = {
 };
 
 /**
+ * Frosted title/subtitle overlay on `ImageBanner` — scales with `heroTitle` (20 → 30 → 34px).
+ * Tablet: 755 × (30 / 34) ≈ 665px. Mobile uses full banner width (`100%`).
+ */
+export const IMAGE_BANNER_OVERLAY_MAX_WIDTH = {
+  mobile: "100%",
+  tablet: "665px",
+  desktop: "755px",
+} as const;
+
+/** Centered max-width for the hero banner text overlay. */
+export const imageBannerOverlayMaxWidthSx: SxProps<Theme> = {
+  width: "100%",
+  maxWidth: IMAGE_BANNER_OVERLAY_MAX_WIDTH.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: IMAGE_BANNER_OVERLAY_MAX_WIDTH.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: IMAGE_BANNER_OVERLAY_MAX_WIDTH.desktop,
+  },
+};
+
+/**
+ * `ImageBanner` band — full-bleed to the viewport on mobile; `LAYOUT_DIMENSIONS` from tablet up.
+ */
+export const imageBannerBandContentSx: SxProps<Theme> = {
+  width: "100%",
+  maxWidth: "none",
+  px: 0,
+  mx: "auto",
+  boxSizing: "border-box",
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: LAYOUT_DIMENSIONS.tablet.maxWidth,
+    px: LAYOUT_DIMENSIONS.tablet.margin,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: LAYOUT_DIMENSIONS.desktop.maxWidth,
+    px: LAYOUT_DIMENSIONS.desktop.margin,
+  },
+};
+
+/**
  * Standard `Container` constraints for case-study content inside a full-bleed band.
  * Applies `LAYOUT_DIMENSIONS` max-width and horizontal margins per breakpoint.
  */
