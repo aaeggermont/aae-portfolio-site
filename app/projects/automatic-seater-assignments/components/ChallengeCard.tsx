@@ -7,9 +7,10 @@ import {
   titleTypeSx,
 } from "../typography";
 
+const CHALLENGE_CARD_BACKGROUND = "#FFFFFF";
+
 export type ChallengeCardData = {
   title: string;
-  background: string;
   introParagraph: string;
   question: {
     emphasisPrefix: string;
@@ -22,7 +23,7 @@ type Props = {
 };
 
 export default function ChallengeCard({ data }: Props) {
-  const { title, background, introParagraph, question } = data;
+  const { title, introParagraph, question } = data;
 
   return (
     <Paper
@@ -38,7 +39,7 @@ export default function ChallengeCard({ data }: Props) {
         overflow: "hidden",
         borderTop: 1,
         borderColor: "divider",
-        background,
+        background: CHALLENGE_CARD_BACKGROUND,
       }}
     >
       <Stack spacing={{ xs: 4, sm: 5 }}>

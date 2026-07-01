@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import {
   AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
@@ -49,36 +49,41 @@ export default function MyContributions({ data }: Props) {
       >
         {title}
       </Typography>
-      <List
-        disablePadding
+      <Box
         sx={{
-          maxWidth: 420,
-          mx: "auto",
-          listStyleType: "decimal",
-          pl: 4,
-          color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+          display: "flex",
+          justifyContent: "center",
+          width: "100%",
         }}
       >
-        {items.map((item) => (
-          <ListItem
-            key={item}
-            disableGutters
-            sx={{
-              display: "list-item",
-              py: 0.25,
-            }}
-          >
-            <ListItemText
-              primary={item}
-              primaryTypographyProps={{
-                sx: bodyTypeSx("introCardBody", {
-                  color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
-                }),
-              }}
-            />
-          </ListItem>
-        ))}
-      </List>
+        <Box
+          component="ol"
+          sx={{
+            width: "fit-content",
+            maxWidth: 420,
+            m: 0,
+            py: 0,
+            pl: 2.5,
+            listStyleType: "decimal",
+            listStylePosition: "outside",
+            color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+          }}
+        >
+          {items.map((item) => (
+            <Typography
+              key={item}
+              component="li"
+              sx={bodyTypeSx("introCardBody", {
+                color: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+                display: "list-item",
+                py: 0.25,
+              })}
+            >
+              {item}
+            </Typography>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 }
