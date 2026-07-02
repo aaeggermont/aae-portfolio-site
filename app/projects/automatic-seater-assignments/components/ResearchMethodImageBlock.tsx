@@ -1,10 +1,12 @@
 "use client";
 
 import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
 import { SlideshowLightbox } from "lightbox.js-react";
 
 import GatedImage from "@/lib/media/GatedImage";
 import { useSignedMediaUrl } from "@/lib/media/useSignedMediaUrl";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
 
 export type ResearchMethodImageBlockData = Extract<
@@ -54,12 +56,63 @@ function lightboxIconColorForModalBackground(background: string): string {
   return "#c0c0c0";
 }
 
+type ImageBlockLike = ResearchMethodImageBlockData | StandaloneResearchMethodImageData;
+
+function resolveAspectRatio(block: ImageBlockLike): string {
+  if (block.aspectRatio) return block.aspectRatio;
+  if (block.frameDimensionsPx) {
+    const { width, height } = block.frameDimensionsPx;
+    return `${width} / ${height}`;
+  }
+  return "16 / 9";
+}
+
+function getConstrainedFrameSx(
+  frameDimensionsPx?: { width: number; height: number },
+): SxProps<Theme> {
+  if (!frameDimensionsPx) {
+    return { width: "100%" };
+  }
+
+  return {
+    width: "100%",
+    maxWidth: "100%",
+    [breakpointMediaQuery.desktopUp]: {
+      maxWidth: frameDimensionsPx.width,
+    },
+  };
+}
+
+function getImageFrameSx(
+  ratio: string,
+  frameBg: string,
+  frameDimensionsPx?: { width: number; height: number },
+  options?: { forLoading?: boolean },
+): SxProps<Theme> {
+  return {
+    position: "relative",
+    ...getConstrainedFrameSx(frameDimensionsPx),
+    aspectRatio: ratio,
+    borderRadius: "8px",
+    bgcolor: frameBg,
+    overflow: "hidden",
+    ...(options?.forLoading ? { display: "grid", placeItems: "center" } : {}),
+  };
+}
+
+const rootStackProps = {
+  spacing: 1 as const,
+  px: 2,
+  alignItems: "center" as const,
+  sx: { width: "100%" },
+};
+
 type Props = {
   block: ResearchMethodImageBlockData | StandaloneResearchMethodImageData;
 };
 
 export function ResearchMethodImageBlock({ block }: Props) {
-  const ratio = block.aspectRatio ?? "16 / 9";
+  const ratio = resolveAspectRatio(block);
   const projectKey = block.projectKey ?? DEFAULT_MEDIA_PROJECT_KEY;
   const objectFit = block.objectFit ?? "cover";
   const frameBg =
@@ -79,6 +132,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
         lineHeight: 1.5,
         fontFamily: "'Poppins', Helvetica",
         textAlign: "center",
+        width: "100%",
       }}
     >
       {block.caption}
@@ -95,6 +149,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
         fontSize: { xs: "1rem", md: "1.125rem" },
         textAlign: "center",
         lineHeight: 1.3,
+        width: "100%",
       }}
     >
       {block.title}
@@ -110,6 +165,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
         fontFamily: "'Poppins', Helvetica",
         textAlign: "center",
         fontStyle: "italic",
+        width: "100%",
       }}
     >
       {block.annotation}
@@ -119,7 +175,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
   if (block.lightbox) {
     if (error) {
       return (
-        <Stack spacing={1} px={2}>
+        <Stack {...rootStackProps}>
           <Typography color="error" variant="body2" sx={{ px: 1 }}>
             Image failed: {error}
           </Typography>
@@ -129,18 +185,8 @@ export function ResearchMethodImageBlock({ block }: Props) {
 
     if (!url) {
       return (
-        <Stack spacing={1} px={2}>
-          <Box
-            sx={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: ratio,
-              borderRadius: "8px",
-              bgcolor: frameBg,
-              display: "grid",
-              placeItems: "center",
-            }}
-          >
+        <Stack {...rootStackProps}>
+          <Box sx={getImageFrameSx(ratio, frameBg, block.frameDimensionsPx, { forLoading: true })}>
             <CircularProgress size={32} sx={{ color: "rgba(255,255,255,0.7)" }} />
           </Box>
           {caption}
@@ -153,34 +199,36 @@ export function ResearchMethodImageBlock({ block }: Props) {
       block.lightboxModalBackground ?? DEFAULT_LIGHTBOX_MODAL_BG;
 
     return (
-      <Stack spacing={1} px={2}>
+      <Stack {...rootStackProps}>
         {blockTitle}
-        <SlideshowLightbox
-          framework="next"
-          images={[{ src: url, alt: block.alt }]}
-          lightboxIdentifier={block.id}
-          showThumbnails={false}
-          showSlideshowIcon={false}
-          showNavigationDots={false}
-          backgroundColor={modalBg}
-          iconColor={lightboxIconColorForModalBackground(modalBg)}
-          modalClose="clickOutside"
-        >
-          <img
-            src={url}
-            alt={block.alt}
-            data-lightboxjs={block.id}
-            style={{
-              width: "100%",
-              aspectRatio: ratio,
-              objectFit,
-              borderRadius: 8,
-              backgroundColor: frameBg,
-              display: "block",
-              cursor: "zoom-in",
-            }}
-          />
-        </SlideshowLightbox>
+        <Box sx={getConstrainedFrameSx(block.frameDimensionsPx)}>
+          <SlideshowLightbox
+            framework="next"
+            images={[{ src: url, alt: block.alt }]}
+            lightboxIdentifier={block.id}
+            showThumbnails={false}
+            showSlideshowIcon={false}
+            showNavigationDots={false}
+            backgroundColor={modalBg}
+            iconColor={lightboxIconColorForModalBackground(modalBg)}
+            modalClose="clickOutside"
+          >
+            <img
+              src={url}
+              alt={block.alt}
+              data-lightboxjs={block.id}
+              style={{
+                width: "100%",
+                aspectRatio: ratio,
+                objectFit,
+                borderRadius: 8,
+                backgroundColor: frameBg,
+                display: "block",
+                cursor: "zoom-in",
+              }}
+            />
+          </SlideshowLightbox>
+        </Box>
         {caption}
         {annotation}
       </Stack>
@@ -188,18 +236,9 @@ export function ResearchMethodImageBlock({ block }: Props) {
   }
 
   return (
-    <Stack spacing={1} px={2}>
+    <Stack {...rootStackProps}>
       {blockTitle}
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: ratio,
-          borderRadius: "8px",
-          overflow: "hidden",
-          bgcolor: frameBg,
-        }}
-      >
+      <Box sx={getImageFrameSx(ratio, frameBg, block.frameDimensionsPx)}>
         <Box
           sx={{
             position: "absolute",

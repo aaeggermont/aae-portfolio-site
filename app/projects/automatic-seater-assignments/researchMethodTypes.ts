@@ -91,6 +91,11 @@ export type ResearchCardContentBlock =
       objectFit?: "cover" | "contain";
       aspectRatio?: string;
       /**
+       * Intrinsic frame size in px (e.g. asset dimensions). On desktop (`lg+`) the frame
+       * caps at this width; narrower viewports scale down proportionally via `width: 100%`.
+       */
+      frameDimensionsPx?: { width: number; height: number };
+      /**
        * Area behind the image when `objectFit` is `contain` (letterboxing).
        * Defaults to white for diagrams; use when the asset doesn’t match `aspectRatio`.
        * Use `"transparent"` so the card gradient shows through.
