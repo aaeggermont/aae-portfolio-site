@@ -7,7 +7,8 @@ import {
   layoutContentContainerSx,
 } from "../layoutConfig";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
-import { bodyTypeSx, titleTypeSx } from "../typography";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+import { bodyTypeSx, mergeSx, titleTypeSx } from "../typography";
 
 const narrativeBodySx = bodyTypeSx("narrativeBody", { m: 0 });
 
@@ -17,6 +18,8 @@ export type StandardParagraphBlockProps = {
   paragraphs?: string[];
   paragraphReadMore?: ReadMoreWordConfig;
   bullets?: string[];
+  /** When true, omits the outer `Container` for embedding inside `ResearchMethod` panels. */
+  embedded?: boolean;
   /** Defaults to square markers (current design). */
   bulletMarker?: "square" | "dot" | "dash";
   /** Optional extra spacing above the block wrapper. */
@@ -34,6 +37,7 @@ export function StandardParagraphBlock({
   bulletMarker = "square",
   paddingTop,
   paddingBottom,
+  embedded = false,
 }: StandardParagraphBlockProps) {
   const { isMobile } = useResponsive();
   /** Read-more truncation applies on mobile only; tablet/desktop show full copy. */
@@ -129,130 +133,153 @@ export function StandardParagraphBlock({
     lineHeight: 1.6,
   } as const;
 
-  return (
-    <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: paddingTop, pb: paddingBottom }}>
-        <Stack alignItems="flex-start" spacing={4} sx={{ pb: 8 }}>
-          {title || subtitle ? (
-            <Stack spacing={1} alignSelf="stretch" alignItems="stretch">
-              {title ? (
-                <Typography
-                  component="h2"
-                  textAlign="center"
-                  sx={titleTypeSx("sectionTitle")}
-                >
-                  {title}
-                </Typography>
-              ) : null}
-              {subtitle ? (
-                <Typography
-                  component="p"
-                  textAlign="center"
-                  sx={titleTypeSx("sectionSubtitle", { m: 0 })}
-                >
-                  {subtitle}
-                </Typography>
-              ) : null}
-            </Stack>
+  const content = (
+    <Stack
+      alignItems="flex-start"
+      spacing={4}
+      sx={{
+        width: "100%",
+        pb: embedded ? (paddingBottom ?? 0) : 8,
+        pt: paddingTop ?? 0,
+      }}
+    >
+      {title || subtitle ? (
+        <Stack spacing={1} alignSelf="stretch" alignItems="stretch">
+          {title ? (
+            <Typography
+              component="h2"
+              textAlign="center"
+              sx={titleTypeSx("sectionTitle")}
+            >
+              {title}
+            </Typography>
           ) : null}
-          {paragraphs?.length ? (
-            <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", width: "100%", gap: 3 }}>
-              {displayedParagraphs.map((text, index) => (
-                <Typography
-                  key={index}
-                  component="p"
-                  sx={narrativeBodySx}
-                >
-                  {text}
-                  {!expandedParagraphs &&
-                  hasTruncatedParagraphs &&
-                  index === expandTriggerParagraphIndex ? (
-                    <>
-                      {truncatedParagraphFlags[index] ? "... " : " "}
-                      <Box
-                        component="button"
-                        type="button"
-                        onClick={() => setExpandedParagraphs(true)}
-                        sx={readToggleTextSx}
-                      >
-                        {activeParagraphReadMore?.buttonLabel ?? "Read more"}
-                      </Box>
-                    </>
-                  ) : null}
-                </Typography>
-              ))}
-              {expandedParagraphs && hasTruncatedParagraphs ? (
-                <Box
-                  component="button"
-                  type="button"
-                  onClick={() => setExpandedParagraphs((prev) => !prev)}
-                  sx={{
-                    alignSelf: "flex-start",
-                    ...readToggleTextSx,
-                  }}
-                >
-                  {activeParagraphReadMore?.readLessButtonLabel ?? "Read less"}
-                </Box>
-              ) : null}
-            </Box>
-          ) : null}
-
-          {bullets?.length ? (
-            <Stack spacing={1.5} sx={{ width: "100%" }}>
-              {bullets.map((text, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    display: "grid",
-                    gridTemplateColumns: "auto 1fr",
-                    columnGap: "13px",
-                    alignItems: "start",
-                    ...narrativeBodySx,
-                  }}
-                >
-                  {bulletMarker === "square" ? (
-                    <Box
-                      sx={{
-                        width: 12,
-                        height: 12,
-                        minWidth: 12,
-                        bgcolor: "#e2e3e8",
-                        borderRadius: "4px",
-                        mt: "0.35em",
-                      }}
-                    />
-                  ) : bulletMarker === "dot" ? (
-                    <Box
-                      component="span"
-                      sx={{
-                        width: 8,
-                        height: 8,
-                        minWidth: 8,
-                        borderRadius: "50%",
-                        bgcolor: "#e2e3e8",
-                        mt: "0.45em",
-                      }}
-                    />
-                  ) : (
-                    <Typography
-                      component="span"
-                      sx={{
-                        ...narrativeBodySx,
-                        minWidth: "1em",
-                        mt: "0.2em",
-                      }}
-                    >
-                      —
-                    </Typography>
-                  )}
-
-                  <Typography sx={{ ...narrativeBodySx, minWidth: 0 }}>
-                    {text}
-                  </Typography>
-                </Box>
-              ))}
-            </Stack>
+          {subtitle ? (
+            <Typography
+              component="p"
+              sx={mergeSx(
+                titleTypeSx("sectionSubtitle", { m: 0 }),
+                embedded
+                  ? {
+                      textAlign: "center",
+                      [breakpointMediaQuery.tabletUp]: { textAlign: "left" },
+                    }
+                  : { textAlign: "center" },
+              )}
+            >
+              {subtitle}
+            </Typography>
           ) : null}
         </Stack>
+      ) : null}
+      {paragraphs?.length ? (
+        <Box sx={{ display: "flex", flexDirection: "column", flexWrap: "wrap", width: "100%", gap: 3 }}>
+          {displayedParagraphs.map((text, index) => (
+            <Typography
+              key={index}
+              component="p"
+              sx={narrativeBodySx}
+            >
+              {text}
+              {!expandedParagraphs &&
+              hasTruncatedParagraphs &&
+              index === expandTriggerParagraphIndex ? (
+                <>
+                  {truncatedParagraphFlags[index] ? "... " : " "}
+                  <Box
+                    component="button"
+                    type="button"
+                    onClick={() => setExpandedParagraphs(true)}
+                    sx={readToggleTextSx}
+                  >
+                    {activeParagraphReadMore?.buttonLabel ?? "Read more"}
+                  </Box>
+                </>
+              ) : null}
+            </Typography>
+          ))}
+          {expandedParagraphs && hasTruncatedParagraphs ? (
+            <Box
+              component="button"
+              type="button"
+              onClick={() => setExpandedParagraphs((prev) => !prev)}
+              sx={{
+                alignSelf: "flex-start",
+                ...readToggleTextSx,
+              }}
+            >
+              {activeParagraphReadMore?.readLessButtonLabel ?? "Read less"}
+            </Box>
+          ) : null}
+        </Box>
+      ) : null}
+
+      {bullets?.length ? (
+        <Stack spacing={1.5} sx={{ width: "100%" }}>
+          {bullets.map((text, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "auto 1fr",
+                columnGap: "13px",
+                alignItems: "start",
+                ...narrativeBodySx,
+              }}
+            >
+              {bulletMarker === "square" ? (
+                <Box
+                  sx={{
+                    width: 12,
+                    height: 12,
+                    minWidth: 12,
+                    bgcolor: "#e2e3e8",
+                    borderRadius: "4px",
+                    mt: "0.35em",
+                  }}
+                />
+              ) : bulletMarker === "dot" ? (
+                <Box
+                  component="span"
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    minWidth: 8,
+                    borderRadius: "50%",
+                    bgcolor: "#e2e3e8",
+                    mt: "0.45em",
+                  }}
+                />
+              ) : (
+                <Typography
+                  component="span"
+                  sx={{
+                    ...narrativeBodySx,
+                    minWidth: "1em",
+                    mt: "0.2em",
+                  }}
+                >
+                  —
+                </Typography>
+              )}
+
+              <Typography sx={{ ...narrativeBodySx, minWidth: 0 }}>
+                {text}
+              </Typography>
+            </Box>
+          ))}
+        </Stack>
+      ) : null}
+    </Stack>
+  );
+
+  if (embedded) {
+    return content;
+  }
+
+  return (
+    <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: paddingTop, pb: paddingBottom }}>
+      {content}
     </Container>
   );
 }

@@ -127,10 +127,7 @@ export function AutomaticSeaterAssignmentsPage({
             }}
           >
             {project.researchMethods.map((block) => (
-              <ResearchMethod
-                key={block.id}
-                data={block}
-              />
+              <ResearchMethod key={block.id} data={block} />
             ))}
           </Stack>
 

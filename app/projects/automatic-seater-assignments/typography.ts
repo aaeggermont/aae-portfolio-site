@@ -9,6 +9,13 @@ export const AUTOMATIC_SEATER_TITLE_FONT =
 /** Body copy, descriptions, captions — Poppins (single-family case study). */
 export const AUTOMATIC_SEATER_BODY_FONT = AUTOMATIC_SEATER_TITLE_FONT;
 
+/** Operational persona cards — Inter. */
+export const AUTOMATIC_SEATER_INTER_FONT =
+  'var(--font-inter), "Inter", Helvetica, sans-serif';
+
+/** Operational persona card copy on white surface. */
+export const AUTOMATIC_SEATER_OPERATIONAL_PERSONA_TEXT_COLOR = "#1F2937";
+
 /** Long-form body on dark / gradient bands. */
 export const AUTOMATIC_SEATER_BODY_ON_DARK_COLOR = "#cfcccc";
 
@@ -103,6 +110,14 @@ export const TYPOGRAPHY = {
   figureLabel: { mobile: "14px", tablet: "16px", desktop: "16px" },
   /** Figure interaction hint under illustrations (`ResearchMethodImageBlock` annotation line). */
   figureHint: { mobile: "14px", tablet: "16px", desktop: "16px" },
+  /** `OperationalPersona` title. Desktop: 20px bold. */
+  operationalPersonaTitle: { mobile: "16px", tablet: "18px", desktop: "20px" },
+  /** `OperationalPersona` description. Desktop: 16px regular. */
+  operationalPersonaDescription: { mobile: "14px", tablet: "15px", desktop: "16px" },
+  /** `OperationalPersona` “Key Responsibilities” heading. Desktop: 18px semibold. */
+  operationalPersonaSectionTitle: { mobile: "16px", tablet: "17px", desktop: "18px" },
+  /** `OperationalPersona` responsibility bullets. Desktop: 16px regular. */
+  operationalPersonaBullet: { mobile: "14px", tablet: "15px", desktop: "16px" },
 } as const;
 
 export type TypographyScaleKey = keyof typeof TYPOGRAPHY;
@@ -122,6 +137,7 @@ export type TitleTypographyScaleKey = Extract<
   | "personaTitle"
   | "componentBlockTitle"
   | "methodologyCardTitle"
+  | "operationalPersonaTitle"
 >;
 
 export type BodyTypographyScaleKey = Extract<
@@ -140,6 +156,9 @@ export type BodyTypographyScaleKey = Extract<
   | "caption"
   | "figureLabel"
   | "figureHint"
+  | "operationalPersonaDescription"
+  | "operationalPersonaSectionTitle"
+  | "operationalPersonaBullet"
 >;
 
 const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
@@ -156,6 +175,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
   personaTitle: 800,
   componentBlockTitle: 700,
   methodologyCardTitle: 700,
+  operationalPersonaTitle: 700,
 };
 
 const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
@@ -173,6 +193,9 @@ const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
   caption: 400,
   figureLabel: 500,
   figureHint: 400,
+  operationalPersonaDescription: 400,
+  operationalPersonaSectionTitle: 600,
+  operationalPersonaBullet: 400,
 };
 
 const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
@@ -185,6 +208,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
   cardColumnLabel: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   figureTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   methodologyCardTitle: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+  operationalPersonaTitle: "#000000",
 };
 
 const BODY_COLOR: Partial<Record<BodyTypographyScaleKey, string>> = {
@@ -198,6 +222,9 @@ const BODY_COLOR: Partial<Record<BodyTypographyScaleKey, string>> = {
   researchCardTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   researchCardSubtitle: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   cardBody: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
+  operationalPersonaDescription: AUTOMATIC_SEATER_OPERATIONAL_PERSONA_TEXT_COLOR,
+  operationalPersonaSectionTitle: "#000000",
+  operationalPersonaBullet: AUTOMATIC_SEATER_OPERATIONAL_PERSONA_TEXT_COLOR,
 };
 
 function buildResponsiveTypeSx(
@@ -225,12 +252,17 @@ export function titleTypeSx(
   scaleKey: TitleTypographyScaleKey,
   extra?: SxProps<Theme>,
 ): SxProps<Theme> {
+  const fontFamily =
+    scaleKey === "operationalPersonaTitle"
+      ? AUTOMATIC_SEATER_INTER_FONT
+      : AUTOMATIC_SEATER_TITLE_FONT;
+
   return buildResponsiveTypeSx(scaleKey, {
-    fontFamily: AUTOMATIC_SEATER_TITLE_FONT,
+    fontFamily,
     fontWeight: TITLE_FONT_WEIGHT[scaleKey],
     lineHeight:
       scaleKey === "heroSubtitle" ? 1.25
-      : scaleKey === "heroTitle" || scaleKey === "introCardTitle" || scaleKey === "sectionSubtitle" || scaleKey === "methodologyCardTitle"
+      : scaleKey === "heroTitle" || scaleKey === "introCardTitle" || scaleKey === "sectionSubtitle" || scaleKey === "methodologyCardTitle" || scaleKey === "operationalPersonaTitle"
         ? 1.2
         : "normal",
     ...(TITLE_COLOR[scaleKey] ? { color: TITLE_COLOR[scaleKey] } : {}),
@@ -249,16 +281,24 @@ export function bodyTypeSx(
       : scaleKey === "narrativeBody" ||
           scaleKey === "bodyText" ||
           scaleKey === "overviewBody" ||
-          scaleKey === "methodologyCardBody"
+          scaleKey === "methodologyCardBody" ||
+          scaleKey === "operationalPersonaDescription"
         ? 1.6
-        : scaleKey === "introCardBody" || scaleKey === "methodologyCardAction"
+        : scaleKey === "introCardBody" ||
+            scaleKey === "methodologyCardAction" ||
+            scaleKey === "operationalPersonaSectionTitle"
           ? 1.4
           : 1.35;
 
   return buildResponsiveTypeSx(scaleKey, {
-    fontFamily: AUTOMATIC_SEATER_BODY_FONT,
+    fontFamily:
+      scaleKey === "operationalPersonaDescription" ||
+      scaleKey === "operationalPersonaSectionTitle" ||
+      scaleKey === "operationalPersonaBullet"
+        ? AUTOMATIC_SEATER_INTER_FONT
+        : AUTOMATIC_SEATER_BODY_FONT,
     fontWeight: BODY_FONT_WEIGHT[scaleKey],
-    lineHeight,
+    ...(scaleKey === "operationalPersonaBullet" ? {} : { lineHeight }),
     ...(BODY_COLOR[scaleKey] ? { color: BODY_COLOR[scaleKey] } : {}),
   }, extra);
 }

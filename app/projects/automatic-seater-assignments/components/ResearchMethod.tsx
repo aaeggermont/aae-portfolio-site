@@ -5,6 +5,7 @@ import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import {
   layoutContentContainerSx,
   methodologyCardGridSx,
+  operationalPersonaGridSx,
   researchMethodContentStackSx,
   researchMethodPanelShellSx,
   researchMethodSectionGapSx,
@@ -12,7 +13,9 @@ import {
 import { mergeSx } from "../typography";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { MethodologyCard } from "./MethodologyCard";
+import OperationalPersona from "./OperationalPersona";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
+import StandardParagraphBlock from "./StandardParagraphBlock";
 
 type Props = {
   /** One item from `automaticSeaterAssignmentsDataProject.researchMethods` (static today; Firestore later). */
@@ -28,6 +31,8 @@ export const ResearchMethod = ({ data }: Props) => {
     introParagraphs,
     cards,
     methodologyCards,
+    footerSubtitle,
+    operationalPersonas,
   } = data;
   const { isMobile } = useResponsive();
   /** Read-more truncation applies on mobile only; tablet/desktop show full copy. */
@@ -232,6 +237,23 @@ export const ResearchMethod = ({ data }: Props) => {
                   </Box>
                 ))}
               </Box>
+            </Box>
+          ) : null}
+
+          {footerSubtitle || operationalPersonas?.length ? (
+            <Box sx={researchMethodSectionGapSx}>
+              <Stack spacing={4} sx={{ width: "100%" }}>
+                {footerSubtitle ? (
+                  <StandardParagraphBlock subtitle={footerSubtitle} embedded />
+                ) : null}
+                {operationalPersonas?.length ? (
+                  <Box sx={operationalPersonaGridSx}>
+                    {operationalPersonas.map((persona) => (
+                      <OperationalPersona key={persona.id} {...persona} />
+                    ))}
+                  </Box>
+                ) : null}
+              </Stack>
             </Box>
           ) : null}
         </Box>

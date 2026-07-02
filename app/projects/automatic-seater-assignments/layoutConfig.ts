@@ -331,6 +331,153 @@ export const methodologyCardGridSx: SxProps<Theme> = {
   },
 };
 
+/**
+ * Operational persona card (`OperationalPersona`) — desktop 444 × 505px.
+ * Tablet/mobile sizes scale at ~91% / ~82% of desktop width (same ratio as methodology cards).
+ */
+export const OPERATIONAL_PERSONA_BACKGROUND = "#FFFFFF" as const;
+export const OPERATIONAL_PERSONA_BORDER_RADIUS = "15px";
+
+export const OPERATIONAL_PERSONA_DIMENSIONS = {
+  mobile: { width: 362, height: 404 },
+  tablet: { width: 403, height: 450 },
+  desktop: { width: 444, height: 505 },
+} as const;
+
+export const OPERATIONAL_PERSONA_AVATAR = {
+  mobile: 68,
+  tablet: 76,
+  desktop: 84,
+} as const;
+
+/** Description line height — desktop 20px at 16px font size. */
+export const OPERATIONAL_PERSONA_DESCRIPTION_LINE_HEIGHT = {
+  mobile: 18,
+  tablet: 19,
+  desktop: 20,
+} as const;
+
+export const operationalPersonaDescriptionLineHeightSx: SxProps<Theme> = {
+  lineHeight: `${OPERATIONAL_PERSONA_DESCRIPTION_LINE_HEIGHT.mobile}px`,
+  [breakpointMediaQuery.tabletUp]: {
+    lineHeight: `${OPERATIONAL_PERSONA_DESCRIPTION_LINE_HEIGHT.tablet}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    lineHeight: `${OPERATIONAL_PERSONA_DESCRIPTION_LINE_HEIGHT.desktop}px`,
+  },
+};
+
+/** Bullet copy line height — matches description scale. */
+export const OPERATIONAL_PERSONA_BULLET_LINE_HEIGHT = {
+  mobile: 18,
+  tablet: 19,
+  desktop: 20,
+} as const;
+
+export const operationalPersonaBulletLineHeightSx: SxProps<Theme> = {
+  lineHeight: `${OPERATIONAL_PERSONA_BULLET_LINE_HEIGHT.mobile}px`,
+  [breakpointMediaQuery.tabletUp]: {
+    lineHeight: `${OPERATIONAL_PERSONA_BULLET_LINE_HEIGHT.tablet}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    lineHeight: `${OPERATIONAL_PERSONA_BULLET_LINE_HEIGHT.desktop}px`,
+  },
+};
+
+/**
+ * Space between responsibility bullets (excludes line box).
+ * Desktop: 8px — ~19% below the original 10px margin (10% + 10%).
+ */
+export const OPERATIONAL_PERSONA_BULLET_GAP = {
+  mobile: 3,
+  tablet: 4,
+  desktop: 4,
+} as const;
+
+export const operationalPersonaBulletListSx: SxProps<Theme> = {
+  "& > li:not(:last-of-type)": {
+    marginBottom: `${OPERATIONAL_PERSONA_BULLET_GAP.mobile}px`,
+  },
+  [breakpointMediaQuery.tabletUp]: {
+    "& > li:not(:last-of-type)": {
+      marginBottom: `${OPERATIONAL_PERSONA_BULLET_GAP.tablet}px`,
+    },
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    "& > li:not(:last-of-type)": {
+      marginBottom: `${OPERATIONAL_PERSONA_BULLET_GAP.desktop}px`,
+    },
+  },
+};
+
+export const OPERATIONAL_PERSONA_GRID_GAP = {
+  mobile: 16,
+  tablet: 16,
+  desktop: 32,
+} as const;
+
+export const operationalPersonaCardSx: SxProps<Theme> = {
+  width: "100%",
+  maxWidth: OPERATIONAL_PERSONA_DIMENSIONS.mobile.width,
+  // Mobile: height grows with content so the responsibilities always fit.
+  height: "auto",
+  mx: "auto",
+  boxSizing: "border-box",
+  borderRadius: OPERATIONAL_PERSONA_BORDER_RADIUS,
+  bgcolor: OPERATIONAL_PERSONA_BACKGROUND,
+  px: 3,
+  py: 3,
+  overflow: "hidden",
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: OPERATIONAL_PERSONA_DIMENSIONS.tablet.width,
+    // Tablet: height grows with content; the flex row (`alignItems: stretch`) equalizes both cards.
+    height: "auto",
+    px: 3.5,
+    py: 3.5,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: OPERATIONAL_PERSONA_DIMENSIONS.desktop.width,
+    height: OPERATIONAL_PERSONA_DIMENSIONS.desktop.height,
+    px: 4,
+    py: 4,
+  },
+};
+
+export const operationalPersonaAvatarSx: SxProps<Theme> = {
+  width: OPERATIONAL_PERSONA_AVATAR.mobile,
+  height: OPERATIONAL_PERSONA_AVATAR.mobile,
+  flexShrink: 0,
+  borderRadius: "50%",
+  overflow: "hidden",
+  position: "relative",
+  bgcolor: "#d6d6d6",
+  [breakpointMediaQuery.tabletUp]: {
+    width: OPERATIONAL_PERSONA_AVATAR.tablet,
+    height: OPERATIONAL_PERSONA_AVATAR.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    width: OPERATIONAL_PERSONA_AVATAR.desktop,
+    height: OPERATIONAL_PERSONA_AVATAR.desktop,
+  },
+};
+
+export const operationalPersonaGridSx: SxProps<Theme> = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: `${OPERATIONAL_PERSONA_GRID_GAP.mobile}px`,
+  width: "100%",
+  [breakpointMediaQuery.tabletUp]: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    justifyContent: "center",
+    gap: `${OPERATIONAL_PERSONA_GRID_GAP.tablet}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    gap: `${OPERATIONAL_PERSONA_GRID_GAP.desktop}px`,
+  },
+};
+
 export function challengeCardSx(background: string): SxProps<Theme> {
   return {
     width: "100%",

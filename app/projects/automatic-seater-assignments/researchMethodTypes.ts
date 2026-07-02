@@ -165,6 +165,18 @@ export type MethodologyCardData = {
   readInsightsLabel?: string;
 };
 
+/** Operational persona card (`OperationalPersona`) in a research method panel footer. */
+export type OperationalPersonaData = {
+  id: string;
+  title: string;
+  description: string;
+  responsibilities: string[];
+  /** Firebase Storage path for the circular portrait (e.g. `projects/project_4/Grouper-Persona.png`). */
+  objectPath?: string;
+  alt?: string;
+  projectKey?: string;
+};
+
 /**
  * One research-method block on the page (e.g. “1. Understanding…”) with intro copy
  * and a list of method cards (SME interviews, workshops, etc.).
@@ -186,4 +198,8 @@ export type ResearchMethodBlockData = {
   cards: ResearchMethodCardData[];
   /** Optional methodology insight cards (`MethodologyCard` grid). */
   methodologyCards?: MethodologyCardData[];
+  /** Optional subtitle block rendered after panel cards (e.g. `StandardParagraphBlock`). */
+  footerSubtitle?: string;
+  /** Optional operational persona cards rendered after `footerSubtitle`. */
+  operationalPersonas?: OperationalPersonaData[];
 };
