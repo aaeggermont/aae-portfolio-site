@@ -55,6 +55,8 @@ export const TYPOGRAPHY = {
   heroSubtitle: { mobile: "15px", tablet: "22px", desktop: "24px" },
   /** Top-level section headings (overview, narrative blocks, solution title). */
   sectionTitle: { mobile: "24px", tablet: "30px", desktop: "36px" },
+  /** Subtitle on dark narrative bands (`StandardParagraphBlock`). Desktop: 28px bold. */
+  sectionSubtitle: { mobile: "22px", tablet: "26px", desktop: "28px" },
   /** Intro cards title (`MyContributions`, `ChallengeCard`). Desktop: 28px bold. */
   introCardTitle: { mobile: "22px", tablet: "26px", desktop: "28px" },
   /** Research method kicker (e.g. “1. Understanding…”). */
@@ -100,6 +102,7 @@ export type TitleTypographyScaleKey = Extract<
   | "heroTitle"
   | "heroSubtitle"
   | "sectionTitle"
+  | "sectionSubtitle"
   | "introCardTitle"
   | "methodKicker"
   | "methodTitle"
@@ -128,6 +131,7 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
   heroTitle: 700,
   heroSubtitle: 500,
   sectionTitle: 700,
+  sectionSubtitle: 700,
   introCardTitle: 700,
   methodKicker: 700,
   methodTitle: 700,
@@ -155,6 +159,7 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
   heroTitle: AUTOMATIC_SEATER_HERO_TITLE_COLOR,
   heroSubtitle: AUTOMATIC_SEATER_HERO_SUBTITLE_COLOR,
   sectionTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
+  sectionSubtitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   introCardTitle: AUTOMATIC_SEATER_INTRO_CARD_TITLE_COLOR,
   cardTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   cardColumnLabel: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -202,7 +207,7 @@ export function titleTypeSx(
     fontWeight: TITLE_FONT_WEIGHT[scaleKey],
     lineHeight:
       scaleKey === "heroSubtitle" ? 1.25
-      : scaleKey === "heroTitle" || scaleKey === "introCardTitle"
+      : scaleKey === "heroTitle" || scaleKey === "introCardTitle" || scaleKey === "sectionSubtitle"
         ? 1.2
         : "normal",
     ...(TITLE_COLOR[scaleKey] ? { color: TITLE_COLOR[scaleKey] } : {}),

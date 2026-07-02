@@ -94,8 +94,14 @@ export function AutomaticSeaterAssignmentsPage({
         >
           <StandardParagraphBlock
             title={project.narrative.starToursCaseStudyTitle}
+            subtitle={project.narrative.starToursCaseStudySubtitle}
             paragraphs={project.narrative.starToursIntroParagraphs}
             paragraphReadMore={project.narrative.starToursIntroReadMore}
+          />
+
+          <StandardParagraphBlock
+            subtitle={project.narrative.humanCenteredDesignProcessSubtitle}
+            paragraphs={project.narrative.humanCenteredDesignProcessParagraphs}
           />
 
           <Container maxWidth={false} sx={{ ...layoutContentContainerSx, py: 2 }}>
@@ -106,6 +112,7 @@ export function AutomaticSeaterAssignmentsPage({
 
           <StandardParagraphBlock
             title={project.narrative.userResearchSectionTitle}
+            subtitle={project.narrative.userResearchSectionSubtitle}
             paragraphs={project.narrative.userResearchLeadInParagraphs}
             paragraphReadMore={project.narrative.userResearchLeadInReadMore}
             paddingTop={{ xs: 4, sm: 4, md: 4, lg: 4 }}
@@ -129,6 +136,7 @@ export function AutomaticSeaterAssignmentsPage({
 
           <StandardParagraphBlock
             title={project.sections.finalResultsKeyMetrics.title}
+            subtitle={project.sections.finalResultsKeyMetrics.subtitle}
             bullets={project.sections.finalResultsKeyMetrics.contentBlocks.flatMap(
               (block) => (block.type === "bullets" ? block.items : []),
             )}
@@ -138,6 +146,7 @@ export function AutomaticSeaterAssignmentsPage({
 
           <StandardParagraphBlock
             title={project.sections.nextSteps.title}
+            subtitle={project.sections.nextSteps.subtitle}
             bullets={project.sections.nextSteps.contentBlocks.flatMap((block) =>
               block.type === "bullets" ? block.items : [],
             )}

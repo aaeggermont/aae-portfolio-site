@@ -9,6 +9,8 @@ import {
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { bodyTypeSx, titleTypeSx } from "../typography";
 
+const narrativeBodySx = bodyTypeSx("narrativeBody", { m: 0 });
+
 export type StandardParagraphBlockProps = {
   title?: string;
   subtitle?: string;
@@ -145,7 +147,7 @@ export function StandardParagraphBlock({
                 <Typography
                   component="p"
                   textAlign="center"
-                  sx={bodyTypeSx("sectionSubtitle", { m: 0 })}
+                  sx={titleTypeSx("sectionSubtitle", { m: 0 })}
                 >
                   {subtitle}
                 </Typography>
@@ -158,11 +160,7 @@ export function StandardParagraphBlock({
                 <Typography
                   key={index}
                   component="p"
-                  fontFamily="'Poppins', Helvetica"
-                  fontWeight={500}
-                  color="#cfcccc"
-                  fontSize={{ xs: "1rem", md: "1.1rem", lg: "1.2rem" }}
-                  sx={{ m: 0, lineHeight: "1.6" }}
+                  sx={narrativeBodySx}
                 >
                   {text}
                   {!expandedParagraphs &&
@@ -208,7 +206,7 @@ export function StandardParagraphBlock({
                     gridTemplateColumns: "auto 1fr",
                     columnGap: "13px",
                     alignItems: "start",
-                    fontSize: { xs: "1rem", md: "1.1rem", lg: "1.2rem" },
+                    ...narrativeBodySx,
                   }}
                 >
                   {bulletMarker === "square" ? (
@@ -238,26 +236,16 @@ export function StandardParagraphBlock({
                     <Typography
                       component="span"
                       sx={{
-                        color: "#cfcccc",
-                        fontFamily: "'Poppins', Helvetica",
+                        ...narrativeBodySx,
                         minWidth: "1em",
                         mt: "0.2em",
-                        lineHeight: 1.6,
                       }}
                     >
                       —
                     </Typography>
                   )}
 
-                  <Typography
-                    sx={{
-                      color: "#cfcccc",
-                      lineHeight: 1.6,
-                      fontFamily: "'Poppins', Helvetica",
-                      fontSize: "inherit",
-                      minWidth: 0,
-                    }}
-                  >
+                  <Typography sx={{ ...narrativeBodySx, minWidth: 0 }}>
                     {text}
                   </Typography>
                 </Box>
