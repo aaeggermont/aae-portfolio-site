@@ -159,13 +159,11 @@ export type ResearchMethodCardData = {
 export type ResearchMethodBlockData = {
   /** Stable id for React keys / Firestore (e.g. doc id or slug). */
   id: string;
-  kicker: string;
   title: string;
   /** Background used by the outer method section shell. */
   background: string;
   /** Typography colors for method header and intro copy. */
   textColors: {
-    kicker: string;
     title: string;
     introParagraph: string;
   };

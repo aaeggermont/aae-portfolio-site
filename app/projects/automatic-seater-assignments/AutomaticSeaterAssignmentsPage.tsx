@@ -109,7 +109,7 @@ export function AutomaticSeaterAssignmentsPage({
               block={project.figures.humanCenteredDesignIllustration}
             />
           </Container>
-
+          {/* user research section 
           <StandardParagraphBlock
             title={project.narrative.userResearchSectionTitle}
             subtitle={project.narrative.userResearchSectionSubtitle}
@@ -117,7 +117,7 @@ export function AutomaticSeaterAssignmentsPage({
             paragraphReadMore={project.narrative.userResearchLeadInReadMore}
             paddingTop={{ xs: 4, sm: 4, md: 4, lg: 4 }}
             paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
-          />
+          />*/}
 
           <Stack
             spacing={8}

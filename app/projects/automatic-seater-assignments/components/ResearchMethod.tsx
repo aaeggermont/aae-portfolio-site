@@ -2,6 +2,7 @@ import React from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
 import { breakpointPx } from "@/lib/responsive/breakpoints";
+import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { layoutContentContainerSx } from "../layoutConfig";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
@@ -13,7 +14,6 @@ type Props = {
 
 export const ResearchMethod = ({ data }: Props) => {
   const {
-    kicker,
     title,
     background,
     textColors,
@@ -21,18 +21,21 @@ export const ResearchMethod = ({ data }: Props) => {
     introParagraphs,
     cards,
   } = data;
+  const { isMobile } = useResponsive();
+  /** Read-more truncation applies on mobile only; tablet/desktop show full copy. */
+  const activeIntroParagraphReadMore = isMobile ? introParagraphReadMore : undefined;
   const [expandedIntroParagraphs, setExpandedIntroParagraphs] = React.useState(false);
 
   React.useEffect(() => {
     setExpandedIntroParagraphs(false);
-  }, [introParagraphs, introParagraphReadMore]);
+  }, [introParagraphs, introParagraphReadMore, isMobile]);
 
   const getLimitForParagraphIndex = (index: number): number | undefined => {
-    if (!introParagraphReadMore) return undefined;
-    const mapLimit = introParagraphReadMore.wordLimitsByParagraphIndex?.[index];
+    if (!activeIntroParagraphReadMore) return undefined;
+    const mapLimit = activeIntroParagraphReadMore.wordLimitsByParagraphIndex?.[index];
     if (typeof mapLimit === "number") return mapLimit;
-    if (index === 0) return introParagraphReadMore.firstParagraphWords;
-    if (index === 1) return introParagraphReadMore.secondParagraphWords;
+    if (index === 0) return activeIntroParagraphReadMore.firstParagraphWords;
+    if (index === 1) return activeIntroParagraphReadMore.secondParagraphWords;
     return undefined;
   };
 
@@ -43,8 +46,8 @@ export const ResearchMethod = ({ data }: Props) => {
   };
 
   const displayedIntroParagraphs = React.useMemo(() => {
-    if (expandedIntroParagraphs || !introParagraphReadMore) return introParagraphs;
-    const triggerIndex = introParagraphReadMore.expandTriggerParagraphIndex;
+    if (expandedIntroParagraphs || !activeIntroParagraphReadMore) return introParagraphs;
+    const triggerIndex = activeIntroParagraphReadMore.expandTriggerParagraphIndex;
     const collapsedSource =
       typeof triggerIndex === "number" && triggerIndex >= 0
         ? introParagraphs.slice(0, Math.min(triggerIndex + 1, introParagraphs.length))
@@ -54,11 +57,11 @@ export const ResearchMethod = ({ data }: Props) => {
       if (!limit || limit < 1) return paragraph;
       return truncateAtWordLimit(paragraph, limit);
     });
-  }, [expandedIntroParagraphs, introParagraphReadMore, introParagraphs]);
+  }, [expandedIntroParagraphs, activeIntroParagraphReadMore, introParagraphs]);
 
   const hasTruncatedIntroParagraphs = React.useMemo(() => {
-    if (!introParagraphReadMore) return false;
-    const triggerIndex = introParagraphReadMore.expandTriggerParagraphIndex;
+    if (!activeIntroParagraphReadMore) return false;
+    const triggerIndex = activeIntroParagraphReadMore.expandTriggerParagraphIndex;
     const hasHiddenParagraphs =
       typeof triggerIndex === "number" &&
       triggerIndex >= 0 &&
@@ -68,33 +71,33 @@ export const ResearchMethod = ({ data }: Props) => {
       if (!limit || limit < 1) return false;
       return paragraph.trim().split(/\s+/).length > limit;
     }) || hasHiddenParagraphs;
-  }, [introParagraphReadMore, introParagraphs]);
+  }, [activeIntroParagraphReadMore, introParagraphs]);
 
   const truncatedIntroParagraphFlags = React.useMemo(() => {
-    if (!introParagraphReadMore) return [] as boolean[];
+    if (!activeIntroParagraphReadMore) return [] as boolean[];
     return introParagraphs.map((paragraph, index) => {
       const limit = getLimitForParagraphIndex(index);
       if (!limit || limit < 1) return false;
       return paragraph.trim().split(/\s+/).length > limit;
     });
-  }, [introParagraphReadMore, introParagraphs]);
+  }, [activeIntroParagraphReadMore, introParagraphs]);
 
   const expandTriggerParagraphIndex = React.useMemo(() => {
-    if (!introParagraphReadMore) return -1;
-    if (typeof introParagraphReadMore.expandTriggerParagraphIndex === "number") {
+    if (!activeIntroParagraphReadMore) return -1;
+    if (typeof activeIntroParagraphReadMore.expandTriggerParagraphIndex === "number") {
       return Math.max(
         0,
-        Math.min(introParagraphReadMore.expandTriggerParagraphIndex, introParagraphs.length - 1),
+        Math.min(activeIntroParagraphReadMore.expandTriggerParagraphIndex, introParagraphs.length - 1),
       );
     }
     return truncatedIntroParagraphFlags.findIndex(Boolean);
-  }, [introParagraphReadMore, truncatedIntroParagraphFlags, introParagraphs.length]);
+  }, [activeIntroParagraphReadMore, truncatedIntroParagraphFlags, introParagraphs.length]);
 
-  const readToggleColor = introParagraphReadMore?.textColor ?? textColors.title;
+  const readToggleColor = activeIntroParagraphReadMore?.textColor ?? textColors.title;
   const readToggleFontFamily =
-    introParagraphReadMore?.fontFamily ?? "'Poppins', Helvetica";
-  const readToggleFontWeight = introParagraphReadMore?.fontWeight ?? 600;
-  const readToggleFontSize = introParagraphReadMore?.fontSize ?? "inherit";
+    activeIntroParagraphReadMore?.fontFamily ?? "'Poppins', Helvetica";
+  const readToggleFontWeight = activeIntroParagraphReadMore?.fontWeight ?? 600;
+  const readToggleFontSize = activeIntroParagraphReadMore?.fontSize ?? "inherit";
   const readToggleTextSx = {
     border: "none",
     background: "transparent",
@@ -126,19 +129,6 @@ export const ResearchMethod = ({ data }: Props) => {
         }}
       >
         <Stack spacing={0} mb={2} px={2}>
-          <Typography
-            variant="subtitle1"
-            sx={{
-              fontFamily: "'Poppins', Helvetica",
-              fontWeight: "bold",
-              color: textColors.kicker,
-              fontSize: { xs: "1.1rem", md: "1.2rem", lg: "1.4rem" },
-              lineHeight: "normal",
-              textAlign: { xs: "center", md: "left", lg: "left" },
-            }}
-          >
-            {kicker}
-          </Typography>
           <Typography
             variant="h3"
             sx={{
@@ -178,7 +168,7 @@ export const ResearchMethod = ({ data }: Props) => {
                       onClick={() => setExpandedIntroParagraphs(true)}
                       sx={readToggleTextSx}
                     >
-                      {introParagraphReadMore?.buttonLabel ?? "Read more"}
+                      {activeIntroParagraphReadMore?.buttonLabel ?? "Read more"}
                     </Box>
                   </>
                 ) : null}
@@ -194,12 +184,13 @@ export const ResearchMethod = ({ data }: Props) => {
                   ...readToggleTextSx,
                 }}
               >
-                {introParagraphReadMore?.readLessButtonLabel ?? "Read less"}
+                {activeIntroParagraphReadMore?.readLessButtonLabel ?? "Read less"}
               </Box>
             ) : null}
           </Stack>
         </Box>
 
+        {cards.length > 0 ? (
         <Box
           sx={{
             display: "flex",
@@ -219,6 +210,7 @@ export const ResearchMethod = ({ data }: Props) => {
             </Box>
           ))}
         </Box>
+        ) : null}
       </Box>
     </Container>
   );
