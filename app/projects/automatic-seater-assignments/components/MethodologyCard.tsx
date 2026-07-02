@@ -10,6 +10,7 @@ import {
   methodologyCardReadInsightsIconSx,
   methodologyCardReadInsightsRowSx,
 } from "../layoutConfig";
+import { methodologyCardHoverSx, METHODOLOGY_CARD_HOVER_BG_COLOR } from "./interactiveCardStyles";
 
 export type MethodologyCardProps = {
   title: string;
@@ -27,11 +28,14 @@ export const MethodologyCard = ({
   return (
     <Box
       component="article"
-      sx={mergeSx(methodologyCardDimensionsSx, {
+      sx={mergeSx(methodologyCardDimensionsSx, methodologyCardHoverSx, {
         bgcolor: METHODOLOGY_CARD_BACKGROUND,
         borderRadius: 4,
-        boxShadow: "0px 8px 18px rgba(0,0,0,0.18)",
         overflow: "hidden",
+        "&:hover": {
+          ...methodologyCardHoverSx["&:hover"],
+          bgcolor: METHODOLOGY_CARD_HOVER_BG_COLOR,
+        },
       })}
     >
       <Stack
