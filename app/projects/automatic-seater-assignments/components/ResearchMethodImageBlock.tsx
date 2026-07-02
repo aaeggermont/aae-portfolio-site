@@ -8,6 +8,7 @@ import GatedImage from "@/lib/media/GatedImage";
 import { useSignedMediaUrl } from "@/lib/media/useSignedMediaUrl";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
+import { bodyTypeSx } from "../typography";
 
 export type ResearchMethodImageBlockData = Extract<
   ResearchCardContentBlock,
@@ -126,14 +127,12 @@ export function ResearchMethodImageBlock({ block }: Props) {
 
   const caption = block.caption ? (
     <Typography
-      sx={{
+      sx={bodyTypeSx("figureLabel", {
         color: captionColor,
-        fontSize: "12px",
-        lineHeight: 1.5,
-        fontFamily: "'Poppins', Helvetica",
         textAlign: "center",
         width: "100%",
-      }}
+        m: 0,
+      })}
     >
       {block.caption}
     </Typography>
@@ -158,19 +157,36 @@ export function ResearchMethodImageBlock({ block }: Props) {
 
   const annotation = block.annotation ? (
     <Typography
-      sx={{
-        color: annotationColor,
-        fontSize: "12px",
-        lineHeight: 1.5,
-        fontFamily: "'Poppins', Helvetica",
-        textAlign: "center",
-        fontStyle: "italic",
-        width: "100%",
-      }}
+      sx={
+        block.caption
+          ? bodyTypeSx("figureHint", {
+              color: annotationColor,
+              textAlign: "center",
+              width: "100%",
+              m: 0,
+            })
+          : {
+              color: annotationColor,
+              fontSize: "12px",
+              lineHeight: 1.5,
+              fontFamily: "'Poppins', Helvetica",
+              textAlign: "center",
+              fontStyle: "italic",
+              width: "100%",
+            }
+      }
     >
       {block.annotation}
     </Typography>
   ) : null;
+
+  const figureFooter =
+    block.caption || block.annotation ? (
+      <Stack spacing={0.5} alignItems="center" sx={{ width: "100%" }}>
+        {caption}
+        {annotation}
+      </Stack>
+    ) : null;
 
   if (block.lightbox) {
     if (error) {
@@ -189,8 +205,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
           <Box sx={getImageFrameSx(ratio, frameBg, block.frameDimensionsPx, { forLoading: true })}>
             <CircularProgress size={32} sx={{ color: "rgba(255,255,255,0.7)" }} />
           </Box>
-          {caption}
-          {annotation}
+          {figureFooter}
         </Stack>
       );
     }
@@ -229,8 +244,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
             />
           </SlideshowLightbox>
         </Box>
-        {caption}
-        {annotation}
+        {figureFooter}
       </Stack>
     );
   }
@@ -260,8 +274,7 @@ export function ResearchMethodImageBlock({ block }: Props) {
           />
         </Box>
       </Box>
-      {caption}
-      {annotation}
+      {figureFooter}
     </Stack>
   );
 }

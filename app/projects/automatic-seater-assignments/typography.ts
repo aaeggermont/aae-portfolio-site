@@ -97,8 +97,12 @@ export const TYPOGRAPHY = {
   researchCardSubtitle: { mobile: "14px", tablet: "14px", desktop: "14px" },
   /** Card list items and column values. */
   cardBody: { mobile: "14px", tablet: "16px", desktop: "18px" },
-  /** Image captions and annotations. */
+  /** Image captions and annotations (legacy single-line hint). */
   caption: { mobile: "12px", tablet: "12px", desktop: "12px" },
+  /** Figure label under illustrations (`ResearchMethodImageBlock` caption line). */
+  figureLabel: { mobile: "14px", tablet: "16px", desktop: "16px" },
+  /** Figure interaction hint under illustrations (`ResearchMethodImageBlock` annotation line). */
+  figureHint: { mobile: "14px", tablet: "16px", desktop: "16px" },
 } as const;
 
 export type TypographyScaleKey = keyof typeof TYPOGRAPHY;
@@ -134,6 +138,8 @@ export type BodyTypographyScaleKey = Extract<
   | "researchCardSubtitle"
   | "cardBody"
   | "caption"
+  | "figureLabel"
+  | "figureHint"
 >;
 
 const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
@@ -165,6 +171,8 @@ const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
   researchCardSubtitle: 400,
   cardBody: 400,
   caption: 400,
+  figureLabel: 500,
+  figureHint: 400,
 };
 
 const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
@@ -236,6 +244,8 @@ export function bodyTypeSx(
   const lineHeight =
     scaleKey === "caption"
       ? 1.35
+      : scaleKey === "figureLabel" || scaleKey === "figureHint"
+        ? 1.5
       : scaleKey === "narrativeBody" ||
           scaleKey === "bodyText" ||
           scaleKey === "overviewBody" ||
