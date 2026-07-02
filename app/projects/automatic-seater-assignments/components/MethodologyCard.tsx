@@ -1,8 +1,9 @@
 import AddIcon from "@mui/icons-material/Add";
 import { Box, ButtonBase, Stack, Typography } from "@mui/material";
 
-import { bodyTypeSx, titleTypeSx } from "../typography";
+import { bodyTypeSx, mergeSx, titleTypeSx } from "../typography";
 import {
+  METHODOLOGY_CARD_BACKGROUND,
   methodologyCardDescriptionMaxWidthSx,
   methodologyCardDimensionsSx,
   methodologyCardReadInsightsGlyphSx,
@@ -22,17 +23,16 @@ export const MethodologyCard = ({
   description,
   readInsightsLabel = "Read insights",
   onReadInsights,
-}: MethodologyCardProps): JSX.Element => {
+}: MethodologyCardProps) => {
   return (
     <Box
       component="article"
-      sx={{
-        ...methodologyCardDimensionsSx,
-        bgcolor: "#f1f1f1",
+      sx={mergeSx(methodologyCardDimensionsSx, {
+        bgcolor: METHODOLOGY_CARD_BACKGROUND,
         borderRadius: 4,
         boxShadow: "0px 8px 18px rgba(0,0,0,0.18)",
         overflow: "hidden",
-      }}
+      })}
     >
       <Stack
         justifyContent="space-between"
@@ -54,12 +54,10 @@ export const MethodologyCard = ({
         </Stack>
         <Typography
           component="p"
-          sx={{
-            ...bodyTypeSx("methodologyCardBody", { m: 0 }),
-            ...methodologyCardDescriptionMaxWidthSx,
+          sx={mergeSx(bodyTypeSx("methodologyCardBody", { m: 0 }), methodologyCardDescriptionMaxWidthSx, {
             letterSpacing: 0,
             alignSelf: "flex-start",
-          }}
+          })}
         >
           {description}
         </Typography>

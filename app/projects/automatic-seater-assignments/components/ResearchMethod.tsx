@@ -1,9 +1,16 @@
 import React from "react";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
-import { breakpointPx, breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
-import { layoutContentContainerSx } from "../layoutConfig";
+import {
+  layoutContentContainerSx,
+  methodologyCardGridSx,
+  researchMethodContentBlockGapPtSx,
+  researchMethodContentStackSx,
+  researchMethodIntroCopyStackSx,
+  researchMethodPanelShellSx,
+} from "../layoutConfig";
+import { mergeSx } from "../typography";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
 import { MethodologyCard } from "./MethodologyCard";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
@@ -114,23 +121,24 @@ export const ResearchMethod = ({ data }: Props) => {
     lineHeight: 1.6,
   } as const;
 
+  const introCopySx =
+    displayedIntroParagraphs.length > 1 || (expandedIntroParagraphs && hasTruncatedIntroParagraphs)
+      ? researchMethodIntroCopyStackSx
+      : undefined;
+
   return (
     <Container maxWidth={false} sx={layoutContentContainerSx}>
       <Box
-        sx={{
-          width: "100%",
-          maxWidth: { xs: 655, md: 815, lg: 960, xl: 960 },
-          minWidth: breakpointPx.mobileMin,
-          mx: "auto",
+        sx={mergeSx(researchMethodPanelShellSx, {
           borderRadius: "32px",
           overflow: "hidden",
           borderTop: "1px solid #a8a8a8",
           background,
           py: { xs: 3, md: 6, lg: 8 },
           px: { xs: 3, md: 6, lg: 8 },
-        }}
+        })}
       >
-        <Stack spacing={0} mb={2} px={2}>
+        <Box sx={researchMethodContentStackSx}>
           <Typography
             variant="h3"
             sx={{
@@ -140,104 +148,99 @@ export const ResearchMethod = ({ data }: Props) => {
               fontSize: { xs: "1.1rem", md: "1.8rem", lg: "2rem" },
               textAlign: { xs: "center", md: "left", lg: "left" },
               lineHeight: "normal",
+              m: 0,
             }}
           >
             {title}
           </Typography>
-        </Stack>
 
-        <Box p={2}>
-          <Stack spacing={2}>
-            {displayedIntroParagraphs.map((paragraph, i) => (
-              <Typography
-                key={`intro-${i}`}
-                sx={{
-                  color: textColors.introParagraph,
-                  fontSize: { xs: "1rem", md: "1.1rem", lg: "1.2rem" },
-                  lineHeight: 1.6,
-                  fontFamily: "'Poppins', Helvetica",
-                }}
-              >
-                {paragraph}
-                {!expandedIntroParagraphs &&
-                hasTruncatedIntroParagraphs &&
-                i === expandTriggerParagraphIndex ? (
-                  <>
-                    {truncatedIntroParagraphFlags[i] ? "... " : " "}
-                    <Box
-                      component="button"
-                      type="button"
-                      onClick={() => setExpandedIntroParagraphs(true)}
-                      sx={readToggleTextSx}
-                    >
-                      {activeIntroParagraphReadMore?.buttonLabel ?? "Read more"}
-                    </Box>
-                  </>
+          {displayedIntroParagraphs.length > 0 ? (
+            <Box sx={researchMethodContentBlockGapPtSx}>
+              <Box sx={introCopySx}>
+                {displayedIntroParagraphs.map((paragraph, i) => (
+                  <Typography
+                    key={`intro-${i}`}
+                    component="p"
+                    sx={{
+                      color: textColors.introParagraph,
+                      fontSize: { xs: "1rem", md: "1.1rem", lg: "1.2rem" },
+                      lineHeight: 1.6,
+                      fontFamily: "'Poppins', Helvetica",
+                      m: 0,
+                    }}
+                  >
+                    {paragraph}
+                    {!expandedIntroParagraphs &&
+                    hasTruncatedIntroParagraphs &&
+                    i === expandTriggerParagraphIndex ? (
+                      <>
+                        {truncatedIntroParagraphFlags[i] ? "... " : " "}
+                        <Box
+                          component="button"
+                          type="button"
+                          onClick={() => setExpandedIntroParagraphs(true)}
+                          sx={readToggleTextSx}
+                        >
+                          {activeIntroParagraphReadMore?.buttonLabel ?? "Read more"}
+                        </Box>
+                      </>
+                    ) : null}
+                  </Typography>
+                ))}
+                {expandedIntroParagraphs && hasTruncatedIntroParagraphs ? (
+                  <Box
+                    component="button"
+                    type="button"
+                    onClick={() => setExpandedIntroParagraphs((prev) => !prev)}
+                    sx={{
+                      alignSelf: "flex-start",
+                      ...readToggleTextSx,
+                    }}
+                  >
+                    {activeIntroParagraphReadMore?.readLessButtonLabel ?? "Read less"}
+                  </Box>
                 ) : null}
-              </Typography>
-            ))}
-            {expandedIntroParagraphs && hasTruncatedIntroParagraphs ? (
+              </Box>
+            </Box>
+          ) : null}
+
+          {methodologyCards && methodologyCards.length > 0 ? (
+            <Box sx={researchMethodContentBlockGapPtSx}>
+              <Box sx={methodologyCardGridSx}>
+                {methodologyCards.map((card) => (
+                  <MethodologyCard
+                    key={card.id}
+                    title={card.title}
+                    description={card.description}
+                    readInsightsLabel={card.readInsightsLabel}
+                  />
+                ))}
+              </Box>
+            </Box>
+          ) : null}
+
+          {cards.length > 0 ? (
+            <Box sx={researchMethodContentBlockGapPtSx}>
               <Box
-                component="button"
-                type="button"
-                onClick={() => setExpandedIntroParagraphs((prev) => !prev)}
                 sx={{
-                  alignSelf: "flex-start",
-                  ...readToggleTextSx,
+                  display: "flex",
+                  flexDirection: { xs: "column", lg: "row" },
+                  gap: 2,
+                  justifyContent: "space-between",
                 }}
               >
-                {activeIntroParagraphReadMore?.readLessButtonLabel ?? "Read less"}
+                {cards.map((card) => (
+                  <Box
+                    key={card.id}
+                    sx={{ flex: { xs: "1 1 auto", lg: "1 1 0" }, minWidth: 0 }}
+                  >
+                    <ResearchMethodCardShell card={card} />
+                  </Box>
+                ))}
               </Box>
-            ) : null}
-          </Stack>
-        </Box>
-
-        {methodologyCards && methodologyCards.length > 0 ? (
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr",
-              gap: 2,
-              mt: 1,
-              px: 2,
-              justifyItems: "center",
-              [breakpointMediaQuery.tabletUp]: {
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-              },
-            }}
-          >
-            {methodologyCards.map((card) => (
-              <MethodologyCard
-                key={card.id}
-                title={card.title}
-                description={card.description}
-                readInsightsLabel={card.readInsightsLabel}
-              />
-            ))}
-          </Box>
-        ) : null}
-
-        {cards.length > 0 ? (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", lg: "row" },
-            gap: 2,
-            mt: 1,
-            px: 2,
-            justifyContent: "space-between",
-          }}
-        >
-          {cards.map((card) => (
-            <Box
-              key={card.id}
-              sx={{ flex: { xs: "1 1 auto", lg: "1 1 0" }, minWidth: 0 }}
-            >
-              <ResearchMethodCardShell card={card} />
             </Box>
-          ))}
+          ) : null}
         </Box>
-        ) : null}
       </Box>
     </Container>
   );

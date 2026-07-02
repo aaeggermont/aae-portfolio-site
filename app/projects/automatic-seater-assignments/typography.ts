@@ -260,3 +260,41 @@ export function typographySize(
 ): string {
   return TYPOGRAPHY[scaleKey][breakpoint];
 }
+
+/** Merge multiple `sx` values; deep-merges `@media` blocks so responsive rules are not clobbered. */
+export function mergeSx(...styles: Array<SxProps<Theme> | undefined>): SxProps<Theme> {
+  const merged: Record<string, unknown> = {};
+
+  const mergeInto = (target: Record<string, unknown>, source: Record<string, unknown>) => {
+    for (const [key, value] of Object.entries(source)) {
+      if (
+        key.startsWith("@media") &&
+        typeof target[key] === "object" &&
+        target[key] != null &&
+        !Array.isArray(target[key]) &&
+        typeof value === "object" &&
+        value != null &&
+        !Array.isArray(value)
+      ) {
+        mergeInto(target[key] as Record<string, unknown>, value as Record<string, unknown>);
+        continue;
+      }
+
+      target[key] = value;
+    }
+  };
+
+  for (const style of styles) {
+    if (style == null) continue;
+
+    const parts = Array.isArray(style) ? style : [style];
+    for (const part of parts) {
+      if (typeof part === "function") continue;
+      if (typeof part === "object" && part != null) {
+        mergeInto(merged, part as Record<string, unknown>);
+      }
+    }
+  }
+
+  return merged as SxProps<Theme>;
+}

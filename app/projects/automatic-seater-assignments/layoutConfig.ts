@@ -53,6 +53,69 @@ export const getUsableLayoutWidth = (
 /** Desktop usable content width (`1260 − 2 × 80`) — shared inset panel cap. */
 export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth("desktop");
 
+/** Outer shell max-width for `ResearchMethod` panels (capped by usable layout width). */
+export const RESEARCH_METHOD_PANEL_MAX_WIDTH_PX = 1100;
+
+export const RESEARCH_METHOD_PANEL_MAX_WIDTH = {
+  mobile: "100%",
+  tablet: `${Math.min(RESEARCH_METHOD_PANEL_MAX_WIDTH_PX, getUsableLayoutWidth("tablet"))}px`,
+  desktop: `${Math.min(RESEARCH_METHOD_PANEL_MAX_WIDTH_PX, getUsableLayoutWidth("desktop"))}px`,
+} as const;
+
+export const researchMethodPanelShellSx: SxProps<Theme> = {
+  width: "100%",
+  maxWidth: RESEARCH_METHOD_PANEL_MAX_WIDTH.mobile,
+  mx: "auto",
+  boxSizing: "border-box",
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: RESEARCH_METHOD_PANEL_MAX_WIDTH.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: RESEARCH_METHOD_PANEL_MAX_WIDTH.desktop,
+  },
+};
+
+/**
+ * Vertical gap between major content blocks in `ResearchMethod`
+ * (title, intro copy, methodology cards, legacy cards). Desktop: 16px.
+ */
+export const RESEARCH_METHOD_CONTENT_BLOCK_GAP = {
+  mobile: 12,
+  tablet: 14,
+  desktop: 16,
+} as const;
+
+export const researchMethodContentStackSx: SxProps<Theme> = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "stretch",
+  width: "100%",
+};
+
+/** Top padding before a block that follows another inside `ResearchMethod`. */
+export const researchMethodContentBlockGapPtSx: SxProps<Theme> = {
+  paddingTop: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.mobile}px`,
+  [breakpointMediaQuery.tabletUp]: {
+    paddingTop: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.tablet}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    paddingTop: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.desktop}px`,
+  },
+};
+
+/** Vertical gap between sibling copy inside one intro block. */
+export const researchMethodIntroCopyStackSx: SxProps<Theme> = {
+  display: "flex",
+  flexDirection: "column",
+  rowGap: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.mobile}px`,
+  [breakpointMediaQuery.tabletUp]: {
+    rowGap: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.tablet}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    rowGap: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.desktop}px`,
+  },
+};
+
 /**
  * Overview intro paragraph measure — scales with `overviewBody` typography (18 → 20 → 22px).
  * Tablet value: 660 × (20 / 22) ≈ 600px. Mobile uses the layout column (`100%`).
@@ -161,6 +224,8 @@ export const INTRO_CARD_MAX_WIDTH = MY_CONTRIBUTIONS_CARD_MAX_WIDTH;
  * Methodology insight card (`MethodologyCard`) — scales with `methodologyCardTitle`
  * (16 → 20 → 22px). Desktop: 380 × 360px.
  */
+export const METHODOLOGY_CARD_BACKGROUND = "#F1F1F1" as const;
+
 export const METHODOLOGY_CARD_DIMENSIONS = {
   mobile: { width: 310, height: 294 },
   tablet: { width: 345, height: 327 },
@@ -180,12 +245,12 @@ export const methodologyCardDimensionsSx: SxProps<Theme> = {
   height: METHODOLOGY_CARD_DIMENSIONS.mobile.height,
   mx: "auto",
   boxSizing: "border-box",
+  justifySelf: "stretch",
   [breakpointMediaQuery.tabletUp]: {
-    maxWidth: METHODOLOGY_CARD_DIMENSIONS.tablet.width,
+    maxWidth: "none",
     height: METHODOLOGY_CARD_DIMENSIONS.tablet.height,
   },
   [breakpointMediaQuery.desktopUp]: {
-    maxWidth: METHODOLOGY_CARD_DIMENSIONS.desktop.width,
     height: METHODOLOGY_CARD_DIMENSIONS.desktop.height,
   },
 };
@@ -250,6 +315,33 @@ export const methodologyCardReadInsightsGlyphSx: SxProps<Theme> = {
   },
 };
 
+/** Grid gap between `MethodologyCard` items in `ResearchMethod`. */
+export const METHODOLOGY_CARD_GRID_GAP = {
+  mobile: 16,
+  tablet: 16,
+  desktop: 32,
+} as const;
+
+export const methodologyCardGridSx: SxProps<Theme> = {
+  display: "grid",
+  gridTemplateColumns: "1fr",
+  rowGap: `${METHODOLOGY_CARD_GRID_GAP.mobile}px`,
+  columnGap: `${METHODOLOGY_CARD_GRID_GAP.mobile}px`,
+  justifyItems: "center",
+  justifyContent: "center",
+  [breakpointMediaQuery.tabletUp]: {
+    gridTemplateColumns: `repeat(2, ${METHODOLOGY_CARD_DIMENSIONS.tablet.width}px)`,
+    rowGap: `${METHODOLOGY_CARD_GRID_GAP.tablet}px`,
+    columnGap: `${METHODOLOGY_CARD_GRID_GAP.tablet}px`,
+    justifyItems: "stretch",
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    gridTemplateColumns: `repeat(2, ${METHODOLOGY_CARD_DIMENSIONS.desktop.width}px)`,
+    rowGap: `${METHODOLOGY_CARD_GRID_GAP.desktop}px`,
+    columnGap: `${METHODOLOGY_CARD_GRID_GAP.desktop}px`,
+  },
+};
+
 export function challengeCardSx(background: string): SxProps<Theme> {
   return {
     width: "100%",
@@ -276,16 +368,17 @@ export function challengeCardSx(background: string): SxProps<Theme> {
  * Applies `LAYOUT_DIMENSIONS` max-width and horizontal margins per breakpoint.
  */
 export const layoutContentContainerSx: SxProps<Theme> = {
-  maxWidth: {
-    xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
-    md: LAYOUT_DIMENSIONS.tablet.maxWidth,
-    lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
-  },
+  width: "100%",
+  maxWidth: LAYOUT_DIMENSIONS.mobile.maxWidth,
+  mx: "auto",
+  boxSizing: "border-box",
   px: LAYOUT_DIMENSIONS.mobile.margin,
   [breakpointMediaQuery.tabletUp]: {
+    maxWidth: LAYOUT_DIMENSIONS.tablet.maxWidth,
     px: LAYOUT_DIMENSIONS.tablet.margin,
   },
   [breakpointMediaQuery.desktopUp]: {
+    maxWidth: LAYOUT_DIMENSIONS.desktop.maxWidth,
     px: LAYOUT_DIMENSIONS.desktop.margin,
   },
 };

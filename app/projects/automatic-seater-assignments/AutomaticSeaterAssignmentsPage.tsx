@@ -123,7 +123,7 @@ export function AutomaticSeaterAssignmentsPage({
             spacing={8}
             sx={{
               width: "100%",
-              alignItems: "stretch",
+              alignItems: "center",
             }}
           >
             {project.researchMethods.map((block) => (
