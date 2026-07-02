@@ -1,10 +1,11 @@
 import React from "react";
 import { Box, Container, Stack, Typography } from "@mui/material";
 
-import { breakpointPx } from "@/lib/responsive/breakpoints";
+import { breakpointPx, breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { layoutContentContainerSx } from "../layoutConfig";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
+import { MethodologyCard } from "./MethodologyCard";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
 
 type Props = {
@@ -20,6 +21,7 @@ export const ResearchMethod = ({ data }: Props) => {
     introParagraphReadMore,
     introParagraphs,
     cards,
+    methodologyCards,
   } = data;
   const { isMobile } = useResponsive();
   /** Read-more truncation applies on mobile only; tablet/desktop show full copy. */
@@ -189,6 +191,31 @@ export const ResearchMethod = ({ data }: Props) => {
             ) : null}
           </Stack>
         </Box>
+
+        {methodologyCards && methodologyCards.length > 0 ? (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 2,
+              mt: 1,
+              px: 2,
+              justifyItems: "center",
+              [breakpointMediaQuery.tabletUp]: {
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              },
+            }}
+          >
+            {methodologyCards.map((card) => (
+              <MethodologyCard
+                key={card.id}
+                title={card.title}
+                description={card.description}
+                readInsightsLabel={card.readInsightsLabel}
+              />
+            ))}
+          </Box>
+        ) : null}
 
         {cards.length > 0 ? (
         <Box

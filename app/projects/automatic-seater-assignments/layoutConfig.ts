@@ -157,6 +157,99 @@ export const myContributionsListSx: SxProps<Theme> = {
 /** Shared max-width for intro cards (`MyContributions`, `ChallengeCard`). */
 export const INTRO_CARD_MAX_WIDTH = MY_CONTRIBUTIONS_CARD_MAX_WIDTH;
 
+/**
+ * Methodology insight card (`MethodologyCard`) — scales with `methodologyCardTitle`
+ * (16 → 20 → 22px). Desktop: 380 × 360px.
+ */
+export const METHODOLOGY_CARD_DIMENSIONS = {
+  mobile: { width: 310, height: 294 },
+  tablet: { width: 345, height: 327 },
+  desktop: { width: 380, height: 360 },
+} as const;
+
+/** Description measure inside the card — ~83% of card width at each breakpoint. */
+export const METHODOLOGY_CARD_DESCRIPTION_MAX_WIDTH = {
+  mobile: 258,
+  tablet: 287,
+  desktop: 316,
+} as const;
+
+export const methodologyCardDimensionsSx: SxProps<Theme> = {
+  width: "100%",
+  maxWidth: METHODOLOGY_CARD_DIMENSIONS.mobile.width,
+  height: METHODOLOGY_CARD_DIMENSIONS.mobile.height,
+  mx: "auto",
+  boxSizing: "border-box",
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: METHODOLOGY_CARD_DIMENSIONS.tablet.width,
+    height: METHODOLOGY_CARD_DIMENSIONS.tablet.height,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: METHODOLOGY_CARD_DIMENSIONS.desktop.width,
+    height: METHODOLOGY_CARD_DIMENSIONS.desktop.height,
+  },
+};
+
+export const methodologyCardDescriptionMaxWidthSx: SxProps<Theme> = {
+  maxWidth: METHODOLOGY_CARD_DESCRIPTION_MAX_WIDTH.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    maxWidth: METHODOLOGY_CARD_DESCRIPTION_MAX_WIDTH.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: METHODOLOGY_CARD_DESCRIPTION_MAX_WIDTH.desktop,
+  },
+};
+
+/**
+ * “Read insights” control — scales with `methodologyCardTitle` (16 → 20 → 22px).
+ * Desktop: 20px icon, 12px glyph, 8px gap.
+ */
+export const METHODOLOGY_CARD_READ_INSIGHTS = {
+  mobile: { iconDiameter: 15, iconGlyph: 9, gap: 6 },
+  tablet: { iconDiameter: 18, iconGlyph: 11, gap: 7 },
+  desktop: { iconDiameter: 20, iconGlyph: 12, gap: 8 },
+} as const;
+
+export const methodologyCardReadInsightsRowSx: SxProps<Theme> = {
+  gap: `${METHODOLOGY_CARD_READ_INSIGHTS.mobile.gap}px`,
+  [breakpointMediaQuery.tabletUp]: {
+    gap: `${METHODOLOGY_CARD_READ_INSIGHTS.tablet.gap}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    gap: `${METHODOLOGY_CARD_READ_INSIGHTS.desktop.gap}px`,
+  },
+};
+
+export const methodologyCardReadInsightsIconSx: SxProps<Theme> = {
+  width: METHODOLOGY_CARD_READ_INSIGHTS.mobile.iconDiameter,
+  height: METHODOLOGY_CARD_READ_INSIGHTS.mobile.iconDiameter,
+  borderRadius: "50%",
+  bgcolor: "#003366",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+  [breakpointMediaQuery.tabletUp]: {
+    width: METHODOLOGY_CARD_READ_INSIGHTS.tablet.iconDiameter,
+    height: METHODOLOGY_CARD_READ_INSIGHTS.tablet.iconDiameter,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    width: METHODOLOGY_CARD_READ_INSIGHTS.desktop.iconDiameter,
+    height: METHODOLOGY_CARD_READ_INSIGHTS.desktop.iconDiameter,
+  },
+};
+
+export const methodologyCardReadInsightsGlyphSx: SxProps<Theme> = {
+  color: "#ffffff",
+  fontSize: METHODOLOGY_CARD_READ_INSIGHTS.mobile.iconGlyph,
+  [breakpointMediaQuery.tabletUp]: {
+    fontSize: METHODOLOGY_CARD_READ_INSIGHTS.tablet.iconGlyph,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    fontSize: METHODOLOGY_CARD_READ_INSIGHTS.desktop.iconGlyph,
+  },
+};
+
 export function challengeCardSx(background: string): SxProps<Theme> {
   return {
     width: "100%",

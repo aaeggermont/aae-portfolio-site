@@ -73,10 +73,16 @@ export const TYPOGRAPHY = {
   personaTitle: { mobile: "16px", tablet: "16px", desktop: "19px" },
   /** Reusable component block title. */
   componentBlockTitle: { mobile: "16px", tablet: "16px", desktop: "20px" },
+  /** Methodology insight card title (`MethodologyCard`). Desktop: 22px bold. */
+  methodologyCardTitle: { mobile: "16px", tablet: "20px", desktop: "22px" },
   /** Overview intro paragraphs on the blue gradient band. */
   overviewBody: { mobile: "18px", tablet: "20px", desktop: "22px" },
   /** Intro cards body (`MyContributions` list, `ChallengeCard` paragraphs). Desktop: 18px medium. */
   introCardBody: { mobile: "16px", tablet: "17px", desktop: "18px" },
+  /** Methodology insight card description (`MethodologyCard`). Desktop: 16px regular. */
+  methodologyCardBody: { mobile: "14px", tablet: "15px", desktop: "16px" },
+  /** Methodology insight card “Read insights” label. Desktop: 16px semibold. */
+  methodologyCardAction: { mobile: "12px", tablet: "15px", desktop: "16px" },
   /** Long-form body on dark / gradient bands (legacy / other sections). */
   bodyText: { mobile: "18px", tablet: "20px", desktop: "26px" },
   /** Narrative / standard paragraph blocks on gradient band. */
@@ -111,12 +117,15 @@ export type TitleTypographyScaleKey = Extract<
   | "figureTitle"
   | "personaTitle"
   | "componentBlockTitle"
+  | "methodologyCardTitle"
 >;
 
 export type BodyTypographyScaleKey = Extract<
   TypographyScaleKey,
   | "overviewBody"
   | "introCardBody"
+  | "methodologyCardBody"
+  | "methodologyCardAction"
   | "bodyText"
   | "narrativeBody"
   | "solutionBody"
@@ -140,11 +149,14 @@ const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
   figureTitle: 700,
   personaTitle: 800,
   componentBlockTitle: 700,
+  methodologyCardTitle: 700,
 };
 
 const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
   overviewBody: 500,
   introCardBody: 500,
+  methodologyCardBody: 400,
+  methodologyCardAction: 600,
   bodyText: 500,
   narrativeBody: 500,
   solutionBody: 400,
@@ -164,11 +176,14 @@ const TITLE_COLOR: Partial<Record<TitleTypographyScaleKey, string>> = {
   cardTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   cardColumnLabel: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
   figureTitle: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
+  methodologyCardTitle: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
 };
 
 const BODY_COLOR: Partial<Record<BodyTypographyScaleKey, string>> = {
   overviewBody: AUTOMATIC_SEATER_OVERVIEW_BODY_COLOR,
   introCardBody: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+  methodologyCardBody: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
+  methodologyCardAction: AUTOMATIC_SEATER_INTRO_CARD_BODY_COLOR,
   bodyText: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   narrativeBody: AUTOMATIC_SEATER_BODY_ON_DARK_COLOR,
   panelBody: AUTOMATIC_SEATER_TITLE_ON_DARK_COLOR,
@@ -207,7 +222,7 @@ export function titleTypeSx(
     fontWeight: TITLE_FONT_WEIGHT[scaleKey],
     lineHeight:
       scaleKey === "heroSubtitle" ? 1.25
-      : scaleKey === "heroTitle" || scaleKey === "introCardTitle" || scaleKey === "sectionSubtitle"
+      : scaleKey === "heroTitle" || scaleKey === "introCardTitle" || scaleKey === "sectionSubtitle" || scaleKey === "methodologyCardTitle"
         ? 1.2
         : "normal",
     ...(TITLE_COLOR[scaleKey] ? { color: TITLE_COLOR[scaleKey] } : {}),
@@ -223,9 +238,10 @@ export function bodyTypeSx(
       ? 1.35
       : scaleKey === "narrativeBody" ||
           scaleKey === "bodyText" ||
-          scaleKey === "overviewBody"
+          scaleKey === "overviewBody" ||
+          scaleKey === "methodologyCardBody"
         ? 1.6
-        : scaleKey === "introCardBody"
+        : scaleKey === "introCardBody" || scaleKey === "methodologyCardAction"
           ? 1.4
           : 1.35;
 

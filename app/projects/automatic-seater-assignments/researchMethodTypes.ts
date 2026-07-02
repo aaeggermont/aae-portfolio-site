@@ -152,6 +152,14 @@ export type ResearchMethodCardData = {
   contentBlocks: ResearchCardContentBlock[];
 };
 
+/** Insight card for the Research & Discovery methodology grid (`MethodologyCard`). */
+export type MethodologyCardData = {
+  id: string;
+  title: string;
+  description: string;
+  readInsightsLabel?: string;
+};
+
 /**
  * One research-method block on the page (e.g. “1. Understanding…”) with intro copy
  * and a list of method cards (SME interviews, workshops, etc.).
@@ -171,4 +179,6 @@ export type ResearchMethodBlockData = {
   introParagraphReadMore?: ReadMoreWordConfig;
   introParagraphs: string[];
   cards: ResearchMethodCardData[];
+  /** Optional methodology insight cards (`MethodologyCard` grid). */
+  methodologyCards?: MethodologyCardData[];
 };
