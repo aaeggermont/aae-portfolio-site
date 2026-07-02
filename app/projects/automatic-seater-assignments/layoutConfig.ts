@@ -76,15 +76,17 @@ export const researchMethodPanelShellSx: SxProps<Theme> = {
 };
 
 /**
- * Vertical gap between major content blocks in `ResearchMethod`
- * (title, intro copy, methodology cards, legacy cards). Desktop: 16px.
+ * Vertical gap between major sections inside `ResearchMethod`
+ * (e.g. intro copy block → methodology cards). Desktop: 16px.
+ * Does not affect title/paragraph spacing within a section or `StandardParagraphBlock`.
  */
-export const RESEARCH_METHOD_CONTENT_BLOCK_GAP = {
-  mobile: 12,
-  tablet: 14,
-  desktop: 16,
+export const RESEARCH_METHOD_SECTION_GAP = {
+  mobile: 24,
+  tablet: 48,
+  desktop: 64,
 } as const;
 
+/** Flex column for panel content — section spacing applied per-section, not via rowGap. */
 export const researchMethodContentStackSx: SxProps<Theme> = {
   display: "flex",
   flexDirection: "column",
@@ -92,27 +94,14 @@ export const researchMethodContentStackSx: SxProps<Theme> = {
   width: "100%",
 };
 
-/** Top padding before a block that follows another inside `ResearchMethod`. */
-export const researchMethodContentBlockGapPtSx: SxProps<Theme> = {
-  paddingTop: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.mobile}px`,
+/** Margin above a major section that follows intro copy or another section. */
+export const researchMethodSectionGapSx: SxProps<Theme> = {
+  marginTop: `${RESEARCH_METHOD_SECTION_GAP.mobile}px`,
   [breakpointMediaQuery.tabletUp]: {
-    paddingTop: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.tablet}px`,
+    marginTop: `${RESEARCH_METHOD_SECTION_GAP.tablet}px`,
   },
   [breakpointMediaQuery.desktopUp]: {
-    paddingTop: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.desktop}px`,
-  },
-};
-
-/** Vertical gap between sibling copy inside one intro block. */
-export const researchMethodIntroCopyStackSx: SxProps<Theme> = {
-  display: "flex",
-  flexDirection: "column",
-  rowGap: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.mobile}px`,
-  [breakpointMediaQuery.tabletUp]: {
-    rowGap: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.tablet}px`,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    rowGap: `${RESEARCH_METHOD_CONTENT_BLOCK_GAP.desktop}px`,
+    marginTop: `${RESEARCH_METHOD_SECTION_GAP.desktop}px`,
   },
 };
 

@@ -1,14 +1,13 @@
 import React from "react";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import {
   layoutContentContainerSx,
   methodologyCardGridSx,
-  researchMethodContentBlockGapPtSx,
   researchMethodContentStackSx,
-  researchMethodIntroCopyStackSx,
   researchMethodPanelShellSx,
+  researchMethodSectionGapSx,
 } from "../layoutConfig";
 import { mergeSx } from "../typography";
 import type { ResearchMethodBlockData } from "../researchMethodTypes";
@@ -121,11 +120,6 @@ export const ResearchMethod = ({ data }: Props) => {
     lineHeight: 1.6,
   } as const;
 
-  const introCopySx =
-    displayedIntroParagraphs.length > 1 || (expandedIntroParagraphs && hasTruncatedIntroParagraphs)
-      ? researchMethodIntroCopyStackSx
-      : undefined;
-
   return (
     <Container maxWidth={false} sx={layoutContentContainerSx}>
       <Box
@@ -139,24 +133,24 @@ export const ResearchMethod = ({ data }: Props) => {
         })}
       >
         <Box sx={researchMethodContentStackSx}>
-          <Typography
-            variant="h3"
-            sx={{
-              fontFamily: "'Poppins', Helvetica",
-              fontWeight: "bold",
-              color: textColors.title,
-              fontSize: { xs: "1.1rem", md: "1.8rem", lg: "2rem" },
-              textAlign: { xs: "center", md: "left", lg: "left" },
-              lineHeight: "normal",
-              m: 0,
-            }}
-          >
-            {title}
-          </Typography>
+          <Stack spacing={2} alignItems="stretch">
+            <Typography
+              variant="h3"
+              sx={{
+                fontFamily: "'Poppins', Helvetica",
+                fontWeight: "bold",
+                color: textColors.title,
+                fontSize: { xs: "1.1rem", md: "1.8rem", lg: "2rem" },
+                textAlign: { xs: "center", md: "left", lg: "left" },
+                lineHeight: "normal",
+                m: 0,
+              }}
+            >
+              {title}
+            </Typography>
 
-          {displayedIntroParagraphs.length > 0 ? (
-            <Box sx={researchMethodContentBlockGapPtSx}>
-              <Box sx={introCopySx}>
+            {displayedIntroParagraphs.length > 0 ? (
+              <Stack spacing={2}>
                 {displayedIntroParagraphs.map((paragraph, i) => (
                   <Typography
                     key={`intro-${i}`}
@@ -200,27 +194,27 @@ export const ResearchMethod = ({ data }: Props) => {
                     {activeIntroParagraphReadMore?.readLessButtonLabel ?? "Read less"}
                   </Box>
                 ) : null}
-              </Box>
-            </Box>
-          ) : null}
+              </Stack>
+            ) : null}
+          </Stack>
 
           {methodologyCards && methodologyCards.length > 0 ? (
-            <Box sx={researchMethodContentBlockGapPtSx}>
+            <Box sx={researchMethodSectionGapSx}>
               <Box sx={methodologyCardGridSx}>
-                {methodologyCards.map((card) => (
-                  <MethodologyCard
-                    key={card.id}
-                    title={card.title}
-                    description={card.description}
-                    readInsightsLabel={card.readInsightsLabel}
-                  />
-                ))}
+              {methodologyCards.map((card) => (
+                <MethodologyCard
+                  key={card.id}
+                  title={card.title}
+                  description={card.description}
+                  readInsightsLabel={card.readInsightsLabel}
+                />
+              ))}
               </Box>
             </Box>
           ) : null}
 
           {cards.length > 0 ? (
-            <Box sx={researchMethodContentBlockGapPtSx}>
+            <Box sx={researchMethodSectionGapSx}>
               <Box
                 sx={{
                   display: "flex",
