@@ -165,22 +165,16 @@ export const imageBannerOverlayMaxWidthSx: SxProps<Theme> = {
 };
 
 /**
- * `ImageBanner` band — full-bleed to the viewport on mobile; `LAYOUT_DIMENSIONS` from tablet up.
+ * `ImageBanner` band — spans the full viewport width up to a `1260px` cap, with no side
+ * padding, so the hero image overflows the standard left/right content paddings that other
+ * sections respect. Centered via `mx: auto`; on narrower viewports it fills 100% width.
  */
 export const imageBannerBandContentSx: SxProps<Theme> = {
   width: "100%",
-  maxWidth: "none",
+  maxWidth: LAYOUT_DIMENSIONS.desktop.maxWidth,
   px: 0,
   mx: "auto",
   boxSizing: "border-box",
-  [breakpointMediaQuery.tabletUp]: {
-    maxWidth: LAYOUT_DIMENSIONS.tablet.maxWidth,
-    px: LAYOUT_DIMENSIONS.tablet.margin,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    maxWidth: LAYOUT_DIMENSIONS.desktop.maxWidth,
-    px: LAYOUT_DIMENSIONS.desktop.margin,
-  },
 };
 
 /**
