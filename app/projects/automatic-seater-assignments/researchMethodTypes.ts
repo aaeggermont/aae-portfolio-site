@@ -80,12 +80,15 @@ export type ResearchCardContentBlock =
       objectPath: string;
       alt: string;
       caption?: string;
+      /** Optional descriptive line between `caption` and `annotation` in the figure footer. */
+      captionDescription?: string;
       /** Optional helper text shown under caption (e.g. interaction hint). */
       annotation?: string;
       /** Optional typography colors for title/caption/annotation around the image. */
       textColors?: {
         title?: string;
         caption?: string;
+        captionDescription?: string;
         annotation?: string;
       };
       objectFit?: "cover" | "contain";
@@ -177,6 +180,20 @@ export type OperationalPersonaData = {
   projectKey?: string;
 };
 
+/** Embedded `StandardParagraphBlock` section inside a research method panel. */
+export type ResearchMethodParagraphSection = {
+  id: string;
+  subtitle?: string;
+  title?: string;
+  paragraphs?: string[];
+  paragraphReadMore?: ReadMoreWordConfig;
+  /**
+   * When set, renders after the card with this id (e.g. right after an illustration card).
+   * Omit to render with other intro sections before all cards.
+   */
+  afterCardId?: string;
+};
+
 /**
  * One research-method block on the page (e.g. “1. Understanding…”) with intro copy
  * and a list of method cards (SME interviews, workshops, etc.).
@@ -195,6 +212,8 @@ export type ResearchMethodBlockData = {
   /** Optional intro truncation + "Read more" behavior for paragraphs 1 and 2. */
   introParagraphReadMore?: ReadMoreWordConfig;
   introParagraphs: string[];
+  /** Optional embedded narrative blocks after intro copy, before cards. */
+  standardParagraphSections?: ResearchMethodParagraphSection[];
   cards: ResearchMethodCardData[];
   /** Optional methodology insight cards (`MethodologyCard` grid). */
   methodologyCards?: MethodologyCardData[];

@@ -149,7 +149,9 @@ export function StandardParagraphBlock({
             <Typography
               component="h2"
               textAlign="center"
-              sx={titleTypeSx("sectionTitle")}
+              sx={titleTypeSx("sectionTitle", {
+                [breakpointMediaQuery.desktopUp]: { fontSize: "34px" },
+              })}
             >
               {title}
             </Typography>

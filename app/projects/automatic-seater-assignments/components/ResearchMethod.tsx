@@ -11,7 +11,7 @@ import {
   researchMethodSectionGapSx,
 } from "../layoutConfig";
 import { mergeSx } from "../typography";
-import type { ResearchMethodBlockData } from "../researchMethodTypes";
+import type { ResearchMethodBlockData, ResearchMethodParagraphSection } from "../researchMethodTypes";
 import { MethodologyCard } from "./MethodologyCard";
 import OperationalPersona from "./OperationalPersona";
 import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
@@ -31,6 +31,7 @@ export const ResearchMethod = ({ data }: Props) => {
     introParagraphs,
     cards,
     methodologyCards,
+    standardParagraphSections,
     footerSubtitle,
     operationalPersonas,
   } = data;
@@ -125,6 +126,34 @@ export const ResearchMethod = ({ data }: Props) => {
     lineHeight: 1.6,
   } as const;
 
+  const standardParagraphSectionsBeforeCards = React.useMemo(
+    () => standardParagraphSections?.filter((section) => !section.afterCardId) ?? [],
+    [standardParagraphSections],
+  );
+
+  const standardParagraphSectionsByCardId = React.useMemo(() => {
+    const grouped = new Map<string, ResearchMethodParagraphSection[]>();
+    for (const section of standardParagraphSections ?? []) {
+      if (!section.afterCardId) continue;
+      const existing = grouped.get(section.afterCardId) ?? [];
+      existing.push(section);
+      grouped.set(section.afterCardId, existing);
+    }
+    return grouped;
+  }, [standardParagraphSections]);
+
+  const renderStandardParagraphSection = (section: ResearchMethodParagraphSection) => (
+    <Box key={section.id} sx={researchMethodSectionGapSx}>
+      <StandardParagraphBlock
+        title={section.title}
+        subtitle={section.subtitle}
+        paragraphs={section.paragraphs}
+        paragraphReadMore={section.paragraphReadMore}
+        embedded
+      />
+    </Box>
+  );
+
   return (
     <Container maxWidth={false} sx={layoutContentContainerSx}>
       <Box
@@ -145,7 +174,7 @@ export const ResearchMethod = ({ data }: Props) => {
                 fontFamily: "'Poppins', Helvetica",
                 fontWeight: "bold",
                 color: textColors.title,
-                fontSize: { xs: "1.1rem", md: "1.8rem", lg: "2rem" },
+                fontSize: { xs: "1.1rem", md: "1.8rem", lg: "34px" },
                 textAlign: { xs: "center", md: "left", lg: "left" },
                 lineHeight: "normal",
                 m: 0,
@@ -203,6 +232,8 @@ export const ResearchMethod = ({ data }: Props) => {
             ) : null}
           </Stack>
 
+          {standardParagraphSectionsBeforeCards.map(renderStandardParagraphSection)}
+
           {methodologyCards && methodologyCards.length > 0 ? (
             <Box sx={researchMethodSectionGapSx}>
               <Box sx={methodologyCardGridSx}>
@@ -223,18 +254,22 @@ export const ResearchMethod = ({ data }: Props) => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", lg: "row" },
-                  gap: 2,
-                  justifyContent: "space-between",
+                  flexDirection: "column",
                 }}
               >
-                {cards.map((card) => (
-                  <Box
-                    key={card.id}
-                    sx={{ flex: { xs: "1 1 auto", lg: "1 1 0" }, minWidth: 0 }}
-                  >
-                    <ResearchMethodCardShell card={card} />
-                  </Box>
+                {cards.map((card, index) => (
+                  <React.Fragment key={card.id}>
+                    <Box
+                      sx={
+                        index === 0
+                          ? { minWidth: 0 }
+                          : mergeSx(researchMethodSectionGapSx, { minWidth: 0 })
+                      }
+                    >
+                      <ResearchMethodCardShell card={card} />
+                    </Box>
+                    {standardParagraphSectionsByCardId.get(card.id)?.map(renderStandardParagraphSection)}
+                  </React.Fragment>
                 ))}
               </Box>
             </Box>

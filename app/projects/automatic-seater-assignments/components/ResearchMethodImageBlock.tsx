@@ -123,7 +123,10 @@ export function ResearchMethodImageBlock({ block }: Props) {
   const { url, error } = useSignedMediaUrl(projectKey, block.objectPath);
   const titleColor = block.textColors?.title ?? "#ffffff";
   const captionColor = block.textColors?.caption ?? "#cfcccc";
+  const captionDescriptionColor =
+    block.textColors?.captionDescription ?? captionColor;
   const annotationColor = block.textColors?.annotation ?? "#dbe6f0";
+  const usesStructuredFigureFooter = Boolean(block.caption || block.captionDescription);
 
   const caption = block.caption ? (
     <Typography
@@ -155,10 +158,23 @@ export function ResearchMethodImageBlock({ block }: Props) {
     </Typography>
   ) : null;
 
+  const captionDescription = block.captionDescription ? (
+    <Typography
+      sx={bodyTypeSx("figureHint", {
+        color: captionDescriptionColor,
+        textAlign: "center",
+        width: "100%",
+        m: 0,
+      })}
+    >
+      {block.captionDescription}
+    </Typography>
+  ) : null;
+
   const annotation = block.annotation ? (
     <Typography
       sx={
-        block.caption
+        usesStructuredFigureFooter
           ? bodyTypeSx("figureHint", {
               color: annotationColor,
               textAlign: "center",
@@ -181,9 +197,17 @@ export function ResearchMethodImageBlock({ block }: Props) {
   ) : null;
 
   const figureFooter =
-    block.caption || block.annotation ? (
-      <Stack spacing={0.5} alignItems="center" sx={{ width: "100%" }}>
+    block.caption || block.captionDescription || block.annotation ? (
+      <Stack
+        spacing={0.5}
+        alignItems="center"
+        sx={{
+          width: "100%",
+          ...getConstrainedFrameSx(block.frameDimensionsPx),
+        }}
+      >
         {caption}
+        {captionDescription}
         {annotation}
       </Stack>
     ) : null;
