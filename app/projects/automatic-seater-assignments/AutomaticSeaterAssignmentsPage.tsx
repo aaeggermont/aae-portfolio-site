@@ -106,11 +106,6 @@ export function AutomaticSeaterAssignmentsPage({
             paragraphs={project.narrative.humanCenteredDesignProcessParagraphs}
           />
 
-          <Container maxWidth={false} sx={{ ...layoutContentContainerSx, py: 2 }}>
-            <ResearchMethodImageBlock
-              block={project.figures.humanCenteredDesignIllustration}
-            />
-          </Container>
           {/* user research section 
           <StandardParagraphBlock
             title={project.narrative.userResearchSectionTitle}
@@ -130,6 +125,12 @@ export function AutomaticSeaterAssignmentsPage({
               width: "100%",
             }}
           >
+            <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: 2 }}>
+              <ResearchMethodImageBlock
+                block={project.figures.humanCenteredDesignIllustration}
+              />
+            </Container>
+
             <Stack
               sx={{
                 ...sectionRowGapSx,
