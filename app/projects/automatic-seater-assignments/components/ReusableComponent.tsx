@@ -13,11 +13,12 @@ const DEFAULT_DESCRIPTION_COLOR = "#204061";
 const IMAGE_WIDTH_PX = 240;
 const TEXT_WIDTH_PX = 635;
 const COLUMN_GAP_PX = 64;
-/** Tablet keeps the desktop two-column layout with a scaled-down image. */
-const TABLET_IMAGE_WIDTH_PX = 168;
 const TABLET_COLUMN_GAP_PX = 40;
-/** Mobile stacks vertically with a smaller image (~25% smaller than desktop). */
-const MOBILE_IMAGE_WIDTH_PX = 180;
+/** Constant image column width on tablet so the text column is identical across components. */
+const TABLET_IMAGE_COLUMN_PX = 168;
+/** Proportional image scaling relative to the desktop image width. */
+const TABLET_IMAGE_SCALE = 0.7;
+const MOBILE_IMAGE_SCALE = 0.75;
 
 export type ReusableComponentProps = {
   title: string;
@@ -28,6 +29,8 @@ export type ReusableComponentProps = {
   sizes?: string;
   /** Intrinsic image size, used for the image frame aspect ratio. */
   frameDimensionsPx?: { width: number; height: number };
+  /** Desktop image width (px); tablet/mobile scale proportionally. Defaults to 240. */
+  imageDesktopWidthPx?: number;
   textColors?: {
     title?: string;
     description?: string;
@@ -42,10 +45,14 @@ export function ReusableComponent({
   projectKey = DEFAULT_PROJECT_KEY,
   sizes = "(max-width: 1023px) 240px, 240px",
   frameDimensionsPx,
+  imageDesktopWidthPx = IMAGE_WIDTH_PX,
   textColors,
 }: ReusableComponentProps) {
   const titleColor = textColors?.title ?? DEFAULT_TITLE_COLOR;
   const descriptionColor = textColors?.description ?? DEFAULT_DESCRIPTION_COLOR;
+  const desktopImageWidthPx = imageDesktopWidthPx;
+  const tabletImageWidthPx = Math.round(desktopImageWidthPx * TABLET_IMAGE_SCALE);
+  const mobileImageWidthPx = Math.round(desktopImageWidthPx * MOBILE_IMAGE_SCALE);
   const aspectRatio = frameDimensionsPx
     ? `${frameDimensionsPx.width} / ${frameDimensionsPx.height}`
     : "1 / 1";
@@ -62,14 +69,14 @@ export function ReusableComponent({
         gridTemplateColumns: "minmax(0, 1fr)",
         width: "100%",
         [breakpointMediaQuery.tabletUp]: {
-          gridTemplateColumns: `${TABLET_IMAGE_WIDTH_PX}px minmax(0, 1fr)`,
+          gridTemplateColumns: `${TABLET_IMAGE_COLUMN_PX}px minmax(0, 1fr)`,
           columnGap: `${TABLET_COLUMN_GAP_PX}px`,
           rowGap: 3,
           justifyItems: "stretch",
           justifyContent: "center",
         },
         [breakpointMediaQuery.desktopUp]: {
-          gridTemplateColumns: `${IMAGE_WIDTH_PX}px ${TEXT_WIDTH_PX}px`,
+          gridTemplateColumns: `${IMAGE_WIDTH_PX}px minmax(0, ${TEXT_WIDTH_PX}px)`,
           columnGap: `${COLUMN_GAP_PX}px`,
         },
       }}
@@ -83,7 +90,8 @@ export function ReusableComponent({
             width: "100%",
           },
           [breakpointMediaQuery.desktopUp]: {
-            width: `${TEXT_WIDTH_PX}px`,
+            width: "100%",
+            maxWidth: `${TEXT_WIDTH_PX}px`,
           },
         }}
       >
@@ -108,17 +116,19 @@ export function ReusableComponent({
       <Box
         sx={{
           position: "relative",
-          width: `${MOBILE_IMAGE_WIDTH_PX}px`,
+          width: `${mobileImageWidthPx}px`,
           maxWidth: "100%",
           aspectRatio,
           [breakpointMediaQuery.tabletUp]: {
             gridColumn: "1",
             gridRow: "2",
             alignSelf: "center",
-            width: `${TABLET_IMAGE_WIDTH_PX}px`,
+            justifySelf: "center",
+            width: `${tabletImageWidthPx}px`,
           },
           [breakpointMediaQuery.desktopUp]: {
-            width: `${IMAGE_WIDTH_PX}px`,
+            justifySelf: "center",
+            width: `${desktopImageWidthPx}px`,
           },
         }}
       >
@@ -146,7 +156,8 @@ export function ReusableComponent({
             mt: 0,
           },
           [breakpointMediaQuery.desktopUp]: {
-            width: `${TEXT_WIDTH_PX}px`,
+            width: "100%",
+            maxWidth: `${TEXT_WIDTH_PX}px`,
           },
         }}
       >

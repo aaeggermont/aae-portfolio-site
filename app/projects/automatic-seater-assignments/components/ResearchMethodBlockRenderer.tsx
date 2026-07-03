@@ -307,6 +307,7 @@ export const ResearchMethodBlockRenderer = ({ block }: Props) => {
           projectKey={block.projectKey}
           sizes={block.sizes}
           frameDimensionsPx={block.frameDimensionsPx}
+          imageDesktopWidthPx={block.imageDesktopWidthPx}
           textColors={block.textColors}
         />
       );

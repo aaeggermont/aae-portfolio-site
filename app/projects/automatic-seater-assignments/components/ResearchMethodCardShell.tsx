@@ -24,6 +24,8 @@ const cardSubtitleSx = {
 
 /** Default gap between consecutive card blocks (matches prior `Stack spacing={2}`). */
 const DEFAULT_BLOCK_GAP_SX: SxProps<Theme> = { marginTop: "16px" };
+/** Gap between consecutive reusable component blocks. */
+const REUSABLE_COMPONENT_GAP_SX: SxProps<Theme> = { marginTop: "32px" };
 
 type Props = {
   card: ResearchMethodCardData;
@@ -46,11 +48,17 @@ export const ResearchMethodCardShell = ({ card }: Props) => {
         /** Consecutive illustrations use the standard research-method section gap. */
         const useSectionGap =
           block.type === "image" && previousBlock?.type === "image";
+        /** Consecutive reusable components use a 32px gap. */
+        const useReusableComponentGap =
+          block.type === "reusableComponent" &&
+          previousBlock?.type === "reusableComponent";
         const gapSx = isFirstElement
           ? undefined
           : useSectionGap
             ? researchMethodSectionGapSx
-            : DEFAULT_BLOCK_GAP_SX;
+            : useReusableComponentGap
+              ? REUSABLE_COMPONENT_GAP_SX
+              : DEFAULT_BLOCK_GAP_SX;
 
         return (
           <Box key={block.id} sx={gapSx}>

@@ -147,6 +147,8 @@ export type ResearchCardContentBlock =
       sizes?: string;
       /** Intrinsic image size, used for the image frame aspect ratio. */
       frameDimensionsPx?: { width: number; height: number };
+      /** Desktop image width (px); tablet/mobile scale proportionally. Defaults to 240. */
+      imageDesktopWidthPx?: number;
       textColors?: {
         title?: string;
         description?: string;
