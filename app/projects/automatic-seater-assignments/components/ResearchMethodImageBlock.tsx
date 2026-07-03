@@ -77,6 +77,20 @@ function getConstrainedFrameSx(
 
   return {
     width: "100%",
+    maxWidth: frameDimensionsPx.width,
+  };
+}
+
+/** Footer width: fills the column on mobile/tablet, caps at the image width on desktop. */
+function getFooterConstrainedSx(
+  frameDimensionsPx?: { width: number; height: number },
+): SxProps<Theme> {
+  if (!frameDimensionsPx) {
+    return { width: "100%" };
+  }
+
+  return {
+    width: "100%",
     maxWidth: "100%",
     [breakpointMediaQuery.desktopUp]: {
       maxWidth: frameDimensionsPx.width,
@@ -217,12 +231,22 @@ export function ResearchMethodImageBlock({ block }: Props) {
       <Stack
         spacing={0.5}
         alignItems="center"
-        sx={mergeSx(getConstrainedFrameSx(block.frameDimensionsPx), {
-          width: "100%",
-          marginTop: FIGURE_FOOTER_GAP.mobile,
-          [breakpointMediaQuery.tabletUp]: { marginTop: FIGURE_FOOTER_GAP.tablet },
-          [breakpointMediaQuery.desktopUp]: { marginTop: FIGURE_FOOTER_GAP.desktop },
-        })}
+        sx={mergeSx(
+          getFooterConstrainedSx(block.frameDimensionsPx),
+          block.figureFooterDesktopMaxWidthPx
+            ? {
+                [breakpointMediaQuery.desktopUp]: {
+                  maxWidth: block.figureFooterDesktopMaxWidthPx,
+                },
+              }
+            : undefined,
+          {
+            width: "100%",
+            marginTop: FIGURE_FOOTER_GAP.mobile,
+            [breakpointMediaQuery.tabletUp]: { marginTop: FIGURE_FOOTER_GAP.tablet },
+            [breakpointMediaQuery.desktopUp]: { marginTop: FIGURE_FOOTER_GAP.desktop },
+          },
+        )}
       >
         {caption}
         {captionDescription}

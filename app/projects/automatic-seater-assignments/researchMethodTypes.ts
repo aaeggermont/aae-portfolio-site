@@ -99,6 +99,11 @@ export type ResearchCardContentBlock =
        */
       frameDimensionsPx?: { width: number; height: number };
       /**
+       * Desktop-only max width (px) for the annotation footer, overriding the image frame width.
+       * Useful for narrow illustrations where the caption/description would otherwise wrap too tightly.
+       */
+      figureFooterDesktopMaxWidthPx?: number;
+      /**
        * Area behind the image when `objectFit` is `contain` (letterboxing).
        * Defaults to white for diagrams; use when the asset doesn’t match `aspectRatio`.
        * Use `"transparent"` so the card gradient shows through.

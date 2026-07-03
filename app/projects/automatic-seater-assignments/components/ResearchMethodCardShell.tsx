@@ -1,5 +1,8 @@
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
 
+import { researchMethodSectionGapSx } from "../layoutConfig";
+import { mergeSx } from "../typography";
 import type { ResearchMethodCardData } from "../researchMethodTypes";
 import { ResearchMethodBlockRenderer } from "./ResearchMethodBlockRenderer";
 
@@ -19,20 +22,42 @@ const cardSubtitleSx = {
   fontSize: "14px",
 } as const;
 
+/** Default gap between consecutive card blocks (matches prior `Stack spacing={2}`). */
+const DEFAULT_BLOCK_GAP_SX: SxProps<Theme> = { marginTop: "16px" };
+
 type Props = {
   card: ResearchMethodCardData;
 };
 
 export const ResearchMethodCardShell = ({ card }: Props) => {
+  const blocks = card.contentBlocks;
+
   return (
-    <Stack spacing={2} p={2}>
+    <Stack p={2}>
       {card.title ? <Typography sx={cardTitleSx}>{card.title}</Typography> : null}
       {card.subtitle ? (
-        <Typography sx={cardSubtitleSx}>{card.subtitle}</Typography>
+        <Typography sx={mergeSx(cardSubtitleSx, DEFAULT_BLOCK_GAP_SX)}>
+          {card.subtitle}
+        </Typography>
       ) : null}
-      {card.contentBlocks.map((block) => (
-        <ResearchMethodBlockRenderer key={block.id} block={block} />
-      ))}
+      {blocks.map((block, index) => {
+        const isFirstElement = index === 0 && !card.title && !card.subtitle;
+        const previousBlock = index > 0 ? blocks[index - 1] : undefined;
+        /** Consecutive illustrations use the standard research-method section gap. */
+        const useSectionGap =
+          block.type === "image" && previousBlock?.type === "image";
+        const gapSx = isFirstElement
+          ? undefined
+          : useSectionGap
+            ? researchMethodSectionGapSx
+            : DEFAULT_BLOCK_GAP_SX;
+
+        return (
+          <Box key={block.id} sx={gapSx}>
+            <ResearchMethodBlockRenderer block={block} />
+          </Box>
+        );
+      })}
     </Stack>
   );
 };
