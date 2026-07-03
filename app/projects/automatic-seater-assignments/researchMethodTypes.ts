@@ -145,6 +145,8 @@ export type ResearchCardContentBlock =
       /** Defaults to this case study’s gated project (`project_4`). */
       projectKey?: string;
       sizes?: string;
+      /** Intrinsic image size, used for the image frame aspect ratio. */
+      frameDimensionsPx?: { width: number; height: number };
       textColors?: {
         title?: string;
         description?: string;
