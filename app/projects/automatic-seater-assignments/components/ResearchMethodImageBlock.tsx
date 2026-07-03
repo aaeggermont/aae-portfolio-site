@@ -8,7 +8,7 @@ import GatedImage from "@/lib/media/GatedImage";
 import { useSignedMediaUrl } from "@/lib/media/useSignedMediaUrl";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { ResearchCardContentBlock } from "../researchMethodTypes";
-import { bodyTypeSx } from "../typography";
+import { bodyTypeSx, mergeSx } from "../typography";
 
 export type ResearchMethodImageBlockData = Extract<
   ResearchCardContentBlock,
@@ -108,6 +108,22 @@ const rootStackProps = {
   sx: { width: "100%" },
 };
 
+/** Outer wrapper so the figure footer gap is not overridden by `Stack` spacing. */
+const figureRootSx = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  width: "100%",
+  px: 2,
+} as const;
+
+/** Gap between the illustration and the annotation title. Desktop 48px, proportionate below. */
+const FIGURE_FOOTER_GAP = {
+  mobile: "32px",
+  tablet: "40px",
+  desktop: "48px",
+} as const;
+
 type Props = {
   block: ResearchMethodImageBlockData | StandaloneResearchMethodImageData;
 };
@@ -201,10 +217,12 @@ export function ResearchMethodImageBlock({ block }: Props) {
       <Stack
         spacing={0.5}
         alignItems="center"
-        sx={{
+        sx={mergeSx(getConstrainedFrameSx(block.frameDimensionsPx), {
           width: "100%",
-          ...getConstrainedFrameSx(block.frameDimensionsPx),
-        }}
+          marginTop: FIGURE_FOOTER_GAP.mobile,
+          [breakpointMediaQuery.tabletUp]: { marginTop: FIGURE_FOOTER_GAP.tablet },
+          [breakpointMediaQuery.desktopUp]: { marginTop: FIGURE_FOOTER_GAP.desktop },
+        })}
       >
         {caption}
         {captionDescription}
@@ -225,12 +243,12 @@ export function ResearchMethodImageBlock({ block }: Props) {
 
     if (!url) {
       return (
-        <Stack {...rootStackProps}>
+        <Box sx={figureRootSx}>
           <Box sx={getImageFrameSx(ratio, frameBg, block.frameDimensionsPx, { forLoading: true })}>
             <CircularProgress size={32} sx={{ color: "rgba(255,255,255,0.7)" }} />
           </Box>
           {figureFooter}
-        </Stack>
+        </Box>
       );
     }
 
@@ -238,67 +256,71 @@ export function ResearchMethodImageBlock({ block }: Props) {
       block.lightboxModalBackground ?? DEFAULT_LIGHTBOX_MODAL_BG;
 
     return (
-      <Stack {...rootStackProps}>
-        {blockTitle}
-        <Box sx={getConstrainedFrameSx(block.frameDimensionsPx)}>
-          <SlideshowLightbox
-            framework="next"
-            images={[{ src: url, alt: block.alt }]}
-            lightboxIdentifier={block.id}
-            showThumbnails={false}
-            showSlideshowIcon={false}
-            showNavigationDots={false}
-            backgroundColor={modalBg}
-            iconColor={lightboxIconColorForModalBackground(modalBg)}
-            modalClose="clickOutside"
-          >
-            <img
-              src={url}
-              alt={block.alt}
-              data-lightboxjs={block.id}
-              style={{
-                width: "100%",
-                aspectRatio: ratio,
-                objectFit,
-                borderRadius: 8,
-                backgroundColor: frameBg,
-                display: "block",
-                cursor: "zoom-in",
-              }}
-            />
-          </SlideshowLightbox>
-        </Box>
+      <Box sx={figureRootSx}>
+        <Stack {...rootStackProps}>
+          {blockTitle}
+          <Box sx={getConstrainedFrameSx(block.frameDimensionsPx)}>
+            <SlideshowLightbox
+              framework="next"
+              images={[{ src: url, alt: block.alt }]}
+              lightboxIdentifier={block.id}
+              showThumbnails={false}
+              showSlideshowIcon={false}
+              showNavigationDots={false}
+              backgroundColor={modalBg}
+              iconColor={lightboxIconColorForModalBackground(modalBg)}
+              modalClose="clickOutside"
+            >
+              <img
+                src={url}
+                alt={block.alt}
+                data-lightboxjs={block.id}
+                style={{
+                  width: "100%",
+                  aspectRatio: ratio,
+                  objectFit,
+                  borderRadius: 8,
+                  backgroundColor: frameBg,
+                  display: "block",
+                  cursor: "zoom-in",
+                }}
+              />
+            </SlideshowLightbox>
+          </Box>
+        </Stack>
         {figureFooter}
-      </Stack>
+      </Box>
     );
   }
 
   return (
-    <Stack {...rootStackProps}>
-      {blockTitle}
-      <Box sx={getImageFrameSx(ratio, frameBg, block.frameDimensionsPx)}>
-        <Box
-          sx={{
-            position: "absolute",
-            inset: 0,
-            "& img": {
-              display: "block",
-            },
-          }}
-        >
-          <GatedImage
-            mode="fill"
-            projectKey={projectKey}
-            objectPath={block.objectPath}
-            alt={block.alt}
-            sizes={block.sizes ?? DEFAULT_IMAGE_SIZES}
-            priority={block.priority ?? false}
-            fullViewportLoading={block.fullViewportLoading ?? false}
-            style={{ objectFit }}
-          />
+    <Box sx={figureRootSx}>
+      <Stack {...rootStackProps}>
+        {blockTitle}
+        <Box sx={getImageFrameSx(ratio, frameBg, block.frameDimensionsPx)}>
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              "& img": {
+                display: "block",
+              },
+            }}
+          >
+            <GatedImage
+              mode="fill"
+              projectKey={projectKey}
+              objectPath={block.objectPath}
+              alt={block.alt}
+              sizes={block.sizes ?? DEFAULT_IMAGE_SIZES}
+              priority={block.priority ?? false}
+              fullViewportLoading={block.fullViewportLoading ?? false}
+              style={{ objectFit }}
+            />
+          </Box>
         </Box>
-      </Box>
+      </Stack>
       {figureFooter}
-    </Stack>
+    </Box>
   );
 }

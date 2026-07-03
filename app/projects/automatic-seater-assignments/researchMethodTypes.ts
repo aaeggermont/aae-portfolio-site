@@ -187,6 +187,10 @@ export type ResearchMethodParagraphSection = {
   title?: string;
   paragraphs?: string[];
   paragraphReadMore?: ReadMoreWordConfig;
+  /** Optional per-section color overrides for title/subtitle/paragraph text. */
+  titleColor?: string;
+  subtitleColor?: string;
+  paragraphColor?: string;
   /**
    * When set, renders after the card with this id (e.g. right after an illustration card).
    * Omit to render with other intro sections before all cards.

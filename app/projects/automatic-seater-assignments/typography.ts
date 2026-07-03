@@ -106,8 +106,8 @@ export const TYPOGRAPHY = {
   cardBody: { mobile: "14px", tablet: "16px", desktop: "18px" },
   /** Image captions and annotations (legacy single-line hint). */
   caption: { mobile: "12px", tablet: "12px", desktop: "12px" },
-  /** Figure label under illustrations (`ResearchMethodImageBlock` caption line). */
-  figureLabel: { mobile: "14px", tablet: "16px", desktop: "16px" },
+  /** Figure label under illustrations (`ResearchMethodImageBlock` caption line). Bold title. */
+  figureLabel: { mobile: "16px", tablet: "18px", desktop: "20px" },
   /** Figure interaction hint under illustrations (`ResearchMethodImageBlock` annotation line). */
   figureHint: { mobile: "14px", tablet: "16px", desktop: "16px" },
   /** `OperationalPersona` title. Desktop: 20px bold. */
@@ -191,7 +191,7 @@ const BODY_FONT_WEIGHT: Record<BodyTypographyScaleKey, number> = {
   researchCardSubtitle: 400,
   cardBody: 400,
   caption: 400,
-  figureLabel: 500,
+  figureLabel: 700,
   figureHint: 400,
   operationalPersonaDescription: 400,
   operationalPersonaSectionTitle: 600,

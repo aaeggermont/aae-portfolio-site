@@ -18,6 +18,10 @@ export type StandardParagraphBlockProps = {
   paragraphs?: string[];
   paragraphReadMore?: ReadMoreWordConfig;
   bullets?: string[];
+  /** Optional color overrides (e.g. per-panel theming). */
+  titleColor?: string;
+  subtitleColor?: string;
+  paragraphColor?: string;
   /** When true, omits the outer `Container` for embedding inside `ResearchMethod` panels. */
   embedded?: boolean;
   /** Defaults to square markers (current design). */
@@ -35,6 +39,9 @@ export function StandardParagraphBlock({
   paragraphReadMore,
   bullets,
   bulletMarker = "square",
+  titleColor,
+  subtitleColor,
+  paragraphColor,
   paddingTop,
   paddingBottom,
   embedded = false,
@@ -151,6 +158,7 @@ export function StandardParagraphBlock({
               textAlign="center"
               sx={titleTypeSx("sectionTitle", {
                 [breakpointMediaQuery.desktopUp]: { fontSize: "34px" },
+                ...(titleColor ? { color: titleColor } : {}),
               })}
             >
               {title}
@@ -160,7 +168,10 @@ export function StandardParagraphBlock({
             <Typography
               component="p"
               sx={mergeSx(
-                titleTypeSx("sectionSubtitle", { m: 0 }),
+                titleTypeSx("sectionSubtitle", {
+                  m: 0,
+                  ...(subtitleColor ? { color: subtitleColor } : {}),
+                }),
                 embedded
                   ? {
                       textAlign: "center",
@@ -180,7 +191,7 @@ export function StandardParagraphBlock({
             <Typography
               key={index}
               component="p"
-              sx={narrativeBodySx}
+              sx={paragraphColor ? mergeSx(narrativeBodySx, { color: paragraphColor }) : narrativeBodySx}
             >
               {text}
               {!expandedParagraphs &&

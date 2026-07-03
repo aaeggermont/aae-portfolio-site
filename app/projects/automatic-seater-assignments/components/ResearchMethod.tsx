@@ -149,6 +149,9 @@ export const ResearchMethod = ({ data }: Props) => {
         subtitle={section.subtitle}
         paragraphs={section.paragraphs}
         paragraphReadMore={section.paragraphReadMore}
+        titleColor={section.titleColor}
+        subtitleColor={section.subtitleColor}
+        paragraphColor={section.paragraphColor}
         embedded
       />
     </Box>
