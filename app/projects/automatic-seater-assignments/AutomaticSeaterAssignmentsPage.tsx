@@ -51,27 +51,27 @@ export function AutomaticSeaterAssignmentsPage({
         </FullBleedBand>
 
         <FullBleedBand backgroundColor={INTRO_SECTIONS_BACKGROUND}>
-          <Stack spacing={6} alignItems="center" sx={{ width: "100%" }}>
+          <Stack
+            alignItems="center"
+            sx={{ ...sectionRowGapSx, width: "100%" }}
+          >
             <OverviewSection data={project.overviewSection} />
             <MyContributions data={project.myContributions} />
             <ChallengeCard data={project.challengeCard} />
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 6,
+                borderRadius: "16px",
+              }}
+            >
+              <MainSolutionParagraph data={project.mainSolution} />
+              <PreviewDemo data={project.previewDemo} />
+            </Box>
           </Stack>
-        </FullBleedBand>
-
-        <FullBleedBand backgroundColor={INTRO_SECTIONS_BACKGROUND}>
-          <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 6,
-              borderRadius: "16px",
-            }}
-          >
-            <MainSolutionParagraph data={project.mainSolution} />
-            <PreviewDemo data={project.previewDemo} />
-          </Box>
         </FullBleedBand>
 
         <FullBleedBand
