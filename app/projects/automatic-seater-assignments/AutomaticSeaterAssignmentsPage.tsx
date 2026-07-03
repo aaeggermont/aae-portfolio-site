@@ -22,6 +22,8 @@ import {
   FULL_BLEED_BAND_PADDINGS,
   INTRO_SECTIONS_BACKGROUND,
   layoutContentContainerSx,
+  sectionGapSx,
+  sectionRowGapSx,
 } from "./layoutConfig";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
@@ -119,47 +121,67 @@ export function AutomaticSeaterAssignmentsPage({
             paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
           />*/}
 
-          <Stack
-            spacing={8}
+          <Box
             sx={{
-              width: "100%",
+              ...sectionGapSx,
+              display: "flex",
+              flexDirection: "column",
               alignItems: "center",
+              width: "100%",
             }}
           >
-            {project.researchMethods.map((block) => (
-              <ResearchMethod key={block.id} data={block} />
-            ))}
-          </Stack>
+            <Stack
+              sx={{
+                ...sectionRowGapSx,
+                width: "100%",
+                alignItems: "center",
+              }}
+            >
+              {project.researchMethods.map((block) => (
+                <ResearchMethod key={block.id} data={block} />
+              ))}
+            </Stack>
 
-          <StandardParagraphBlock
-            title={project.sections.projectOutcomes.title}
-            paragraphs={project.sections.projectOutcomes.paragraphs}
-            maxWidth={660}
-            paddingTop={{ xs: 8, sm: 8, md: 10, lg: 12 }}
-            paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
-          />
+            <Container
+              maxWidth={false}
+              sx={layoutContentContainerSx}
+            >
+              <Stack
+                sx={{
+                  ...sectionRowGapSx,
+                  width: "100%",
+                  alignItems: "center",
+                }}
+              >
+                <StandardParagraphBlock
+                  embedded
+                  title={project.sections.projectOutcomes.title}
+                  paragraphs={project.sections.projectOutcomes.paragraphs}
+                  maxWidth={660}
+                />
 
-          <StandardParagraphBlock
-            title={project.sections.finalResultsKeyMetrics.title}
-            subtitle={project.sections.finalResultsKeyMetrics.subtitle}
-            bullets={project.sections.finalResultsKeyMetrics.contentBlocks.flatMap(
-              (block) => (block.type === "bullets" ? block.items : []),
-            )}
-            maxWidth={660}
-            paddingTop={{ xs: 8, sm: 8, md: 10, lg: 12 }}
-            paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
-          />
+                <StandardParagraphBlock
+                  embedded
+                  title={project.sections.finalResultsKeyMetrics.title}
+                  subtitle={project.sections.finalResultsKeyMetrics.subtitle}
+                  bullets={project.sections.finalResultsKeyMetrics.contentBlocks.flatMap(
+                    (block) => (block.type === "bullets" ? block.items : []),
+                  )}
+                  maxWidth={660}
+                />
 
-          <StandardParagraphBlock
-            title={project.sections.nextSteps.title}
-            subtitle={project.sections.nextSteps.subtitle}
-            bullets={project.sections.nextSteps.contentBlocks.flatMap((block) =>
-              block.type === "bullets" ? block.items : [],
-            )}
-            maxWidth={660}
-            paddingTop={{ xs: 4, sm: 4, md: 4, lg: 12 }}
-            paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
-          />
+                <StandardParagraphBlock
+                  embedded
+                  title={project.sections.nextSteps.title}
+                  subtitle={project.sections.nextSteps.subtitle}
+                  bullets={project.sections.nextSteps.contentBlocks.flatMap((block) =>
+                    block.type === "bullets" ? block.items : [],
+                  )}
+                  maxWidth={660}
+                />
+              </Stack>
+            </Container>
+          </Box>
         </FullBleedBand>
 
         <div className={styles.container}>

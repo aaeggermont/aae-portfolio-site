@@ -17,6 +17,20 @@ export const SECTION_GAPS = {
   desktop: "8rem",
 } as const;
 
+/** Responsive `rowGap` sx for stacks of major page sections (uses `SECTION_GAPS`). */
+export const sectionRowGapSx: SxProps<Theme> = {
+  rowGap: SECTION_GAPS.mobile,
+  [breakpointMediaQuery.tabletUp]: { rowGap: SECTION_GAPS.tablet },
+  [breakpointMediaQuery.desktopUp]: { rowGap: SECTION_GAPS.desktop },
+};
+
+/** Responsive `gap` sx for flex columns separating major page sections (uses `SECTION_GAPS`). */
+export const sectionGapSx: SxProps<Theme> = {
+  gap: SECTION_GAPS.mobile,
+  [breakpointMediaQuery.tabletUp]: { gap: SECTION_GAPS.tablet },
+  [breakpointMediaQuery.desktopUp]: { gap: SECTION_GAPS.desktop },
+};
+
 /**
  * Top/bottom padding for full-bleed section bands (overview, preview demo, etc.).
  * Uses the same 3 : 5 : 8 rem scale as `SECTION_GAPS`.
