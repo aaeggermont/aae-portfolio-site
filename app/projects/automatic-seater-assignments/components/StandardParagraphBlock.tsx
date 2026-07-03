@@ -30,6 +30,8 @@ export type StandardParagraphBlockProps = {
   paddingTop?: ResponsiveStyleValue<number | string>;
   /** Optional extra spacing below the block wrapper. */
   paddingBottom?: ResponsiveStyleValue<number | string>;
+  /** Optional max width (px or CSS length) for the block content. */
+  maxWidth?: number | string;
 };
 
 export function StandardParagraphBlock({
@@ -44,6 +46,7 @@ export function StandardParagraphBlock({
   paragraphColor,
   paddingTop,
   paddingBottom,
+  maxWidth,
   embedded = false,
 }: StandardParagraphBlockProps) {
   const { isMobile } = useResponsive();
@@ -146,6 +149,7 @@ export function StandardParagraphBlock({
       spacing={4}
       sx={{
         width: "100%",
+        ...(maxWidth ? { maxWidth, mx: "auto" } : {}),
         pb: embedded ? (paddingBottom ?? 0) : 8,
         pt: paddingTop ?? 0,
       }}
