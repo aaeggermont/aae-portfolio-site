@@ -1,3 +1,5 @@
+const AOS_ENABLED = false;
+
 export type AosEffect =
   | "fade-up"
   | "fade-down"
@@ -14,6 +16,10 @@ type AosOptions = {
 };
 
 function buildAosProps(effect: AosEffect, options: AosOptions = {}) {
+  if (!AOS_ENABLED) {
+    return {};
+  }
+
   const {
     delay,
     duration = 1000,

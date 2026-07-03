@@ -80,16 +80,29 @@ export type ResearchCardContentBlock =
       objectPath: string;
       alt: string;
       caption?: string;
+      /** Optional descriptive line between `caption` and `annotation` in the figure footer. */
+      captionDescription?: string;
       /** Optional helper text shown under caption (e.g. interaction hint). */
       annotation?: string;
       /** Optional typography colors for title/caption/annotation around the image. */
       textColors?: {
         title?: string;
         caption?: string;
+        captionDescription?: string;
         annotation?: string;
       };
       objectFit?: "cover" | "contain";
       aspectRatio?: string;
+      /**
+       * Intrinsic frame size in px (e.g. asset dimensions). On desktop (`lg+`) the frame
+       * caps at this width; narrower viewports scale down proportionally via `width: 100%`.
+       */
+      frameDimensionsPx?: { width: number; height: number };
+      /**
+       * Desktop-only max width (px) for the annotation footer, overriding the image frame width.
+       * Useful for narrow illustrations where the caption/description would otherwise wrap too tightly.
+       */
+      figureFooterDesktopMaxWidthPx?: number;
       /**
        * Area behind the image when `objectFit` is `contain` (letterboxing).
        * Defaults to white for diagrams; use when the asset doesn’t match `aspectRatio`.
@@ -132,6 +145,10 @@ export type ResearchCardContentBlock =
       /** Defaults to this case study’s gated project (`project_4`). */
       projectKey?: string;
       sizes?: string;
+      /** Intrinsic image size, used for the image frame aspect ratio. */
+      frameDimensionsPx?: { width: number; height: number };
+      /** Desktop image width (px); tablet/mobile scale proportionally. Defaults to 240. */
+      imageDesktopWidthPx?: number;
       textColors?: {
         title?: string;
         description?: string;
@@ -152,6 +169,44 @@ export type ResearchMethodCardData = {
   contentBlocks: ResearchCardContentBlock[];
 };
 
+/** Insight card for the Research & Discovery methodology grid (`MethodologyCard`). */
+export type MethodologyCardData = {
+  id: string;
+  title: string;
+  description: string;
+  readInsightsLabel?: string;
+};
+
+/** Operational persona card (`OperationalPersona`) in a research method panel footer. */
+export type OperationalPersonaData = {
+  id: string;
+  title: string;
+  description: string;
+  responsibilities: string[];
+  /** Firebase Storage path for the circular portrait (e.g. `projects/project_4/Grouper-Persona.png`). */
+  objectPath?: string;
+  alt?: string;
+  projectKey?: string;
+};
+
+/** Embedded `StandardParagraphBlock` section inside a research method panel. */
+export type ResearchMethodParagraphSection = {
+  id: string;
+  subtitle?: string;
+  title?: string;
+  paragraphs?: string[];
+  paragraphReadMore?: ReadMoreWordConfig;
+  /** Optional per-section color overrides for title/subtitle/paragraph text. */
+  titleColor?: string;
+  subtitleColor?: string;
+  paragraphColor?: string;
+  /**
+   * When set, renders after the card with this id (e.g. right after an illustration card).
+   * Omit to render with other intro sections before all cards.
+   */
+  afterCardId?: string;
+};
+
 /**
  * One research-method block on the page (e.g. “1. Understanding…”) with intro copy
  * and a list of method cards (SME interviews, workshops, etc.).
@@ -159,18 +214,24 @@ export type ResearchMethodCardData = {
 export type ResearchMethodBlockData = {
   /** Stable id for React keys / Firestore (e.g. doc id or slug). */
   id: string;
-  kicker: string;
   title: string;
   /** Background used by the outer method section shell. */
   background: string;
   /** Typography colors for method header and intro copy. */
   textColors: {
-    kicker: string;
     title: string;
     introParagraph: string;
   };
   /** Optional intro truncation + "Read more" behavior for paragraphs 1 and 2. */
   introParagraphReadMore?: ReadMoreWordConfig;
   introParagraphs: string[];
+  /** Optional embedded narrative blocks after intro copy, before cards. */
+  standardParagraphSections?: ResearchMethodParagraphSection[];
   cards: ResearchMethodCardData[];
+  /** Optional methodology insight cards (`MethodologyCard` grid). */
+  methodologyCards?: MethodologyCardData[];
+  /** Optional subtitle block rendered after panel cards (e.g. `StandardParagraphBlock`). */
+  footerSubtitle?: string;
+  /** Optional operational persona cards rendered after `footerSubtitle`. */
+  operationalPersonas?: OperationalPersonaData[];
 };
