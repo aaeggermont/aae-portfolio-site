@@ -132,11 +132,20 @@ export function AutomaticSeaterAssignmentsPage({
           </Stack>
 
           <StandardParagraphBlock
+            title={project.sections.projectOutcomes.title}
+            paragraphs={project.sections.projectOutcomes.paragraphs}
+            maxWidth={660}
+            paddingTop={{ xs: 8, sm: 8, md: 10, lg: 12 }}
+            paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
+          />
+
+          <StandardParagraphBlock
             title={project.sections.finalResultsKeyMetrics.title}
             subtitle={project.sections.finalResultsKeyMetrics.subtitle}
             bullets={project.sections.finalResultsKeyMetrics.contentBlocks.flatMap(
               (block) => (block.type === "bullets" ? block.items : []),
             )}
+            maxWidth={660}
             paddingTop={{ xs: 8, sm: 8, md: 10, lg: 12 }}
             paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
           />
@@ -147,6 +156,7 @@ export function AutomaticSeaterAssignmentsPage({
             bullets={project.sections.nextSteps.contentBlocks.flatMap((block) =>
               block.type === "bullets" ? block.items : [],
             )}
+            maxWidth={660}
             paddingTop={{ xs: 4, sm: 4, md: 4, lg: 12 }}
             paddingBottom={{ xs: 0, sm: 0, md: 0, lg: 0 }}
           />
