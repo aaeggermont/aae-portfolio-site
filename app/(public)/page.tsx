@@ -1,6 +1,5 @@
-// app/(public)/page.tsx
-import HomePanels from "@/app/home/home-panels";
+import HomePage from "@/app/home/HomePage";
 
-export default function HomePage() {
-  return <HomePanels />;
+export default function Page() {
+  return <HomePage />;
 }

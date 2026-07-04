@@ -69,12 +69,7 @@ type FloaterConfig = {
   duration: string;
 };
 
-type ContactMeProps = {
-  /** When true, section shares viewport with footer — fills remaining height and scrolls internally */
-  embedInPanel?: boolean;
-};
-
-function ContactMe({ embedInPanel = false }: ContactMeProps) {
+function ContactMe() {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
@@ -206,10 +201,7 @@ function ContactMe({ embedInPanel = false }: ContactMeProps) {
   );
 
   return (
-    <section
-      className={`${styles.contactMeSection} ${embedInPanel ? styles.contactMeSection_embedded : ""}`}
-      id="contact-me"
-    >
+    <section className={styles.contactMeSection} id="contact-me">
        {/* Decorative floating images – render only after we have client-side config */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
@@ -233,11 +225,7 @@ function ContactMe({ embedInPanel = false }: ContactMeProps) {
         ))}
       </div>
 
-      {embedInPanel ? (
-        <div className={styles.embeddedCenter}>{mainContent}</div>
-      ) : (
-        mainContent
-      )}
+      {mainContent}
   
       {toast && (
         <div
