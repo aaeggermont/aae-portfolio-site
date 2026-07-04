@@ -1,9 +1,11 @@
-import { usePathname } from 'next/navigation';
-import type { HeaderLogoColorProps, HeaderProps } from ".";
-import Link from 'next/link';
-import { HeaderLogo } from './HeaderLogo';
+'use client';
 
-import styles from './header.module.scss';
+import { useHomeNav } from "@/lib/home/useHomeNav";
+import type { HeaderLogoColorProps, HeaderProps } from ".";
+import Link from "next/link";
+import { HeaderLogo } from "./HeaderLogo";
+
+import styles from "./header.module.scss";
 
 export function HeaderDesktop({
   fontColor,
@@ -11,24 +13,13 @@ export function HeaderDesktop({
   logoAccentColor,
   resumeHref,
 }: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
-  const pathname = usePathname();
-
-  const isActive = (href: string) => {
-    // adjust if you want "startsWith" instead of exact match
-    if (href === "/") {
-      return pathname === href;
-    }
-    if (pathname.startsWith('/work') && href === '/mywork') {
-      return true;
-    }
-    return pathname.startsWith(href);
-  };
+  const { getHref, isActive } = useHomeNav();
 
   return <>
     <div className={styles.site_menu}>
       <div className={styles.menu_wrapper}>
         <div className={styles.brand_logo}>
-          <Link href='/'>
+          <Link href={getHref("home")}>
             <HeaderLogo
               width="190"
               height="50"
@@ -43,8 +34,8 @@ export function HeaderDesktop({
             <ul>
               <li className={styles.menu_item}>
                 <Link
-                  href="/"
-                  className={isActive("/") ? styles.active_link : ''}
+                  href={getHref("home")}
+                  className={isActive("home") ? styles.active_link : ""}
                   style={{ color: fontColor }}
                 >
                   Home
@@ -53,10 +44,8 @@ export function HeaderDesktop({
 
               <li className={styles.menu_item}>
                 <Link
-                  href="/aboutme"
-                  className={
-                    isActive("/aboutme") ? styles.active_link : ''
-                  }
+                  href={getHref("about")}
+                  className={isActive("about") ? styles.active_link : ""}
                   style={{ color: fontColor }}
                 >
                   About Me
@@ -65,10 +54,8 @@ export function HeaderDesktop({
 
               <li className={styles.menu_item}>
                 <Link
-                  href="/mywork"
-                  className={
-                    isActive("/mywork") ? styles.active_link : ''
-                  }
+                  href={getHref("work")}
+                  className={isActive("work") ? styles.active_link : ""}
                   style={{ color: fontColor }}
                 >
                   My Work
@@ -89,10 +76,8 @@ export function HeaderDesktop({
 
               <li className={styles.menu_item}>
                 <Link
-                  href="/contact"
-                  className={
-                    isActive("/contact") ? styles.active_link : ''
-                  }
+                  href={getHref("contact")}
+                  className={isActive("contact") ? styles.active_link : ""}
                   style={{ color: fontColor }}
                 >
                   Contact

@@ -11,8 +11,15 @@ import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from "typewriter-effect";
 import { backgroundFloatImages } from "./background-float-images";
 import type { MainBannerData } from "./data/main-banner-data";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 function TypewriterComponent() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  if (prefersReducedMotion) {
+    return <>Hello, my name is Antonio</>;
+  }
+
   return (
     <Typewriter
       options={{
@@ -49,6 +56,7 @@ function MainBanner({ banner }: MainBannerProps) {
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
@@ -58,6 +66,12 @@ function MainBanner({ banner }: MainBannerProps) {
   }, [pathname]);
 
   useLayoutEffect(() => {
+    if (prefersReducedMotion) {
+      if (textRef.current) textRef.current.style.opacity = "1";
+      if (photoRef.current) photoRef.current.style.opacity = "1";
+      return;
+    }
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
@@ -89,7 +103,7 @@ function MainBanner({ banner }: MainBannerProps) {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     // This runs ONLY in the browser, after hydration ✅

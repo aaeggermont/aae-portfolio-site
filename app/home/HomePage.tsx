@@ -16,6 +16,7 @@ import {
   type HomePageData,
 } from "@/app/home/lib/home-page-data";
 import { subscribeHomePageData } from "@/app/home/lib/main-page.firestore";
+import { isHomeSectionId, scrollToHomeSection } from "@/lib/home/homeAnchors";
 
 export default function HomePage() {
   const [homePageData, setHomePageData] = useState<HomePageData>(homePageFallback);
@@ -29,9 +30,21 @@ export default function HomePage() {
     });
   }, []);
 
+  useEffect(() => {
+    if (phase !== "done") return;
+
+    const hash = window.location.hash.replace("#", "");
+    if (!isHomeSectionId(hash)) return;
+
+    requestAnimationFrame(() => {
+      scrollToHomeSection(hash);
+    });
+  }, [phase]);
+
   return (
     <>
       <main
+        data-home-page
         className={styles.homePage}
         aria-hidden={isLocked}
         inert={isLocked ? true : undefined}

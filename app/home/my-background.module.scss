@@ -1,13 +1,21 @@
 /* app/home/my-background.module.scss */
 
 .myBackgroundSection {
-  min-height: 100vh;
   width: 100%;
   background-color: var(--page-canvas);
   display: flex;
-  align-items: center;
-  overflow: visible !important;
-  position: relative;  /* required for stacking */
+  align-items: flex-start;
+  overflow: visible;
+  position: relative;
+  padding-block: 2rem;
+
+  @media screen and (min-width: $tablet-min) {
+    padding-block: 3rem;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    padding-block: 4rem;
+  }
 }
 
 .content {
@@ -16,7 +24,7 @@
   width: 100%;
   position: relative;            // ✅ participate in stacking
   z-index: 1;
-  padding-bottom: 10%;
+  padding-bottom: 2rem;
 }
 
 .heading {
@@ -155,4 +163,20 @@
 @keyframes twBlink {
   0%, 49%   { opacity: 1; }
   50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floatImg {
+    animation: none !important;
+  }
+
+  .cardWrapper {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  :global(.Typewriter__cursor) {
+    animation: none !important;
+  }
 }

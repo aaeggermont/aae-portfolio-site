@@ -3,6 +3,12 @@
   z-index: 100;
 }
 
+.header_sticky {
+  position: sticky;
+  top: 0;
+  background-color: var(--page-canvas);
+}
+
 /**
  * Caps inner header row to the same width as home panels on wide screens.
  * Combine with `global-container` on the wrapper — tablet/mobile margins unchanged.

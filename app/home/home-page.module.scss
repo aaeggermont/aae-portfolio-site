@@ -3,8 +3,24 @@
 .homePage {
   width: 100%;
   background-color: var(--page-canvas);
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  /* Approximate global header height for hero min-height and anchor scroll offset */
+  --header-height: 80px;
+
+  @media screen and (min-width: $tablet-min) {
+    gap: 5rem;
+    --header-height: 72px;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    gap: 8rem;
+    --header-height: 64px;
+  }
 }
 
 .section {
   width: 100%;
+  scroll-margin-top: var(--header-height);
 }

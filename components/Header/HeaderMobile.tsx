@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from "next/link";
-import { usePathname } from 'next/navigation';
 
 import styles from './header.module.scss';
 
@@ -15,6 +14,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import type { HeaderLogoColorProps, HeaderProps } from ".";
 import { HeaderLogo } from './HeaderLogo';
 import { clsx } from 'clsx';
+import { useHomeNav } from '@/lib/home/useHomeNav';
 
 export function HeaderMobile({
   isDark,
@@ -22,7 +22,7 @@ export function HeaderMobile({
   logoAccentColor,
   resumeHref,
 }: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
-  const pathname = usePathname();
+  const { getHref, isActive } = useHomeNav();
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
@@ -42,16 +42,11 @@ export function HeaderMobile({
     setToggleMobileMenu(false);
   };
 
-  const isActive = (href: string) => {
-    // adjust if you want "startsWith" instead of exact match
-    return pathname === href;
-  };
-
   return <>
     <div className={styles.mobile_wrapper}>
       <div className={styles.mobile_header}>
         <div className={styles.brand_logo}>
-          <Link href='/'>
+          <Link href={getHref("home")}>
             <HeaderLogo
               width="190"
               height="50"
@@ -113,8 +108,8 @@ export function HeaderMobile({
         <ul className={styles.sidebar_menu}>
           <li className="menu-item">
             <Link
-              href="/"
-              className={isActive("/") ? styles.active_link : ''}
+              href={getHref("home")}
+              className={isActive("home") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
@@ -126,8 +121,8 @@ export function HeaderMobile({
 
           <li className="menu-item">
             <Link
-              href="/aboutme"
-              className={isActive("/aboutme") ? styles.active_link : ''}
+              href={getHref("about")}
+              className={isActive("about") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
@@ -139,8 +134,8 @@ export function HeaderMobile({
 
           <li className="menu-item">
             <Link
-              href="/mywork"
-              className={isActive("/mywork") ? styles.active_link : ''}
+              href={getHref("work")}
+              className={isActive("work") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
@@ -172,8 +167,8 @@ export function HeaderMobile({
 
           <li className="menu-item">
             <Link
-              href="/contact"
-              className={isActive("/contact") ? styles.active_link : ''}
+              href={getHref("contact")}
+              className={isActive("contact") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
