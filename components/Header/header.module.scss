@@ -15,16 +15,9 @@
   @include home.home-content-cap;
 }
 
-/**
- * Caps inner header row to the same width as home panels on wide screens.
- * Combine with `global-container` on the wrapper — tablet/mobile margins unchanged.
- */
-.contentCap {
-  width: 100%;
-  max-width: $layout-content-max-width;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
+.headerContentCap {
+  @include home.home-content-cap;
+  padding-left: 0;
 }
 
 @keyframes slide-in-menu {
@@ -39,9 +32,10 @@
 
 .site_menu {
 	display: none;
-	justify-content: center;
+	justify-content: flex-start;
+	width: 100%;
 
-	@media (min-width: #{$desktop-min}) {
+	@media (min-width: #{home.$header-desktop-min}) {
 		display: flex;
 	}
 }
@@ -51,13 +45,15 @@
 	justify-content: space-between;
 	align-items: center;
 	box-sizing: border-box;
-	width: calc(70vw + 1.75rem);
+	width: 100%;
 }
 
 .brand_logo {
   display: flex;
   flex-shrink: 0;
   min-width: min-content;
+  margin: 0;
+  padding: 0;
 
   /* Next.js <Link> renders <a> — without this, the logo image can collapse to 0×0 in flex layouts */
   a {
@@ -90,7 +86,7 @@
       position: relative;
       text-decoration: none;
 
-      @media #{$desktop}{
+      @media (min-width: #{home.$header-desktop-min}) and (max-width: #{home.$header-desktop-max}) {
 				@include fluid-type(16px, 16px, 18px);
       }
 
@@ -129,10 +125,12 @@
 		width: 100%;
 		align-items: center;
 		justify-content: space-between;
-		padding: 20px;
+		padding-block: 20px;
+		padding-right: 20px;
+		padding-left: 0;
 	}
 
-	@media (min-width: #{$desktop-min}) {
+	@media (min-width: #{home.$header-desktop-min}) {
 		display: none;
 	}
 

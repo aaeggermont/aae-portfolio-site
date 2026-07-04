@@ -10,7 +10,9 @@
  * | desktopMin | $desktop-min    |
  * | desktopMax | $desktop-max    |
  *
- * When you change the SCSS values, update this object to match.
+ * Header nav uses a narrower desktop layout band: 1024px–1260px
+ * (`home-layout.scss` → `$header-desktop-min` / `$header-desktop-max`).
+ * Site-wide `$desktop-max` remains 3800px for other components.
  */
 export const breakpointPx = {
   mobileMin: 360,
@@ -31,6 +33,8 @@ export const breakpointMediaQuery = {
   tabletUp: `@media (min-width: ${breakpointPx.tabletMin}px)`,
   tabletOnly: `@media (min-width: ${breakpointPx.tabletMin}px) and (max-width: ${breakpointPx.tabletMax}px)`,
   desktopUp: `@media (min-width: ${breakpointPx.desktopMin}px)`,
+  /** Header horizontal nav layout band — matches `$header-desktop-min` / `$header-desktop-max`. */
+  headerDesktopBand: `@media (min-width: ${breakpointPx.desktopMin}px) and (max-width: 1260px)`,
 } as const;
 
 export type BreakpointMediaQuery = typeof breakpointMediaQuery;

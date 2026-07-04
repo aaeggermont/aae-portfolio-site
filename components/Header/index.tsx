@@ -50,7 +50,7 @@ export default function Header({
       className={clsx(styles.header_area, useStickyHomeHeader && styles.header_sticky)}
       style={{ position: useStickyHomeHeader ? "sticky" : position }}
     >
-      <div className={pathname === "/" ? styles.homeContentCap : "global-container"}>
+      <div className={styles.headerContentCap}>
         <HeaderMobile
           isDark={isDark}
           resumeHref={resumeHref}

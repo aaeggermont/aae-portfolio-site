@@ -22,7 +22,7 @@
   }
 
   .content {
-    @include home.home-content-cap;
+    @include home.home-section-content-cap;
     text-align: center;
     width: 100%;
     padding-bottom: 2rem;

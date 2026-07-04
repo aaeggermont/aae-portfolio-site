@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 
 import styles from './header.module.scss';
 
@@ -14,7 +15,6 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import type { HeaderLogoColorProps, HeaderProps } from ".";
 import { HeaderLogo } from './HeaderLogo';
 import { clsx } from 'clsx';
-import { useHomeNav } from '@/lib/home/useHomeNav';
 
 export function HeaderMobile({
   isDark,
@@ -22,7 +22,7 @@ export function HeaderMobile({
   logoAccentColor,
   resumeHref,
 }: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
-  const { getHref, isActive } = useHomeNav();
+  const pathname = usePathname();
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
@@ -42,14 +42,18 @@ export function HeaderMobile({
     setToggleMobileMenu(false);
   };
 
+  const isActive = (href: string) => {
+    return pathname === href;
+  };
+
   return <>
     <div className={styles.mobile_wrapper}>
       <div className={styles.mobile_header}>
         <div className={styles.brand_logo}>
-          <Link href={getHref("home")}>
+          <Link href='/'>
             <HeaderLogo
-              width="190"
-              height="50"
+              width="140"
+              height="37"
               primaryColor={logoPrimaryColor}
               accentColor={logoAccentColor}
             />
@@ -97,8 +101,8 @@ export function HeaderMobile({
 
         <div className={styles.sidenav_header}>
           <HeaderLogo
-            width="190"
-            height="50"
+            width="140"
+            height="37"
             primaryColor={logoPrimaryColor}
             accentColor={logoAccentColor}
           />
@@ -108,8 +112,8 @@ export function HeaderMobile({
         <ul className={styles.sidebar_menu}>
           <li className="menu-item">
             <Link
-              href={getHref("home")}
-              className={isActive("home") ? styles.active_link : ''}
+              href="/"
+              className={isActive("/") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
@@ -121,8 +125,8 @@ export function HeaderMobile({
 
           <li className="menu-item">
             <Link
-              href={getHref("about")}
-              className={isActive("about") ? styles.active_link : ''}
+              href="/aboutme"
+              className={isActive("/aboutme") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
@@ -134,8 +138,8 @@ export function HeaderMobile({
 
           <li className="menu-item">
             <Link
-              href={getHref("work")}
-              className={isActive("work") ? styles.active_link : ''}
+              href="/mywork"
+              className={isActive("/mywork") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
@@ -167,8 +171,8 @@ export function HeaderMobile({
 
           <li className="menu-item">
             <Link
-              href={getHref("contact")}
-              className={isActive("contact") ? styles.active_link : ''}
+              href="/contact"
+              className={isActive("/contact") ? styles.active_link : ''}
               onClick={closeMenu}
             >
               <span className={styles.menu_icon}>
