@@ -1,4 +1,5 @@
 /* app/home/main-banner.module.scss */
+@use './home-layout' as home;
 
 /* Gradient orb from your MUI Box */
 .bgGradientOrb {
@@ -89,32 +90,31 @@
 
 .mainBanner {
   width: 100%;
-  //max-width: 1563px;
-  min-height: 100vh;
-  height: 100%;
   box-sizing: border-box;
+  position: relative;
+  overflow: visible;
+  isolation: isolate;
+  background-color: var(--page-canvas);
+  min-height: calc(100dvh - var(--header-height, 80px));
+}
+
+.bannerContentCap {
+  @include home.home-content-cap;
+  min-height: calc(100dvh - var(--header-height, 80px));
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: clamp(1.5rem, 5vw, 4rem);
-  position: relative;
-  overflow: visible;
-  isolation: isolate;
-  background-color: var(--page-canvas);
 
-  /* Desktop only: shift panel up by header height so content is centered in the viewport */
-  @media screen and #{$desktop-device} {
-    transform: translateY(calc(-1 * var(--header-height, 64px)));
-  }
-
-  // 📱 Mobile: stack vertically, photo first, text second; center block in viewport
   @media screen and #{$mobile} {
     flex-direction: column-reverse;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     text-align: center;
-    gap: 2rem;
+    gap: clamp(0.5rem, 1.5vh, 0.875rem);
+    padding-block: clamp(0.25rem, 1vh, 0.75rem);
+    box-sizing: border-box;
   }
 
   .bannerTexContent {
@@ -139,6 +139,8 @@
       align-items: center;
       width: 100%;
       max-width: 32rem;
+      padding: 0;
+      flex: 0 0 auto;
     }
   }
 
@@ -158,8 +160,17 @@
     }
 
     @media screen and #{$mobile} {
-      width: min(84.6vw, 414px);
-      margin-bottom: 0.5rem;
+      /* ~25% larger than prior mobile cap; text reserve tightened to keep headline in view */
+      height: clamp(
+        188px,
+        calc(100dvh - var(--header-height, 80px) - 8.25rem),
+        300px
+      );
+      width: auto;
+      max-width: min(78vw, 263px);
+      aspect-ratio: 3 / 4;
+      flex: 0 0 auto;
+      margin: 0;
       filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
     }
   }
@@ -178,6 +189,13 @@
     -webkit-mask-size: 124% 108%;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center 38%;
+
+    @media screen and #{$mobile} {
+      mask-size: 118% 104%;
+      mask-position: center 44%;
+      -webkit-mask-size: 118% 104%;
+      -webkit-mask-position: center 44%;
+    }
   }
 
   .bannerPhotoImage {
@@ -195,7 +213,10 @@
     margin-bottom: 1rem;
 
     @media screen and #{$mobile} {
-      padding: 0 1.5rem;
+      padding: 0 1rem;
+      margin-bottom: 0.35rem;
+      font-size: clamp(1rem, 4.2vw, 1.125rem);
+      line-height: 1.25;
     }
 
     span {
@@ -214,9 +235,12 @@
 
     @media screen and #{$mobile} {
       text-align: center;
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
-      max-width: 32rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+      margin-bottom: 0;
+      max-width: 22rem;
+      font-size: clamp(0.8125rem, 3.6vw, 0.9375rem);
+      line-height: 1.35;
     }
 
     @media screen and #{$tablet} {
@@ -242,6 +266,7 @@
     @media screen and #{$mobile} {
       max-width: 32rem;
       padding: 0 1.5rem;
+      margin-top: 0.75rem;
     }
 
     @media screen and #{$desktop-device} {
@@ -249,113 +274,46 @@
     }
   }
 
-.linkedinWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 0.6rem;
-
-  @media screen and #{$mobile} {
-    gap: 0;
-  }
-}
-
-.linkedinButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  // Square shape
-  width: 42px;
-  height: 42px;
-  border-radius: 6px;
-  padding: 0;
-  border: none;
-
-  // LinkedIn brand gradient
-  background-image: linear-gradient(
-    135deg,
-    #0a66c2,
-    #0077b5,
-    #00a0dc
-  );
-  color: #ffffff;
-
-  transition:
-    background-image 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    background-image: linear-gradient(
-      135deg,
-      #0b6ed3,
-      #0a66c2,
-      #0091d4
-    );
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-  }
-
-  &:focus-visible {
-    outline: 2px solid rgba(10, 102, 194, 0.6);
-    outline-offset: 2px;
-  }
-
-  @media screen and #{$mobile} {
-    width: 36px;
-    height: 36px;
-  }
-}
-
-.linkedinIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 70%;
-  height: 70%;
-
-  svg {
+  .linkedinWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    height: 100%;
-    display: block;
+    gap: 0.6rem;
+
+    @media screen and #{$mobile} {
+      gap: 0;
+      margin-top: 0.75rem;
+    }
+  }
+
+  .linkedinLabel {
+    font-family: var(--font-poppins);
+    font-size: 1rem;
+    font-weight: 500;
+    color: $font-color-bold;
+    display: none;
+
+    @media screen and #{$tablet} {
+      display: inline;
+    }
+
+    @media screen and #{$desktop-device} {
+      display: inline;
+    }
   }
 }
 
-.linkedinLabel {
-  font-family: var(--font-poppins);
-  font-size: 1rem;
-  font-weight: 500;
-  color: $font-color-bold;
-
-  // hidden on mobile
-  display: none;
-
-  @media screen and #{$tablet} {
-    display: inline;
-  }
-
-  @media screen and #{$desktop-device} {
-    display: inline;
-  }
+.floatLayer {
+  @include home.home-float-layer-bleed;
+  overflow: hidden;
 }
 
-  .floatLayer {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .floatImg {
-    position: absolute;
-    opacity: 0.42;
-    animation: mainBannerFloaterFloat 12s ease-in-out infinite alternate;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
-  }
-
+.floatImg {
+  position: absolute;
+  opacity: 0.42;
+  animation: mainBannerFloaterFloat 12s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
 }
 
 @keyframes mainBannerFloaterFloat {
@@ -364,6 +322,16 @@
   }
   100% {
     transform: translate(10px, -18px) scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bgGradientOrb {
+    animation: none !important;
+  }
+
+  .floatImg {
+    animation: none !important;
   }
 }
 

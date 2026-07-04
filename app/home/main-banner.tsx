@@ -3,16 +3,23 @@
 import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import IconButton from "@mui/material/IconButton";
 import gsap from "gsap";
 import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
+import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
 import styles from "./main-banner.module.scss";
 import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from "typewriter-effect";
 import { backgroundFloatImages } from "./background-float-images";
 import type { MainBannerData } from "./data/main-banner-data";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 function TypewriterComponent() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  if (prefersReducedMotion) {
+    return <>Hello, my name is Antonio</>;
+  }
+
   return (
     <Typewriter
       options={{
@@ -49,6 +56,7 @@ function MainBanner({ banner }: MainBannerProps) {
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
@@ -58,6 +66,12 @@ function MainBanner({ banner }: MainBannerProps) {
   }, [pathname]);
 
   useLayoutEffect(() => {
+    if (prefersReducedMotion) {
+      if (textRef.current) textRef.current.style.opacity = "1";
+      if (photoRef.current) photoRef.current.style.opacity = "1";
+      return;
+    }
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
@@ -89,7 +103,7 @@ function MainBanner({ banner }: MainBannerProps) {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     // This runs ONLY in the browser, after hydration ✅
@@ -148,6 +162,8 @@ function MainBanner({ banner }: MainBannerProps) {
       </div>
 
       <div className={styles.bgGradientOrb}></div>
+
+      <div className={styles.bannerContentCap}>
       {/* Text side */}
       <div
         ref={textRef}
@@ -163,34 +179,7 @@ function MainBanner({ banner }: MainBannerProps) {
 
         {/* LinkedIn button – last row in the text block */}
         <div className={styles.linkedinWrapper}>
-          <IconButton
-            aria-label="Visit my LinkedIn profile"
-            onClick={handleLinkedIn}
-            className={styles.linkedinButton}
-          >
-            <span className={styles.linkedinIcon} aria-hidden="true">
-              <svg
-                viewBox="0 0 24 24"
-                role="img"
-                focusable="false"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width="24"
-                  height="24"
-                  rx="4"
-                  ry="4"
-                  fill="none"
-                />
-                <path
-                  fill="#ffffff"
-                  d="M6.5 7.5C5.67 7.5 5 6.83 5 6s.67-1.5 1.5-1.5S8 5.17 8 6s-.67 1.5-1.5 1.5zM6 9h3v9H6zM10.5 9h2.8v1.23h.04c.39-.74 1.35-1.52 2.78-1.52 2.97 0 3.52 1.96 3.52 4.51V18h-3v-4.04c0-.96-.02-2.19-1.34-2.19-1.34 0-1.55 1.05-1.55 2.12V18h-3z"
-                />
-              </svg>
-            </span>
-          </IconButton>
+          <LinkedInProfileButton onClick={handleLinkedIn} />
 
           {/* Label displayed only on tablet + desktop */}
           <span className={styles.linkedinLabel}>LinkedIn</span>
@@ -218,6 +207,7 @@ function MainBanner({ banner }: MainBannerProps) {
             sizes="(max-width: 767px) 70vw, (max-width: 1023px) 40vw, 26vw"
           /> */}
         </div>
+      </div>
       </div>
     </section>
   );

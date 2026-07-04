@@ -1,22 +1,29 @@
 /* app/home/my-background.module.scss */
+@use './home-layout' as home;
 
 .myBackgroundSection {
-  min-height: 100vh;
   width: 100%;
   background-color: var(--page-canvas);
   display: flex;
-  align-items: center;
-  overflow: visible !important;
-  position: relative;  /* required for stacking */
+  align-items: flex-start;
+  overflow: visible;
+  position: relative;
+  padding-block: 2rem;
+
+  @media screen and (min-width: $tablet-min) {
+    padding-block: 3rem;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    padding-block: 4rem;
+  }
 }
 
 .content {
-  //@include global-container;
+  @include home.home-section-content-cap;
   text-align: center;
   width: 100%;
-  position: relative;            // ✅ participate in stacking
-  z-index: 1;
-  padding-bottom: 10%;
+  padding-bottom: 2rem;
 }
 
 .heading {
@@ -25,20 +32,11 @@
   font-weight: 600;
   color: #074C5F;
   margin-bottom: 2rem;
-
-  //background-color: aqua;
   padding-bottom: 2vh;
+  text-align: left;
 
-  @media screen and #{$tablet} {
-    margin-left: 1vw;
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  @media screen and #{$desktop-device} {
-    margin-left: 3vw;
-    display: flex;
-    justify-content: flex-start;
+  @media screen and #{$mobile} {
+    text-align: center;
   }
 }
 
@@ -108,11 +106,7 @@
 }
 
 .floatLayer {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-  pointer-events: none; // background only
-  z-index: 0; // behind content
+  @include home.home-float-layer-bleed;
 }
 
 .floatImg {
@@ -133,7 +127,6 @@
   display: flex;
   justify-content: center;  // center the text block horizontally
   .summarySectionText {
-    @include global-container;
     @include fluid-type(16px, 22px, 32px);
     font-family: var(--font-figtree);
     color: $font-color-bold;
@@ -155,4 +148,20 @@
 @keyframes twBlink {
   0%, 49%   { opacity: 1; }
   50%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .floatImg {
+    animation: none !important;
+  }
+
+  .cardWrapper {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  :global(.Typewriter__cursor) {
+    animation: none !important;
+  }
 }

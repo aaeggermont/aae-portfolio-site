@@ -1,64 +1,17 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Typewriter from "typewriter-effect";
 import styles from "./contact-me.module.scss";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import emailjs from '@emailjs/browser';
 import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
+import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
+import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 
 const FLOAT_COUNT = 24;
-
-function HeadingTypewriter() {
-  const wrapperRef = useRef<HTMLHeadingElement | null>(null);
-  const typewriterRef = useRef<{ typeString: (s: string) => { pauseFor: (n: number) => { start: () => void } } } | null>(null);
-  const hasStarted = useRef(false);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInView(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { root: null, threshold: 0.2, rootMargin: "0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!inView || hasStarted.current || !typewriterRef.current) return;
-    hasStarted.current = true;
-    typewriterRef.current.typeString("Get in Touch").pauseFor(2500).start();
-  }, [inView]);
-
-  return (
-    <h2 ref={wrapperRef} className={styles.heading}>
-      <Typewriter
-        options={{
-          autoStart: false,
-          loop: false,
-          deleteSpeed: 50,
-        }}
-        onInit={(tw) => {
-          typewriterRef.current = tw;
-        }}
-      />
-    </h2>
-  );
-}
 
 type FloaterConfig = {
   img: any;
@@ -69,12 +22,7 @@ type FloaterConfig = {
   duration: string;
 };
 
-type ContactMeProps = {
-  /** When true, section shares viewport with footer — fills remaining height and scrolls internally */
-  embedInPanel?: boolean;
-};
-
-function ContactMe({ embedInPanel = false }: ContactMeProps) {
+function ContactMe() {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
@@ -169,7 +117,7 @@ function ContactMe({ embedInPanel = false }: ContactMeProps) {
 
   const mainContent = (
     <div className={styles.content}>
-      <HeadingTypewriter />
+      <SectionTypewriterHeading text="Get in Touch" className={styles.heading} />
       <div className={styles.summarySection}>
         <span className={styles.summarySectionText}>
           I&apos;m open to full-time roles, consulting, and partnerships—especially
@@ -192,13 +140,14 @@ function ContactMe({ embedInPanel = false }: ContactMeProps) {
             <AlternateEmailIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
             <span> aaeggermont@outlook.com</span>
           </div>
-          <div className={styles.contactRow}>
-            <LinkedInIcon
+          <div className={`${styles.contactRow} ${styles.contactLinkedInRow}`}>
+            <LinkedInProfileButton onClick={handleLinkedIn} />
+            <span
+              className={styles.contactLinkedInLabel}
               onClick={handleLinkedIn}
-              sx={{ color: "#02232c" }}
-              style={{ fontSize: 40 }}
-            />
-            <span onClick={handleLinkedIn}> LinkedIn</span>
+            >
+              LinkedIn
+            </span>
           </div>
         </div>
       </div>
@@ -206,10 +155,7 @@ function ContactMe({ embedInPanel = false }: ContactMeProps) {
   );
 
   return (
-    <section
-      className={`${styles.contactMeSection} ${embedInPanel ? styles.contactMeSection_embedded : ""}`}
-      id="contact-me"
-    >
+    <section className={styles.contactMeSection} id="contact-me">
        {/* Decorative floating images – render only after we have client-side config */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
@@ -233,11 +179,7 @@ function ContactMe({ embedInPanel = false }: ContactMeProps) {
         ))}
       </div>
 
-      {embedInPanel ? (
-        <div className={styles.embeddedCenter}>{mainContent}</div>
-      ) : (
-        mainContent
-      )}
+      {mainContent}
   
       {toast && (
         <div

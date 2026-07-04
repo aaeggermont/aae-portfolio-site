@@ -1,3 +1,5 @@
+'use client';
+
 import { usePathname } from 'next/navigation';
 import type { HeaderLogoColorProps, HeaderProps } from ".";
 import Link from 'next/link';
@@ -14,7 +16,6 @@ export function HeaderDesktop({
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    // adjust if you want "startsWith" instead of exact match
     if (href === "/") {
       return pathname === href;
     }
@@ -30,8 +31,8 @@ export function HeaderDesktop({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width="190"
-              height="50"
+              width="140"
+              height="37"
               primaryColor={logoPrimaryColor}
               accentColor={logoAccentColor}
             />

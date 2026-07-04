@@ -43,7 +43,6 @@ export function HeaderMobile({
   };
 
   const isActive = (href: string) => {
-    // adjust if you want "startsWith" instead of exact match
     return pathname === href;
   };
 
@@ -53,8 +52,8 @@ export function HeaderMobile({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width="190"
-              height="50"
+              width="140"
+              height="37"
               primaryColor={logoPrimaryColor}
               accentColor={logoAccentColor}
             />
@@ -102,8 +101,8 @@ export function HeaderMobile({
 
         <div className={styles.sidenav_header}>
           <HeaderLogo
-            width="190"
-            height="50"
+            width="140"
+            height="37"
             primaryColor={logoPrimaryColor}
             accentColor={logoAccentColor}
           />
