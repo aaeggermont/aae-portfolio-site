@@ -4,11 +4,11 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./contact-me.module.scss";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import emailjs from '@emailjs/browser';
 import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
+import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 
 const FLOAT_COUNT = 24;
@@ -140,13 +140,14 @@ function ContactMe() {
             <AlternateEmailIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
             <span> aaeggermont@outlook.com</span>
           </div>
-          <div className={styles.contactRow}>
-            <LinkedInIcon
+          <div className={`${styles.contactRow} ${styles.contactLinkedInRow}`}>
+            <LinkedInProfileButton onClick={handleLinkedIn} />
+            <span
+              className={styles.contactLinkedInLabel}
               onClick={handleLinkedIn}
-              sx={{ color: "#02232c" }}
-              style={{ fontSize: 40 }}
-            />
-            <span onClick={handleLinkedIn}> LinkedIn</span>
+            >
+              LinkedIn
+            </span>
           </div>
         </div>
       </div>

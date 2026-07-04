@@ -1,0 +1,65 @@
+.linkedinButton {
+  appearance: none;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 6px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  flex-shrink: 0;
+  cursor: pointer;
+  line-height: 0;
+  text-align: center;
+  background-image: linear-gradient(
+    135deg,
+    #0a66c2,
+    #0077b5,
+    #00a0dc
+  );
+  color: #ffffff;
+  transition:
+    background-image 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    background-image: linear-gradient(
+      135deg,
+      #0b6ed3,
+      #0a66c2,
+      #0091d4
+    );
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(10, 102, 194, 0.6);
+    outline-offset: 2px;
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.linkedinIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  height: 70%;
+  flex-shrink: 0;
+  pointer-events: none;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+}

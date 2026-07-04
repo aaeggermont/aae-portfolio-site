@@ -34,6 +34,10 @@
   margin-bottom: 2rem;
   padding-bottom: 2vh;
   text-align: left;
+
+  @media screen and #{$mobile} {
+    text-align: center;
+  }
 }
 
 
