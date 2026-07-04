@@ -17,12 +17,20 @@ import {
 } from "@/app/home/lib/home-page-data";
 import { subscribeHomePageData } from "@/app/home/lib/main-page.firestore";
 import { isHomeSectionId, scrollToHomeSection } from "@/lib/home/homeAnchors";
+import { useSetAtom } from "jotai";
+import { layoutState } from "@/app/(public)/layout-state";
 
 export default function HomePage() {
+  const setLayoutState = useSetAtom(layoutState);
   const [homePageData, setHomePageData] = useState<HomePageData>(homePageFallback);
   const { phase, isLocked, splashPhase, onFadeEnd } = useLoadingSplash({
     waitFor: preloadLandingImages,
   });
+
+  useEffect(() => {
+    setLayoutState({ isFullWidth: true });
+    return () => setLayoutState({ isFullWidth: false });
+  }, [setLayoutState]);
 
   useEffect(() => {
     return subscribeHomePageData((data) => {

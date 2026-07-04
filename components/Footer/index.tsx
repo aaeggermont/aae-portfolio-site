@@ -7,6 +7,7 @@ import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import { FooterLogo } from './FooterLogo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { clsx } from 'clsx';
 import styles from './footer.module.scss';
 
 type FooterProps = {
@@ -51,11 +52,15 @@ export function Footer(props: FooterProps = {}) {
         window.open('https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/', '_blank');
     };
 
+    const wrapperClass = clsx(
+        pathname === '/' ? styles.homeContentCap : 'global-container',
+    );
+
     if (screenDevice.isMobile) {
         return (
             <div
               style={{ paddingTop: "5rem" }}
-              className="container"
+              className={wrapperClass}
             >
                 <div
                     className={styles['footer-container']}
@@ -86,7 +91,7 @@ export function Footer(props: FooterProps = {}) {
         );
     } else {
         return (
-            <div className="container">
+            <div className={wrapperClass}>
                 <div className={styles['footer-container']}>
                     <div className={styles['logo-section']}>
                         <FooterLogo color={logoFontColor} width="55px" height="20px" />

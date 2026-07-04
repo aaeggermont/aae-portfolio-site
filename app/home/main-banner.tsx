@@ -162,6 +162,8 @@ function MainBanner({ banner }: MainBannerProps) {
       </div>
 
       <div className={styles.bgGradientOrb}></div>
+
+      <div className={styles.bannerContentCap}>
       {/* Text side */}
       <div
         ref={textRef}
@@ -232,6 +234,7 @@ function MainBanner({ banner }: MainBannerProps) {
             sizes="(max-width: 767px) 70vw, (max-width: 1023px) 40vw, 26vw"
           /> */}
         </div>
+      </div>
       </div>
     </section>
   );

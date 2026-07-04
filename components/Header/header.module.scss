@@ -1,3 +1,5 @@
+@use '../../app/home/home-layout' as home;
+
 .header_area {
   position: relative;
   z-index: 100;
@@ -7,6 +9,10 @@
   position: sticky;
   top: 0;
   background-color: var(--page-canvas);
+}
+
+.homeContentCap {
+  @include home.home-content-cap;
 }
 
 /**

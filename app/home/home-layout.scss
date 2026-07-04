@@ -1,0 +1,33 @@
+@use '@/styles/variables' as *;
+
+$home-content-max-width: 1260px;
+
+@mixin home-content-cap {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: $home-content-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+  padding-left: clamp(1rem, 5vw, 6rem);
+  padding-right: clamp(1rem, 5vw, 6rem);
+
+  @media screen and (min-width: $home-content-max-width) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@mixin home-float-layer-bleed {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  max-width: none;
+  pointer-events: none;
+  z-index: 0;
+  overflow: visible;
+}

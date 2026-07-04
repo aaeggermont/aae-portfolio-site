@@ -1,4 +1,5 @@
 /* app/home/latest-projects.module.scss */
+@use './home-layout' as home;
 
 .latestProjectsSection {
   width: 100%;
@@ -18,10 +19,9 @@
   }
 
   .content {
+    @include home.home-content-cap;
     text-align: center;
     width: 100%;
-    position: relative;
-    z-index: 1;
   }
 
   .heading {
@@ -31,18 +31,7 @@
     color: #074c5f;
     margin-bottom: 1.5rem;
     padding-bottom: 2vh;
-
-    @media screen and #{$tablet} {
-      margin-left: 1vw;
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    @media screen and #{$desktop-device} {
-      margin-left: 3vw;
-      display: flex;
-      justify-content: flex-start;
-    }
+    text-align: left;
   }
 
   .summarySection {
@@ -52,8 +41,6 @@
     justify-content: center;
   
     .summarySectionText {
-      @include global-container;
-  
       @include fluid-type(16px, 22px, 32px);
       font-family: var(--font-figtree);
       color: $font-color-bold;
@@ -65,7 +52,6 @@
 
   .projectsSwiper {
    height: 440px;
-   @include global-container;    
 
     :global(.swiper-wrapper) {
       align-items: stretch;
@@ -80,11 +66,7 @@
 
 /* Floating background images (same pattern as MyBackground) */
 .floatLayer {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-  pointer-events: none;
-  z-index: 0;
+  @include home.home-float-layer-bleed;
 }
 
 .floatImg {

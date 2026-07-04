@@ -1,3 +1,4 @@
+@use './home-layout' as home;
 @import "@/styles/variables";
 @import "@/styles/mixins";
 
@@ -21,10 +22,9 @@
   }
 
   .content {
+    @include home.home-content-cap;
     text-align: center;
     width: 100%;
-    position: relative;
-    z-index: 1;
     padding-bottom: 2rem;
   }
 
@@ -35,18 +35,7 @@
     color: #074C5F;
     margin-bottom: 1.5rem;
     padding-bottom: 1vh;
-
-    @media screen and #{$tablet} {
-      margin-left: 1vw;
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    @media screen and #{$desktop-device} {
-      margin-left: 3vw;
-      display: flex;
-      justify-content: flex-start;
-    }
+    text-align: left;
   }
 
   .summarySection {
@@ -56,8 +45,6 @@
     justify-content: center;
 
     .summarySectionText {
-      @include global-container;
-
       @media screen and #{$mobile} {
         max-width: 420px;
       }
@@ -154,11 +141,7 @@
 }
 
 .floatLayer {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-  pointer-events: none; // background only
-  z-index: 0; // behind content
+  @include home.home-float-layer-bleed;
 }
 
 .floatImg {
