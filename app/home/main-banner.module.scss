@@ -110,9 +110,11 @@
   @media screen and #{$mobile} {
     flex-direction: column-reverse;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     text-align: center;
-    gap: 2rem;
+    gap: clamp(0.5rem, 1.5vh, 0.875rem);
+    padding-block: clamp(0.25rem, 1vh, 0.75rem);
+    box-sizing: border-box;
   }
 
   .bannerTexContent {
@@ -137,6 +139,8 @@
       align-items: center;
       width: 100%;
       max-width: 32rem;
+      padding: 0;
+      flex: 0 0 auto;
     }
   }
 
@@ -156,8 +160,17 @@
     }
 
     @media screen and #{$mobile} {
-      width: min(84.6vw, 414px);
-      margin-bottom: 0.5rem;
+      /* ~25% larger than prior mobile cap; text reserve tightened to keep headline in view */
+      height: clamp(
+        188px,
+        calc(100dvh - var(--header-height, 80px) - 8.25rem),
+        300px
+      );
+      width: auto;
+      max-width: min(78vw, 263px);
+      aspect-ratio: 3 / 4;
+      flex: 0 0 auto;
+      margin: 0;
       filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
     }
   }
@@ -176,6 +189,13 @@
     -webkit-mask-size: 124% 108%;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center 38%;
+
+    @media screen and #{$mobile} {
+      mask-size: 118% 104%;
+      mask-position: center 44%;
+      -webkit-mask-size: 118% 104%;
+      -webkit-mask-position: center 44%;
+    }
   }
 
   .bannerPhotoImage {
@@ -193,7 +213,10 @@
     margin-bottom: 1rem;
 
     @media screen and #{$mobile} {
-      padding: 0 1.5rem;
+      padding: 0 1rem;
+      margin-bottom: 0.35rem;
+      font-size: clamp(1rem, 4.2vw, 1.125rem);
+      line-height: 1.25;
     }
 
     span {
@@ -212,9 +235,12 @@
 
     @media screen and #{$mobile} {
       text-align: center;
-      margin-left: 1.5rem;
-      margin-right: 1.5rem;
-      max-width: 32rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+      margin-bottom: 0;
+      max-width: 22rem;
+      font-size: clamp(0.8125rem, 3.6vw, 0.9375rem);
+      line-height: 1.35;
     }
 
     @media screen and #{$tablet} {
@@ -240,6 +266,7 @@
     @media screen and #{$mobile} {
       max-width: 32rem;
       padding: 0 1.5rem;
+      margin-top: 0.75rem;
     }
 
     @media screen and #{$desktop-device} {
@@ -256,6 +283,7 @@
 
     @media screen and #{$mobile} {
       gap: 0;
+      margin-top: 0.75rem;
     }
   }
 

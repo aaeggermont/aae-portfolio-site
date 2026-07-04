@@ -88,13 +88,16 @@ function stippleToneFromPixel(r: number, g: number, b: number): {
   };
 }
 
-function drawImageCoverBottom(
+type CoverAnchorY = "top" | "center" | "bottom";
+
+function drawImageCover(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   dx: number,
   dy: number,
   dW: number,
   dH: number,
+  anchorY: CoverAnchorY = "bottom",
 ) {
   const iw = img.naturalWidth;
   const ih = img.naturalHeight;
@@ -103,7 +106,12 @@ function drawImageCoverBottom(
   const sw = dW / scale;
   const sh = dH / scale;
   const sx = Math.max(0, Math.min(iw - sw, (iw - sw) * 0.5));
-  const sy = Math.max(0, ih - sh);
+  let sy = 0;
+  if (anchorY === "center") {
+    sy = Math.max(0, (ih - sh) * 0.5);
+  } else if (anchorY === "bottom") {
+    sy = Math.max(0, ih - sh);
+  }
   ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dW, dH);
 }
 
@@ -731,7 +739,16 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
 
       offscreen.width = w;
       offscreen.height = h;
-      drawImageCoverBottom(offCtx, image, 0, 0, w, h);
+      const isMobilePortrait = window.matchMedia("(max-width: 767px)").matches;
+      drawImageCover(
+        offCtx,
+        image,
+        0,
+        0,
+        w,
+        h,
+        isMobilePortrait ? "top" : "bottom",
+      );
       const pixels = offCtx.getImageData(0, 0, w, h).data;
 
       stopLoop();
