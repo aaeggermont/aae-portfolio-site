@@ -24,15 +24,14 @@ export type HomeNavKey = "home" | "about" | "work" | "contact";
 
 export function getHomeNavHref(pathname: string, key: HomeNavKey): string {
   if (key === "about") return "/aboutme";
+  if (key === "work") return "/mywork";
 
   if (pathname !== "/") {
     if (key === "home") return "/";
-    if (key === "work") return "/mywork";
     return "/contact";
   }
 
   if (key === "home") return "#hero";
-  if (key === "work") return "#work";
   return "#contact";
 }
 
@@ -46,11 +45,7 @@ export function isHomeNavActive(
   }
 
   if (key === "work") {
-    return (
-      pathname.startsWith("/mywork") ||
-      pathname.startsWith("/work") ||
-      (pathname === "/" && hash === "#work")
-    );
+    return pathname.startsWith("/mywork") || pathname.startsWith("/work");
   }
 
   if (key === "contact") {
