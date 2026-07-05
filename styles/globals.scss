@@ -8,6 +8,19 @@ html, body {
   background-color: var(--page-canvas);
 }
 
+/* Mobile hamburger + slide-out drawer — single navy (matches headerTheme.ts) */
+[class*="menu_button"]:not([data-menu-inverse="true"]) {
+  background-color: #064C5F !important;
+}
+
+[class*="sidenav_menu"] {
+  background-color: #064C5F !important;
+}
+
+[class*="menu_button"][data-menu-inverse="true"] {
+  background-color: #ffffff !important;
+}
+
 /* Keep header above page content so nav links stay clickable */
 .header_area {
   position: relative;
