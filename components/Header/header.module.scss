@@ -12,12 +12,11 @@
 }
 
 .homeContentCap {
-  @include home.home-content-cap;
+  @include home.home-page-gutter;
 }
 
 .headerContentCap {
-  @include home.home-content-cap;
-  padding-left: 0;
+  @include home.home-page-gutter;
 }
 
 @keyframes slide-in-menu {
@@ -126,8 +125,6 @@
 		align-items: center;
 		justify-content: space-between;
 		padding-block: 20px;
-		padding-right: 20px;
-		padding-left: 0;
 	}
 
 	@media (min-width: #{home.$header-desktop-min}) {

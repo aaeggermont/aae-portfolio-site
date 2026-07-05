@@ -99,7 +99,7 @@
 }
 
 .bannerContentCap {
-  @include home.home-content-cap;
+  @include home.home-page-gutter;
   min-height: calc(100dvh - var(--header-height, 80px));
   display: flex;
   flex-direction: row;
@@ -235,8 +235,6 @@
 
     @media screen and #{$mobile} {
       text-align: center;
-      margin-left: 1rem;
-      margin-right: 1rem;
       margin-bottom: 0;
       max-width: 22rem;
       font-size: clamp(0.8125rem, 3.6vw, 0.9375rem);
