@@ -27,10 +27,10 @@ export default function Header({
   const { isDark, position, logoPrimaryColor, logoAccentColor } =
     useAtomValue(headerState);
 
-  let fontColor = fontColorProp || "#074c5f";
+  let fontColor = fontColorProp || "#064c5f";
   const resolvedLogoPrimary =
     logoPrimaryColor ??
-    (isDark ? "#ffffff" : logoFontColorProp || "#074c5f");
+    (isDark ? "#ffffff" : logoFontColorProp || "#064c5f");
 
   if (isDark) {
     fontColor = "#ffffff";
