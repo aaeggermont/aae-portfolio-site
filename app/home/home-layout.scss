@@ -1,43 +1,45 @@
 @use '@/styles/variables' as *;
 
-$home-content-max-width: 1260px;
-$home-section-content-max-width: 1100px;
+/**
+ * Landing page horizontal grid — mirrors AR Story Teller `LAYOUT_DIMENSIONS` values
+ * (16 / 40 / 80px gutters; tablet 1024px shell; desktop 1260px shell → 1100px usable).
+ * Kept in this file so the home route stays independent of case-study layoutConfig.
+ */
+$home-layout-max-width-tablet: 1024px;
+$home-layout-max-width-desktop: 1260px;
+$home-layout-margin-mobile: 16px;
+$home-layout-margin-tablet: 40px;
+$home-layout-margin-desktop: 80px;
+
+/** Usable content width at desktop (`1260 − 2 × 80`). */
+$home-layout-usable-width-desktop: $home-layout-max-width-desktop -
+  ($home-layout-margin-desktop * 2);
 
 /** Header desktop nav layout band — viewport-relative menu width applies only in this range. */
 $header-desktop-min: $desktop-min;
-$header-desktop-max: $home-content-max-width;
+$header-desktop-max: $home-layout-max-width-desktop;
 
-@mixin home-content-cap {
+@mixin home-page-gutter {
   box-sizing: border-box;
   width: 100%;
-  max-width: $home-content-max-width;
+  max-width: none;
   margin-left: auto;
   margin-right: auto;
   position: relative;
   z-index: 1;
-  padding-left: clamp(1rem, 5vw, 6rem);
-  padding-right: clamp(1rem, 5vw, 6rem);
+  padding-left: $home-layout-margin-mobile;
+  padding-right: $home-layout-margin-mobile;
 
-  @media screen and (min-width: $home-content-max-width) {
-    padding-left: 0;
-    padding-right: 0;
+  @media screen and (min-width: $tablet-min) {
+    max-width: $home-layout-max-width-tablet;
+    padding-left: $home-layout-margin-tablet;
+    padding-right: $home-layout-margin-tablet;
   }
-}
 
-@mixin home-section-content-cap {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: $home-section-content-max-width;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  z-index: 1;
-  padding-left: clamp(1rem, 5vw, 6rem);
-  padding-right: clamp(1rem, 5vw, 6rem);
-
-  @media screen and (min-width: $home-section-content-max-width) {
-    padding-left: 0;
-    padding-right: 0;
+  @media screen and (min-width: $desktop-min) {
+    max-width: $home-layout-max-width-desktop;
+    padding-left: $home-layout-margin-desktop;
+    padding-right: $home-layout-margin-desktop;
   }
 }
 

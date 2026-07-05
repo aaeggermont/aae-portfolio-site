@@ -20,7 +20,7 @@
 }
 
 .content {
-  @include home.home-section-content-cap;
+  @include home.home-page-gutter;
   text-align: center;
   width: 100%;
   padding-bottom: 2rem;

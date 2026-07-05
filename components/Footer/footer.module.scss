@@ -1,7 +1,7 @@
 @use '../../app/home/home-layout' as home;
 
 .homeContentCap {
-  @include home.home-content-cap;
+  @include home.home-page-gutter;
 }
 
 .footer-container {
