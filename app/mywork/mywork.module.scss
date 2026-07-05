@@ -1,16 +1,10 @@
+@use '../home/home-layout' as home;
+
 .myWorkPage {
-  /* Narrower cap than global layout — `$mywork-content-max-width` (`main` already uses `global-container`). */
+  @include home.home-page-gutter;
   width: 100%;
-  max-width: $mywork-content-max-width;
-  margin-left: auto;
-  margin-right: auto;
   box-sizing: border-box;
   position: relative;
-
-  @media screen and #{$tablet} {
-    padding-left: clamp(2rem, 4vw, 2.5rem);
-    padding-right: clamp(2rem, 4vw, 2.5rem);
-  }
 }
 
 .myWorkSection {

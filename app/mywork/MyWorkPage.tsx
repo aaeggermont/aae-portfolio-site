@@ -2,7 +2,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useSetAtom } from "jotai";
+
 import styles from "./mywork.module.scss";
+import { layoutState } from "@/app/(public)/layout-state";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
@@ -43,6 +46,7 @@ type ProjectDoc = {
 };
 
 export default function MyWorkPageView() {
+  const setLayoutState = useSetAtom(layoutState);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const [projects, setProjects] = useState<ProjectDoc[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -67,6 +71,11 @@ export default function MyWorkPageView() {
   };
 
   // floating bg images
+  useEffect(() => {
+    setLayoutState({ isFullWidth: true });
+    return () => setLayoutState({ isFullWidth: false });
+  }, [setLayoutState]);
+
   useEffect(() => {
     const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(() => {
       const img =

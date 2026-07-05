@@ -53,7 +53,7 @@ export function Footer(props: FooterProps = {}) {
     };
 
     const useStandardPageGutter =
-        pathname === '/' || pathname === '/aboutme';
+        pathname === '/' || pathname === '/aboutme' || pathname === '/mywork';
 
     const wrapperClass = clsx(
         useStandardPageGutter ? styles.homeContentCap : 'global-container',
