@@ -19,6 +19,7 @@ type FooterProps = {
   logoFontColor?: string;
   logoAccentColor?: string;
   fontColor?: string;
+  backgroundColor?: string;
 };
 
 export function Footer(props: FooterProps = {}) {
@@ -28,6 +29,7 @@ export function Footer(props: FooterProps = {}) {
     const footerThemeStyle = getFooterThemeStyle({
       isDark: props.isDark,
       fontColor: props.fontColor,
+      backgroundColor: props.backgroundColor,
     });
     const { primary: logoPrimaryColor, accent: logoAccentColor } =
       resolveFooterLogoColors({

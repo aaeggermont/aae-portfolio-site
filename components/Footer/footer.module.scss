@@ -42,7 +42,7 @@
   border-top-color: var(--footer-border-color, rgb(7, 76, 95, 0.15));
   border-top-width: 0.1rem;
   margin-top: 3rem;
-  background-color: white;
+  background-color: var(--footer-background-color, #ffffff);
 
   @media #{$sm}, #{$xs} {
     height: auto;

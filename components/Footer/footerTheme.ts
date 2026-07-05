@@ -9,6 +9,7 @@ import { HEADER_LOGO_DEFAULT_COLORS } from "@/components/Header/HeaderLogo";
 export const FOOTER_COLORS = {
   text: HEADER_MOBILE_NAVY,
   textDark: "#ffffff",
+  background: "#ffffff",
   borderLight: "rgb(7, 76, 95, 0.15)",
   borderDark: "rgba(255, 255, 255, 0.15)",
   activeUnderline: "#feb000",
@@ -74,6 +75,7 @@ export const FOOTER_MOBILE_LAYOUT = {
 export type FooterThemeOptions = {
   isDark?: boolean;
   fontColor?: string;
+  backgroundColor?: string;
 };
 
 export function resolveFooterTextColor(options: FooterThemeOptions = {}): string {
@@ -85,6 +87,12 @@ export function resolveFooterTextColor(options: FooterThemeOptions = {}): string
 
 export function resolveFooterBorderColor(options: FooterThemeOptions = {}): string {
   return options.isDark ? FOOTER_COLORS.borderDark : FOOTER_COLORS.borderLight;
+}
+
+export function resolveFooterBackgroundColor(
+  options: FooterThemeOptions = {},
+): string {
+  return options.backgroundColor ?? FOOTER_COLORS.background;
 }
 
 export function resolveFooterLogoColors(options: {
@@ -106,11 +114,13 @@ export function getFooterThemeStyle(
 ): CSSProperties {
   const textColor = resolveFooterTextColor(options);
   const borderColor = resolveFooterBorderColor(options);
+  const backgroundColor = resolveFooterBackgroundColor(options);
 
   return {
     "--footer-font-family": FOOTER_NAV_TYPOGRAPHY.fontFamily,
     "--footer-text-color": textColor,
     "--footer-border-color": borderColor,
+    "--footer-background-color": backgroundColor,
     "--footer-active-underline-color": FOOTER_COLORS.activeUnderline,
 
     "--footer-text-font-weight": String(FOOTER_NAV_TYPOGRAPHY.fontWeight),
