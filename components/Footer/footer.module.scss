@@ -1,7 +1,27 @@
 @use '../../app/home/home-layout' as home;
 
-.homeContentCap {
+.footerContentCap {
   @include home.home-page-gutter;
+}
+
+/** Nav link + copyright sizes — keep in sync with `header.module.scss` `.main_menu a`. */
+@mixin footer-nav-type-size {
+  font-size: var(--footer-nav-font-size-mobile, 17px);
+
+  @media screen and (min-width: #{home.$header-tablet-min}) and (max-width: #{home.$header-tablet-max}) {
+    font-size: var(--footer-nav-font-size-tablet, 15px);
+  }
+
+  @media (min-width: #{home.$header-desktop-min}) and (max-width: #{home.$header-desktop-max}) {
+    @include fluid-type(16px, 16px, 18px);
+  }
+}
+
+@mixin footer-text-base {
+  font-family: var(--footer-font-family, var(--font-poppins), sans-serif);
+  font-weight: var(--footer-text-font-weight, 400);
+  line-height: var(--footer-text-line-height, 1.3);
+  color: var(--footer-text-color, #064c5f);
 }
 
 .footer-container {
@@ -15,7 +35,7 @@
   bottom: 0px;
   border-top: solid;
   border-top-style: solid;
-  border-top-color: rgb(7, 76, 95, .15);
+  border-top-color: var(--footer-border-color, rgb(7, 76, 95, 0.15));
   border-top-width: 0.1rem;
   margin-top: 3rem;
   background-color: white;
@@ -36,12 +56,17 @@
     align-items: flex-start;
     justify-content: center;
     gap: 1rem;
-    padding-left: 8%;
+
+    .footer_logo_link {
+      display: inline-flex;
+      align-items: center;
+      line-height: 0;
+      text-decoration: none;
+    }
 
     @media #{$sm}, #{$xs} {
       width: 20%;
       align-items: center;
-      padding-left: 0;
     }
   }
 
@@ -53,19 +78,29 @@
     align-content: center;
     align-items: center;
     justify-content: center;
+    text-align: center;
 
     @media #{$sm}, #{$xs} {
       width: 100%;
-      flex-direction: row;
       padding-top: 1rem;
       padding-bottom: 3rem;
     }
 
-    span {
-      font-family: var(--font-poppins), sans-serif;
-      font-weight: 500;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      color: #07435F;
+    .copyright_text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 0.25rem;
+
+      span {
+        @include footer-text-base;
+        @include footer-nav-type-size;
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
     }
   }
 
@@ -77,29 +112,25 @@
     align-content: center;
     align-items: flex-start;
     justify-content: center;
-    padding-left: 5%;
     gap: 0.3rem;
 
     @media #{$sm}, #{$xs} {
       width: 50%;
       align-items: center;
-      padding-left: 0%;
     }
 
     .navigation-title {
-      font-family: var(--font-poppins), sans-serif;
-      font-weight: 500;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      color: #07435F;
+      @include footer-text-base;
+      @include footer-nav-type-size;
 
       @media #{$sm}, #{$xs} {
-        font-weight: 800;
+        font-size: var(--footer-title-font-size-mobile, 18px);
       }
     }
 
     .active_link {
       text-decoration: none;
-      font-weight: bold;
+      font-weight: var(--footer-nav-active-font-weight, 700);
 
       &:after {
         content: '';
@@ -108,24 +139,19 @@
         bottom: 0;
         width: 100%;
         height: 3px;
-        background: $theme_color;
+        background: var(--footer-active-underline-color, #feb000);
       }
     }
 
     span {
       position: relative;
-      font-family: var(--font-poppins), sans-serif;
-      font-size: clamp(0.75rem, 4vw, 1rem);
-      font-weight: 500;
+      @include footer-text-base;
+      @include footer-nav-type-size;
       padding-left: 0rem;
-
-      @media #{$sm}, #{$xs} {
-        font-weight: normal;
-      }
 
       a {
         text-decoration: none;
-        color: #496A8A;
+        color: inherit;
       }
     }
   }
