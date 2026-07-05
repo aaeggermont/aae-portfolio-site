@@ -22,35 +22,44 @@ export const FOOTER_LOGO = {
 } as const;
 
 /**
- * Footer nav type tiers — mirrors top navigation (`header.module.scss` + `headerTheme.ts`).
+ * Footer typography — single place to edit type tokens.
+ * Applied as CSS variables on `.footer-container` (consumed in `footer.module.scss`).
  *
- * | Viewport | Header nav | Footer nav links | Footer “Navigation” title + copyright |
- * |----------|------------|------------------|---------------------------------------|
- * | All      | varies     | **16px** (fixed) | responsive tiers below                |
+ * | Role | Size | Weight |
+ * |------|------|--------|
+ * | Nav links (Home, About Me, …) | 16px fixed | 400 (700 active) |
+ * | “Navigation” title | responsive + 18px mobile | 600 |
+ * | Copyright lines | responsive | 500 |
  *
- * Responsive sizes are applied in `footer.module.scss` (fluid-type + header breakpoints).
+ * Responsive tiers for title + copyright mirror header `.main_menu a`
+ * (17px mobile → 15px tablet → fluid 16–18px desktop).
  */
-export const FOOTER_NAV_TYPOGRAPHY = {
+export const FOOTER_TYPOGRAPHY = {
   fontFamily: "var(--font-poppins), sans-serif",
-  fontWeight: 400,
   lineHeight: "1.3",
-  navActiveFontWeight: 700,
-  /** Home, About Me, My Work, Contact — fixed across breakpoints. */
-  navLinkFontSize: "16px",
-  titleFontWeight: 600,
-  copyrightFontWeight: 500,
 
-  mobile: {
-    navFontSize: HEADER_SIDEBAR_TYPOGRAPHY.navFontSize,
-    titleFontSize: HEADER_SIDEBAR_TYPOGRAPHY.nameFontSize,
+  /** Title + copyright — breakpoint sizes (nav links use `navLink` instead). */
+  responsiveType: {
+    fontSizeMobile: HEADER_SIDEBAR_TYPOGRAPHY.navFontSize,
+    fontSizeTablet: "15px",
+    desktopFluidMin: "16px",
+    desktopFluidMax: "18px",
   },
-  tablet: {
-    fontSize: "15px",
+
+  title: {
+    fontWeight: 600,
+    /** Mobile “Navigation” label — overrides `responsiveType.fontSizeMobile`. */
+    fontSizeMobile: HEADER_SIDEBAR_TYPOGRAPHY.nameFontSize,
   },
-  desktop: {
-    fluidMin: "16px",
-    fluidMid: "16px",
-    fluidMax: "18px",
+
+  navLink: {
+    fontSize: "16px",
+    fontWeight: 400,
+    activeFontWeight: 700,
+  },
+
+  copyright: {
+    fontWeight: 500,
   },
 } as const;
 
@@ -59,18 +68,47 @@ export const FOOTER_NAV_TYPOGRAPHY = {
  * Applied via CSS variables on `.footer-container` (mobile breakpoints only).
  */
 export const FOOTER_MOBILE_LAYOUT = {
-  /** Space above the footer shell (below page content). */
   wrapperPaddingTop: "3rem",
-  /** Space inside footer below the top border. */
   containerPaddingTop: "2rem",
-  /** Equal gap between Navigation, Logo, and Copyright blocks. */
   blockGap: "2rem",
-  /** Gap between “Navigation” title and link list. */
   navStackGap: "0.75rem",
-  /** Gap between copyright lines. */
   copyrightLineGap: "0.35rem",
   containerPaddingBottom: "2.5rem",
 } as const;
+
+/** CSS custom properties for footer type — keep in sync with FOOTER_TYPOGRAPHY. */
+export const footerTypographyStyle = {
+  "--footer-font-family": FOOTER_TYPOGRAPHY.fontFamily,
+  "--footer-text-line-height": FOOTER_TYPOGRAPHY.lineHeight,
+
+  "--footer-type-size-mobile": FOOTER_TYPOGRAPHY.responsiveType.fontSizeMobile,
+  "--footer-type-size-tablet": FOOTER_TYPOGRAPHY.responsiveType.fontSizeTablet,
+  "--footer-desktop-fluid-min": FOOTER_TYPOGRAPHY.responsiveType.desktopFluidMin,
+  "--footer-desktop-fluid-max": FOOTER_TYPOGRAPHY.responsiveType.desktopFluidMax,
+
+  "--footer-title-font-weight": String(FOOTER_TYPOGRAPHY.title.fontWeight),
+  "--footer-title-font-size-mobile": FOOTER_TYPOGRAPHY.title.fontSizeMobile,
+
+  "--footer-nav-link-font-size": FOOTER_TYPOGRAPHY.navLink.fontSize,
+  "--footer-nav-link-font-weight": String(FOOTER_TYPOGRAPHY.navLink.fontWeight),
+  "--footer-nav-active-font-weight": String(
+    FOOTER_TYPOGRAPHY.navLink.activeFontWeight,
+  ),
+
+  "--footer-copyright-font-weight": String(FOOTER_TYPOGRAPHY.copyright.fontWeight),
+} as CSSProperties;
+
+/** CSS custom properties for mobile footer spacing — keep in sync with FOOTER_MOBILE_LAYOUT. */
+export const footerMobileLayoutStyle = {
+  "--footer-mobile-wrapper-padding-top": FOOTER_MOBILE_LAYOUT.wrapperPaddingTop,
+  "--footer-mobile-container-padding-top":
+    FOOTER_MOBILE_LAYOUT.containerPaddingTop,
+  "--footer-mobile-block-gap": FOOTER_MOBILE_LAYOUT.blockGap,
+  "--footer-mobile-nav-stack-gap": FOOTER_MOBILE_LAYOUT.navStackGap,
+  "--footer-mobile-copyright-line-gap": FOOTER_MOBILE_LAYOUT.copyrightLineGap,
+  "--footer-mobile-container-padding-bottom":
+    FOOTER_MOBILE_LAYOUT.containerPaddingBottom,
+} as CSSProperties;
 
 export type FooterThemeOptions = {
   isDark?: boolean;
@@ -108,47 +146,16 @@ export function resolveFooterLogoColors(options: {
   };
 }
 
-/** CSS custom properties for `.footer-container` — colors + weights; sizes live in SCSS tiers. */
+/** CSS custom properties for `.footer-container` — merge typography + layout + runtime colors. */
 export function getFooterThemeStyle(
   options: FooterThemeOptions = {},
 ): CSSProperties {
-  const textColor = resolveFooterTextColor(options);
-  const borderColor = resolveFooterBorderColor(options);
-  const backgroundColor = resolveFooterBackgroundColor(options);
-
   return {
-    "--footer-font-family": FOOTER_NAV_TYPOGRAPHY.fontFamily,
-    "--footer-text-color": textColor,
-    "--footer-border-color": borderColor,
-    "--footer-background-color": backgroundColor,
+    ...footerTypographyStyle,
+    ...footerMobileLayoutStyle,
+    "--footer-text-color": resolveFooterTextColor(options),
+    "--footer-border-color": resolveFooterBorderColor(options),
+    "--footer-background-color": resolveFooterBackgroundColor(options),
     "--footer-active-underline-color": FOOTER_COLORS.activeUnderline,
-
-    "--footer-text-font-weight": String(FOOTER_NAV_TYPOGRAPHY.fontWeight),
-    "--footer-text-line-height": FOOTER_NAV_TYPOGRAPHY.lineHeight,
-    "--footer-nav-active-font-weight": String(
-      FOOTER_NAV_TYPOGRAPHY.navActiveFontWeight,
-    ),
-
-    "--footer-title-font-weight": String(FOOTER_NAV_TYPOGRAPHY.titleFontWeight),
-    "--footer-copyright-font-weight": String(
-      FOOTER_NAV_TYPOGRAPHY.copyrightFontWeight,
-    ),
-
-    "--footer-nav-link-font-size": FOOTER_NAV_TYPOGRAPHY.navLinkFontSize,
-
-    "--footer-nav-font-size-mobile": FOOTER_NAV_TYPOGRAPHY.mobile.navFontSize,
-    "--footer-title-font-size-mobile":
-      FOOTER_NAV_TYPOGRAPHY.mobile.titleFontSize,
-    "--footer-nav-font-size-tablet": FOOTER_NAV_TYPOGRAPHY.tablet.fontSize,
-
-    "--footer-mobile-wrapper-padding-top": FOOTER_MOBILE_LAYOUT.wrapperPaddingTop,
-    "--footer-mobile-container-padding-top":
-      FOOTER_MOBILE_LAYOUT.containerPaddingTop,
-    "--footer-mobile-block-gap": FOOTER_MOBILE_LAYOUT.blockGap,
-    "--footer-mobile-nav-stack-gap": FOOTER_MOBILE_LAYOUT.navStackGap,
-    "--footer-mobile-copyright-line-gap":
-      FOOTER_MOBILE_LAYOUT.copyrightLineGap,
-    "--footer-mobile-container-padding-bottom":
-      FOOTER_MOBILE_LAYOUT.containerPaddingBottom,
   } as CSSProperties;
 }

@@ -5,27 +5,36 @@
 }
 
 .footerMobileWrapper {
-  padding-top: var(--footer-mobile-wrapper-padding-top, 3rem);
+  padding-top: var(--footer-mobile-wrapper-padding-top);
 }
 
-/** Nav link + copyright sizes — keep in sync with `header.module.scss` `.main_menu a`. */
-@mixin footer-nav-type-size {
-  font-size: var(--footer-nav-font-size-mobile, 17px);
+/**
+ * Title + copyright responsive sizes — tokens from `footerTheme.ts` → `footerTypographyStyle`.
+ * Breakpoints match header `.main_menu a` (`home-layout.scss` header tiers).
+ */
+@mixin footer-responsive-type-size {
+  font-size: var(--footer-type-size-mobile);
 
   @media screen and (min-width: #{home.$header-tablet-min}) and (max-width: #{home.$header-tablet-max}) {
-    font-size: var(--footer-nav-font-size-tablet, 15px);
+    font-size: var(--footer-type-size-tablet);
   }
 
   @media (min-width: #{home.$header-desktop-min}) and (max-width: #{home.$header-desktop-max}) {
-    @include fluid-type(16px, 16px, 18px);
+    font-size: clamp(
+      var(--footer-desktop-fluid-min),
+      calc(
+        var(--footer-desktop-fluid-min) + (var(--footer-desktop-fluid-max) - var(--footer-desktop-fluid-min)) *
+        ((100vw - #{home.$header-desktop-min}) / (#{home.$header-desktop-max} - #{home.$header-desktop-min}))
+      ),
+      var(--footer-desktop-fluid-max)
+    );
   }
 }
 
 @mixin footer-text-base {
-  font-family: var(--footer-font-family, var(--font-poppins), sans-serif);
-  font-weight: var(--footer-text-font-weight, 400);
-  line-height: var(--footer-text-line-height, 1.3);
-  color: var(--footer-text-color, #064c5f);
+  font-family: var(--footer-font-family);
+  line-height: var(--footer-text-line-height);
+  color: var(--footer-text-color);
 }
 
 .footer-container {
@@ -39,19 +48,19 @@
   bottom: 0px;
   border-top: solid;
   border-top-style: solid;
-  border-top-color: var(--footer-border-color, rgb(7, 76, 95, 0.15));
+  border-top-color: var(--footer-border-color);
   border-top-width: 0.1rem;
   margin-top: 3rem;
-  background-color: var(--footer-background-color, #ffffff);
+  background-color: var(--footer-background-color);
 
   @media #{$sm}, #{$xs} {
     height: auto;
     min-height: 0;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
-    row-gap: var(--footer-mobile-block-gap, 2rem);
-    padding-top: var(--footer-mobile-container-padding-top, 2rem);
-    padding-bottom: var(--footer-mobile-container-padding-bottom, 2.5rem);
+    row-gap: var(--footer-mobile-block-gap);
+    padding-top: var(--footer-mobile-container-padding-top);
+    padding-bottom: var(--footer-mobile-container-padding-bottom);
     border-top-width: 0.3rem;
   }
 
@@ -120,13 +129,13 @@
       gap: 0.25rem;
 
       @media #{$sm}, #{$xs} {
-        gap: var(--footer-mobile-copyright-line-gap, 0.35rem);
+        gap: var(--footer-mobile-copyright-line-gap);
       }
 
       span {
         @include footer-text-base;
-        @include footer-nav-type-size;
-        font-weight: var(--footer-copyright-font-weight, 500);
+        @include footer-responsive-type-size;
+        font-weight: var(--footer-copyright-font-weight);
         display: block;
         width: 100%;
         text-align: center;
@@ -151,24 +160,24 @@
       height: auto;
       align-items: center;
       justify-self: center;
-      gap: var(--footer-mobile-nav-stack-gap, 0.75rem);
+      gap: var(--footer-mobile-nav-stack-gap);
     }
 
     .navigation-title {
       @include footer-text-base;
-      @include footer-nav-type-size;
-      font-weight: var(--footer-title-font-weight, 500);
+      @include footer-responsive-type-size;
+      font-weight: var(--footer-title-font-weight);
       text-align: left;
 
       @media #{$sm}, #{$xs} {
-        font-size: var(--footer-title-font-size-mobile, 18px);
+        font-size: var(--footer-title-font-size-mobile);
         text-align: center;
       }
     }
 
     .active_link {
       text-decoration: none;
-      font-weight: var(--footer-nav-active-font-weight, 700);
+      font-weight: var(--footer-nav-active-font-weight);
 
       &:after {
         content: '';
@@ -177,14 +186,15 @@
         bottom: 0;
         width: 100%;
         height: 3px;
-        background: var(--footer-active-underline-color, #feb000);
+        background: var(--footer-active-underline-color);
       }
     }
 
     span {
       position: relative;
       @include footer-text-base;
-      font-size: var(--footer-nav-link-font-size, 16px);
+      font-size: var(--footer-nav-link-font-size);
+      font-weight: var(--footer-nav-link-font-weight);
       padding-left: 0rem;
       text-align: left;
 
