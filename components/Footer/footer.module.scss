@@ -4,6 +4,10 @@
   @include home.home-page-gutter;
 }
 
+.footerMobileWrapper {
+  padding-top: var(--footer-mobile-wrapper-padding-top, 3rem);
+}
+
 /** Nav link + copyright sizes — keep in sync with `header.module.scss` `.main_menu a`. */
 @mixin footer-nav-type-size {
   font-size: var(--footer-nav-font-size-mobile, 17px);
@@ -27,8 +31,8 @@
 .footer-container {
   width: 100%;
   height: 10.5rem;
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   margin-bottom: 1rem;
   position: relative;
@@ -41,14 +45,19 @@
   background-color: white;
 
   @media #{$sm}, #{$xs} {
-    height: 21.5rem;
-    flex-direction: column;
-    padding-bottom: 1rem;
+    height: auto;
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    row-gap: var(--footer-mobile-block-gap, 2rem);
+    padding-top: var(--footer-mobile-container-padding-top, 2rem);
+    padding-bottom: var(--footer-mobile-container-padding-bottom, 2.5rem);
     border-top-width: 0.3rem;
   }
 
   .logo-section {
-    width: 20%;
+    width: auto;
+    max-width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -56,6 +65,7 @@
     align-items: flex-start;
     justify-content: center;
     gap: 1rem;
+    justify-self: start;
 
     .footer_logo_link {
       display: inline-flex;
@@ -65,13 +75,15 @@
     }
 
     @media #{$sm}, #{$xs} {
-      width: 20%;
+      height: auto;
       align-items: center;
+      justify-self: center;
     }
   }
 
   .copyright-section {
-    width: 55%;
+    width: auto;
+    max-width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -79,11 +91,11 @@
     align-items: center;
     justify-content: center;
     text-align: center;
+    justify-self: center;
 
     @media #{$sm}, #{$xs} {
+      height: auto;
       width: 100%;
-      padding-top: 1rem;
-      padding-bottom: 3rem;
     }
 
     .copyright_text {
@@ -94,9 +106,14 @@
       text-align: center;
       gap: 0.25rem;
 
+      @media #{$sm}, #{$xs} {
+        gap: var(--footer-mobile-copyright-line-gap, 0.35rem);
+      }
+
       span {
         @include footer-text-base;
         @include footer-nav-type-size;
+        font-weight: var(--footer-copyright-font-weight, 500);
         display: block;
         width: 100%;
         text-align: center;
@@ -105,26 +122,34 @@
   }
 
   .navigation-section {
-    width: 25%;
+    width: max-content;
+    max-width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-content: center;
+    align-content: flex-start;
     align-items: flex-start;
     justify-content: center;
     gap: 0.3rem;
+    justify-self: end;
 
     @media #{$sm}, #{$xs} {
-      width: 50%;
+      width: auto;
+      height: auto;
       align-items: center;
+      justify-self: center;
+      gap: var(--footer-mobile-nav-stack-gap, 0.75rem);
     }
 
     .navigation-title {
       @include footer-text-base;
       @include footer-nav-type-size;
+      font-weight: var(--footer-title-font-weight, 500);
+      text-align: left;
 
       @media #{$sm}, #{$xs} {
         font-size: var(--footer-title-font-size-mobile, 18px);
+        text-align: center;
       }
     }
 
@@ -146,8 +171,13 @@
     span {
       position: relative;
       @include footer-text-base;
-      @include footer-nav-type-size;
+      font-size: var(--footer-nav-link-font-size, 16px);
       padding-left: 0rem;
+      text-align: left;
+
+      @media #{$sm}, #{$xs} {
+        text-align: center;
+      }
 
       a {
         text-decoration: none;

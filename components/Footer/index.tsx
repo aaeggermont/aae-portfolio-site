@@ -7,6 +7,7 @@ import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import { HeaderLogo } from '@/components/Header/HeaderLogo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { clsx } from 'clsx';
 import {
   getFooterThemeStyle,
   resolveFooterLogoColors,
@@ -97,8 +98,8 @@ export function Footer(props: FooterProps = {}) {
     if (screenDevice.isMobile) {
         return (
             <div
-              style={{ paddingTop: "5rem" }}
-              className={wrapperClass}
+              className={clsx(wrapperClass, styles.footerMobileWrapper)}
+              style={footerThemeStyle}
             >
                 <div
                     className={styles['footer-container']}
