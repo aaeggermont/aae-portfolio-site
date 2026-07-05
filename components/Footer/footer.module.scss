@@ -64,14 +64,27 @@
     align-content: center;
     align-items: flex-start;
     justify-content: center;
-    gap: 1rem;
     justify-self: start;
+
+    .logo_stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
 
     .footer_logo_link {
       display: inline-flex;
       align-items: center;
       line-height: 0;
       text-decoration: none;
+    }
+
+    .footer_linkedin {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
     }
 
     @media #{$sm}, #{$xs} {

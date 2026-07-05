@@ -61,21 +61,23 @@ export function Footer(props: FooterProps = {}) {
 
     const logoBlock = (
       <div className={styles['logo-section']}>
-        <Link href="/" className={styles.footer_logo_link}>
-          <HeaderLogo
-            width="140"
-            height="37"
-            primaryColor={logoPrimaryColor}
-            accentColor={logoAccentColor}
-          />
-        </Link>
-        {!screenDevice.isMobile ? (
-          <div className="contact-area">
-            <IconButton color="primary" component="label" onClick={handleLinkedIn}>
-              <LinkedInIcon />
-            </IconButton>
-          </div>
-        ) : null}
+        <div className={styles.logo_stack}>
+          <Link href="/" className={styles.footer_logo_link}>
+            <HeaderLogo
+              width="140"
+              height="37"
+              primaryColor={logoPrimaryColor}
+              accentColor={logoAccentColor}
+            />
+          </Link>
+          {!screenDevice.isMobile ? (
+            <div className={styles.footer_linkedin}>
+              <IconButton color="primary" component="label" onClick={handleLinkedIn}>
+                <LinkedInIcon />
+              </IconButton>
+            </div>
+          ) : null}
+        </div>
       </div>
     );
 
