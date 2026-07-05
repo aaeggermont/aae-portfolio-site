@@ -52,8 +52,11 @@ export function Footer(props: FooterProps = {}) {
         window.open('https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/', '_blank');
     };
 
+    const useStandardPageGutter =
+        pathname === '/' || pathname === '/aboutme';
+
     const wrapperClass = clsx(
-        pathname === '/' ? styles.homeContentCap : 'global-container',
+        useStandardPageGutter ? styles.homeContentCap : 'global-container',
     );
 
     if (screenDevice.isMobile) {
