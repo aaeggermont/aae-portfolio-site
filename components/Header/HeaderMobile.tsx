@@ -16,6 +16,15 @@ import { HeaderLogo } from './HeaderLogo';
 import { clsx } from 'clsx';
 import { HEADER_NAV_ITEMS, type HeaderNavKey } from './navConfig';
 import { useHeaderNav } from './useHeaderNav';
+import {
+  HEADER_MOBILE_NAVY,
+  HEADER_SIDEBAR_LOGO_ACCENT,
+  HEADER_SIDEBAR_LOGO_PRIMARY,
+  headerSidebarTypographyStyle,
+} from './headerTheme';
+
+const CLOSE_TAB_PATH =
+  "M15.249 12.7734V0H0V109H15.249V95.375C15.249 91.9688 18.6297 86.7397 21.1792 84.3047C23.8539 81.75 26.2688 80.3002 28.8037 77.4922C32.7806 73.0866 35.2187 69.4454 37.2753 63.8672C39.0601 59.0263 39.0605 56.2556 38.9696 51.0938C38.8844 46.2524 37.7177 43.5116 35.581 39.1719C33.585 35.118 31.7358 33.2358 28.8037 29.8047C26.0598 26.5939 21.1792 22.1406 21.1792 22.1406C21.1792 22.1406 15.249 17.1094 15.249 12.7734Z";
 
 const MOBILE_NAV_ICONS: Record<HeaderNavKey, ReactNode> = {
   home: <HomeIcon style={{ height: "28px" }} />,
@@ -43,12 +52,10 @@ export function HeaderMobile({
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
-  let menuButtonBackground = "#496A8A";
   let hambMenuColor = "#ffffff";
 
   if (isDark) {
-    menuButtonBackground = "#ffffff";
-    hambMenuColor = "#496A8A";
+    hambMenuColor = HEADER_MOBILE_NAVY;
   }
 
   const controlMobileMenu = () => {
@@ -97,7 +104,7 @@ export function HeaderMobile({
         <button
           type="button"
           className={styles.menu_button}
-          style={{ background: menuButtonBackground }}
+          data-menu-inverse={isDark ? "true" : undefined}
           onClick={controlMobileMenu}
           aria-expanded={toggleMobileMenu}
           aria-controls="mobile-main-nav"
@@ -128,73 +135,76 @@ export function HeaderMobile({
         />
       )}
 
-      {/* Side nav mobile menu */}
       <div
         id="mobile-main-nav"
         className={clsx([
           styles.sidenav_menu,
           toggleMobileMenu ? styles.active : ''
-        ])
-        }
+        ])}
+        style={headerSidebarTypographyStyle}
       >
         <div className={styles.close_icon} onClick={closeMenu}>
           <ChevronLeftIcon className={styles.close_btn} />
-          <Image
-            src="/images/topbar-header/close_button_bg.svg"
-            alt="Close background"
-            width={70}
-            height={70}
+          <svg
+            viewBox="0 0 39 109"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
             className={styles.close_bg}
-          />
+            aria-hidden="true"
+          >
+            <path d={CLOSE_TAB_PATH} fill={HEADER_MOBILE_NAVY} />
+          </svg>
         </div>
 
-        <div className={styles.sidenav_header}>
-          <HeaderLogo
-            width="140"
-            height="37"
-            primaryColor={logoPrimaryColor}
-            accentColor={logoAccentColor}
-          />
-          <p>Antonio Aranda Eggermont</p>
-        </div>
+        <div className={styles.sidenav_body}>
+          <div className={styles.sidenav_header}>
+            <HeaderLogo
+              width="140"
+              height="37"
+              primaryColor={HEADER_SIDEBAR_LOGO_PRIMARY}
+              accentColor={HEADER_SIDEBAR_LOGO_ACCENT}
+            />
+            <p>Antonio Aranda Eggermont</p>
+          </div>
 
-        <ul className={styles.sidebar_menu}>
-          {HEADER_NAV_ITEMS.map((item) => {
-            const href = getHref(item);
-            const active = isActive(item.key);
-            const icon = MOBILE_NAV_ICONS[item.key];
+          <ul className={styles.sidebar_menu}>
+            {HEADER_NAV_ITEMS.map((item) => {
+              const href = getHref(item);
+              const active = isActive(item.key);
+              const icon = MOBILE_NAV_ICONS[item.key];
 
-            if (item.download) {
+              if (item.download) {
+                return (
+                  <li key={item.key} className="menu-item">
+                    <a
+                      href={href}
+                      download="AAEResume"
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={closeMenu}
+                    >
+                      <span className={styles.menu_icon}>{icon}</span>
+                      {item.label}
+                    </a>
+                  </li>
+                );
+              }
+
               return (
                 <li key={item.key} className="menu-item">
-                  <a
+                  <Link
                     href={href}
-                    download="AAEResume"
-                    target="_blank"
-                    rel="noreferrer"
+                    className={active ? styles.active_link : ''}
                     onClick={closeMenu}
                   >
                     <span className={styles.menu_icon}>{icon}</span>
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               );
-            }
-
-            return (
-              <li key={item.key} className="menu-item">
-                <Link
-                  href={href}
-                  className={active ? styles.active_link : ''}
-                  onClick={closeMenu}
-                >
-                  <span className={styles.menu_icon}>{icon}</span>
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   </>

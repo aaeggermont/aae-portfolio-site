@@ -1,5 +1,6 @@
 // app/layout.tsx
 import type { ReactNode } from "react";
+import type { Metadata } from "next";
 import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
@@ -94,9 +95,13 @@ const sourceSans3 = localFont({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Antonio Eggermont – Portfolio",
   description: "Full-stack UX Engineer & AI/ML Specialist",
+  icons: {
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    shortcut: [{ url: "/icon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
