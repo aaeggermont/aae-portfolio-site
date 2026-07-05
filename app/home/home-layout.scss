@@ -15,7 +15,10 @@ $home-layout-margin-desktop: 80px;
 $home-layout-usable-width-desktop: $home-layout-max-width-desktop -
   ($home-layout-margin-desktop * 2);
 
-/** Header desktop nav layout band — viewport-relative menu width applies only in this range. */
+/** Header nav tiers — hamburger (mobile), compact horizontal (tablet), standard horizontal (desktop). */
+$header-mobile-max: $mobile-max;
+$header-tablet-min: $tablet-min;
+$header-tablet-max: $tablet-max;
 $header-desktop-min: $desktop-min;
 $header-desktop-max: $home-layout-max-width-desktop;
 
