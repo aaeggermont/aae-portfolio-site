@@ -105,8 +105,8 @@ export function Footer(props: FooterProps = {}) {
                     className={styles['footer-container']}
                     style={footerThemeStyle}
                 >
-                    {navigationBlock}
                     {logoBlock}
+                    {navigationBlock}
                     {copyrightBlock}
                 </div>
             </div>
