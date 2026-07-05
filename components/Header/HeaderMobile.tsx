@@ -110,6 +110,7 @@ export function HeaderMobile({
           </svg>
         </div>
 
+        <div className={styles.sidenav_body}>
         <div className={styles.sidenav_header}>
           <HeaderLogo
             width="140"
@@ -193,6 +194,7 @@ export function HeaderMobile({
             </Link>
           </li>
         </ul>
+        </div>
       </div>
     </div>
   </>

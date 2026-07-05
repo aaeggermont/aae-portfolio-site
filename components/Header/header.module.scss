@@ -181,16 +181,20 @@
 
 .sidenav_menu{
 	width: 60%;
-	min-height: 100dvh;
-	height: 100dvh;
 	position: fixed;
 	top: 0;
 	left: 0;
+	bottom: 0;
+	box-sizing: border-box;
 	padding: 40px 30px;
 	z-index: 9999;
 	background-color: #064C5F;
 	transform: translateX(-110%);
 	transition: transform .5s;
+	overflow: visible;
+	/* Fallback, then dynamic viewport (mobile URL bar). top+bottom:0 is primary. */
+	min-height: 100vh;
+	min-height: 100dvh;
 	/* Typography tokens from `headerTheme.ts` → `headerSidebarTypographyStyle`. */
 	font-family: var(--sidebar-font-family, var(--font-poppins), sans-serif);
 	font-weight: var(--sidebar-font-weight, 400);
@@ -228,6 +232,7 @@
 		left: 100%;
 		margin-left: -11px;
 		line-height: 0;
+		z-index: 1;
 
 		.close_btn{
 			width: 24px;
@@ -243,6 +248,12 @@
 			width: auto;
 			display: block;
 		}
+	}
+
+	.sidenav_body {
+		height: 100%;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.sidebar_menu {

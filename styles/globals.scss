@@ -15,6 +15,10 @@ html, body {
 
 [class*="sidenav_menu"] {
   background-color: #064C5F !important;
+  top: 0;
+  bottom: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 [class*="menu_button"][data-menu-inverse="true"] {
