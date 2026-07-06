@@ -54,17 +54,81 @@
     }
   }
 
+  .projectsGrid {
+    display: none;
+
+    @media screen and (min-width: $desktop-min) {
+      display: grid;
+      grid-template-columns: repeat(
+        3,
+        var(--selected-work-card-width, 294px)
+      );
+      gap: 2rem;
+      justify-content: start;
+      align-items: start;
+      width: 100%;
+    }
+  }
+
+  .projectsGridItem {
+    display: flex;
+    width: var(--selected-work-card-width, 294px);
+    min-width: 0;
+  }
+
   .projectsSwiper {
-   height: 440px;
+    width: 100%;
+    min-height: var(--selected-work-card-height, 390px);
+    height: auto;
+    padding-bottom: var(--selected-work-carousel-padding-bottom, 2.5rem);
+    box-sizing: border-box;
+
+    @media screen and (min-width: $desktop-min) {
+      display: none;
+    }
 
     :global(.swiper-wrapper) {
-      align-items: stretch;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     :global(.swiper-slide) {
       display: flex;
+      width: var(--selected-work-card-width, 294px);
+      box-sizing: border-box;
       justify-content: center;
+      height: auto;
+
+      @media screen and (min-width: $tablet-min) {
+        justify-content: flex-start;
+      }
     }
+
+    :global(.swiper-pagination) {
+      bottom: 0 !important;
+    }
+  }
+
+  .carouselCardShell {
+    transform: scale(var(--selected-work-carousel-inactive-scale, 0.94));
+    opacity: 0.88;
+    transform-origin: center center;
+    transition:
+      transform 0.35s ease,
+      opacity 0.35s ease;
+  }
+
+  .projectsSwiper :global(.swiper-slide-active) .carouselCardShell {
+    transform: scale(var(--selected-work-carousel-active-scale, 1));
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .latestProjectsSection .carouselCardShell {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
   }
 }
 
