@@ -148,13 +148,7 @@ export default function MyBackground() {
         <div className={styles.cardsGrid}>
           {backgroundItems.map((item, index) => (
             <AnimatedCardWrapper key={item.title} index={index}>
-              <BackgroundCard
-                info={item}
-                dimensions={{
-                  width: "100%",
-                  height: "260px",
-                }}
-              />
+              <BackgroundCard info={item} />
             </AnimatedCardWrapper>
           ))}
         </div>

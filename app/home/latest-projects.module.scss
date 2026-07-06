@@ -64,9 +64,15 @@
         var(--selected-work-card-width, 294px)
       );
       gap: 2rem;
-      justify-content: start;
-      align-items: start;
-      width: 100%;
+      justify-content: center;
+      align-items: center;
+      width: min(
+        100%,
+        calc(
+          var(--selected-work-card-width, 294px) * 3 + 2rem * 2
+        )
+      );
+      margin-inline: auto;
     }
   }
 
@@ -74,6 +80,33 @@
     display: flex;
     width: var(--selected-work-card-width, 294px);
     min-width: 0;
+    justify-content: center;
+    transform: scale(var(--selected-work-carousel-inactive-scale, 0.94));
+    opacity: 0.88;
+    transform-origin: center center;
+    transition:
+      transform 0.35s ease,
+      opacity 0.35s ease;
+
+  }
+
+  /* Default: first card matches carousel active slide (full size). */
+  .projectsGrid .projectsGridItem:first-child {
+    transform: scale(var(--selected-work-carousel-active-scale, 1));
+    opacity: 1;
+  }
+
+  /* Hover: emphasized card grows to active size; others shrink like inactive slides. */
+  .projectsGrid:hover .projectsGridItem {
+    transform: scale(var(--selected-work-carousel-inactive-scale, 0.94));
+    opacity: 0.88;
+  }
+
+  .projectsGrid:hover .projectsGridItem:hover {
+    transform: scale(var(--selected-work-carousel-active-scale, 1));
+    opacity: 1;
+    position: relative;
+    z-index: 1;
   }
 
   .projectsSwiper {
@@ -125,7 +158,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .latestProjectsSection .carouselCardShell {
+  .latestProjectsSection .carouselCardShell,
+  .latestProjectsSection .projectsGridItem {
     transform: none !important;
     opacity: 1 !important;
     transition: none !important;
