@@ -8,29 +8,28 @@ import CardActionArea from "@mui/material/CardActionArea";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import type { StaticImageData } from "next/image";
+import { SELECTED_WORK_CARD } from "./selectedWorkCardLayout";
 
 export type LatestProjectProps = {
   title: string;
   thumbnailImg: StaticImageData;
   description: string[];
-  /** Desktop grid — fills the grid column width. */
-  fullWidth?: boolean;
 };
 
-function LatestProjectCard({
-  title,
-  thumbnailImg,
-  description,
-  fullWidth = false,
-}: LatestProjectProps) {
+function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectProps) {
+  const { widthPx, heightPx, contentPaddingPx } = SELECTED_WORK_CARD;
+  const bleedX = contentPaddingPx * 2;
+
   return (
     <Card
       sx={{
-        width: fullWidth ? "100%" : "294px",
-        height: "390px",
+        width: `${widthPx}px`,
+        height: `${heightPx}px`,
+        flexShrink: 0,
         borderRadius: 1.5,
         boxShadow: "0 4px 14px rgba(0, 0, 0, 0.08)",
         transition: "transform 0.35s ease, box-shadow 0.35s ease, opacity 0.3s ease",
+        overflow: "hidden",
 
         "&:hover": {
           transform: "translateY(-4px)",
@@ -43,7 +42,17 @@ function LatestProjectCard({
       }}
       raised
     >
-      <CardActionArea sx={{ height: "100%" }}>
+      <CardActionArea
+        sx={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "stretch",
+          boxSizing: "border-box",
+          padding: `${contentPaddingPx}px`,
+          paddingBottom: 0,
+        }}
+      >
         <CardMedia
           component="img"
           className="project-media"
@@ -51,19 +60,33 @@ function LatestProjectCard({
           alt={title}
           sx={{
             display: "block",
-            margin: "0 auto",
+            width: `calc(100% + ${bleedX}px)`,
+            maxWidth: `calc(100% + ${bleedX}px)`,
+            height: "auto",
+            flexShrink: 0,
+            marginTop: `-${contentPaddingPx}px`,
+            marginLeft: `-${contentPaddingPx}px`,
+            marginRight: `-${contentPaddingPx}px`,
+            marginBottom: `${contentPaddingPx}px`,
             objectFit: "contain",
+            objectPosition: "top center",
             transition: "opacity 0.3s ease",
           }}
         />
 
         <CardContent
           sx={{
+            flex: 1,
             display: "flex",
             flexDirection: "column",
             gap: 1,
-            height: "100%",
-            padding: 2.5,
+            minHeight: 0,
+            boxSizing: "border-box",
+            padding: 0,
+            paddingBottom: `${contentPaddingPx}px`,
+            "&:last-child": {
+              paddingBottom: `${contentPaddingPx}px`,
+            },
           }}
         >
           <Box
@@ -87,7 +110,7 @@ function LatestProjectCard({
             </Typography>
           </Box>
 
-          <Box sx={{ textAlign: "left" }}>
+          <Box sx={{ textAlign: "left", flex: 1 }}>
             {description.map((paragraph, idx) => (
               <Typography
                 key={idx}

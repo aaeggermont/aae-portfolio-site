@@ -16,6 +16,7 @@ import { backgroundFloatImages } from "./background-float-images";
 import LatestProjectCard from "./LatestProjectCard";
 import { latestProjectsItems } from "./data/latestprojects-data";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
+import { selectedWorkLayoutStyle } from "./selectedWorkCardLayout";
 
 const FLOAT_COUNT = 14;
 
@@ -54,7 +55,11 @@ function LatestProjects() {
   }, []);
 
   return (
-    <section className={styles.latestProjectsSection} id="latest-projects">
+    <section
+      className={styles.latestProjectsSection}
+      id="latest-projects"
+      style={selectedWorkLayoutStyle}
+    >
       {/* Decorative floating images */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
@@ -102,7 +107,6 @@ function LatestProjects() {
                 title={item.title}
                 description={item.description}
                 thumbnailImg={item.img}
-                fullWidth
               />
             </div>
           ))}
