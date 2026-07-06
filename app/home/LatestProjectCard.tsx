@@ -13,32 +13,37 @@ export type LatestProjectProps = {
   title: string;
   thumbnailImg: StaticImageData;
   description: string[];
+  /** Desktop grid — fills the grid column width. */
+  fullWidth?: boolean;
 };
 
-function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectProps) {
+function LatestProjectCard({
+  title,
+  thumbnailImg,
+  description,
+  fullWidth = false,
+}: LatestProjectProps) {
   return (
     <Card
       sx={{
-        //width: "100%",
-        width: { xs: "294px", sm: "294px", md: "294px", lg: "294px", xl: "294px" },
-        height:  { xs: "390px", sm: "390px", md: "390px", lg: "390px", xl: "390px" },
+        width: fullWidth ? "100%" : "294px",
+        height: "390px",
         borderRadius: 1.5,
         boxShadow: "0 4px 14px rgba(0, 0, 0, 0.08)",
         transition: "transform 0.35s ease, box-shadow 0.35s ease, opacity 0.3s ease",
 
         "&:hover": {
           transform: "translateY(-4px)",
-          boxShadow: "0 10px 26px rgba(0, 0, 0, 0.18)",   // soft elevated glow
+          boxShadow: "0 10px 26px rgba(0, 0, 0, 0.18)",
         },
 
         "&:hover .project-media": {
-          opacity: 0.92, // subtle responsive hover fade
+          opacity: 0.92,
         },
       }}
       raised
     >
       <CardActionArea sx={{ height: "100%" }}>
-        {/* ⭐ Full width image with hover fade handled by parent */}
         <CardMedia
           component="img"
           className="project-media"
@@ -48,12 +53,19 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
             display: "block",
             margin: "0 auto",
             objectFit: "contain",
-            transition: "opacity 0.3s ease",  // smooth fade on hover
+            transition: "opacity 0.3s ease",
           }}
         />
 
-        <CardContent sx={{ display: "flex", flexDirection: "column", gap: 1, height: "100%", padding: 2.5 }}>
-          {/* Title */}
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+            height: "100%",
+            padding: 2.5,
+          }}
+        >
           <Box
             sx={{
               display: "flex",
@@ -65,7 +77,7 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
             <Typography
               component="h3"
               sx={{
-                fontSize: { xs: "1rem", sm: "1rem", md: "1rem", lg: "1rem", xl: "1rem" },
+                fontSize: "1rem",
                 fontWeight: 500,
                 fontFamily: "Poppins, sans-serif",
                 color: "#011114",
@@ -75,13 +87,12 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
             </Typography>
           </Box>
 
-          {/* Description */}
           <Box sx={{ textAlign: "left" }}>
             {description.map((paragraph, idx) => (
               <Typography
                 key={idx}
                 sx={{
-                  fontSize: { xs: "0.8rem", sm: "0.8rem", md: "0.9rem", lg: "0.9rem", xl: "0.9rem" },
+                  fontSize: "0.9rem",
                   fontWeight: 400,
                   fontFamily: "Poppins, sans-serif",
                   color: "#011114",

@@ -94,48 +94,51 @@ function LatestProjects() {
           </span>
         </div>
 
-        <Swiper
-          className={styles.projectsSwiper}
-          centeredSlides={false}
-          slidesPerView={"auto"}
-          spaceBetween={10}
-          pagination={{ clickable: true, dynamicBullets: true }}
-          modules={[Pagination]}
-          // Breakpoints configuration
-          breakpoints={{
-            // when window width is >= 640px
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-              centeredSlides: true
-            },
-            // when window width is >= 768px
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 10,
-              centeredSlides: true
-            },
-            // when window width is >= 1024px
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 10,
-              centeredSlides: false
-            },
-            // when window width is >= 1280px
-            1280: {
-              slidesPerView: 3,
-              spaceBetween: 5,
-              centeredSlides: false
-            },
-        }}
-        >
+        {/* Desktop — equal grid when all 3 cards fit (≥1024px) */}
+        <div className={styles.projectsGrid}>
           {latestProjectsItems.map((item) => (
-            <SwiperSlide key={item.title}>
+            <div key={item.title} className={styles.projectsGridItem}>
               <LatestProjectCard
                 title={item.title}
                 description={item.description}
                 thumbnailImg={item.img}
+                fullWidth
               />
+            </div>
+          ))}
+        </div>
+
+        {/* Carousel when 3 cards cannot fit (<1024px) — active slide scales up */}
+        <Swiper
+          className={styles.projectsSwiper}
+          initialSlide={0}
+          centeredSlides={false}
+          slidesPerView="auto"
+          spaceBetween={16}
+          pagination={{ clickable: true, dynamicBullets: true }}
+          modules={[Pagination]}
+          breakpoints={{
+            360: {
+              slidesPerView: 1,
+              spaceBetween: 16,
+              centeredSlides: true,
+            },
+            768: {
+              slidesPerView: "auto",
+              spaceBetween: 24,
+              centeredSlides: false,
+            },
+          }}
+        >
+          {latestProjectsItems.map((item) => (
+            <SwiperSlide key={item.title}>
+              <div className={styles.carouselCardShell}>
+                <LatestProjectCard
+                  title={item.title}
+                  description={item.description}
+                  thumbnailImg={item.img}
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
