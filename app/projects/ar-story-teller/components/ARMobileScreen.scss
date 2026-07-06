@@ -1,13 +1,6 @@
-/* AR Mobile Screen mockup — visually mirrors `MockupIllustration` out of the box so the
-   component drops in as a like-for-like replacement, then can diverge freely as the AR
-   showcase design evolves. Class names are scoped under `.ar-mobile-screen-container` so
-   tweaks here never bleed into `MockupIllustration`. */
+/* AR Mobile Screen mockup — typography from `typography.ts` (cardTitle / smallBody). */
+@use '../typography' as typo;
 
-/* Mockup image shadow — three stacked layers (contact, form, ambient) tinted with the
-   project navy (#102764) at low alphas. Colored shadows feel richer and more "premium"
-   than pure black, mirroring the look used by Stripe / Linear / Apple product pages.
-   Border-radius matches typical phone bezels so the shadow follows a rounded silhouette
-   even when the source PNG is a flat rectangle. */
 .ar-mobile-screen-container__image {
     display: block;
     filter:
@@ -15,9 +8,6 @@
         drop-shadow(0 12px 24px rgba(16, 39, 100, 0.10))
         drop-shadow(0 28px 56px rgba(16, 39, 100, 0.14));
     transition: filter 300ms ease, transform 300ms ease;
-    /* Pins the artwork to the top of the rendered box so a single PNG with slightly
-       different transparent padding can't drift below its row-mates. With matching
-       intrinsic + content dimensions this is effectively a no-op. */
     object-fit: contain;
     object-position: top center;
 }
@@ -51,21 +41,16 @@
         .title {
             text-align: center;
             margin-bottom: 1rem;
-            font-family: var(--font-poppins);
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #102764;
+            @include typo.ar-st-title-type(600);
+            font-size: 22px;
             padding-top: 2rem;
         }
 
         .description {
-   
             padding-left: 15%;
             padding-right: 15%;
-            font-family: var(--font-poppins);
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #102764;
+            @include typo.ar-st-body-type;
+            font-size: 18px;
         }
     }
 }
@@ -79,28 +64,19 @@
         align-content: center;
         width: 55%;
 
-        /* Title / description spacing intentionally mirrors the desktop rhythm
-           (`padding-top: 2rem` above the title, `margin-bottom: 1rem` to the description).
-           The original values (`6rem` / `3rem`) were authored when each card was a
-           full-width column on tablet; in the 2×2 grid each card is roughly the width
-           of a desktop 4-up card, so the desktop spacing reads correctly here. */
         .title {
             padding-top: 2rem;
             margin-bottom: 1rem;
             text-align: center;
-            font-family: var(--font-poppins);
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #102764;
+            @include typo.ar-st-title-type(600);
+            font-size: 20px;
         }
 
         .description {
             padding-left: 15%;
             padding-right: 15%;
-            font-family: var(--font-poppins);
-            font-size: 1rem;
-            font-weight: 400;
-            color: #102764;
+            @include typo.ar-st-body-type;
+            font-size: 17px;
         }
     }
 }
@@ -121,19 +97,15 @@
 
         .title {
             text-align: center;
-            font-family: var(--font-poppins);
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #102764;
+            @include typo.ar-st-title-type(600);
+            font-size: 18px;
             padding-top: 2rem;
             padding-bottom: 1rem;
         }
 
         .description {
-            font-family: var(--font-poppins);
-            font-size: 0.8rem;
-            font-weight: 400;
-            color: #102764;
+            @include typo.ar-st-body-type;
+            font-size: 16px;
             text-align: center;
             padding-top: 1.5rem;
             padding-left: 5%;

@@ -1,10 +1,9 @@
 'use client';
 import { useMemo, useState } from 'react';
-import TitleParagraph from './TitleParagraph';
+import Typography from '@mui/material/Typography';
 import ParagraphText from './ParagraphText';
-import SubTitle1 from './SubTitle1';
-import SubTitle2 from './SubTitle2';
-import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
+import { breakpointMediaQuery } from '@/lib/responsive/breakpoints';
+import { titleTypeSx } from '../typography';
 import './ParagraphBlock.scss';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -37,6 +36,19 @@ function ReadMoreButton({ onClick, isShowingFull = false }: ReadMoreButtonProps)
     );
 }
 
+const blockTitleSx = titleTypeSx('panelHeading', {
+    textAlign: 'center',
+    m: 0,
+});
+
+const blockSubtitleSx = titleTypeSx('panelHeading', {
+    textAlign: 'center',
+    m: 0,
+    [breakpointMediaQuery.tabletUp]: {
+        textAlign: 'left',
+    },
+});
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function ParagraphBlock({
@@ -48,7 +60,6 @@ export function ParagraphBlock({
     showReadMore = false,
     ...props
 }: ParagraphBlockProps) {
-    const screenDevice = useResponsive();
     const [isShowingFull, setShowingFull] = useState(false);
 
     const textToShow = useMemo(() => {
@@ -85,24 +96,34 @@ export function ParagraphBlock({
     }, [paragraphs, isShowingFull, wordsLimit]);
 
     const paragraphsRender = textToShow.map((paragraph, index) => (
-        <ParagraphText key={index} text={paragraph} screenDevice={screenDevice} />
+        <ParagraphText key={index} text={paragraph} />
     ));
 
     return (
-        <div {...props}>
-            {title === undefined ? null : <TitleParagraph title={title} />}
+        <div className="paragraph-block" {...props}>
+            {title === undefined ? null : (
+                <div className="paragraph-block__title">
+                    <Typography component="h2" sx={blockTitleSx}>
+                        {title}
+                    </Typography>
+                </div>
+            )}
             {subTitle1 === undefined ? null : (
                 <div className="paragraph-block__subtitle">
-                    <SubTitle1 subTitle={subTitle1} />
+                    <Typography component="h3" sx={blockSubtitleSx}>
+                        {subTitle1}
+                    </Typography>
                 </div>
             )}
             {subTitle2 === undefined ? null : (
                 <div className="paragraph-block__subtitle">
-                    <SubTitle2 subTitle={subTitle2} />
+                    <Typography component="h3" sx={blockSubtitleSx}>
+                        {subTitle2}
+                    </Typography>
                 </div>
             )}
             {paragraphsRender}
-            <div className={screenDevice.isMobile ? 'storyteller-xsxm-paragraph-block' : 'st-paragraph-block'}>
+            <div className="st-paragraph-block">
                 {showReadMore ? (
                     <ReadMoreButton
                         onClick={() => setShowingFull(!isShowingFull)}

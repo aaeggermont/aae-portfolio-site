@@ -4,30 +4,39 @@ import IconButton from '@mui/material/IconButton';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
-import { FooterLogo } from './FooterLogo';
+import { HeaderLogo } from '@/components/Header/HeaderLogo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { clsx } from 'clsx';
+import {
+  getFooterThemeStyle,
+  resolveFooterLogoColors,
+} from './footerTheme';
 import styles from './footer.module.scss';
 
 type FooterProps = {
   isDark?: boolean;
   logoFontColor?: string;
+  logoAccentColor?: string;
   fontColor?: string;
-  /** Less vertical padding when rendered under home ContactMe */
-  dockedInPanel?: boolean;
+  backgroundColor?: string;
 };
 
 export function Footer(props: FooterProps = {}) {
     const screenDevice = useResponsive();
     const pathname = usePathname();
 
-    let logoFontColor = props.logoFontColor || '#496A8A';
-    let fontColor = props.fontColor || '#496A8A';
-
-    if (props.isDark) {
-      fontColor = '#ffffff';
-      logoFontColor = '#ffffff';
-    }
+    const footerThemeStyle = getFooterThemeStyle({
+      isDark: props.isDark,
+      fontColor: props.fontColor,
+      backgroundColor: props.backgroundColor,
+    });
+    const { primary: logoPrimaryColor, accent: logoAccentColor } =
+      resolveFooterLogoColors({
+        isDark: props.isDark,
+        logoFontColor: props.logoFontColor,
+        logoAccentColor: props.logoAccentColor,
+      });
 
     const MenuLinks = [
         { path: '/', name: 'Home' },
@@ -40,10 +49,7 @@ export function Footer(props: FooterProps = {}) {
                 className={pathname === link.path
                     ? styles['active_link']
                     : ''}
-                href={link.path}
-                style={{
-                    color: fontColor,
-                }}>
+                href={link.path}>
                 { link.name }
             </Link>
         </span>
@@ -53,78 +59,74 @@ export function Footer(props: FooterProps = {}) {
         window.open('https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/', '_blank');
     };
 
-    const docked = props.dockedInPanel === true;
+    const wrapperClass = styles.footerContentCap;
+
+    const logoBlock = (
+      <div className={styles['logo-section']}>
+        <div className={styles.logo_stack}>
+          <Link href="/" className={styles.footer_logo_link}>
+            <HeaderLogo
+              width="140"
+              height="37"
+              primaryColor={logoPrimaryColor}
+              accentColor={logoAccentColor}
+            />
+          </Link>
+          {!screenDevice.isMobile ? (
+            <div className={styles.footer_linkedin}>
+              <IconButton color="primary" component="label" onClick={handleLinkedIn}>
+                <LinkedInIcon />
+              </IconButton>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+
+    const copyrightBlock = (
+      <div className={styles['copyright-section']}>
+        <div className={styles.copyright_text}>
+          <span className={styles.copyright_name}>Antonio Aranda Eggermont</span>
+          <span className={styles.copyright_rights}>© All Rights Serserved</span>
+        </div>
+      </div>
+    );
+
+    const navigationBlock = (
+      <div className={styles['navigation-section']}>
+        <div className={styles['navigation-title']}>Navigation</div>
+        { MenuLinks }
+      </div>
+    );
 
     if (screenDevice.isMobile) {
         return (
             <div
-              style={{ paddingTop: docked ? "1rem" : "5rem" }}
-              className="container"
+              className={clsx(wrapperClass, styles.footerMobileWrapper)}
+              style={footerThemeStyle}
             >
                 <div
                     className={styles['footer-container']}
-                    style={{
-                        borderTopColor: fontColor,
-                        ...(docked
-                          ? { marginTop: "0.35rem", marginBottom: "0.35rem" }
-                          : {}),
-                    }}
+                    style={footerThemeStyle}
                 >
-                    <div className={styles['navigation-section']}>
-                        <div
-                            className={styles['navigation-title']}
-                            style={{
-                                color: fontColor,
-                            }}>
-                            Navigation
-                        </div>
-                        { MenuLinks }
-                    </div>
-                    <div className={styles['logo-section']}>
-                        <FooterLogo color={logoFontColor} width="55px" height="20px" />
-                    </div>
-                    <div className={styles['copyright-section']}>
-                        <span style={{
-                            color: fontColor,
-                        }}> Antonio Aranda Eggermont - All Rights Serserved </span>
-                    </div>
-                </div>
-            </div>
-        );
-    } else {
-        return (
-            <div
-              className="container"
-              style={docked ? { paddingTop: "0.5rem" } : undefined}
-            >
-                <div
-                  className={styles['footer-container']}
-                  style={
-                    docked
-                      ? { marginTop: "0.35rem", marginBottom: "0.35rem" }
-                      : undefined
-                  }
-                >
-                    <div className={styles['logo-section']}>
-                        <FooterLogo color={logoFontColor} width="55px" height="20px" />
-
-                        <div className="contact-area">
-                            <IconButton color="primary" component="label" onClick={handleLinkedIn}>
-                                <LinkedInIcon />
-                            </IconButton>
-                        </div>
-                    </div>
-                    <div className={styles['copyright-section']}>
-                        <span style={{
-                            color: fontColor,
-                        }}> Antonio Aranda Eggermont - All Rights Serserved </span>
-                    </div>
-                    <div className={styles['navigation-section']}>
-                        <div className={styles['navigation-title']}> Navigation</div>
-                        { MenuLinks }
-                    </div>
+                    {logoBlock}
+                    {navigationBlock}
+                    {copyrightBlock}
                 </div>
             </div>
         );
     }
+
+    return (
+        <div className={wrapperClass}>
+            <div
+              className={styles['footer-container']}
+              style={footerThemeStyle}
+            >
+                {logoBlock}
+                {copyrightBlock}
+                {navigationBlock}
+            </div>
+        </div>
+    );
 }

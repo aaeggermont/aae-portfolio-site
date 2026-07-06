@@ -3,6 +3,7 @@
 import ParagraphBlock from "../ParagraphBlock";
 import { SectionTitle } from "../SectionTitle";
 import type { ConclusionsAndImpactSectionData } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import pageStyles from "../../ArStoryTeller.module.scss";
 import dsSectionStyles from "../../sections/DesignSystemSection.module.scss";
 
 interface ConclusionsAndImpactSectionProps {
@@ -25,8 +26,8 @@ export function ConclusionsAndImpactSection({
     >
       <div className={dsSectionStyles.conclusionsImpactBleedInner}>
         {items.map((item, idx) => (
-          <div key={`${item.title}-${idx}`}>
-            <SectionTitle title={item.title} paddingTop={0} paddingBottom={16}/>
+          <div className={pageStyles["content-group"]} key={`${item.title}-${idx}`}>
+            <SectionTitle title={item.title} />
             {item.paragraphs?.length ? (
               <ParagraphBlock paragraphs={item.paragraphs} />
             ) : null}
@@ -38,4 +39,3 @@ export function ConclusionsAndImpactSection({
 }
 
 export default ConclusionsAndImpactSection;
-

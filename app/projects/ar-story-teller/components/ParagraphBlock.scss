@@ -1,35 +1,39 @@
-/* SubTitle1/2 via ParagraphBlock: mobile centered, tablet+ left-aligned */
+.paragraph-block__title {
+    padding-top: 2rem;
+    padding-bottom: 0.75rem;
+    text-align: center;
+}
+
 .paragraph-block__subtitle {
-    .st-subtitle1-container .subtitle-paragraph,
-    .st-subtitle2-container .subtitle-paragraph {
-        text-align: center;
-    }
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
 }
 
 @media #{$tablet} {
+    .paragraph-block__title {
+        padding-top: 3rem;
+    }
+
     .paragraph-block__subtitle {
-        .st-subtitle1-container .subtitle-paragraph,
-        .st-subtitle2-container .subtitle-paragraph {
-            text-align: left;
-        }
+        padding-top: 2rem;
     }
 }
 
 @media #{$desktop} {
-    .paragraph-block__subtitle {
-        .st-subtitle1-container .subtitle-paragraph,
-        .st-subtitle2-container .subtitle-paragraph {
-            text-align: left;
-        }
+    .paragraph-block__title {
+        padding-top: 5rem;
+        padding-bottom: 1.25rem;
     }
-}
 
-@media #{$desktop} {
+    .paragraph-block__subtitle {
+        padding-top: 3rem;
+        padding-bottom: 0.75rem;
+    }
+
     .st-paragraph-block {
         margin: auto;
         width: 85%;
     }
-
 }
 
 @media #{$tablet} {
@@ -40,10 +44,9 @@
 }
 
 @media #{$mobile} {
-    .storyteller-xsxm-paragraph-block {
+    .st-paragraph-block {
         margin: auto;
         width: 100%;
         padding: 0 5%;
     }
 }
-

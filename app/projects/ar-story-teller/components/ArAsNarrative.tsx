@@ -7,6 +7,7 @@ import {
   getUsableLayoutWidth,
 } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
+import { bodyTypeSx } from "../typography";
 
 interface ArAsNarrativeProps {
   title: string;
@@ -99,14 +100,7 @@ const ArAsNarrative = ({
             <Typography
               key={idx}
               component="p"
-              sx={{
-                color: "#002464",
-                fontFamily:
-                  'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                fontWeight: 500,
-                fontSize: { xs: "16px", sm: "20px", md: "20px" },
-                lineHeight: 1.35,
-              }}
+              sx={{ m: 0, ...bodyTypeSx("panelBody") }}
             >
               {paragraph}
             </Typography>

@@ -1,0 +1,237 @@
+import type { ReactNode } from "react";
+
+export type RichParagraphSegment = {
+  text: string;
+  /**
+   * `emphasis` is used for highlighted terms within a sentence.
+   * Current style in renderer: #EDD84A + semibold.
+   */
+  style?: "default" | "emphasis";
+};
+
+export type RichParagraphValue = string | RichParagraphSegment[];
+
+export type ReadMoreWordConfig = {
+  /**
+   * Per-paragraph word limits for collapsed mode.
+   * Keys are zero-based paragraph indexes.
+   */
+  wordLimitsByParagraphIndex?: Record<number, number>;
+  /** Word limit for paragraph index 0. */
+  firstParagraphWords?: number;
+  /** Word limit for paragraph index 1. */
+  secondParagraphWords?: number;
+  /**
+   * Paragraph index that should display the inline expansion trigger.
+   * Defaults to first truncated paragraph.
+   */
+  expandTriggerParagraphIndex?: number;
+  /** Defaults to "Read more". */
+  buttonLabel?: string;
+  /** Defaults to "Read less". */
+  readLessButtonLabel?: string;
+  /** Optional text color for both "Read more" and "Read less". */
+  textColor?: string;
+  /** Optional font family for both toggle labels. */
+  fontFamily?: string;
+  /** Optional font weight for both toggle labels. */
+  fontWeight?: number | string;
+  /** Optional font size for both toggle labels. */
+  fontSize?: number | string;
+};
+
+export type ResearchUserPersona = {
+  title: string;
+  description: string;
+  objectPath: string;
+  alt: string;
+};
+
+/**
+ * Ordered body content inside a research method card.
+ * Order is preserved: e.g. paragraphs → image → bullets → paragraphs.
+ */
+export type ResearchCardContentBlock =
+  | {
+      type: "paragraphs";
+      id: string;
+      paragraphs: RichParagraphValue[];
+      /** Optional per-block typography colors for paragraph text and emphasis segments. */
+      textColors?: {
+        paragraph?: string;
+        emphasis?: string;
+      };
+      /** Optional truncation + inline expand/collapse behavior for this paragraph block. */
+      readMore?: ReadMoreWordConfig;
+    }
+  | {
+      type: "bullets";
+      id: string;
+      items: string[];
+      /** Defaults to square markers (current design). */
+      marker?: "square" | "dot" | "dash";
+    }
+  | {
+      type: "image";
+      id: string;
+      /** Optional label above the figure (e.g. “Site Map”), distinct from card title. */
+      title?: string;
+      /** Firebase Storage path (e.g. `projects/project_4/illustration.png`). */
+      objectPath: string;
+      alt: string;
+      caption?: string;
+      /** Optional descriptive line between `caption` and `annotation` in the figure footer. */
+      captionDescription?: string;
+      /** Optional helper text shown under caption (e.g. interaction hint). */
+      annotation?: string;
+      /** Optional typography colors for title/caption/annotation around the image. */
+      textColors?: {
+        title?: string;
+        caption?: string;
+        captionDescription?: string;
+        annotation?: string;
+      };
+      objectFit?: "cover" | "contain";
+      aspectRatio?: string;
+      /**
+       * Intrinsic frame size in px (e.g. asset dimensions). On desktop (`lg+`) the frame
+       * caps at this width; narrower viewports scale down proportionally via `width: 100%`.
+       */
+      frameDimensionsPx?: { width: number; height: number };
+      /**
+       * Desktop-only max width (px) for the annotation footer, overriding the image frame width.
+       * Useful for narrow illustrations where the caption/description would otherwise wrap too tightly.
+       */
+      figureFooterDesktopMaxWidthPx?: number;
+      /**
+       * Area behind the image when `objectFit` is `contain` (letterboxing).
+       * Defaults to white for diagrams; use when the asset doesn’t match `aspectRatio`.
+       * Use `"transparent"` so the card gradient shows through.
+       */
+      letterboxBackground?: string;
+      /**
+       * Backdrop behind the image when `lightbox` is open (`SlideshowLightbox` `backgroundColor`).
+       * Defaults to a dark scrim; set `"transparent"` for no overlay tint.
+       */
+      lightboxModalBackground?: string;
+      /** Defaults to this case study’s gated project (`project_4`). */
+      projectKey?: string;
+      /** Passed to `next/image` `sizes`; omit for a sensible default in the card layout. */
+      sizes?: string;
+      priority?: boolean;
+      /**
+       * Full-viewport loading overlay (same as hero banner). Ignored when `lightbox` is true.
+       */
+      fullViewportLoading?: boolean;
+      /**
+       * When `true`, uses `lightbox.js-react` (`SlideshowLightbox`): click to open zoom + pan (wheel / drag / pinch).
+       * Requires `NEXT_PUBLIC_LIGHTBOXJS_LICENSE` and `initLightboxJS` in `app/providers.tsx`.
+       */
+      lightbox?: boolean;
+    }
+  | {
+      type: "userPersonas";
+      id: string;
+      personas: ResearchUserPersona[];
+    }
+  | {
+      type: "reusableComponent";
+      id: string;
+      title: string;
+      description: string;
+      /** Firebase Storage path (e.g. `projects/project_4/Seat-Component.png`). */
+      objectPath: string;
+      alt: string;
+      /** Defaults to this case study’s gated project (`project_4`). */
+      projectKey?: string;
+      sizes?: string;
+      /** Intrinsic image size, used for the image frame aspect ratio. */
+      frameDimensionsPx?: { width: number; height: number };
+      /** Desktop image width (px); tablet/mobile scale proportionally. Defaults to 240. */
+      imageDesktopWidthPx?: number;
+      textColors?: {
+        title?: string;
+        description?: string;
+      };
+    }
+  | {
+      type: "custom";
+      id: string;
+      /** Escape hatch for layouts not covered by structured blocks. */
+      node: ReactNode;
+    };
+
+export type ResearchMethodCardData = {
+  id: string;
+  /** Omit when headings live only in `contentBlocks` (e.g. image `title`). */
+  title?: string;
+  subtitle?: string;
+  contentBlocks: ResearchCardContentBlock[];
+};
+
+/** Insight card for the Research & Discovery methodology grid (`MethodologyCard`). */
+export type MethodologyCardData = {
+  id: string;
+  title: string;
+  description: string;
+  readInsightsLabel?: string;
+};
+
+/** Operational persona card (`OperationalPersona`) in a research method panel footer. */
+export type OperationalPersonaData = {
+  id: string;
+  title: string;
+  description: string;
+  responsibilities: string[];
+  /** Firebase Storage path for the circular portrait (e.g. `projects/project_4/Grouper-Persona.png`). */
+  objectPath?: string;
+  alt?: string;
+  projectKey?: string;
+};
+
+/** Embedded `StandardParagraphBlock` section inside a research method panel. */
+export type ResearchMethodParagraphSection = {
+  id: string;
+  subtitle?: string;
+  title?: string;
+  paragraphs?: string[];
+  paragraphReadMore?: ReadMoreWordConfig;
+  /** Optional per-section color overrides for title/subtitle/paragraph text. */
+  titleColor?: string;
+  subtitleColor?: string;
+  paragraphColor?: string;
+  /**
+   * When set, renders after the card with this id (e.g. right after an illustration card).
+   * Omit to render with other intro sections before all cards.
+   */
+  afterCardId?: string;
+};
+
+/**
+ * One research-method block on the page (e.g. “1. Understanding…”) with intro copy
+ * and a list of method cards (SME interviews, workshops, etc.).
+ */
+export type ResearchMethodBlockData = {
+  /** Stable id for React keys / Firestore (e.g. doc id or slug). */
+  id: string;
+  title: string;
+  /** Background used by the outer method section shell. */
+  background: string;
+  /** Typography colors for method header and intro copy. */
+  textColors: {
+    title: string;
+    introParagraph: string;
+  };
+  /** Optional intro truncation + "Read more" behavior for paragraphs 1 and 2. */
+  introParagraphReadMore?: ReadMoreWordConfig;
+  introParagraphs: string[];
+  /** Optional embedded narrative blocks after intro copy, before cards. */
+  standardParagraphSections?: ResearchMethodParagraphSection[];
+  cards: ResearchMethodCardData[];
+  /** Optional methodology insight cards (`MethodologyCard` grid). */
+  methodologyCards?: MethodologyCardData[];
+  /** Optional subtitle block rendered after panel cards (e.g. `StandardParagraphBlock`). */
+  footerSubtitle?: string;
+  /** Optional operational persona cards rendered after `footerSubtitle`. */
+  operationalPersonas?: OperationalPersonaData[];
+};

@@ -1,8 +1,7 @@
 // app/home/latest-projects.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Typewriter from "typewriter-effect";
+import React, { useEffect, useState } from "react";
 import styles from "./latest-projects.module.scss";
 import Image from "next/image";
 
@@ -16,55 +15,10 @@ import "swiper/css/navigation";
 import { backgroundFloatImages } from "./background-float-images";
 import LatestProjectCard from "./LatestProjectCard";
 import { latestProjectsItems } from "./data/latestprojects-data";
+import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
+import { selectedWorkLayoutStyle } from "./selectedWorkCardLayout";
 
 const FLOAT_COUNT = 14;
-
-function HeadingTypewriter() {
-  const wrapperRef = useRef<HTMLHeadingElement | null>(null);
-  const typewriterRef = useRef<{ typeString: (s: string) => { pauseFor: (n: number) => { start: () => void } } } | null>(null);
-  const hasStarted = useRef(false);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInView(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { root: null, threshold: 0.2, rootMargin: "0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!inView || hasStarted.current || !typewriterRef.current) return;
-    hasStarted.current = true;
-    typewriterRef.current.typeString("Selected Work").pauseFor(2500).start();
-  }, [inView]);
-
-  return (
-    <h2 ref={wrapperRef} className={styles.heading}>
-      <Typewriter
-        options={{
-          autoStart: false,
-          loop: false,
-          deleteSpeed: 50,
-        }}
-        onInit={(tw) => {
-          typewriterRef.current = tw;
-        }}
-      />
-    </h2>
-  );
-}
 
 type FloaterConfig = {
   img: any;
@@ -101,7 +55,11 @@ function LatestProjects() {
   }, []);
 
   return (
-    <section className={styles.latestProjectsSection} id="latest-projects">
+    <section
+      className={styles.latestProjectsSection}
+      id="latest-projects"
+      style={selectedWorkLayoutStyle}
+    >
       {/* Decorative floating images */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
@@ -126,7 +84,10 @@ function LatestProjects() {
       </div>
 
       <div className={styles.content}>
-        <HeadingTypewriter />
+        <SectionTypewriterHeading
+          text="Selected Work"
+          className={styles.heading}
+        />
 
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}>
@@ -138,48 +99,50 @@ function LatestProjects() {
           </span>
         </div>
 
-        <Swiper
-          className={styles.projectsSwiper}
-          centeredSlides={false}
-          slidesPerView={"auto"}
-          spaceBetween={10}
-          pagination={{ clickable: true, dynamicBullets: true }}
-          modules={[Pagination]}
-          // Breakpoints configuration
-          breakpoints={{
-            // when window width is >= 640px
-            640: {
-              slidesPerView: 1,
-              spaceBetween: 0,
-              centeredSlides: true
-            },
-            // when window width is >= 768px
-            768: {
-              slidesPerView: 2,
-              spaceBetween: 10,
-              centeredSlides: true
-            },
-            // when window width is >= 1024px
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 10,
-              centeredSlides: false
-            },
-            // when window width is >= 1280px
-            1280: {
-              slidesPerView: 3,
-              spaceBetween: 5,
-              centeredSlides: false
-            },
-        }}
-        >
+        {/* Desktop — equal grid when all 3 cards fit (≥1024px) */}
+        <div className={styles.projectsGrid}>
           {latestProjectsItems.map((item) => (
-            <SwiperSlide key={item.title}>
+            <div key={item.title} className={styles.projectsGridItem}>
               <LatestProjectCard
                 title={item.title}
                 description={item.description}
                 thumbnailImg={item.img}
               />
+            </div>
+          ))}
+        </div>
+
+        {/* Carousel when 3 cards cannot fit (<1024px) — active slide scales up */}
+        <Swiper
+          className={styles.projectsSwiper}
+          initialSlide={0}
+          centeredSlides={false}
+          slidesPerView="auto"
+          spaceBetween={16}
+          pagination={{ clickable: true, dynamicBullets: true }}
+          modules={[Pagination]}
+          breakpoints={{
+            360: {
+              slidesPerView: 1,
+              spaceBetween: 16,
+              centeredSlides: true,
+            },
+            768: {
+              slidesPerView: "auto",
+              spaceBetween: 24,
+              centeredSlides: false,
+            },
+          }}
+        >
+          {latestProjectsItems.map((item) => (
+            <SwiperSlide key={item.title}>
+              <div className={styles.carouselCardShell}>
+                <LatestProjectCard
+                  title={item.title}
+                  description={item.description}
+                  thumbnailImg={item.img}
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

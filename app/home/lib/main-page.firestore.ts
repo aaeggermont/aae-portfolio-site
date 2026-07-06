@@ -22,7 +22,7 @@ function reportPanelError(
 ) {
   onError?.(panel, error);
   console.warn(
-    `[home-panels] Firestore realtime read failed for "${panel}"; using local fallback.`,
+    `[home-page] Firestore realtime read failed for "${panel}"; using local fallback.`,
     error,
   );
 }

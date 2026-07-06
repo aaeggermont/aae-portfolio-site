@@ -6,6 +6,7 @@ import ParagraphBlock from "./ParagraphBlock";
 import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
 import { PrototypingImageCarousel } from "./PrototypingImageCarousel";
+import { PanelAccordionList, type PanelAccordionItem } from "./PanelAccordionList";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 import {
   cssLengthToPx,
@@ -13,6 +14,7 @@ import {
   LAYOUT_DIMENSIONS,
   PANEL_CONTENT_MAX_WIDTH_PX,
 } from "../layoutConfig";
+import { bodyTypeSx } from "../typography";
 
 /** Mobile wireframe asset — intrinsic ratio for layout reserve. */
 const WIREFRAME_IMAGE_INTRINSIC_WIDTH = 390;
@@ -62,16 +64,11 @@ const WIREFLOW_IMAGE_INTRINSIC_HEIGHT = 560;
 
 const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
 
-const IMAGE_ANNOTATION_SX = {
-  fontFamily:
-    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-  fontWeight: 400,
-  color: "#000",
-  lineHeight: 1.35,
+const IMAGE_ANNOTATION_SX = bodyTypeSx("caption", {
   textAlign: "center",
   width: "100%",
   m: 0,
-} as const;
+});
 
 /** Matches `InteractionDesignPrinciples` stacked / row column gap. */
 const SPLIT_COLUMN_GAP = {
@@ -125,15 +122,19 @@ function PanelImageFigure({
 
 function CopyImageSplitLayout({
   paragraphs,
+  accordionSections,
   image,
   carouselImages,
 }: {
   paragraphs?: string[];
+  accordionSections?: PanelAccordionItem[];
   image?: PrototypingPanelImage;
   carouselImages?: PrototypingPanelImage[];
 }) {
+  const hasAccordion = Boolean(accordionSections?.length);
   const hasCarousel = Boolean(carouselImages?.length);
   const hasRightColumn = Boolean(image || hasCarousel);
+  const hasLeftColumn = hasAccordion || Boolean(paragraphs?.length);
 
   return (
     <Stack
@@ -146,13 +147,13 @@ function CopyImageSplitLayout({
         },
         [DESKTOP_LAYOUT_MQ]: {
           flexDirection: "row",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: hasCarousel ? "flex-start" : "space-between",
           gap: SPLIT_COLUMN_GAP.desktop,
         },
       }}
     >
-      {paragraphs?.length ? (
+      {hasLeftColumn ? (
         <Box
           sx={{
             width: "100%",
@@ -175,7 +176,14 @@ function CopyImageSplitLayout({
                   },
           }}
         >
-          <ParagraphBlock paragraphs={paragraphs} />
+          {hasAccordion && accordionSections ? (
+            <PanelAccordionList
+              items={accordionSections}
+              bodyMaxWidthDesktop={360}
+            />
+          ) : (
+            <ParagraphBlock paragraphs={paragraphs} />
+          )}
         </Box>
       ) : null}
       {hasCarousel && carouselImages ? (
@@ -190,7 +198,7 @@ function CopyImageSplitLayout({
               width: CAROUSEL_SPLIT_MEDIA_WIDTH,
               maxWidth: CAROUSEL_SPLIT_MEDIA_WIDTH,
               minWidth: 0,
-              alignSelf: "center",
+              alignSelf: "flex-start",
             },
           }}
         >
@@ -237,18 +245,12 @@ function CopyImageSplitLayout({
             {image.annotation || image.annotationInstruction ? (
               <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
                 {image.annotation ? (
-                  <Typography
-                    component="p"
-                    sx={{ ...IMAGE_ANNOTATION_SX, fontSize: "1rem" }}
-                  >
+                  <Typography component="p" sx={IMAGE_ANNOTATION_SX}>
                     {image.annotation}
                   </Typography>
                 ) : null}
                 {image.annotationInstruction ? (
-                  <Typography
-                    component="p"
-                    sx={{ ...IMAGE_ANNOTATION_SX, fontSize: "0.875rem" }}
-                  >
+                  <Typography component="p" sx={IMAGE_ANNOTATION_SX}>
                     {image.annotationInstruction}
                   </Typography>
                 ) : null}
@@ -265,6 +267,8 @@ export interface PrototypingMethodPanelProps {
   children?: ReactNode;
   /** Copy left / image right (Wire-Flow panel). */
   paragraphs?: string[];
+  /** Expandable copy left / carousel right (Software Prototypes panel). */
+  accordionSections?: PanelAccordionItem[];
   copyImage?: PrototypingPanelImage;
   /** Copy left / carousel right (Software Prototypes panel). */
   carouselImages?: PrototypingPanelImage[];
@@ -277,13 +281,17 @@ export interface PrototypingMethodPanelProps {
 export function PrototypingMethodPanel({
   children,
   paragraphs,
+  accordionSections,
   copyImage,
   carouselImages,
   primaryImage,
   secondaryImage,
 }: PrototypingMethodPanelProps) {
   const hasCopyImageSplit = Boolean(
-    paragraphs?.length || copyImage || carouselImages?.length,
+    paragraphs?.length ||
+      accordionSections?.length ||
+      copyImage ||
+      carouselImages?.length,
   );
   const hasStackedImages = Boolean(primaryImage || secondaryImage);
 
@@ -300,6 +308,7 @@ export function PrototypingMethodPanel({
         {hasCopyImageSplit ? (
           <CopyImageSplitLayout
             paragraphs={paragraphs}
+            accordionSections={accordionSections}
             image={copyImage}
             carouselImages={carouselImages}
           />

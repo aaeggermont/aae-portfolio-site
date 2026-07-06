@@ -1,61 +1,15 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Typewriter from "typewriter-effect";
 import styles from "./my-background.module.scss";
 import backgroundItems from "@/app/home/data/background-data";
 import BackgroundCard from "@/app/home/BackgroundCard";
 import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
+import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
+import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
 const FLOAT_COUNT = 14;
-
-function HeadingTypewriter() {
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const typewriterRef = useRef<{ typeString: (s: string) => { pauseFor: (n: number) => { start: () => void } } } | null>(null);
-  const hasStarted = useRef(false);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInView(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { root: null, threshold: 0.2, rootMargin: "0px" }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!inView || hasStarted.current || !typewriterRef.current) return;
-    hasStarted.current = true;
-    typewriterRef.current.typeString("What I do").pauseFor(2500).start();
-  }, [inView]);
-
-  return (
-    <div ref={wrapperRef} className={styles.heading}>
-      <Typewriter
-        options={{
-          autoStart: false,
-          loop: false,
-          deleteSpeed: 50,
-        }}
-        onInit={(tw) => {
-          typewriterRef.current = tw;
-        }}
-      />
-    </div>
-  );
-}
 
 type FloaterConfig = {
   img: any;
@@ -73,10 +27,16 @@ function AnimatedCardWrapper({
   children: React.ReactNode;
   index: number;
 }) {
+  const prefersReducedMotion = usePrefersReducedMotion();
   const ref = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(false);
+  const [inView, setInView] = useState(prefersReducedMotion);
 
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setInView(true);
+      return;
+    }
+
     const el = ref.current;
     if (!el) return;
 
@@ -99,14 +59,14 @@ function AnimatedCardWrapper({
     observer.observe(el);
 
     return () => observer.disconnect();
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <div
       ref={ref}
       className={`${styles.cardWrapper} ${inView ? styles.cardInView : ""}`}
       style={{
-        transitionDelay: inView ? `${index * 90}ms` : "0ms",
+        transitionDelay: inView && !prefersReducedMotion ? `${index * 90}ms` : "0ms",
       }}
     >
       {children}
@@ -167,7 +127,11 @@ export default function MyBackground() {
 
       <div className={styles.content}>
 
-        <HeadingTypewriter />
+        <SectionTypewriterHeading
+          as="div"
+          text="What I do"
+          className={styles.heading}
+        />
 
         <div className={styles.summarySection}>
           <p className={styles.summarySectionText}>
@@ -184,13 +148,7 @@ export default function MyBackground() {
         <div className={styles.cardsGrid}>
           {backgroundItems.map((item, index) => (
             <AnimatedCardWrapper key={item.title} index={index}>
-              <BackgroundCard
-                info={item}
-                dimensions={{
-                  width: "100%",
-                  height: "260px",
-                }}
-              />
+              <BackgroundCard info={item} />
             </AnimatedCardWrapper>
           ))}
         </div>

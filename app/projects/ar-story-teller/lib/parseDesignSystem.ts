@@ -360,17 +360,26 @@ function parsePrototypingMethod(value: unknown, path: string): PrototypingMethod
   if (!Array.isArray(value.images)) {
     throw new Error(`Invalid ${path}.images: expected array`);
   }
-  return {
+  const method: PrototypingMethod = {
     title: requireString(value.title, `${path}.title`),
     alt: requireString(value.alt, `${path}.alt`),
-    paragraphs:
-      value.paragraphs !== undefined
-        ? parseStringArray(value.paragraphs, `${path}.paragraphs`)
-        : undefined,
     images: value.images.map((img, index) =>
       parsePrototypingImage(img, `${path}.images[${index}]`),
     ),
   };
+  if (value.paragraphs !== undefined) {
+    method.paragraphs = parseStringArray(value.paragraphs, `${path}.paragraphs`);
+  }
+  const accordionSource = value.accordionSections ?? value.sections;
+  if (accordionSource !== undefined) {
+    if (!Array.isArray(accordionSource)) {
+      throw new Error(`Invalid ${path}.accordionSections: expected array`);
+    }
+    method.accordionSections = accordionSource.map((item, index) =>
+      parseFeatureSpecification(item, `${path}.accordionSections[${index}]`),
+    );
+  }
+  return method;
 }
 
 function parsePrototyping(value: unknown, path: string): Prototyping {

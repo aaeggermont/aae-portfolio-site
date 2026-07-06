@@ -1,66 +1,84 @@
-/* Caption typography: Source Sans 3. Title — 24 / 22 / 20 px; description — 24 / 22 / 18 px
-   (description steps down to paragraph-scale on mobile). */
+/* Image caption — `typography.ts` → bodyText (title bold) / bodyText (description). */
+@use '../typography' as typo;
+
+@mixin paragraph-img-title-type($font-size) {
+    @include typo.ar-st-body-type;
+    font-size: $font-size;
+    font-weight: 700;
+    line-height: normal;
+}
+
+@mixin paragraph-img-description-type($font-size) {
+    @include typo.ar-st-body-type;
+    font-size: $font-size;
+    line-height: normal;
+}
+
+.storyteller-paragraphimg {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    &__media {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: var(--paragraph-img-width, 100%);
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    &__image {
+        width: 100%;
+        height: auto;
+        align-self: center;
+    }
+
+    &__labels {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: var(--paragraph-img-width, 100%);
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    &__title {
+        margin: 0;
+        text-align: center;
+        padding-top: 1.25rem;
+    }
+
+    &__description {
+        margin: 0;
+        text-align: center;
+        padding-top: 0.75rem;
+    }
+}
 
 @media #{$desktop} {
     .storyteller-paragraphimg {
-        margin: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-content: center;
-        align-items: center;
         width: 100%;
 
         &__media {
             padding-top: 2rem;
             padding-bottom: 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: var(--paragraph-img-width, 100%);
-            max-width: 100%;
-            box-sizing: border-box;
-            //background-color: aqua;
-        }
-
-        &__image {
-            width: 100%;
-            height: auto;
-            align-self: center;
         }
 
         &__labels {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
             width: var(--paragraph-img-width, 90%);
-            max-width: 100%;
-            box-sizing: border-box;
         }
 
         &__title {
-            margin: 0;
-            color: #03133c;
-            text-align: center;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 20px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
-            padding-top: 1.25rem;
-            
+            @include paragraph-img-title-type(20px);
         }
 
         &__description {
-            margin: 0;
-            color: #03133c;
+            @include paragraph-img-description-type(20px);
             text-align: left;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 20px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-            padding-top: 0.75rem;
             padding-left: 10%;
             padding-right: 10%;
         }
@@ -69,60 +87,16 @@
 
 @media #{$tablet} {
     .storyteller-paragraphimg {
-        margin: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-content: center;
-        align-items: center;
-
         &__media {
             padding-top: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: var(--paragraph-img-width, 100%);
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        &__image {
-            width: 100%;
-            height: auto;
-            align-self: center;
-        }
-
-        &__labels {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            width: var(--paragraph-img-width, 100%);
-            max-width: 100%;
-            box-sizing: border-box;
         }
 
         &__title {
-            margin: 0;
-            color: #03133c;
-            text-align: center;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 20px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
-            padding-top: 1.25rem;
+            @include paragraph-img-title-type(20px);
         }
 
         &__description {
-            margin: 0;
-            color: #03133c;
-            text-align: center;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 19px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
-            padding-top: 0.75rem;
+            @include paragraph-img-description-type(20px);
             padding-left: 15%;
             padding-right: 15%;
         }
@@ -131,60 +105,26 @@
 
 @media #{$mobile} {
     .storyteller-paragraphimg {
-        margin: auto;
         padding: 0 5%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         width: 100%;
         box-sizing: border-box;
 
         &__media {
             padding-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             width: var(--paragraph-img-width, 80%);
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-
-        &__image {
-            width: 100%;
-            height: auto;
         }
 
         &__labels {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
             width: var(--paragraph-img-width, 80%);
-            max-width: 100%;
-            box-sizing: border-box;
         }
 
         &__title {
-            margin: 0;
-            color: #03133c;
-            text-align: center;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
+            @include paragraph-img-title-type(18px);
             padding-top: 1rem;
         }
 
         &__description {
-            margin: 0;
-            color: #03133c;
-            text-align: center;
-            font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
-            font-size: 16px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: normal;
+            @include paragraph-img-description-type(18px);
             padding-top: 0.5rem;
         }
     }

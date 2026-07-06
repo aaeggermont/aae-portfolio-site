@@ -1,21 +1,24 @@
-/* Paragraph type: Source Sans 3. Sizes — desktop 24px; tablet 22px; mobile 18px (step down for
-   line length + thumb reach; bump mobile to 19–20px if blocks feel small). */
+/* Body copy — `typography.ts` → bodyText. Stack gap owned by `.paragraph-block`. */
+@use '../typography' as typo;
+
 @mixin paragraph-text-type($font-size) {
     .text-paragraph {
-        color: #010a24;
-        font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+        @include typo.ar-st-body-type;
         font-size: $font-size;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
+        margin: 0;
     }
+}
+
+.paragraph-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--body-stack-gap);
 }
 
 @media #{$desktop} {
     .st-paragraph-text {
         margin: auto;
         width: 100%;
-        padding-top: 1rem;
         @include paragraph-text-type(20px);
     }
 }
@@ -24,7 +27,6 @@
     .st-paragraph-text {
         margin: auto;
         width: 100%;
-        padding-top: 1rem;
         @include paragraph-text-type(20px);
     }
 }
@@ -33,9 +35,9 @@
     .storyteller-xsxm-paragraph-text {
         margin: auto;
         width: 100%;
-        padding: 0 5%;
-        padding-top: 2rem;
+        padding-left: 5%;
+        padding-right: 5%;
+        box-sizing: border-box;
         @include paragraph-text-type(18px);
     }
 }
-

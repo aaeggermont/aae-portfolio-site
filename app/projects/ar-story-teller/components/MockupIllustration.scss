@@ -1,3 +1,15 @@
+@use '../typography' as typo;
+
+@mixin mockup-title-type($font-size) {
+    @include typo.ar-st-title-type(600);
+    font-size: $font-size;
+}
+
+@mixin mockup-description-type($font-size) {
+    @include typo.ar-st-body-type;
+    font-size: $font-size;
+}
+
 @media #{$desktop} {
     .mockup-container {
         margin: auto;
@@ -11,25 +23,19 @@
         span {
             text-align: center;
             margin-bottom: 1rem;
-            font-family: var(--font-poppins);
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #102764;
+            @include mockup-title-type(22px);
         }
 
         p {
             padding-top: 2rem;
             padding-left: 15%;
             padding-right: 15%;
-            font-family: var(--font-poppins);
-            font-size: 1rem;
-            font-weight: 400;
-            color: #102764;
+            @include mockup-description-type(20px);
         }
     }
 }
 
-@media  #{$tablet} {
+@media #{$tablet} {
     .mockup-container {
         margin: auto;
         display: flex;
@@ -41,20 +47,14 @@
         span {
             padding-top: 6rem;
             text-align: center;
-            font-family: var(--font-poppins);
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: #102764;
+            @include mockup-title-type(20px);
         }
 
         p {
             padding-top: 3rem;
             padding-left: 15%;
             padding-right: 15%;
-            font-family: var(--font-poppins);
-            font-size: 1rem;
-            font-weight: 400;
-            color: #102764;
+            @include mockup-description-type(20px);
         }
     }
 }
@@ -68,19 +68,13 @@
 
         .title {
             text-align: center;
-            font-family: poppins;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #102764;
+            @include mockup-title-type(18px);
             padding-top: 2rem;
             padding-bottom: 1rem;
         }
 
         .description {
-            font-family: poppins;
-            font-size: 0.8rem;
-            font-weight: 400;
-            color: #102764;
+            @include mockup-description-type(16px);
             text-align: center;
             padding-top: 1.5rem;
             padding-left: 5%;

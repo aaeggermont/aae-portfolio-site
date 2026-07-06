@@ -7,6 +7,8 @@ import type {
   ProjectOverviewColumn,
   ProjectOverviewData,
 } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import { bodyTypeSx, titleTypeSx } from "../typography";
+import styles from "../ArStoryTeller.module.scss";
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
@@ -14,24 +16,8 @@ const TABLET_UP_MQ = breakpointMediaQuery.tabletUp;
 
 const ICON_INTRINSIC_SIZE = 60;
 
-/** Body copy — typography tokens to be refined in a follow-up pass. */
-const bodyTextSx = {
-  color: "#002464",
-  fontFamily:
-    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-  fontWeight: 400,
-  fontSize: { xs: "16px", md: "20px" },
-  lineHeight: 1.35,
-} as const;
-
-/** Column heading — typography tokens to be refined in a follow-up pass. */
-const columnTitleSx = {
-  fontFamily: 'var(--font-satoshi), sans-serif',
-  fontWeight: 600,
-  color: "#002464",
-  lineHeight: 1.2,
-  fontSize: { xs: "18px", md: "22px" },
-} as const;
+const panelBodySx = bodyTypeSx("panelBody");
+const columnTitleSx = titleTypeSx("cardTitle", { lineHeight: 1.2, m: 0 });
 
 interface ProjectOverviewProps {
   data: ProjectOverviewData;
@@ -91,7 +77,7 @@ function OverviewColumn({ item }: { item: ProjectOverviewColumn }) {
           <Typography
             key={entry}
             component="li"
-            sx={{ ...bodyTextSx, display: "block" }}
+            sx={{ ...panelBodySx, display: "block" }}
           >
             {entry}
           </Typography>
@@ -138,7 +124,7 @@ function OverviewRow({ item }: { item: ProjectOverviewColumn }) {
           <Typography
             key={entry}
             component="li"
-            sx={{ ...bodyTextSx, display: "block" }}
+            sx={{ ...panelBodySx, display: "block" }}
           >
             {entry}
           </Typography>
@@ -153,8 +139,8 @@ const ProjectOverview = ({ data }: ProjectOverviewProps) => {
   const headingId = "project-overview-heading";
 
   return (
-    <section aria-labelledby={headingId}>
-      <SectionTitle id={headingId} title={title} paddingBottom="2rem" />
+    <section aria-labelledby={headingId} className={styles['panel-subsection']}>
+      <SectionTitle id={headingId} title={title} />
       <Box
         sx={{
           bgcolor: "#f4f5f6",

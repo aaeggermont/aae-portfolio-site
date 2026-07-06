@@ -3,20 +3,14 @@ import { SectionTitle } from "./SectionTitle";
 import { PANEL_BLOCK_PADDINGS } from "../layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { TeamData, TeamMember } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import { bodyTypeSx } from "../typography";
+import styles from "../ArStoryTeller.module.scss";
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
 const TABLET_UP_MQ = breakpointMediaQuery.tabletUp;
 
-/** Body copy — typography tokens to be refined in a follow-up pass. */
-const bodyTextSx = {
-  color: "#002464",
-  fontFamily:
-    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-  fontWeight: 500,
-  fontSize: { xs: "16px", sm: "20px", md: "20px" },
-  lineHeight: 1.35,
-} as const;
+const panelBodySx = bodyTypeSx("panelBody");
 
 interface TeamProps {
   data: TeamData;
@@ -56,7 +50,7 @@ function MemberBlock({
           pt: stacked ? 0 : 2,
           pr: stacked || !isRight ? 0 : 2,
           pl: stacked || isRight ? 0 : 2,
-          ...bodyTextSx,
+          ...panelBodySx,
           fontWeight: 600,
         }}
       >
@@ -69,7 +63,7 @@ function MemberBlock({
           mt: stacked ? 0.5 : 0,
           pr: stacked || !isRight ? 0 : 2,
           pl: stacked || isRight ? 0 : 2,
-          ...bodyTextSx,
+          ...panelBodySx,
         }}
       >
         {member.role}
@@ -108,8 +102,8 @@ const Team = ({ data }: TeamProps) => {
   const memberRows = chunkRowPairs(members);
 
   return (
-    <section aria-labelledby={headingId}>
-      <SectionTitle id={headingId} title={title} paddingBottom="2rem" />
+    <section aria-labelledby={headingId} className={styles['panel-subsection']}>
+      <SectionTitle id={headingId} title={title} />
       <Box
         sx={{
           bgcolor: "#f4f5f6",

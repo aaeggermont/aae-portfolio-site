@@ -13,6 +13,20 @@ import {
   buildResearchMethodDialogSections,
   type ResearchMethodCardData,
 } from "../types/researchMethodCard";
+import { bodyTypeSx, titleTypeSx } from "../typography";
+
+const DIALOG_TITLE_SX = titleTypeSx("cardTitle", {
+  textAlign: "center",
+  lineHeight: 1.2,
+});
+
+const DIALOG_SECTION_HEADING_SX = titleTypeSx("panelHeading", {
+  lineHeight: 1.3,
+});
+
+const DIALOG_BODY_SX = bodyTypeSx("smallBody", {
+  lineHeight: 1.5,
+});
 
 export interface ResearchMethodDialogProps {
   open: boolean;
@@ -78,20 +92,7 @@ export const ResearchMethodDialog = ({
               <CloseIcon fontSize="small" />
             </IconButton>
           </Box>
-          <Typography
-            component="h1"
-            variant="h4"
-            align="center"
-            sx={{
-              fontSize: { xs: 20, sm: 20, md: 24 },
-              fontFamily:
-                "var(--font-satoshi), var(--font-poppins), sans-serif",
-              fontStyle: "normal",
-              fontWeight: 700,
-              color: "#111111",
-              lineHeight: 1.2,
-            }}
-          >
+          <Typography component="h1" sx={DIALOG_TITLE_SX}>
             {method.title}
           </Typography>
         </Stack>
@@ -129,28 +130,11 @@ export const ResearchMethodDialog = ({
           {sections.map((section) => (
             <Box component="section" key={section.title}>
               <Stack spacing={1.5}>
-                <Typography
-                  component="h2"
-                  sx={{
-                    fontSize: 22,
-                    fontWeight: 700,
-                    color: "#111111",
-                    lineHeight: 1.3,
-                  }}
-                >
+                <Typography component="h2" sx={DIALOG_SECTION_HEADING_SX}>
                   {section.title}
                 </Typography>
                 {section.content?.map((paragraph) => (
-                  <Typography
-                    key={paragraph}
-                    component="p"
-                    sx={{
-                      fontSize: 16,
-                      fontWeight: 400,
-                      color: "#111111",
-                      lineHeight: 1.5,
-                    }}
-                  >
+                  <Typography key={paragraph} component="p" sx={DIALOG_BODY_SX}>
                     {paragraph}
                   </Typography>
                 ))}
@@ -159,15 +143,7 @@ export const ResearchMethodDialog = ({
                   <Box component="ul" sx={{ m: 0, pl: 3 }}>
                     {section.bullets.map((item) => (
                       <Box component="li" key={item} sx={{ mb: 0.25 }}>
-                        <Typography
-                          component="span"
-                          sx={{
-                            fontSize: 16,
-                            fontWeight: 400,
-                            color: "#111111",
-                            lineHeight: 1.5,
-                          }}
-                        >
+                        <Typography component="span" sx={DIALOG_BODY_SX}>
                           {item}
                         </Typography>
                       </Box>

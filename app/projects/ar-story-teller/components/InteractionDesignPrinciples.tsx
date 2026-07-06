@@ -18,6 +18,7 @@ import { useState } from "react";
 import ProjectImage from "@/lib/media/ProjectImage";
 import { PANEL_HEADER_GAP } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
+import { bodyTypeSx, titleTypeSx } from "../typography";
 
 export interface FeatureSpecification {
   title: string;
@@ -48,6 +49,34 @@ const ILLUSTRATION_SECONDARY_MAX_WIDTH_PX = Math.round(411 * 0.75);
 const ILLUSTRATION_INTRINSIC_HEIGHT_PX = Math.round(320 * 0.75);
 const ILLUSTRATION_PRIMARY_CAPTION_MAX_WIDTH_PX = Math.round(409 * 0.75);
 const ILLUSTRATION_SECONDARY_CAPTION_MAX_WIDTH_PX = Math.round(383 * 0.75);
+
+const panelHeadingSx = titleTypeSx("panelHeading", {
+  m: 0,
+  textAlign: "center",
+  [breakpointMediaQuery.tabletUp]: {
+    textAlign: "left",
+  },
+});
+
+const accordionTitleSx = titleTypeSx("cardTitle", {
+  flex: 1,
+  lineHeight: "normal !important",
+  letterSpacing: 0,
+});
+
+const accordionBodySx = bodyTypeSx("smallBody", {
+  letterSpacing: 0,
+  maxWidth: "100%",
+});
+
+const illustrationCaptionSx = bodyTypeSx("caption", {
+  maxWidth: "100%",
+  textAlign: "center",
+});
+
+const legendLabelSx = bodyTypeSx("smallBody", {
+  lineHeight: 1.2,
+});
 
 /** Row layout only at project desktop (1024px+); mobile + tablet stack accordion then illustrations. */
 const DESKTOP_LAYOUT_MQ = breakpointMediaQuery.desktopUp;
@@ -91,23 +120,7 @@ export const InteractionDesignPrinciples = ({
         },
       }}
     >
-      <Typography
-        component="h1"
-        sx={{
-          color: "#03133c",
-          fontFamily:
-            'var(--font-satoshi), var(--font-poppins), "Source Sans 3", system-ui, sans-serif',
-          fontSize: { xs: 28, md: 30, lg: 30 },
-          fontWeight: 700,
-          lineHeight: "normal !important",
-          letterSpacing: 0,
-          m: 0,
-          textAlign: "center",
-          [breakpointMediaQuery.tabletUp]: {
-            textAlign: "left",
-          },
-        }}
-      >
+      <Typography component="h1" sx={panelHeadingSx}>
         {title}
       </Typography>
       <Box
@@ -175,14 +188,7 @@ export const InteractionDesignPrinciples = ({
                       <Typography
                         component="h2"
                         sx={{
-                          fontFamily:
-                            'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                          fontSize: { xs: "1rem", md: "1.25rem", lg: "1.5rem" },
-                          fontWeight: 600,
-                          color: "#000",
-                          lineHeight: 'normal !important',
-                          letterSpacing: 0,
-                          flex: 1,
+                          ...accordionTitleSx,
                           maxWidth: index === 0 ? 268 : "100%",
                         }}
                       >
@@ -205,13 +211,7 @@ export const InteractionDesignPrinciples = ({
                         <Typography
                           component="p"
                           sx={{
-                            fontFamily: '"Source Sans 3", sans-serif',
-                            fontWeight: 400,
-                            color: "#000",
-                            fontSize: { xs: "1rem", md: "1rem", lg: "1.2rem" },
-                            lineHeight: 1.4,
-                            letterSpacing: 0,
-                            maxWidth: "100%",
+                            ...accordionBodySx,
                             [DESKTOP_LAYOUT_MQ]: {
                               maxWidth: 360,
                             },
@@ -299,13 +299,7 @@ export const InteractionDesignPrinciples = ({
                 <Typography
                   component="p"
                   sx={{
-                    fontFamily: '"Source Sans 3", sans-serif',
-                    fontWeight: 400,
-                    fontSize: "16px",
-                    lineHeight: 1.35,
-                    color: "#000",
-                    maxWidth: "100%",
-                    textAlign: "center",
+                    ...illustrationCaptionSx,
                     [DESKTOP_LAYOUT_MQ]: {
                       maxWidth:
                         index === 0
@@ -354,16 +348,7 @@ export const InteractionDesignPrinciples = ({
                       sx={{ fontSize: 20, color: "#000" }}
                     />
                   </Box>
-                  <Typography
-                    sx={{
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontSize: { xs: "0.8rem", md: "1rem", lg: "1rem" },
-                      fontWeight: 400,
-                      lineHeight: 1.2,
-                      color: "#000",
-                    }}
-                  >
+                  <Typography sx={legendLabelSx}>
                     Target object
                   </Typography>
                 </Stack>
@@ -382,16 +367,7 @@ export const InteractionDesignPrinciples = ({
                       flexShrink: 0,
                     }}
                   />
-                  <Typography
-                    sx={{
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontSize: { xs: "0.8rem", md: "1rem", lg: "1rem" },
-                      fontWeight: 400,
-                      lineHeight: 1.2,
-                      color: "#000",
-                    }}
-                  >
+                  <Typography sx={legendLabelSx}>
                     Geofancing area
                   </Typography>
                 </Stack>
@@ -421,16 +397,7 @@ export const InteractionDesignPrinciples = ({
                       }}
                     />
                   </Box>
-                  <Typography
-                    sx={{
-                     fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontSize: { xs: "0.8rem", md: "1rem", lg: "1rem" },
-                      fontWeight: 400,
-                      lineHeight: 1.2,
-                      color: "#000",
-                    }}
-                  >
+                  <Typography sx={legendLabelSx}>
                     Smart Phone Camera
                   </Typography>
                 </Stack>
@@ -459,17 +426,7 @@ export const InteractionDesignPrinciples = ({
                       }}
                     />
                   </Box>
-                  <Typography
-                    sx={{
-                      fontFamily:
-                        'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                      fontSize: { xs: "0.8rem", md: "1rem", lg: "1rem" },
-                      fontWeight: 400,
-                     
-                      lineHeight: 1.2,
-                      color: "#000",
-                    }}
-                  >
+                  <Typography sx={legendLabelSx}>
                     Camera point of view
                   </Typography>
                 </Stack>

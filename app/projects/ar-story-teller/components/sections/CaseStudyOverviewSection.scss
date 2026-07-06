@@ -1,52 +1,6 @@
-/* Internal section spacing. Mirrors the pattern in `ArStoryTeller.module.scss` and
-   `MagicExperiencesSection.scss`: a single `--case-study-overview-gap` is set per
-   breakpoint and applied as `margin-top` to every direct child after the first via
-   `> * + *`. Defaults below are kept aligned with `CASE_STUDY_OVERVIEW_GAPS` in
-   `CaseStudyOverviewSection.tsx` so the section still renders sensibly if the inline
-   style is ever removed. Override a single internal gap by setting
-   `--case-study-overview-gap-self` inline on a child. */
-.case-study-overview {
-    --case-study-overview-gap-mobile: 0rem;
-    --case-study-overview-gap-tablet: 0rem;
-    --case-study-overview-gap-desktop: 0rem;
-    --case-study-overview-gap: var(--case-study-overview-gap-mobile);
+@use '../../typography' as typo;
 
-    @media #{$tablet} {
-        --case-study-overview-gap: var(--case-study-overview-gap-tablet);
-    }
-
-    @media #{$desktop} {
-        --case-study-overview-gap: var(--case-study-overview-gap-desktop);
-    }
-
-    > * + * {
-        margin-top: var(
-            --case-study-overview-gap-self,
-            var(--case-study-overview-gap)
-        );
-    }
-
-    /* Gap between banner image and overview `ParagraphBlock` only */
-    --case-study-banner-paragraph-gap-mobile: 3rem;
-    --case-study-banner-paragraph-gap-tablet: 6rem;
-    --case-study-banner-paragraph-gap-desktop: 8rem;
-    --case-study-banner-paragraph-gap: var(--case-study-banner-paragraph-gap-mobile);
-
-    @media #{$tablet} {
-        --case-study-banner-paragraph-gap: var(--case-study-banner-paragraph-gap-tablet);
-    }
-
-    @media #{$desktop} {
-        --case-study-banner-paragraph-gap: var(--case-study-banner-paragraph-gap-desktop);
-    }
-
-    > .case-study-banner + * {
-        margin-top: var(
-            --case-study-overview-gap-self,
-            var(--case-study-banner-paragraph-gap)
-        );
-    }
-}
+/* Uses global `--panel-section-gap` from `layoutConfig` / `ArStoryTellerPage`. */
 
 /* Case study section banner.
 
@@ -57,7 +11,6 @@
    `position: relative` makes the wrapper the containing block for the title overlay. */
 .case-study-banner {
     position: relative;
-    padding-top: 3rem;
     width: 100%;
     box-sizing: border-box;
 }
@@ -99,11 +52,27 @@
 /* Dedicated banner title styling; intentionally separate from the shared `BlockTitle`. */
 .case-study-banner__title {
     margin: 0;
-    padding-top: 1.5rem;
-    padding-bottom: 0;
-    font-family: var(--font-satoshi), sans-serif;
-    font-size: clamp(1.3rem, 3vw, 2rem);
+    padding: 0;
+    font-family: typo.$ar-st-title-font;
     font-weight: 600;
-    color: #ffffff;
+    color: typo.$ar-st-hero-title-color;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+}
+
+@media #{$mobile} {
+    .case-study-banner__title {
+        font-size: 20px;
+    }
+}
+
+@media #{$tablet} {
+    .case-study-banner__title {
+        font-size: 24px;
+    }
+}
+
+@media #{$desktop} {
+    .case-study-banner__title {
+        font-size: 28px;
+    }
 }

@@ -1,3 +1,5 @@
+@use '../typography' as typo;
+
 .desktop-illlustration-container {
     display: flex;
     justify-content: center;
@@ -9,18 +11,15 @@
     padding-bottom: 4rem;
 
     span {
-        font-family: poppins;
-        font-size: 1rem;
+        @include typo.ar-st-body-type;
+        font-size: 16px;
         font-weight: 500;
     }
 
     .illustration-title {
         padding-top: 2rem;
-
-        font-family: poppins;
-        font-size: 2rem;
-        font-weight: 500;
-        color: #000000;
+        @include typo.ar-st-title-type(700);
+        font-size: 32px;
     }
 
     .image-container {
@@ -33,45 +32,36 @@
     .text-description {
         width: 50%;
         padding-top: 1rem;
-        font-family: poppins;
-        font-size: 1.5rem;
-        font-weight: 400;
-        color: #000000;
-    }    
+        @include typo.ar-st-body-type;
+        font-size: 20px;
+    }
 }
 
 .mobile-illlustration-container {
-
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     background-color: #F4F4F4;
     margin-top: 3rem;
-  
+
     .image-container {
         width: 80%;
         text-align: center;
     }
 
     .illustration-title {
-        // padding-top: 1rem;
-        font-family: poppins;
-        font-size: 1rem;
-        font-weight: 500;
-        color: #000000;
+        @include typo.ar-st-title-type(600);
+        font-size: 18px;
     }
 
     .text-description {
         padding-top: 1rem;
         padding-bottom: 1.5rem;
         width: 80%;
-        font-family: poppins;
-        font-size: .8rem;
-        font-weight: 400;
-        color: #000000;
-    }    
-
+        @include typo.ar-st-body-type;
+        font-size: 16px;
+    }
 }
 
 .tablet-illlustration-container {
@@ -86,32 +76,26 @@
         padding-bottom: 2rem;
     }
 
-
     .illustration-title {
-        font-family: poppins;
-        font-size: 1rem;
-        font-weight: 500;
-        color: #040B35;
+        @include typo.ar-st-title-type(600);
+        font-size: 20px;
     }
 
     .text-description {
         width: 80%;
         padding-top: 1rem;
-        font-family: poppins;
-        font-size: 1.2rem;
-        font-weight: 400;
-        color: #102764;
-    }    
+        @include typo.ar-st-body-type;
+        font-size: 20px;
+    }
 }
 
 .object-fit_fill {
-    object-fit: fill   
+    object-fit: fill;
 }
-
 
 button {
     border: none;
     cursor: pointer;
     appearance: none;
     background-color: inherit;
-  }
+}

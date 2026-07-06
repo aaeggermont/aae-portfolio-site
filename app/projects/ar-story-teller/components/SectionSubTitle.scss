@@ -1,56 +1,44 @@
-/* Subsection heading — Satoshi bold. Desktop 40px per spec; tablet 34px / mobile 28px
-   (same step as `SectionTitle.scss` so subsection titles stay in the same scale rhythm). */
+/* Subsection heading — typography only; spacing from `content-group` / `TITLE_CONTENT_GAP`. */
+@use '../typography' as typo;
+
+.section-sub-title {
+    padding: 0;
+    margin: 0;
+
+    .section-sub-title__label {
+        margin: 0;
+        @include typo.ar-st-title-type(700);
+    }
+}
 
 @media #{$desktop} {
     .section-sub-title {
-        padding-top: 2.5rem;
-        padding-bottom: 1rem;
         text-align: left;
 
         .section-sub-title__label {
-            color: #03133c;
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 40px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
+            font-size: 32px;
         }
     }
 }
 
 @media #{$tablet} {
     .section-sub-title {
-        margin: auto;
-        padding-top: 2rem;
-        padding-bottom: 0.75rem;
+        text-align: center;
 
         .section-sub-title__label {
             text-align: center;
-            color: #03133c;
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 34px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
+            font-size: 28px;
         }
     }
 }
 
 @media #{$mobile} {
     .section-sub-title {
-        margin: auto;
         text-align: center;
-        padding-top: 1.5rem;
-        padding-bottom: 0.5rem;
 
         .section-sub-title__label {
             text-align: center;
-            color: #03133c;
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 28px;
-            font-style: normal;
-            font-weight: 700;
-            line-height: normal;
+            font-size: 24px;
         }
     }
 }

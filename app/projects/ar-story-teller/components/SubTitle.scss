@@ -1,46 +1,30 @@
-.desktop-subtitle-container {
-    max-width: 2500px;
-    margin: auto;
+/* Inline subtitle — `typography.ts` → cardTitle. */
+@use '../typography' as typo;
 
+@mixin subtitle-label-type($font-size) {
     .subtitle-paragraph {
-        font-family: var(--font-satoshi), sans-serif;
-        font-size: 2.5rem;
-        font-weight: 600;
-        color: $font-color-normal;
+        @include typo.ar-st-title-type(600);
+        font-size: $font-size;
         padding-top: 20px;
         padding-bottom: 10px;
         text-align: center;
     }
+}
 
+.desktop-subtitle-container {
+    max-width: 2500px;
+    margin: auto;
+    @include subtitle-label-type(22px);
 }
 
 .lgmd-subtitle-container {
     max-width: 1366px;
     margin: auto;
-
-    .subtitle-paragraph {
-        font-family: var(--font-satoshi), sans-serif;
-        font-size: 1.4rem;
-        font-weight: 600;
-        color: $font-color-normal;
-        padding-top: 20px;
-        padding-bottom: 10px;
-        text-align: center;
-    }
+    @include subtitle-label-type(20px);
 }
 
 .xssm-subtitle-container {
     max-width: 428px;
     margin: auto;
-
-
-    .subtitle-paragraph {
-        font-family: var(--font-satoshi), sans-serif;
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: $font-color-normal;
-        padding-top: 20px;
-        padding-bottom: 10px;
-        text-align: center;
-    }
+    @include subtitle-label-type(18px);
 }

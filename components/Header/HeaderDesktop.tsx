@@ -1,7 +1,10 @@
-import { usePathname } from 'next/navigation';
+'use client';
+
 import type { HeaderLogoColorProps, HeaderProps } from ".";
 import Link from 'next/link';
 import { HeaderLogo } from './HeaderLogo';
+import { HEADER_NAV_ITEMS } from './navConfig';
+import { useHeaderNav } from './useHeaderNav';
 
 import styles from './header.module.scss';
 
@@ -11,18 +14,7 @@ export function HeaderDesktop({
   logoAccentColor,
   resumeHref,
 }: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
-  const pathname = usePathname();
-
-  const isActive = (href: string) => {
-    // adjust if you want "startsWith" instead of exact match
-    if (href === "/") {
-      return pathname === href;
-    }
-    if (pathname.startsWith('/work') && href === '/mywork') {
-      return true;
-    }
-    return pathname.startsWith(href);
-  };
+  const { getHref, isActive } = useHeaderNav(resumeHref);
 
   return <>
     <div className={styles.site_menu}>
@@ -30,8 +22,8 @@ export function HeaderDesktop({
         <div className={styles.brand_logo}>
           <Link href='/'>
             <HeaderLogo
-              width="190"
-              height="50"
+              width="140"
+              height="37"
               primaryColor={logoPrimaryColor}
               accentColor={logoAccentColor}
             />
@@ -39,65 +31,41 @@ export function HeaderDesktop({
         </div>
 
         <div className="primary_menu" id="menu">
-          <nav className={styles.main_menu}>
+          <nav className={styles.main_menu} aria-label="Main navigation">
             <ul>
-              <li className={styles.menu_item}>
-                <Link
-                  href="/"
-                  className={isActive("/") ? styles.active_link : ''}
-                  style={{ color: fontColor }}
-                >
-                  Home
-                </Link>
-              </li>
+              {HEADER_NAV_ITEMS.map((item) => {
+                const href = getHref(item);
+                const active = isActive(item.key);
+                const linkStyle = { color: fontColor };
 
-              <li className={styles.menu_item}>
-                <Link
-                  href="/aboutme"
-                  className={
-                    isActive("/aboutme") ? styles.active_link : ''
-                  }
-                  style={{ color: fontColor }}
-                >
-                  About Me
-                </Link>
-              </li>
+                if (item.download) {
+                  return (
+                    <li key={item.key} className={styles.menu_item}>
+                      <a
+                        href={href}
+                        download="AAEResume"
+                        target="_blank"
+                        rel="noreferrer"
+                        style={linkStyle}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  );
+                }
 
-              <li className={styles.menu_item}>
-                <Link
-                  href="/mywork"
-                  className={
-                    isActive("/mywork") ? styles.active_link : ''
-                  }
-                  style={{ color: fontColor }}
-                >
-                  My Work
-                </Link>
-              </li>
-
-              <li className={styles.menu_item}>
-                <a
-                  href={resumeHref}
-                  download="AAEResume"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ color: fontColor }}
-                >
-                  Resume
-                </a>
-              </li>
-
-              <li className={styles.menu_item}>
-                <Link
-                  href="/contact"
-                  className={
-                    isActive("/contact") ? styles.active_link : ''
-                  }
-                  style={{ color: fontColor }}
-                >
-                  Contact
-                </Link>
-              </li>
+                return (
+                  <li key={item.key} className={styles.menu_item}>
+                    <Link
+                      href={href}
+                      className={active ? styles.active_link : ''}
+                      style={linkStyle}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
         </div>

@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import './CaseStudyOverviewSection.scss';
 import ParagraphBlock from '../ParagraphBlock';
-import ParagraphImg from '../ParagraphImg';
 import ArAsNarrative from '../ArAsNarrative';
 import ContextualNotifications from '../ContextNotifications';
 import { MagicExperiencesSection } from './MagicExperiencesSection';
@@ -10,7 +9,7 @@ import ProjectImage from '@/lib/media/ProjectImage';
 import { CASE_STUDY_BANNER_OBJECT_PATH } from '@/app/projects/ar-story-teller/lib/criticalAssets';
 import type { CaseStudyOverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import styles from '../../ArStoryTeller.module.scss';
-import { SectionSubTitle} from '../SectionSubTitle';
+import { SectionSubTitle } from '../SectionSubTitle';
 import {
     LAYOUT_DIMENSIONS,
     PANEL_CONTENT_MAX_WIDTH_PX,
@@ -26,57 +25,14 @@ interface CaseStudyOverviewSectionProps {
 
 const CASE_STUDY_BANNER_ALT = 'Tower of Terror case study banner';
 
-/* Intrinsic ratio for the banner — used by `next/image` to reserve space and avoid layout
-   shift. Update if the actual asset's aspect differs significantly. */
 const CASE_STUDY_BANNER_INTRINSIC_WIDTH = 1920;
 const CASE_STUDY_BANNER_INTRINSIC_HEIGHT = 720;
 const CASE_STUDY_BANNER_MAX_WIDTH_PX = PANEL_CONTENT_MAX_WIDTH_PX;
 const CASE_STUDY_BANNER_SIZES = `(max-width: ${LAYOUT_DIMENSIONS.desktop.maxWidth}) 100vw, ${CASE_STUDY_BANNER_MAX_WIDTH_PX}px`;
 
-/**
- * Default vertical spacing between direct children of `CaseStudyOverviewSection`
- * (banner → paragraph block → optional `ArAsNarrative`).
- *
- * Defaults are `0rem` to preserve the current layout: the banner already owns its own
- * `padding-top: 3rem`, so introducing a gap here without zeroing those would double-space
- * the area. Tune these to dial the internal rhythm of this section without touching the
- * page-level `SECTION_GAPS` in `ArStoryTellerPage.tsx`.
- *
- * Breakpoints follow `styles/variables.scss`:
- *   - `mobile`  ➝ 360 – 767px
- *   - `tablet`  ➝ 768 – 1023px
- *   - `desktop` ➝ 1024px +
- *
- * To override a single internal gap (e.g. tighter between paragraph block and
- * `ArAsNarrative`), set `--case-study-overview-gap-self` inline on that child.
- *
- * Banner → overview paragraphs use `--case-study-banner-paragraph-gap-*` (see below).
- */
-const CASE_STUDY_OVERVIEW_GAPS = {
-    mobile: '3rem',
-    tablet: '6rem',
-    desktop: '8rem',
-} as const;
-
-/** Vertical space between the case study banner image and `ParagraphBlock` only. */
-const CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS = {
-    mobile: '3rem',
-    tablet: '6rem',
-    desktop: '8rem',
-} as const;
-
-const caseStudyOverviewGapStyle: CSSProperties = {
-    ['--case-study-overview-gap-mobile' as string]: CASE_STUDY_OVERVIEW_GAPS.mobile,
-    ['--case-study-overview-gap-tablet' as string]: CASE_STUDY_OVERVIEW_GAPS.tablet,
-    ['--case-study-overview-gap-desktop' as string]: CASE_STUDY_OVERVIEW_GAPS.desktop,
-    ['--case-study-banner-paragraph-gap-mobile' as string]:
-        CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS.mobile,
-    ['--case-study-banner-paragraph-gap-tablet' as string]:
-        CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS.tablet,
-    ['--case-study-banner-paragraph-gap-desktop' as string]:
-        CASE_STUDY_BANNER_TO_PARAGRAPH_GAPS.desktop,
+const caseStudyBannerStyle: CSSProperties = {
     ['--case-study-banner-max-width' as string]: `${CASE_STUDY_BANNER_MAX_WIDTH_PX}px`,
-} as CSSProperties;
+};
 
 function CaseStudyBannerTitle({ title }: { title: string }) {
     return <h2 className="case-study-banner__title">{title}</h2>;
@@ -86,17 +42,8 @@ function CaseStudyBannerTitle({ title }: { title: string }) {
 
 export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps) {
     const { caseStudy } = data;
-    console.log('--------------------------------');
-    console.log(caseStudy, 'caseStudy');
-    console.log('--------------------------------');
-    const { overview, overviewImages, overviewImagesAlt, ARAsNarrativeTool, notificationsAttrac } = caseStudy;
-    console.log('--------------------------------');
-    console.log(overview, 'overview');
-    console.log('--------------------------------');
+    const { overview, ARAsNarrativeTool, notificationsAttrac } = caseStudy;
 
-    /* Title overlay fades in only once the banner image's `load` event fires, so the title
-       never appears over a still-loading background. We watch the underlying `<img>` rendered
-       by `ProjectImage` rather than extending the shared component's prop surface. */
     const bannerRef = useRef<HTMLDivElement>(null);
     const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -106,8 +53,6 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
         const img = container.querySelector('img');
         if (!img) return;
 
-        /* Cached images are already `.complete` by the time the effect runs and would never
-           emit a `load` event, so flip the flag immediately for that case. */
         if (img.complete && img.naturalWidth > 0) {
             setImageLoaded(true);
             return;
@@ -127,8 +72,8 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
 
     return (
         <section
-            className={`${styles['project-container']} case-study-overview`}
-            style={caseStudyOverviewGapStyle}
+            className={`${styles['project-container']} ${styles['panel-section-stack']} case-study-overview`}
+            style={caseStudyBannerStyle}
         >
             <div
                 ref={bannerRef}
@@ -146,13 +91,13 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
                     sizes={CASE_STUDY_BANNER_SIZES}
                     borderRadius="30px"
                 />
-                <div 
+                <div
                     className={overlayClassName}
                     data-aos="fade-down"
                     data-aos-duration="3000"
                     data-aos-anchor-placement="top-center"
                     data-aos-delay="10000"
-                    >
+                >
                     <CaseStudyBannerTitle title={overview.title} />
                 </div>
             </div>
@@ -165,12 +110,8 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
             />
 
             {ARAsNarrativeTool ? (
-                <div>
-                    <SectionSubTitle
-                        title={ARAsNarrativeTool.title}
-                        paddingTop="2rem"
-                        paddingBottom="2rem"
-                    />
+                <div className={styles['panel-subsection']}>
+                    <SectionSubTitle title={ARAsNarrativeTool.title} />
                     <ArAsNarrative
                         title={ARAsNarrativeTool.title}
                         paragraphs={ARAsNarrativeTool.paragraphs}
@@ -183,12 +124,8 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
             <MagicExperiencesSection data={{ caseStudy }} />
 
             {notificationsAttrac ? (
-                <div>
-                    <SectionSubTitle
-                        title={notificationsAttrac.title}
-                        paddingTop="2rem"
-                        paddingBottom="2rem"
-                    />
+                <div className={styles['panel-subsection']}>
+                    <SectionSubTitle title={notificationsAttrac.title} />
                     <ContextualNotifications
                         title={notificationsAttrac.title}
                         paragraphs={notificationsAttrac.paragraphs}
@@ -196,7 +133,6 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
                         alt={notificationsAttrac.alt}
                     />
                 </div>
-               
             ) : null}
         </section>
     );

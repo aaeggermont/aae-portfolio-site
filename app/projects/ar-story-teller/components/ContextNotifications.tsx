@@ -7,6 +7,7 @@ import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 import ProjectImage from "@/lib/media/ProjectImage";
 import { getUsableLayoutWidth, PANEL_BLOCK_PADDINGS, LAYOUT_DIMENSIONS, cssLengthToPx } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
+import { bodyTypeSx } from "../typography";
 
 /* The card caps at the project's desktop usable width (`1260 − 2 × 80 = 1100px`) and
    centers in any viewport wider than that. Inside `.project-content` the parent already
@@ -156,14 +157,7 @@ export const ContextualNotifications = ({
               <Typography
                 key={idx}
                 component="p"
-                sx={{
-                  color: "#002464",
-                  fontFamily:
-                    'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif',
-                    fontWeight: 500,
-                    fontSize: { xs: "1.5rem", sm: "1.2rem", md: "1.5rem" },
-                    lineHeight: 1.35,
-                  }}
+                sx={{ m: 0, ...bodyTypeSx("panelBody") }}
               >
                 {paragraph}
               </Typography>

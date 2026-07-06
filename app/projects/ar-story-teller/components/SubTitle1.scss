@@ -1,19 +1,21 @@
+/* Legacy subtitle — aligned to `panelHeading` tokens. */
+@use '../typography' as typo;
+
+@mixin subtitle1-label($font-size) {
+    .subtitle-paragraph {
+        @include typo.ar-st-title-type(700);
+        font-size: $font-size;
+        padding-top: 20px;
+        padding-bottom: 10px;
+        text-align: center;
+    }
+}
+
 @media #{$desktop} {
     .st-subtitle1-container {
         padding-top: 5rem;
         padding-bottom: 1.5rem;
-
-
-        .subtitle-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: $font-color-normal;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-        }
-
+        @include subtitle1-label(26px);
     }
 }
 
@@ -21,33 +23,19 @@
     .st-subtitle1-container {
         margin: auto;
         padding-top: 3rem;
+        @include subtitle1-label(24px);
 
         .subtitle-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: $font-color-normal;
             padding-top: 1.25rem;
             padding-bottom: 0.62rem;
-            text-align: center;
         }
     }
-
 }
 
 @media #{$mobile} {
     .st-subtitle1-container {
         margin: auto;
-
         padding-top: 1rem;
-        .subtitle-paragraph {
-            font-family: var(--font-satoshi), sans-serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: $font-color-normal;
-            padding-top: 20px;
-            padding-bottom: 10px;
-            text-align: center;
-        }
+        @include subtitle1-label(22px);
     }
 }

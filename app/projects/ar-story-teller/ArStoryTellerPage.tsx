@@ -19,21 +19,60 @@ import { AR_STORY_TELLER_HEADER_LOGO } from "./headerTheme";
 import type { ArStoryTellerContent } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import BusinessGoals from './components/sections/BusinessGoals';
 import {
+    BODY_STACK_GAP,
+    FULL_BLEED_BAND_PADDINGS,
     LAYOUT_DIMENSIONS,
     PANEL_BLOCK_PADDINGS,
+    PANEL_SECTION_GAPS,
     SECTION_GAPS,
+    TITLE_CONTENT_GAP,
+    type BodyStackGap,
+    type FullBleedBandPaddings,
     type LayoutDimensions,
     type PanelBlockPaddings,
+    type PanelSectionGaps,
     type SectionGaps,
+    type TitleContentGap,
 } from './layoutConfig';
 
-export { LAYOUT_DIMENSIONS, PANEL_BLOCK_PADDINGS, SECTION_GAPS };
-export type { LayoutDimensions, PanelBlockPaddings, SectionGaps };
+export {
+    BODY_STACK_GAP,
+    FULL_BLEED_BAND_PADDINGS,
+    LAYOUT_DIMENSIONS,
+    PANEL_BLOCK_PADDINGS,
+    PANEL_SECTION_GAPS,
+    SECTION_GAPS,
+    TITLE_CONTENT_GAP,
+};
+export type {
+    BodyStackGap,
+    FullBleedBandPaddings,
+    LayoutDimensions,
+    PanelBlockPaddings,
+    PanelSectionGaps,
+    SectionGaps,
+    TitleContentGap,
+};
 
-const projectContentStyle: CSSProperties = {
+const arStoryTellerPageStyle: CSSProperties = {
     ['--section-gap-mobile' as string]: SECTION_GAPS.mobile,
     ['--section-gap-tablet' as string]: SECTION_GAPS.tablet,
     ['--section-gap-desktop' as string]: SECTION_GAPS.desktop,
+    ['--full-bleed-band-padding-y-mobile' as string]:
+        FULL_BLEED_BAND_PADDINGS.y.mobile,
+    ['--full-bleed-band-padding-y-tablet' as string]:
+        FULL_BLEED_BAND_PADDINGS.y.tablet,
+    ['--full-bleed-band-padding-y-desktop' as string]:
+        FULL_BLEED_BAND_PADDINGS.y.desktop,
+    ['--panel-section-gap-mobile' as string]: PANEL_SECTION_GAPS.mobile,
+    ['--panel-section-gap-tablet' as string]: PANEL_SECTION_GAPS.tablet,
+    ['--panel-section-gap-desktop' as string]: PANEL_SECTION_GAPS.desktop,
+    ['--title-content-gap-mobile' as string]: TITLE_CONTENT_GAP.mobile,
+    ['--title-content-gap-tablet' as string]: TITLE_CONTENT_GAP.tablet,
+    ['--title-content-gap-desktop' as string]: TITLE_CONTENT_GAP.desktop,
+    ['--body-stack-gap-mobile' as string]: BODY_STACK_GAP.mobile,
+    ['--body-stack-gap-tablet' as string]: BODY_STACK_GAP.tablet,
+    ['--body-stack-gap-desktop' as string]: BODY_STACK_GAP.desktop,
     ['--layout-max-width-mobile' as string]: LAYOUT_DIMENSIONS.mobile.maxWidth,
     ['--layout-max-width-tablet' as string]: LAYOUT_DIMENSIONS.tablet.maxWidth,
     ['--layout-max-width-desktop' as string]: LAYOUT_DIMENSIONS.desktop.maxWidth,
@@ -72,10 +111,10 @@ export function ArStoryTellerPage({
   const hasContent = projectData != null;
 
   return (
-    <div>
+    <div className={styles['project-page']} style={arStoryTellerPageStyle}>
       <ProjectHeader onAllLayersReady={onProjectHeaderLayersReady} />
       {hasContent ? (
-        <div className={styles['project-content']} style={projectContentStyle}>
+        <div className={styles['project-content']}>
           <OverviewSection
             data={{
               designChallenge: projectData.designChallenge,

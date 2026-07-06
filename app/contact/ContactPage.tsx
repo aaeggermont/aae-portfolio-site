@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useSetAtom } from "jotai";
+
 import styles from "./contact-page.module.scss";
+import { layoutState } from "@/app/(public)/layout-state";
 import Image from "next/image";
 import { backgroundFloatImages } from "../home/background-float-images";
 import emailjs from '@emailjs/browser';
@@ -70,6 +73,7 @@ function AnimatedCardWrapper({
 
 
 function ContactMePage() {
+  const setLayoutState = useSetAtom(layoutState);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
@@ -124,6 +128,11 @@ function ContactMePage() {
 
 
   useEffect(() => {
+    setLayoutState({ isFullWidth: true });
+    return () => setLayoutState({ isFullWidth: false });
+  }, [setLayoutState]);
+
+  useEffect(() => {
     // This runs ONLY in the browser, after hydration ✅
     const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
       () => {
@@ -165,6 +174,7 @@ function ContactMePage() {
 
   return (
     <section className={styles.contactMeSection}>
+      <div className={styles.contactPage}>
        {/* Decorative floating images – render only after we have client-side config */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
@@ -205,6 +215,7 @@ function ContactMePage() {
           />
         </div>
         <SendMessage />        
+      </div>
       </div>
       {toast && (
         <div

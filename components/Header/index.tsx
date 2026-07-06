@@ -1,8 +1,11 @@
 "use client";
+
 import { HeaderMobile } from "./HeaderMobile";
 import { HeaderDesktop } from "./HeaderDesktop";
-import { headerState } from "./HeaderState";
+import { defaultHeaderState, headerState } from "./HeaderState";
 import { useAtomValue } from "jotai";
+import { usePathname } from "next/navigation";
+import { clsx } from "clsx";
 import styles from "./header.module.scss";
 
 export type HeaderProps = {
@@ -20,13 +23,14 @@ export default function Header({
   fontColor: fontColorProp,
   logoFontColor: logoFontColorProp,
 }: HeaderProps) {
+  const pathname = usePathname();
   const { isDark, position, logoPrimaryColor, logoAccentColor } =
     useAtomValue(headerState);
 
-  let fontColor = fontColorProp || "#074c5f";
+  let fontColor = fontColorProp || "#064c5f";
   const resolvedLogoPrimary =
     logoPrimaryColor ??
-    (isDark ? "#ffffff" : logoFontColorProp || "#074c5f");
+    (isDark ? "#ffffff" : logoFontColorProp || "#064c5f");
 
   if (isDark) {
     fontColor = "#ffffff";
@@ -38,10 +42,15 @@ export default function Header({
   };
 
   const resumeHref = "/resume/AntonioEggermontResume-2024.pdf";
+  const useStickyHomeHeader =
+    pathname === "/" && position === defaultHeaderState.position;
 
   return (
-    <header className={styles.header_area} style={{ position }}>
-      <div className="global-container">
+    <header
+      className={clsx(styles.header_area, useStickyHomeHeader && styles.header_sticky)}
+      style={{ position: useStickyHomeHeader ? "sticky" : position }}
+    >
+      <div className={styles.headerContentCap}>
         <HeaderMobile
           isDark={isDark}
           resumeHref={resumeHref}
