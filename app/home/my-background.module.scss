@@ -55,19 +55,22 @@
     gap: 5%;
 }
 
+$what-i-do-card-width-mobile: 168px;
+$what-i-do-card-height-mobile: 206px;
 $what-i-do-card-width: 212px;
+$what-i-do-card-height: 260px;
 $what-i-do-gap-mobile: 24px;
 $what-i-do-gap-tablet: 24px;
 $what-i-do-gap-desktop: 32px;
 
 .cardsGrid {
   display: grid;
-  width: min(100%, $what-i-do-card-width);
+  width: min(100%, $what-i-do-card-width-mobile);
   margin-inline: auto;
   justify-content: center;
   justify-items: center;
   gap: $what-i-do-gap-mobile;
-  grid-template-columns: minmax(0, $what-i-do-card-width);
+  grid-template-columns: minmax(0, $what-i-do-card-width-mobile);
 
   /* Tablet — 2×2, 24px gap (proportional to desktop 32px) */
   @media screen and #{$tablet} {
@@ -93,8 +96,12 @@ $what-i-do-gap-desktop: 32px;
 }
 
 .cardWrapper {
-  width: $what-i-do-card-width;
+  width: $what-i-do-card-width-mobile;
   max-width: 100%;
+
+  @media screen and (min-width: $tablet-min) {
+    width: $what-i-do-card-width;
+  }
   opacity: 0;
   transform: translateY(24px);
   transition:

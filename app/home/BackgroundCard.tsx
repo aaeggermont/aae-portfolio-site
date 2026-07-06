@@ -154,21 +154,8 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         raised
       >
         <CardActionArea sx={{ height: "100%" }}>
-          {/* Icon */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              paddingTop: "1rem",
-            }}
-          >
-            <div
-              style={{
-                position: "relative",
-                width: 120,
-                height: 120,
-              }}
-            >
+          <div className={styles.cardIconArea}>
+            <div className={styles.cardIcon}>
               <Image
                 src={img}
                 alt={title}
