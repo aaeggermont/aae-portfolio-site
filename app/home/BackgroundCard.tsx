@@ -22,10 +22,6 @@ const CARD_ICON_OPACITY = 0.80;
 
 type BackgroundCardProps = {
   info: BackgroundItem;
-  dimensions?: {
-    width: string | number;
-    height: string | number;
-  };
 };
 
 export default function BackgroundCard({ info }: BackgroundCardProps) {
@@ -143,7 +139,6 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         onClick={handleClickOpen}
         className={styles.fullHeightCard}
         sx={{
-          // width/height are controlled by SCSS via fluid-card-size mixin
           cursor: "pointer",
           borderRadius: 3,
           boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",

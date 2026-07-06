@@ -55,44 +55,46 @@
     gap: 5%;
 }
 
+$what-i-do-card-width: 212px;
+$what-i-do-gap-mobile: 24px;
+$what-i-do-gap-tablet: 24px;
+$what-i-do-gap-desktop: 32px;
+
 .cardsGrid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  width: min(100%, $what-i-do-card-width);
+  margin-inline: auto;
   justify-content: center;
-  gap: 1.5rem;
+  justify-items: center;
+  gap: $what-i-do-gap-mobile;
+  grid-template-columns: minmax(0, $what-i-do-card-width);
 
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;   // <— center within .content
-
-  //justify-content: center;
-
-  /* Desktop */
-  @media screen and #{$desktop-device} {
-    justify-content: center;
-    flex-wrap: nowrap;
-    gap: 1rem;
-}
-
-  /* Tablet — two per row naturally */
+  /* Tablet — 2×2, 24px gap (proportional to desktop 32px) */
   @media screen and #{$tablet} {
-    gap: 1rem;
-    justify-content: center;
-    align-items: center;
+    gap: $what-i-do-gap-tablet;
+    grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width));
+    width: min(
+      100%,
+      calc(#{$what-i-do-card-width} * 2 + #{$what-i-do-gap-tablet})
+    );
   }
 
-  /* Mobile */
-  @media screen and #{$mobile} {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+  /* Desktop — 1×4 row, 32px gap */
+  @media screen and #{$desktop-device} {
+    gap: $what-i-do-gap-desktop;
+    grid-template-columns: repeat(4, minmax(0, $what-i-do-card-width));
+    width: min(
+      100%,
+      calc(
+        #{$what-i-do-card-width} * 4 + #{$what-i-do-gap-desktop} * 3
+      )
+    );
   }
 }
 
 .cardWrapper {
-  max-width: 340px;
+  width: $what-i-do-card-width;
+  max-width: 100%;
   opacity: 0;
   transform: translateY(24px);
   transition:
