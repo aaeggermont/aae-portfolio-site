@@ -32,6 +32,69 @@
   }
 }
 
+.dialogPaper {
+  position: relative;
+}
+
+.dialogCloseSlot {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogHeader {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 2.75rem 16px 0;
+
+  @media screen and (min-width: $tablet-min) {
+    padding: 2.75rem 1.5rem 0;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    padding: 2.75rem 2rem 0;
+  }
+}
+
+.dialogHeaderMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+
+  @media screen and (min-width: $tablet-min) {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    width: auto;
+  }
+}
+
+.dialogIcon {
+  position: relative;
+  width: 65px;
+  height: 65px;
+  flex-shrink: 0;
+}
+
+.dialogTitle {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+
+  @media screen and (min-width: $tablet-min) {
+    width: auto;
+    text-align: left;
+  }
+}
+
 @media screen and #{$mobile} {
   .backgroundTitle {
     text-align: center;

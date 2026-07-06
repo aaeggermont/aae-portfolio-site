@@ -42,67 +42,58 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         onClose={handleClose}
         aria-labelledby="background-dialog-title"
         aria-describedby="background-dialog-description"
+        slotProps={{
+          paper: {
+            className: styles.dialogPaper,
+            sx: { position: "relative" },
+          },
+        }}
       >
-        {/* Header: icon + title */}
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "row",
-            alignItems: "center",
-            padding: "1rem 1.5rem 0",
-            gap: "1.5rem",
-          }}
-        >
+        <div className={styles.dialogCloseSlot}>
           <Tooltip title="Close">
             <IconButton
               aria-label="Close dialog"
               onClick={handleClose}
               size="small"
-              sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                color: "#011114",
-              }}
+              sx={{ color: "#011114" }}
             >
               <CloseIcon fontSize="small" />
             </IconButton>
           </Tooltip>
+        </div>
 
-          <div
-            style={{
-              position: "relative",
-              width: 65,
-              height: 65,
-              flexShrink: 0,
-            }}
-          >
-            <Image
-              src={img}
-              alt={title}
-              fill
-              style={{ objectFit: "contain", opacity: DIALOG_ICON_OPACITY }}
-            />
+        {/* Header: icon + title */}
+        <div className={styles.dialogHeader}>
+          <div className={styles.dialogHeaderMain}>
+            <div className={styles.dialogIcon}>
+              <Image
+                src={img}
+                alt={title}
+                fill
+                style={{ objectFit: "contain", opacity: DIALOG_ICON_OPACITY }}
+              />
+            </div>
+
+            <DialogTitle
+              id="background-dialog-title"
+              className={styles.dialogTitle}
+              sx={{
+                padding: 0,
+                margin: 0,
+                fontSize: {
+                  xs: "1.2rem",
+                  sm: "1.5rem",
+                  md: "1.6rem",
+                  lg: "1.7rem",
+                },
+                fontWeight: 500,
+                fontFamily: "Poppins, sans-serif",
+                color: "#011114",
+              }}
+            >
+              {title}
+            </DialogTitle>
           </div>
-
-          <DialogTitle
-            id="background-dialog-title"
-            sx={{
-              fontSize: {
-                xs: "1.2rem",
-                sm: "1.5rem",
-                md: "1.6rem",
-                lg: "1.7rem",
-              },
-              fontWeight: 500,
-              fontFamily: "Poppins, sans-serif",
-              color: "#011114",
-            }}
-          >
-            {title}
-          </DialogTitle>
         </div>
 
         {/* Body: paragraphs */}
