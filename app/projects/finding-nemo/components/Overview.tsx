@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 
-import { INTRO_SECTIONS_BACKGROUND, INTRO_NARRATIVE_MAX_WIDTH_PX, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
+import { INTRO_SECTIONS_BACKGROUND, INTRO_NARRATIVE_MAX_WIDTH_PX, LAYOUT_DIMENSIONS, sectionTitleContentGapMbSx } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
@@ -48,7 +48,7 @@ export default function OverviewSection({ data }: OverviewSectionProps) {
               fontWeight: 700,
               color: "text.primary",
               lineHeight: 1.2,
-              mb: { xs: 4, md: 5 },
+              ...sectionTitleContentGapMbSx,
             })}
           >
             {data.title}

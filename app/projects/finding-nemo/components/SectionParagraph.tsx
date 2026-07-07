@@ -1,6 +1,10 @@
 import { Stack, Typography } from "@mui/material";
 
+import {
+  SECTION_TITLE_CONTENT_GAP,
+} from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 export type SectionParagraphProps = {
   /** Optional section heading (IBM Plex Sans / section title scale). */
@@ -36,8 +40,24 @@ export default function SectionParagraph({
   const hasBody = paragraphs.length > 0;
   const isSubtitle = titleVariant === "subtitle";
 
+  const titleContentGapSx =
+    hasBody && !isSubtitle
+      ? {
+          gap: SECTION_TITLE_CONTENT_GAP.mobile,
+          [breakpointMediaQuery.tabletUp]: {
+            gap: SECTION_TITLE_CONTENT_GAP.tablet,
+          },
+          [breakpointMediaQuery.desktopUp]: {
+            gap: SECTION_TITLE_CONTENT_GAP.desktop,
+          },
+        }
+      : undefined;
+
   return (
-    <Stack spacing={hasBody ? { xs: 3, md: 4.5 } : 0}>
+    <Stack
+      spacing={hasBody && isSubtitle ? { xs: 3, md: 4.5 } : 0}
+      sx={titleContentGapSx}
+    >
       {title ? (
         <Typography
           component={isSubtitle ? "h3" : "h2"}

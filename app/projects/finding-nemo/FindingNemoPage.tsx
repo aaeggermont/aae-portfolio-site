@@ -13,6 +13,7 @@ import {
   PRIMARY_USERS_CARD_HEIGHT_PX,
   PRIMARY_USERS_CARD_WIDTH_PX,
 } from "@/app/projects/finding-nemo/components/ContentCard";
+import DesigningHumanCenteredAiSection from "@/app/projects/finding-nemo/components/DesigningHumanCenteredAiSection";
 import ContentCardsRow from "@/app/projects/finding-nemo/components/ContentCardsRow";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
 import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
@@ -33,6 +34,7 @@ import {
   PANEL_SECTION_GAPS,
   PANEL_SHELL_SX,
   SECTION_GAPS,
+  sectionTitleContentGapMtSx,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
   CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
@@ -160,13 +162,12 @@ export function FindingNemoPage({
             <ProblemDemoPanel data={project.problemDemoPanel} />
           ) : null}
           <MyContributions data={project.myContributions} />
+          <DesigningHumanCenteredAiSection data={project.designingHumanCenteredAi} />
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
             <SectionParagraph title={project.problemSpaceFraming.title} />
             <Stack
               spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: { xs: 3, md: 4.5 },
-              }}
+              sx={sectionTitleContentGapMtSx}
             >
               <SectionParagraph
                 title={project.challenges.title}
@@ -261,9 +262,7 @@ export function FindingNemoPage({
             <SectionParagraph title={project.understandingTheUsers.title} />
             <Stack
               spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: { xs: 3, md: 4.5 },
-              }}
+              sx={sectionTitleContentGapMtSx}
             >
               <SectionParagraph
                 title={project.primaryUsers.title}
@@ -518,8 +517,8 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
-            <Stack sx={panelSectionStackSx}>
-              <SectionParagraph title={project.expectedImpact.title} />
+            <SectionParagraph title={project.expectedImpact.title} />
+            <Stack sx={{ ...panelSectionStackSx, ...sectionTitleContentGapMtSx }}>
               <Box
                 component="section"
                 sx={{

@@ -1,3 +1,7 @@
+import type { SxProps, Theme } from "@mui/material/styles";
+
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+
 /**
  * Vertical spacing between top-level section children inside `.project-content`.
  *
@@ -102,6 +106,23 @@ export const MY_CONTRIBUTIONS_CARD = {
   borderRadiusPx: 32,
 } as const;
 
+/**
+ * Four-stage framework cards (`Designing Human-Centered AI`).
+ * 250×297px at all breakpoints so copy is not clipped on mobile.
+ */
+export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
+  mobile: { width: 250, height: 297 },
+  tablet: { width: 250, height: 297 },
+  desktop: { width: 250, height: 297 },
+} as const;
+
+/** Gaps between framework cards — mobile 16px; tablet 32px; desktop 16–32px (uses 32px). */
+export const HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP = {
+  mobile: 16,
+  tablet: 32,
+  desktop: 32,
+} as const;
+
 /** Inset panel shell backgrounds (white panels inside full-bleed bands). */
 export const PANEL_COLORS = {
   default: "#ffffff",
@@ -136,7 +157,7 @@ export const PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY = {
 } as const;
 
 /** Inset panel background for the problem demo carousel section. */
-export const PROBLEM_DEMO_PANEL_BACKGROUND = "#E8F0F8" as const;
+export const PROBLEM_DEMO_PANEL_BACKGROUND = MY_CONTRIBUTIONS_CARD.background;
 
 /** Problem demo panel — copy column width when side-by-side at desktop (1260px+). */
 export const PROBLEM_DEMO_PANEL_COPY_WIDTH = {
@@ -151,14 +172,43 @@ export const PROBLEM_DEMO_PANEL_GAP = {
 } as const;
 
 /**
- * Gap between section title and inset panel (smaller than `SECTION_GAPS`, which
- * separates major page sections). Aligns with Overview title spacing (~32–48px).
+ * Gap between a section title (h2) and the content block directly below it —
+ * full-bleed bands, inset intro panels, and `SectionParagraph` (section title variant).
+ * Smaller than `SECTION_GAPS`, which separates major page sections.
  */
-export const PROBLEM_DEMO_PANEL_TITLE_GAP = {
+export const SECTION_TITLE_CONTENT_GAP = {
   mobile: "32px",
   tablet: "40px",
-  desktop: "48px",
+  desktop: "64px",
 } as const;
+
+/** Alias for full-bleed band title → first content sibling. */
+export const FULL_BLEED_BAND_TITLE_CONTENT_GAP = SECTION_TITLE_CONTENT_GAP;
+
+/** Alias for problem demo / Overview inset panels. */
+export const PROBLEM_DEMO_PANEL_TITLE_GAP = SECTION_TITLE_CONTENT_GAP;
+
+/** `margin-top` for content that follows a title-only `SectionParagraph` in a band. */
+export const sectionTitleContentGapMtSx: SxProps<Theme> = {
+  mt: SECTION_TITLE_CONTENT_GAP.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    mt: SECTION_TITLE_CONTENT_GAP.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    mt: SECTION_TITLE_CONTENT_GAP.desktop,
+  },
+};
+
+/** `margin-bottom` on a standalone section title before body copy (e.g. Overview). */
+export const sectionTitleContentGapMbSx: SxProps<Theme> = {
+  mb: SECTION_TITLE_CONTENT_GAP.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    mb: SECTION_TITLE_CONTENT_GAP.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    mb: SECTION_TITLE_CONTENT_GAP.desktop,
+  },
+};
 
 /**
  * Carousel slide caption (e.g. "Walking on Blue") — desktop 18px; tablet ~90%, mobile ~78%.
@@ -268,6 +318,7 @@ export type ProblemDemoCarouselImageDisplay =
   typeof PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY;
 export type ProblemDemoPanelCopyWidth = typeof PROBLEM_DEMO_PANEL_COPY_WIDTH;
 export type ProblemDemoPanelGap = typeof PROBLEM_DEMO_PANEL_GAP;
+export type SectionTitleContentGap = typeof SECTION_TITLE_CONTENT_GAP;
 export type ProblemDemoPanelTitleGap = typeof PROBLEM_DEMO_PANEL_TITLE_GAP;
 export type ProblemDemoCarouselCaptionFontSize =
   typeof PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE;
