@@ -29,6 +29,7 @@ import {
   BAND_COLORS,
   LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
+  MY_CONTRIBUTIONS_CARD,
   PANEL_CONTENT_MAX_WIDTH_PX,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
@@ -209,9 +210,11 @@ export function FindingNemoPage({
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
             <Stack spacing={{ xs: 4, md: 6 }}>
+              <SectionParagraph title={project.solutionOverview.title} />
               <SectionParagraph
-                title={project.solutionOverview.title}
+                title={project.solutionOverview.subtitle}
                 body={project.solutionOverview.paragraphs}
+                titleVariant="subtitle"
               />
               <Box
                 sx={{
@@ -257,12 +260,17 @@ export function FindingNemoPage({
                 </Stack>
               </Box>
             </Stack>
-          </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
-            <SectionParagraph title={project.understandingTheUsers.title} />
             <Stack
               spacing={{ xs: 4, md: 6 }}
-              sx={sectionTitleContentGapMtSx}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
             >
               <SectionParagraph
                 title={project.primaryUsers.title}
@@ -270,6 +278,7 @@ export function FindingNemoPage({
                 titleVariant="subtitle"
               />
               <ContentCardsRow
+                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
                 cards={project.primaryUsers.cards.map((card) => ({
                   title: card.title,
                   description: card.description,

@@ -1,6 +1,7 @@
 import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
 
 import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+import { MY_CONTRIBUTIONS_CARD } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import type { FindingNemoPersonaItem } from "@/scripts/project-2.data";
 
@@ -37,7 +38,7 @@ export default function Persona({
         pt: 4,
         pb: 5,
         borderRadius: "15px",
-        backgroundColor: "#fff",
+        backgroundColor: MY_CONTRIBUTIONS_CARD.background,
         overflow: "hidden",
         boxSizing: "border-box",
         ...(interactive
@@ -45,8 +46,8 @@ export default function Persona({
               ...interactiveCardHoverSx,
               "&:hover": {
                 ...interactiveCardHoverSx["&:hover"],
-                bgcolor: "#fff",
-                backgroundColor: "#fff",
+                bgcolor: MY_CONTRIBUTIONS_CARD.background,
+                backgroundColor: MY_CONTRIBUTIONS_CARD.background,
               },
             }
           : {}),
