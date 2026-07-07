@@ -29,6 +29,7 @@ import {
   BAND_COLORS,
   LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
+  MY_CONTRIBUTIONS_CARD,
   PANEL_CONTENT_MAX_WIDTH_PX,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
@@ -306,54 +307,12 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
-              <SectionParagraph
-                title={project.mobileExperienceConcepts.title}
-                body={project.mobileExperienceConcepts.paragraphs}
-              />
-              <Stack spacing={{ xs: 4, md: 6 }} sx={{ width: "100%" }}>
-                {project.mobileExperienceConcepts.mockups[0] ? (
-                  <Box
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <MobileExperienceMockup
-                      {...project.mobileExperienceConcepts.mockups[0]}
-                      variant="notification"
-                    />
-                  </Box>
-                ) : null}
-                {project.mobileExperienceConcepts.mockups.length > 1 ? (
-                  <Box sx={mobileExperienceMockupsRowSx}>
-                    {project.mobileExperienceConcepts.mockups
-                      .slice(1)
-                      .map((mockup) => (
-                        <MobileExperienceMockup key={mockup.title} {...mockup} />
-                      ))}
-                  </Box>
-                ) : null}
-              </Stack>
-            </Stack>
-          </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
             <Stack sx={panelSectionStackSx}>
+              <SectionParagraph title={project.systemWorkflowArchitecture.title} />
               <SectionParagraph
-                title={project.conceptEvolution.title}
-                body={project.conceptEvolution.paragraphs}
-              />
-              {project.conceptEvolution.panels.map((panel) => (
-                <PanelSection key={panel.title} {...panel} />
-              ))}
-            </Stack>
-          </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
-            <Stack sx={panelSectionStackSx}>
-              <SectionParagraph
-                title={project.systemWorkflowArchitecture.title}
+                title={project.systemWorkflowArchitecture.subtitle}
                 body={project.systemWorkflowArchitecture.paragraphs}
+                titleVariant="subtitle"
               />
               <Box
                 sx={{
@@ -428,7 +387,7 @@ export function FindingNemoPage({
                   project.systemWorkflowArchitecture.coreMvpComponents.principles
                 }
                 image={project.systemWorkflowArchitecture.coreMvpComponents.image}
-                panelBackgroundColor={PANEL_COLORS.coreMvpComponents}
+                panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
               />
               <SectionParagraph
                 title={
@@ -438,6 +397,7 @@ export function FindingNemoPage({
                   project.systemWorkflowArchitecture.conceptualMvpArchitecture
                     .paragraphs
                 }
+                titleVariant="subtitle"
               />
               <Box
                 sx={{
@@ -521,15 +481,111 @@ export function FindingNemoPage({
                     .paragraphsAfterIllustration
                 }
               />
+              {project.systemWorkflowArchitecture.definingSuccessPanel ? (
+                <PanelSection
+                  {...project.systemWorkflowArchitecture.definingSuccessPanel}
+                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
+                />
+              ) : null}
             </Stack>
           </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
+          <FullBleedBand backgroundColor={BAND_COLORS.designDecisionSupportExperience}>
+            <SectionParagraph title={project.mobileExperienceConcepts.title} />
+            {project.mobileExperienceConcepts.paragraphAfterSubtitle ? (
+              <Stack sx={sectionTitleContentGapMtSx}>
+                <SectionParagraph
+                  body={project.mobileExperienceConcepts.paragraphAfterSubtitle}
+                />
+              </Stack>
+            ) : null}
+            {project.mobileExperienceConcepts.conceptEvolutionPanel ? (
+              <Stack
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <PanelSection
+                  {...project.mobileExperienceConcepts.conceptEvolutionPanel}
+                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
+                />
+              </Stack>
+            ) : null}
+            {project.mobileExperienceConcepts.corePrinciplesPanel ? (
+              <Stack
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <PanelSection
+                  {...project.mobileExperienceConcepts.corePrinciplesPanel}
+                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
+                />
+              </Stack>
+            ) : null}
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
+            >
+              <SectionParagraph
+                title={project.mobileExperienceConcepts.subtitle}
+                body={project.mobileExperienceConcepts.paragraphs}
+                titleVariant="subtitle"
+              />
+              <Stack spacing={{ xs: 4, md: 6 }} sx={{ width: "100%" }}>
+                {project.mobileExperienceConcepts.mockups[0] ? (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <MobileExperienceMockup
+                      {...project.mobileExperienceConcepts.mockups[0]}
+                      variant="notification"
+                    />
+                  </Box>
+                ) : null}
+                {project.mobileExperienceConcepts.mockups.length > 1 ? (
+                  <Box sx={mobileExperienceMockupsRowSx}>
+                    {project.mobileExperienceConcepts.mockups
+                      .slice(1)
+                      .map((mockup) => (
+                        <MobileExperienceMockup key={mockup.title} {...mockup} />
+                      ))}
+                  </Box>
+                ) : null}
+              </Stack>
+            </Stack>
+          </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.expectedImpactAndReflections}>
             <SectionParagraph title={project.expectedImpact.title} />
             <Stack sx={{ ...panelSectionStackSx, ...sectionTitleContentGapMtSx }}>
               <Box
                 component="section"
                 sx={{
                   ...PANEL_SHELL_SX,
+                  pt: 0,
                   bgcolor: PANEL_COLORS.default,
                 }}
               >

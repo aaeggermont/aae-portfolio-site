@@ -94,6 +94,10 @@ export const BAND_COLORS = {
   identifyAiOpportunity: "#FFFFFF",
   /** `02 - Define the AI-Assisted Solution` */
   defineAiSolution: "#EEF3F9",
+  /** `04 — Design the Decision Support Experience` */
+  designDecisionSupportExperience: "#EEF3F9",
+  /** Expected Impact + Reflections & Key Learnings */
+  expectedImpactAndReflections: "#FFFFFF",
 } as const;
 
 /**
@@ -108,6 +112,14 @@ export const MY_CONTRIBUTIONS_CARD = {
   paddingPx: 64,
   maxWidthPx: 600,
   borderRadiusPx: 32,
+} as const;
+
+/**
+ * KPI cards in Defining Success (`AI Performance`, `User Experience`,
+ * `Operational Impact`). Update `background` to change all KPI card surfaces.
+ */
+export const DEFINING_SUCCESS_KPI_CARD = {
+  background: "#E6F1FF",
 } as const;
 
 /**
@@ -306,6 +318,7 @@ export const CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY = {
   desktop: { width: 800, height: 1022 },
 } as const;
 
+export type DefiningSuccessKpiCard = typeof DEFINING_SUCCESS_KPI_CARD;
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
