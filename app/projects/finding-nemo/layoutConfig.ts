@@ -86,10 +86,14 @@ export const PROJECT_HEADER_EXTRA_TOP_PADDING = {
 
 /** Full-bleed section band backgrounds (edge-to-edge via `FullBleedBand`). */
 export const BAND_COLORS = {
-  /** #DEE8F3 @ 80% opacity */
+  /** #DEE8F3 @ 50% opacity — alternating tinted bands */
   businessOpportunities: "rgba(222, 232, 243, 0.5)",
   /** White inset / neutral full-bleed bands */
   neutralPanel: "#FFFFFF",
+  /** `01 - Identify the AI Opportunity` */
+  identifyAiOpportunity: "#FFFFFF",
+  /** `02 - Define the AI-Assisted Solution` */
+  defineAiSolution: "#EEF3F9",
 } as const;
 
 /**

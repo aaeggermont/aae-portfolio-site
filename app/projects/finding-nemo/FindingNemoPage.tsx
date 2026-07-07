@@ -29,7 +29,6 @@ import {
   BAND_COLORS,
   LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
-  MY_CONTRIBUTIONS_CARD,
   PANEL_CONTENT_MAX_WIDTH_PX,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
@@ -164,7 +163,7 @@ export function FindingNemoPage({
           ) : null}
           <MyContributions data={project.myContributions} />
           <DesigningHumanCenteredAiSection data={project.designingHumanCenteredAi} />
-          <FullBleedBand backgroundColor={BAND_COLORS.businessOpportunities}>
+          <FullBleedBand backgroundColor={BAND_COLORS.identifyAiOpportunity}>
             <SectionParagraph title={project.problemSpaceFraming.title} />
             <Stack
               spacing={{ xs: 4, md: 6 }}
@@ -208,7 +207,7 @@ export function FindingNemoPage({
               />
             </Stack>
           </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
+          <FullBleedBand backgroundColor={BAND_COLORS.defineAiSolution}>
             <Stack spacing={{ xs: 4, md: 6 }}>
               <SectionParagraph title={project.solutionOverview.title} />
               <SectionParagraph
@@ -278,7 +277,6 @@ export function FindingNemoPage({
                 titleVariant="subtitle"
               />
               <ContentCardsRow
-                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
                 cards={project.primaryUsers.cards.map((card) => ({
                   title: card.title,
                   description: card.description,
