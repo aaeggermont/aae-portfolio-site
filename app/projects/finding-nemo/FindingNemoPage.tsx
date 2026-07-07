@@ -176,6 +176,7 @@ export function FindingNemoPage({
                 titleVariant="subtitle"
               />
               <ContentCardsRow
+                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
                 cards={project.challenges.cards.map((card) => ({
                   title: card.title,
                   description: card.description,
@@ -201,6 +202,7 @@ export function FindingNemoPage({
                 titleVariant="subtitle"
               />
               <ContentCardsRow
+                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
                 cards={project.businessOpportunities.cards.map((card) => ({
                   title: card.title,
                   description: card.description,
