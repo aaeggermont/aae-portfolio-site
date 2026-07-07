@@ -30,8 +30,11 @@ export const LAYOUT_DIMENSIONS = {
 /** Desktop usable content width (`1260 − 2 × 80`) — shared inset panel cap. */
 export const PANEL_CONTENT_MAX_WIDTH_PX = 1100 as const;
 
-/** Max width for intro narrative blocks: Overview copy, Problem panel, My Contributions card. */
+/** Max width for intro narrative blocks: Overview copy, Problem panel (desktop). */
 export const INTRO_NARRATIVE_MAX_WIDTH_PX = 920 as const;
+
+/** Tablet width for inset intro cards (My Contributions, Problem panel). */
+export const INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX = 600 as const;
 
 /**
  * Padding for inset panel blocks (rounded grey sections, narrative panels, etc.).

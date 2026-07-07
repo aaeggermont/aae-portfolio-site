@@ -6,8 +6,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 
 import {
-  INTRO_SECTIONS_BACKGROUND,
+  INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX,
   INTRO_NARRATIVE_MAX_WIDTH_PX,
+  INTRO_SECTIONS_BACKGROUND,
   LAYOUT_DIMENSIONS,
   PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY,
   PROBLEM_DEMO_PANEL_BACKGROUND,
@@ -208,8 +209,14 @@ export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
           <Box
             sx={{
               width: "100%",
-              maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
+              maxWidth: "100%",
               mx: "auto",
+              [breakpointMediaQuery.tabletOnly]: {
+                maxWidth: INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX,
+              },
+              [breakpointMediaQuery.desktopUp]: {
+                maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
+              },
               bgcolor: PROBLEM_DEMO_PANEL_BACKGROUND,
               borderRadius: 5,
               px: { xs: 3, sm: 5, md: 8 },

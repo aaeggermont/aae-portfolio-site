@@ -9,6 +9,7 @@ import {
 import type { SxProps, Theme } from "@mui/material/styles";
 
 import {
+  INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX,
   INTRO_SECTIONS_BACKGROUND,
   LAYOUT_DIMENSIONS,
   MY_CONTRIBUTIONS_CARD,
@@ -23,13 +24,19 @@ type MyContributionsProps = {
 
 const contributionsCardSx = {
   width: "100%",
-  maxWidth: MY_CONTRIBUTIONS_CARD.maxWidthPx,
+  maxWidth: "100%",
   mx: "auto",
   boxSizing: "border-box",
   backgroundColor: MY_CONTRIBUTIONS_CARD.background,
   borderRadius: `${MY_CONTRIBUTIONS_CARD.borderRadiusPx}px`,
   p: `${MY_CONTRIBUTIONS_CARD.paddingPx}px`,
   boxShadow: "0 4px 14px rgba(0, 0, 0, 0.08)",
+  [breakpointMediaQuery.tabletOnly]: {
+    maxWidth: INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    maxWidth: MY_CONTRIBUTIONS_CARD.maxWidthPx,
+  },
 } as const;
 
 export default function MyContributions({ data }: MyContributionsProps) {

@@ -58,9 +58,10 @@ export default function OverviewSection({ data }: OverviewSectionProps) {
               <Typography
                 key={index}
                 component="p"
-                sx={bodyTypeSx("bodyText", {
+                sx={bodyTypeSx("sectionDescription", {
                   color: "text.primary",
-                  lineHeight: 1.65,
+                  fontWeight: 400,
+                  lineHeight: 1.5,
                   mb: index === data.paragraphs.length - 1 ? 0 : 3.5,
                 })}
               >
