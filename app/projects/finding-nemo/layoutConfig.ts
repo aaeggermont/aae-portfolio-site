@@ -30,6 +30,9 @@ export const LAYOUT_DIMENSIONS = {
 /** Desktop usable content width (`1260 − 2 × 80`) — shared inset panel cap. */
 export const PANEL_CONTENT_MAX_WIDTH_PX = 1100 as const;
 
+/** Max width for intro narrative blocks: Overview copy, Problem panel, My Contributions card. */
+export const INTRO_NARRATIVE_MAX_WIDTH_PX = 920 as const;
+
 /**
  * Padding for inset panel blocks (rounded grey sections, narrative panels, etc.).
  * Vertical values use the case study breakpoints (`variables.scss`): mobile (<768px),
@@ -88,6 +91,14 @@ export const BAND_COLORS = {
  */
 export const INTRO_SECTIONS_BACKGROUND = "#ffffff" as const;
 
+/** Inset card shell for the My Contributions block. */
+export const MY_CONTRIBUTIONS_CARD = {
+  background: "#F6FBFF",
+  paddingPx: 64,
+  maxWidthPx: 600,
+  borderRadiusPx: 32,
+} as const;
+
 /** Inset panel shell backgrounds (white panels inside full-bleed bands). */
 export const PANEL_COLORS = {
   default: "#ffffff",
@@ -112,13 +123,13 @@ export const FULL_BLEED_BAND_PADDINGS = {
 } as const;
 
 /**
- * Problem demo carousel frame (524:330 aspect ratio).
- * Desktop matches Figma; tablet ~90%, mobile ~75%.
+ * Problem demo carousel frame (524:330 intrinsic asset aspect ratio).
+ * Desktop 450px → 15% reduction for calmer card density; tablet ~90%, mobile ~75%.
  */
 export const PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY = {
-  mobile: { width: 393, height: 248 },
-  tablet: { width: 472, height: 297 },
-  desktop: { width: 524, height: 330 },
+  mobile: { width: 286, height: 180 },
+  tablet: { width: 344, height: 217 },
+  desktop: { width: 383, height: 241 },
 } as const;
 
 /** Inset panel background for the problem demo carousel section. */
@@ -126,13 +137,14 @@ export const PROBLEM_DEMO_PANEL_BACKGROUND = "#E8F0F8" as const;
 
 /** Problem demo panel — copy column width when side-by-side at desktop (1260px+). */
 export const PROBLEM_DEMO_PANEL_COPY_WIDTH = {
-  desktop: 360,
+  desktop: 330,
 } as const;
 
 /** Gap between copy and carousel — stacked (vertical) vs side-by-side (horizontal at 1260px+). */
 export const PROBLEM_DEMO_PANEL_GAP = {
   stacked: 64,
-  sideBySide: 80,
+  /** Fits copy (306) + carousel (450) inside 920px panel with md horizontal padding. */
+  sideBySide: 36,
 } as const;
 
 /**
@@ -161,7 +173,7 @@ export const PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE = {
 export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1260 as const;
 
 /** Copy column minimum width when side-by-side at the desktop band. */
-export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 321 as const;
+export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 295 as const;
 
 /**
  * Solution overview hi-fi mockup display (402:874 intrinsic aspect ratio).

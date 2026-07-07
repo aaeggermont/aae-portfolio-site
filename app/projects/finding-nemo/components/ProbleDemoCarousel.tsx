@@ -7,8 +7,8 @@ import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 
 import {
   INTRO_SECTIONS_BACKGROUND,
+  INTRO_NARRATIVE_MAX_WIDTH_PX,
   LAYOUT_DIMENSIONS,
-  PANEL_CONTENT_MAX_WIDTH_PX,
   PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY,
   PROBLEM_DEMO_PANEL_BACKGROUND,
   PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX,
@@ -208,7 +208,7 @@ export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
           <Box
             sx={{
               width: "100%",
-              maxWidth: PANEL_CONTENT_MAX_WIDTH_PX,
+              maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
               mx: "auto",
               bgcolor: PROBLEM_DEMO_PANEL_BACKGROUND,
               borderRadius: 5,

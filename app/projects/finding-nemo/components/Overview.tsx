@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 
-import { INTRO_SECTIONS_BACKGROUND, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
+import { INTRO_SECTIONS_BACKGROUND, INTRO_NARRATIVE_MAX_WIDTH_PX, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
@@ -37,7 +37,7 @@ export default function OverviewSection({ data }: OverviewSectionProps) {
       >
         <Box
           sx={{
-            maxWidth: 920,
+            maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
             mx: "auto",
           }}
         >
