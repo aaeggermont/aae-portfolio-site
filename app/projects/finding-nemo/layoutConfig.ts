@@ -31,6 +31,22 @@ export const LAYOUT_DIMENSIONS = {
   desktop: { maxWidth: "1260px", margin: "80px" },
 } as const;
 
+/** Shared `Container` cap + horizontal gutters for full-bleed bands and intro sections. */
+export const PROJECT_CONTENT_CONTAINER_SX = {
+  maxWidth: {
+    xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
+    md: LAYOUT_DIMENSIONS.tablet.maxWidth,
+    lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
+  },
+  px: LAYOUT_DIMENSIONS.mobile.margin,
+  [breakpointMediaQuery.tabletUp]: {
+    px: LAYOUT_DIMENSIONS.tablet.margin,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    px: LAYOUT_DIMENSIONS.desktop.margin,
+  },
+} as const;
+
 /** Desktop usable content width (`1260 − 2 × 80`) — shared inset panel cap. */
 export const PANEL_CONTENT_MAX_WIDTH_PX = 1100 as const;
 
@@ -321,6 +337,7 @@ export const CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY = {
 export type DefiningSuccessKpiCard = typeof DEFINING_SUCCESS_KPI_CARD;
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
+export type ProjectContentContainerSx = typeof PROJECT_CONTENT_CONTAINER_SX;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 export type BandColors = typeof BAND_COLORS;
 export type IntroSectionsBackground = typeof INTRO_SECTIONS_BACKGROUND;

@@ -514,7 +514,7 @@ export function FindingNemoPage({
               >
                 <PanelSection
                   {...project.mobileExperienceConcepts.conceptEvolutionPanel}
-                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
+                  panelBackgroundColor={PANEL_COLORS.default}
                 />
               </Stack>
             ) : null}
@@ -532,7 +532,7 @@ export function FindingNemoPage({
               >
                 <PanelSection
                   {...project.mobileExperienceConcepts.corePrinciplesPanel}
-                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
+                  panelBackgroundColor={PANEL_COLORS.default}
                 />
               </Stack>
             ) : null}

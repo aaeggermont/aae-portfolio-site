@@ -5,13 +5,11 @@ import {
   HUMAN_CENTERED_AI_FRAMEWORK_CARD,
   HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP,
   INTRO_SECTIONS_BACKGROUND,
-  INTRO_NARRATIVE_MAX_WIDTH_PX,
-  LAYOUT_DIMENSIONS,
   MY_CONTRIBUTIONS_CARD,
+  PROJECT_CONTENT_CONTAINER_SX,
   sectionTitleContentGapMbSx,
 } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
-import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
 
 type DesigningHumanCenteredAiSectionProps = {
@@ -27,38 +25,11 @@ export default function DesigningHumanCenteredAiSection({
       sx={{
         bgcolor: INTRO_SECTIONS_BACKGROUND,
         py: { xs: 8, md: 10, lg: 12 },
-        px: LAYOUT_DIMENSIONS.mobile.margin,
-        [breakpointMediaQuery.tabletUp]: {
-          px: LAYOUT_DIMENSIONS.tablet.margin,
-        },
-        [breakpointMediaQuery.desktopUp]: {
-          px: LAYOUT_DIMENSIONS.desktop.margin,
-        },
       }}
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: {
-            xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
-            md: LAYOUT_DIMENSIONS.tablet.maxWidth,
-            lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
-          },
-        }}
-      >
-        <Stack
-          spacing={{ xs: 5, md: 6, lg: 8 }}
-          alignItems="center"
-          sx={{ width: "100%" }}
-        >
-          <Box
-            sx={{
-              maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
-              width: "100%",
-              mx: "auto",
-              textAlign: "center",
-            }}
-          >
+      <Container maxWidth={false} sx={PROJECT_CONTENT_CONTAINER_SX}>
+        <Stack spacing={{ xs: 5, md: 6, lg: 8 }} sx={{ width: "100%" }}>
+          <Box sx={{ width: "100%" }}>
             <Typography
               component="h2"
               align="center"
@@ -76,11 +47,11 @@ export default function DesigningHumanCenteredAiSection({
                 <Typography
                   key={index}
                   component="p"
-                  align="center"
                   sx={bodyTypeSx("sectionDescription", {
                     color: "text.primary",
                     fontWeight: 400,
                     lineHeight: 1.5,
+                    textAlign: "left",
                     mb: index === data.paragraphs.length - 1 ? 0 : 3.5,
                   })}
                 >
@@ -108,6 +79,21 @@ export default function DesigningHumanCenteredAiSection({
               descriptionTextAlign: "center",
             }))}
           />
+
+          {data.paragraphAfterCards ? (
+            <Typography
+              component="p"
+              sx={bodyTypeSx("sectionDescription", {
+                color: "text.primary",
+                fontWeight: 400,
+                lineHeight: 1.5,
+                textAlign: "left",
+                m: 0,
+              })}
+            >
+              {data.paragraphAfterCards}
+            </Typography>
+          ) : null}
         </Stack>
       </Container>
     </Box>
