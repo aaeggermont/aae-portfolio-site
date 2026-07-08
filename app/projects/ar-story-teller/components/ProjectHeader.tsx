@@ -2,22 +2,22 @@
 import { useCallback, useEffect, useRef, type CSSProperties, type RefObject } from 'react';
 import './ProjectHeader.scss';
 import { PROJECT_HEADER_LAYER_COUNT } from '../lib/projectHeaderLayersReady';
-import CloudsLayer1 from '../Images/cloud-1.png';
-import CloudsLayer2 from '../Images/cloud-2.png';
-import CloudsLayer3 from '../Images/cloud-3.png';
-import CloudsLayer4 from '../Images/cloud-4.png';
-import CloudsLayerMobile1 from '../Images/clouds-layer-1.png';
-import CloudsLayerMobile2 from '../Images/clouds-layer-2.png';
-import CloudsLayerMobile3 from '../Images/clouds-layer-3.png';
-import CloudsLayerMobile4 from '../Images/clouds-layer-4.png';
-import CrowdsWaitingDesktop from '../Images/CrowdsWaiting-Desktop.png';
+import {
+  PROJECT_HEADER_CROWD_OBJECT_PATH,
+  PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS,
+  PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS,
+} from '../lib/projectHeaderAssets';
+import ProjectImage from '@/lib/media/ProjectImage';
 import {
   Parallax,
   ParallaxBanner,
   ParallaxBannerLayer,
 } from 'react-scroll-parallax';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
-import Image, { StaticImageData } from 'next/image';
+
+/** Intrinsic dimensions of `CrowdsWaiting-Desktop.png` in Storage. */
+const CROWD_IMAGE_INTRINSIC_WIDTH = 1628;
+const CROWD_IMAGE_INTRINSIC_HEIGHT = 875;
 
 function useReportImageReady(
   containerRef: RefObject<HTMLDivElement | null>,
@@ -70,7 +70,7 @@ function useReportImageReady(
 }
 
 type ParallaxCloudLayerProps = {
-  src: StaticImageData;
+  objectPath: string;
   alt: string;
   speed: number;
   onLayerReady?: () => void;
@@ -90,7 +90,7 @@ type ParallaxCloudLayerProps = {
 };
 
 function ParallaxCloudLayer({
-  src,
+  objectPath,
   alt,
   speed,
   onLayerReady,
@@ -103,7 +103,7 @@ function ParallaxCloudLayer({
   initialTop,
 }: ParallaxCloudLayerProps) {
   const layerRef = useRef<HTMLDivElement>(null);
-  useReportImageReady(layerRef, onLayerReady, src.src);
+  useReportImageReady(layerRef, onLayerReady, objectPath);
 
   /* Inline top/height so extra lift always wins (CSS var-only overrides were flaky in some cases). */
   const shiftStyle: CSSProperties | undefined =
@@ -137,8 +137,8 @@ function ParallaxCloudLayer({
           className="project-header-parallax__layer-shift"
           style={shiftStyle}
         >
-          <Image
-            src={src}
+          <ProjectImage
+            objectPath={objectPath}
             alt={alt}
             fill
             sizes="100vw"
@@ -164,7 +164,7 @@ function PeopleInLineCrowd({
   initialTop?: CSSProperties['marginTop'];
 }) {
   const crowdRef = useRef<HTMLDivElement>(null);
-  useReportImageReady(crowdRef, onLayerReady, CrowdsWaitingDesktop.src);
+  useReportImageReady(crowdRef, onLayerReady, PROJECT_HEADER_CROWD_OBJECT_PATH);
 
   const stripStyle: CSSProperties | undefined =
     initialTop != null ? { marginTop: initialTop } : undefined;
@@ -173,12 +173,12 @@ function PeopleInLineCrowd({
     <div className="people-in-line" style={stripStyle}>
       <Parallax speed={speed} className="people-in-line__parallax">
         <div ref={crowdRef}>
-          <Image
+          <ProjectImage
             className="people-in-line__crowd"
             alt="Crowds waiting in line"
-            src={CrowdsWaitingDesktop}
-            width={1600}
-            height={900}
+            objectPath={PROJECT_HEADER_CROWD_OBJECT_PATH}
+            width={CROWD_IMAGE_INTRINSIC_WIDTH}
+            height={CROWD_IMAGE_INTRINSIC_HEIGHT}
             priority
           />
         </div>
@@ -248,7 +248,7 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
         <BannerTitles />
         <ParallaxBanner className="project-header-parallax">
           <ParallaxCloudLayer
-            src={CloudsLayer4}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer4}
             alt="Clouds Layer 4"
             speed={12}
             onLayerReady={onLayerReady}
@@ -256,7 +256,7 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
             objectPosition="center 15%"
           />
           <ParallaxCloudLayer
-            src={CloudsLayer3}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer3}
             alt="Clouds Layer 3"
             speed={8}
             onLayerReady={onLayerReady}
@@ -264,16 +264,16 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
             objectPosition="center 17%"
           />
           <ParallaxCloudLayer
-            src={CloudsLayer2}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer2}
             alt="Clouds Layer 2"
-            speed={3}
+            speed={1}
             onLayerReady={onLayerReady}
             layerLiftPx={150}
             objectFit="contain"
             objectPosition="center 28%"
           />
           <ParallaxCloudLayer
-            src={CloudsLayer1}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer1}
             alt="Clouds Layer 1"
             speed={-3}
             onLayerReady={onLayerReady}
@@ -282,7 +282,7 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-30%" speed={32} onLayerReady={onLayerReady} />
+      <PeopleInLineCrowd initialTop="-35%" speed={12} onLayerReady={onLayerReady} />
     </div>
   );
 }
@@ -294,26 +294,26 @@ function ProjectHeaderTablet({ onLayerReady }: HeaderVariantProps) {
         <BannerTitles />
         <ParallaxBanner className="project-header-parallax">
           <ParallaxCloudLayer
-            src={CloudsLayer4}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer4}
             alt="Clouds Layer 4"
             speed={4}
             onLayerReady={onLayerReady}
           />
           <ParallaxCloudLayer
-            src={CloudsLayer3}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer3}
             alt="Clouds Layer 3"
             speed={2}
             onLayerReady={onLayerReady}
             layerLiftPx={50}
           />
           <ParallaxCloudLayer
-            src={CloudsLayer2}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer2}
             alt="Clouds Layer 2"
             speed={0}
             onLayerReady={onLayerReady}
           />
           <ParallaxCloudLayer
-            src={CloudsLayer1}
+            objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer1}
             alt="Clouds Layer 1"
             speed={-2}
             onLayerReady={onLayerReady}
@@ -335,7 +335,7 @@ function ProjectHeaderMobile({ onLayerReady }: HeaderVariantProps) {
         <BannerTitles />
         <ParallaxBanner className="project-header-parallax">
           <ParallaxCloudLayer
-            src={CloudsLayerMobile4}
+            objectPath={PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer4}
             alt="Clouds Layer Mobile 4"
             speed={4}
             onLayerReady={onLayerReady}
@@ -343,7 +343,7 @@ function ProjectHeaderMobile({ onLayerReady }: HeaderVariantProps) {
             initialTop="15%"
           />
           <ParallaxCloudLayer
-            src={CloudsLayerMobile3}
+            objectPath={PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer3}
             alt="Clouds Layer Mobile 3"
             speed={0}
             onLayerReady={onLayerReady}
@@ -352,7 +352,7 @@ function ProjectHeaderMobile({ onLayerReady }: HeaderVariantProps) {
             initialTop="12%"
           />
           <ParallaxCloudLayer
-            src={CloudsLayerMobile2}
+            objectPath={PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer2}
             alt="Clouds Layer Mobile 2"
             speed={-2}
             onLayerReady={onLayerReady}
@@ -360,7 +360,7 @@ function ProjectHeaderMobile({ onLayerReady }: HeaderVariantProps) {
             initialTop="15%"
           />
           <ParallaxCloudLayer
-            src={CloudsLayerMobile1}
+            objectPath={PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer1}
             alt="Clouds Layer Mobile 1"
             speed={-4}
             onLayerReady={onLayerReady}

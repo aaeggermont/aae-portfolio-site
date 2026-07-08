@@ -1,10 +1,11 @@
+'use client';
+
 import React from 'react';
 import './OverviewParagraphBlock.scss';
 import { SectionTitle } from './SectionTitle';
 import ParagraphText from './ParagraphText';
-import WaitingPeopleDesktop from '../Images/WaitingPeople-DesktopLg.png';
-import WaitingPeopleLgMd from '../Images/WaitingPeople-LgMd.png';
-import WaitingPeopleSMSX from '../Images/WaitingPeople-SMSX.png';
+import { OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS } from '../lib/projectHeaderAssets';
+import { useProjectMediaUrl } from '@/lib/media/useProjectMediaUrl';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -27,6 +28,14 @@ function OverviewBody({ paragraphs }: { paragraphs: string[] }) {
     );
 }
 
+function overviewBackgroundStyle(url: string | null): React.CSSProperties | undefined {
+    if (!url) return undefined;
+
+    return {
+        ['--overview-bg-image' as string]: `url(${url})`,
+    };
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function OverviewParagraphBlock({
@@ -35,18 +44,20 @@ export function OverviewParagraphBlock({
     ...props
 }: OverviewParagraphBlockProps) {
     const screenDevice = useResponsive();
+    const backgroundObjectPath = screenDevice.isMobile
+        ? OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS.mobile
+        : screenDevice.isTablet
+          ? OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS.tablet
+          : OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS.desktop;
+    const { url: backgroundUrl } = useProjectMediaUrl(backgroundObjectPath);
+    const backgroundStyle = overviewBackgroundStyle(backgroundUrl);
 
     if (screenDevice.isDesktopOrLaptop) {
         return (
             <div
                 {...props}
-                className="project-summary"
-                style={{
-                    backgroundImage: `url(${WaitingPeopleDesktop.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center top 10%',
-                    backgroundSize: '60%',
-                }}
+                className="overview-paragraph-block overview-paragraph-block--desktop"
+                style={backgroundStyle}
             >
                 <div className="project-summary-container">
                     <div className="storyteller-laptoplg-content-left">
@@ -66,11 +77,8 @@ export function OverviewParagraphBlock({
         return (
             <div
                 {...props}
-                style={{
-                    backgroundImage: `url(${WaitingPeopleLgMd.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center center',
-                }}
+                className="overview-paragraph-block overview-paragraph-block--tablet"
+                style={backgroundStyle}
             >
                 <div className="project-summary-container">
                     <div className="content">
@@ -90,11 +98,8 @@ export function OverviewParagraphBlock({
         return (
             <div
                 {...props}
-                style={{
-                    backgroundImage: `url(${WaitingPeopleSMSX.src})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'auto',
-                }}
+                className="overview-paragraph-block overview-paragraph-block--mobile"
+                style={backgroundStyle}
             >
                 <div className="storyteller-mobile-paragraph-container">
                     <div className="storyteller-mobile-content">

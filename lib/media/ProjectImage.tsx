@@ -25,6 +25,8 @@ type ProjectImageProps = {
   borderRadius?: React.CSSProperties["borderRadius"];
   /** When false, Next.js may resize remote images and honor `sizes` (requires `images.remotePatterns`). Default true preserves existing behavior. */
   unoptimized?: boolean;
+  /** Fill the positioned parent (`position: relative` required). */
+  fill?: boolean;
 };
 
 
@@ -40,6 +42,7 @@ export default function ProjectImage({
   fullViewportLoading = false,
   borderRadius,
   unoptimized = true,
+  fill = false,
 }: ProjectImageProps) {
   const { projectKey, visibility } = useProjectAccess();
   console.log("Project Access Context:", { projectKey, visibility });
@@ -64,8 +67,7 @@ export default function ProjectImage({
       <Image
         src={publicUrl}
         alt={alt}
-        width={width}
-        height={height}
+        {...(fill ? { fill: true } : { width, height })}
         className={className}
         style={mergedStyle}
         sizes={sizes}
@@ -87,6 +89,7 @@ export default function ProjectImage({
       sizes={sizes}
       priority={priority}
       fullViewportLoading={fullViewportLoading}
+      mode={fill ? "fill" : "intrinsic"}
     />
   );
 }

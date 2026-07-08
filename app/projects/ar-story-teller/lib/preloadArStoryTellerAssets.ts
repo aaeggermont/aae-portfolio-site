@@ -4,6 +4,11 @@ import { buildPublicStorageUrl } from "@/lib/firebase/publicStorageUrl";
 import { preloadOne } from "@/lib/media/preloadImages";
 
 import { CASE_STUDY_BANNER_OBJECT_PATH } from "./criticalAssets";
+import {
+  getOverviewWaitingPeoplePreloadObjectPath,
+  getProjectHeaderPreloadObjectPaths,
+  type ViewportBand,
+} from "./projectHeaderPreloadUrls";
 
 type PreloadBannerOptions = {
   projectKey: string;
@@ -50,6 +55,34 @@ export async function preloadArStoryTellerCaseStudyBanner({
   await preloadGatedMediaObject(
     projectKey,
     CASE_STUDY_BANNER_OBJECT_PATH,
+    visibility,
+  );
+}
+
+/** Parallax cloud layers for the active viewport band. */
+export async function preloadProjectHeaderCloudLayers({
+  projectKey,
+  visibility,
+  viewportBand,
+}: PreloadBannerOptions & { viewportBand: ViewportBand }): Promise<void> {
+  const objectPaths = getProjectHeaderPreloadObjectPaths(viewportBand);
+
+  await Promise.all(
+    objectPaths.map((objectPath) =>
+      preloadGatedMediaObject(projectKey, objectPath, visibility),
+    ),
+  );
+}
+
+/** Overview Ferris wheel background for the active viewport band. */
+export async function preloadOverviewWaitingPeopleBackground({
+  projectKey,
+  visibility,
+  viewportBand,
+}: PreloadBannerOptions & { viewportBand: ViewportBand }): Promise<void> {
+  await preloadGatedMediaObject(
+    projectKey,
+    getOverviewWaitingPeoplePreloadObjectPath(viewportBand),
     visibility,
   );
 }

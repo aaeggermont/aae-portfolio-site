@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { ArStoryTellerPage } from "@/app/projects/ar-story-teller/ArStoryTellerPage";
 import { subscribeArStoryTellerProject } from "@/app/projects/ar-story-teller/lib/ar-story-teller.firestore";
 import { createProjectHeaderLayersReadyGate } from "@/app/projects/ar-story-teller/lib/projectHeaderLayersReady";
-import { preloadArStoryTellerCaseStudyBanner } from "@/app/projects/ar-story-teller/lib/preloadArStoryTellerAssets";
+import { preloadArStoryTellerCaseStudyBanner, preloadOverviewWaitingPeopleBackground, preloadProjectHeaderCloudLayers } from "@/app/projects/ar-story-teller/lib/preloadArStoryTellerAssets";
 import type { ViewportBand } from "@/app/projects/ar-story-teller/lib/projectHeaderPreloadUrls";
 import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import ProjectAccessGate from "@/lib/access/ProjectAccessGate";
@@ -69,13 +69,25 @@ function ArStoryTellerRouteContent() {
   }, [viewportBand]);
 
   const bannerPreloadRef = useRef<Promise<void> | null>(null);
+  const cloudPreloadRef = useRef<Promise<void> | null>(null);
+  const overviewBgPreloadRef = useRef<Promise<void> | null>(null);
 
   useEffect(() => {
     bannerPreloadRef.current = preloadArStoryTellerCaseStudyBanner({
       projectKey,
       visibility,
     });
-  }, [projectKey, visibility]);
+    cloudPreloadRef.current = preloadProjectHeaderCloudLayers({
+      projectKey,
+      visibility,
+      viewportBand,
+    });
+    overviewBgPreloadRef.current = preloadOverviewWaitingPeopleBackground({
+      projectKey,
+      visibility,
+      viewportBand,
+    });
+  }, [projectKey, visibility, viewportBand]);
 
   useEffect(() => {
     const ready = contentReadyRef.current!;
@@ -105,8 +117,12 @@ function ArStoryTellerRouteContent() {
       headerLayersReadyRef.current.promise,
       bannerPreloadRef.current ??
         preloadArStoryTellerCaseStudyBanner({ projectKey, visibility }),
+      cloudPreloadRef.current ??
+        preloadProjectHeaderCloudLayers({ projectKey, visibility, viewportBand }),
+      overviewBgPreloadRef.current ??
+        preloadOverviewWaitingPeopleBackground({ projectKey, visibility, viewportBand }),
     ]);
-  }, [projectKey, visibility]);
+  }, [projectKey, visibility, viewportBand]);
 
   const handleSplashError = useCallback(() => {
     setHasError(true);
