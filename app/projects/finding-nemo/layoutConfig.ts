@@ -1,3 +1,7 @@
+import type { SxProps, Theme } from "@mui/material/styles";
+
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+
 /**
  * Vertical spacing between top-level section children inside `.project-content`.
  *
@@ -27,8 +31,30 @@ export const LAYOUT_DIMENSIONS = {
   desktop: { maxWidth: "1260px", margin: "80px" },
 } as const;
 
+/** Shared `Container` cap + horizontal gutters for full-bleed bands and intro sections. */
+export const PROJECT_CONTENT_CONTAINER_SX = {
+  maxWidth: {
+    xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
+    md: LAYOUT_DIMENSIONS.tablet.maxWidth,
+    lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
+  },
+  px: LAYOUT_DIMENSIONS.mobile.margin,
+  [breakpointMediaQuery.tabletUp]: {
+    px: LAYOUT_DIMENSIONS.tablet.margin,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    px: LAYOUT_DIMENSIONS.desktop.margin,
+  },
+} as const;
+
 /** Desktop usable content width (`1260 − 2 × 80`) — shared inset panel cap. */
 export const PANEL_CONTENT_MAX_WIDTH_PX = 1100 as const;
+
+/** Max width for intro narrative blocks: Overview copy, Problem panel (desktop). */
+export const INTRO_NARRATIVE_MAX_WIDTH_PX = 920 as const;
+
+/** Tablet width for inset intro cards (My Contributions, Problem panel). */
+export const INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX = 600 as const;
 
 /**
  * Padding for inset panel blocks (rounded grey sections, narrative panels, etc.).
@@ -76,10 +102,18 @@ export const PROJECT_HEADER_EXTRA_TOP_PADDING = {
 
 /** Full-bleed section band backgrounds (edge-to-edge via `FullBleedBand`). */
 export const BAND_COLORS = {
-  /** #DEE8F3 @ 80% opacity */
+  /** #DEE8F3 @ 50% opacity — alternating tinted bands */
   businessOpportunities: "rgba(222, 232, 243, 0.5)",
   /** White inset / neutral full-bleed bands */
   neutralPanel: "#FFFFFF",
+  /** `01 - Identify the AI Opportunity` */
+  identifyAiOpportunity: "#FFFFFF",
+  /** `02 - Define the AI-Assisted Solution` */
+  defineAiSolution: "#EEF3F9",
+  /** `04 — Design the Decision Support Experience` */
+  designDecisionSupportExperience: "#EEF3F9",
+  /** Expected Impact + Reflections & Key Learnings */
+  expectedImpactAndReflections: "#FFFFFF",
 } as const;
 
 /**
@@ -87,6 +121,39 @@ export const BAND_COLORS = {
  * and My Contributions (above the first alternating full-bleed bands).
  */
 export const INTRO_SECTIONS_BACKGROUND = "#ffffff" as const;
+
+/** Inset card shell for the My Contributions block. */
+export const MY_CONTRIBUTIONS_CARD = {
+  background: "#F6FBFF",
+  paddingPx: 64,
+  maxWidthPx: 600,
+  borderRadiusPx: 32,
+} as const;
+
+/**
+ * KPI cards in Defining Success (`AI Performance`, `User Experience`,
+ * `Operational Impact`). Update `background` to change all KPI card surfaces.
+ */
+export const DEFINING_SUCCESS_KPI_CARD = {
+  background: "#E6F1FF",
+} as const;
+
+/**
+ * Four-stage framework cards (`Designing Human-Centered AI`).
+ * 250×297px at all breakpoints so copy is not clipped on mobile.
+ */
+export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
+  mobile: { width: 250, height: 297 },
+  tablet: { width: 250, height: 297 },
+  desktop: { width: 250, height: 297 },
+} as const;
+
+/** Gaps between framework cards — mobile 16px; tablet 32px; desktop 16–32px (uses 32px). */
+export const HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP = {
+  mobile: 16,
+  tablet: 32,
+  desktop: 32,
+} as const;
 
 /** Inset panel shell backgrounds (white panels inside full-bleed bands). */
 export const PANEL_COLORS = {
@@ -112,38 +179,68 @@ export const FULL_BLEED_BAND_PADDINGS = {
 } as const;
 
 /**
- * Problem demo carousel frame (524:330 aspect ratio).
- * Desktop matches Figma; tablet ~90%, mobile ~75%.
+ * Problem demo carousel frame (524:330 intrinsic asset aspect ratio).
+ * Desktop 450px → 15% reduction for calmer card density; tablet ~90%, mobile ~75%.
  */
 export const PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY = {
-  mobile: { width: 393, height: 248 },
-  tablet: { width: 472, height: 297 },
-  desktop: { width: 524, height: 330 },
+  mobile: { width: 286, height: 180 },
+  tablet: { width: 344, height: 217 },
+  desktop: { width: 383, height: 241 },
 } as const;
 
 /** Inset panel background for the problem demo carousel section. */
-export const PROBLEM_DEMO_PANEL_BACKGROUND = "#E8F0F8" as const;
+export const PROBLEM_DEMO_PANEL_BACKGROUND = MY_CONTRIBUTIONS_CARD.background;
 
 /** Problem demo panel — copy column width when side-by-side at desktop (1260px+). */
 export const PROBLEM_DEMO_PANEL_COPY_WIDTH = {
-  desktop: 360,
+  desktop: 330,
 } as const;
 
 /** Gap between copy and carousel — stacked (vertical) vs side-by-side (horizontal at 1260px+). */
 export const PROBLEM_DEMO_PANEL_GAP = {
   stacked: 64,
-  sideBySide: 80,
+  /** Fits copy (306) + carousel (450) inside 920px panel with md horizontal padding. */
+  sideBySide: 36,
 } as const;
 
 /**
- * Gap between section title and inset panel (smaller than `SECTION_GAPS`, which
- * separates major page sections). Aligns with Overview title spacing (~32–48px).
+ * Gap between a section title (h2) and the content block directly below it —
+ * full-bleed bands, inset intro panels, and `SectionParagraph` (section title variant).
+ * Smaller than `SECTION_GAPS`, which separates major page sections.
  */
-export const PROBLEM_DEMO_PANEL_TITLE_GAP = {
+export const SECTION_TITLE_CONTENT_GAP = {
   mobile: "32px",
   tablet: "40px",
-  desktop: "48px",
+  desktop: "64px",
 } as const;
+
+/** Alias for full-bleed band title → first content sibling. */
+export const FULL_BLEED_BAND_TITLE_CONTENT_GAP = SECTION_TITLE_CONTENT_GAP;
+
+/** Alias for problem demo / Overview inset panels. */
+export const PROBLEM_DEMO_PANEL_TITLE_GAP = SECTION_TITLE_CONTENT_GAP;
+
+/** `margin-top` for content that follows a title-only `SectionParagraph` in a band. */
+export const sectionTitleContentGapMtSx: SxProps<Theme> = {
+  mt: SECTION_TITLE_CONTENT_GAP.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    mt: SECTION_TITLE_CONTENT_GAP.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    mt: SECTION_TITLE_CONTENT_GAP.desktop,
+  },
+};
+
+/** `margin-bottom` on a standalone section title before body copy (e.g. Overview). */
+export const sectionTitleContentGapMbSx: SxProps<Theme> = {
+  mb: SECTION_TITLE_CONTENT_GAP.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    mb: SECTION_TITLE_CONTENT_GAP.tablet,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    mb: SECTION_TITLE_CONTENT_GAP.desktop,
+  },
+};
 
 /**
  * Carousel slide caption (e.g. "Walking on Blue") — desktop 18px; tablet ~90%, mobile ~78%.
@@ -161,7 +258,7 @@ export const PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE = {
 export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1260 as const;
 
 /** Copy column minimum width when side-by-side at the desktop band. */
-export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 321 as const;
+export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 295 as const;
 
 /**
  * Solution overview hi-fi mockup display (402:874 intrinsic aspect ratio).
@@ -237,8 +334,10 @@ export const CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY = {
   desktop: { width: 800, height: 1022 },
 } as const;
 
+export type DefiningSuccessKpiCard = typeof DEFINING_SUCCESS_KPI_CARD;
 export type SectionGaps = typeof SECTION_GAPS;
 export type LayoutDimensions = typeof LAYOUT_DIMENSIONS;
+export type ProjectContentContainerSx = typeof PROJECT_CONTENT_CONTAINER_SX;
 export type PanelBlockPaddings = typeof PANEL_BLOCK_PADDINGS;
 export type BandColors = typeof BAND_COLORS;
 export type IntroSectionsBackground = typeof INTRO_SECTIONS_BACKGROUND;
@@ -253,6 +352,7 @@ export type ProblemDemoCarouselImageDisplay =
   typeof PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY;
 export type ProblemDemoPanelCopyWidth = typeof PROBLEM_DEMO_PANEL_COPY_WIDTH;
 export type ProblemDemoPanelGap = typeof PROBLEM_DEMO_PANEL_GAP;
+export type SectionTitleContentGap = typeof SECTION_TITLE_CONTENT_GAP;
 export type ProblemDemoPanelTitleGap = typeof PROBLEM_DEMO_PANEL_TITLE_GAP;
 export type ProblemDemoCarouselCaptionFontSize =
   typeof PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE;

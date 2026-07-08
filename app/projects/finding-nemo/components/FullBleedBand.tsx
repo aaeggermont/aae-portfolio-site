@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import { FULL_BLEED_BAND_PADDINGS, LAYOUT_DIMENSIONS } from "@/app/projects/finding-nemo/layoutConfig";
+import { FULL_BLEED_BAND_PADDINGS, PROJECT_CONTENT_CONTAINER_SX } from "@/app/projects/finding-nemo/layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 type FullBleedBandProps = {
@@ -47,23 +47,7 @@ export default function FullBleedBand({
         ] as SxProps<Theme>
       }
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: {
-            xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
-            md: LAYOUT_DIMENSIONS.tablet.maxWidth,
-            lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
-          },
-          px: LAYOUT_DIMENSIONS.mobile.margin,
-          [breakpointMediaQuery.tabletUp]: {
-            px: LAYOUT_DIMENSIONS.tablet.margin,
-          },
-          [breakpointMediaQuery.desktopUp]: {
-            px: LAYOUT_DIMENSIONS.desktop.margin,
-          },
-        }}
-      >
+      <Container maxWidth={false} sx={PROJECT_CONTENT_CONTAINER_SX}>
         {children}
       </Container>
     </Box>

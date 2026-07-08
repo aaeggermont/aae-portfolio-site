@@ -5,16 +5,15 @@ import {
   FINDING_NEMO_TITLE_FONT,
   TYPOGRAPHY,
 } from "@/app/projects/finding-nemo/typography";
+import {
+  DEFINING_SUCCESS_KPI_CARD,
+} from "@/app/projects/finding-nemo/layoutConfig";
 import type { FindingNemoKpiCardItem } from "@/scripts/project-2.data";
 
-import {
-  INTERACTIVE_CARD_BG_COLOR,
-  interactiveCardHoverSx,
-} from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
 
 export const KPI_CARD_WIDTH_PX = 300;
 export const KPI_CARD_HEIGHT_PX = 280;
-export const KPI_CARD_BG_COLOR = INTERACTIVE_CARD_BG_COLOR;
 
 export type KpiCardProps = FindingNemoKpiCardItem;
 
@@ -37,11 +36,15 @@ export default function KpiCard({ icon, title, description }: KpiCardProps) {
         px: 4,
         pt: 6,
         pb: 4,
-        bgcolor: KPI_CARD_BG_COLOR,
+        bgcolor: DEFINING_SUCCESS_KPI_CARD.background,
         borderRadius: "20px",
         overflow: "hidden",
         boxSizing: "border-box",
         ...interactiveCardHoverSx,
+        "&:hover": {
+          ...interactiveCardHoverSx["&:hover"],
+          bgcolor: DEFINING_SUCCESS_KPI_CARD.background,
+        },
       }}
     >
       <Box

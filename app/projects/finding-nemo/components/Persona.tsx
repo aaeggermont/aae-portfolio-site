@@ -1,7 +1,10 @@
-import { Avatar, Box, Paper, Stack, Typography } from "@mui/material";
+"use client";
+
+import { Box, Paper, Stack, Typography } from "@mui/material";
 
 import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import ProjectImage from "@/lib/media/ProjectImage";
 import type { FindingNemoPersonaItem } from "@/scripts/project-2.data";
 
 export type PersonaProps = FindingNemoPersonaItem & {
@@ -15,7 +18,7 @@ export default function Persona({
   title,
   roleDescription,
   avatarAlt,
-  avatarSrc,
+  avatarObjectPath,
   goals,
   painPoints,
   quote,
@@ -55,12 +58,35 @@ export default function Persona({
       <Stack spacing={4} sx={fillHeight ? { flex: 1 } : undefined}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          spacing={3}
+          spacing={2}
           alignItems={{ xs: "center", sm: "flex-start" }}
-          justifyContent="center"
+          justifyContent="flex-start"
+          width="100%"
         >
-          <Avatar alt={avatarAlt} src={avatarSrc} sx={{ width: 84, height: 82 }} />
-          <Stack spacing={1} maxWidth={223}>
+          <Box
+            sx={{
+              width: 84,
+              height: 82,
+              flexShrink: 0,
+              borderRadius: "41px",
+              overflow: "hidden",
+              alignSelf: { xs: "center", sm: "flex-start" },
+            }}
+          >
+            <ProjectImage
+              objectPath={avatarObjectPath}
+              alt={avatarAlt}
+              width={84}
+              height={82}
+              style={{
+                display: "block",
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          </Box>
+          <Stack spacing={1} flex={1} minWidth={0}>
             <Typography
               component="h1"
               sx={titleTypeSx("contentCardTitle", {
