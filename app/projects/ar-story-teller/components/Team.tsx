@@ -3,6 +3,7 @@ import { SectionTitle } from "./SectionTitle";
 import { PANEL_BLOCK_PADDINGS } from "../layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { TeamData, TeamMember } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import { overviewNarrativeBlockSx } from "../overviewNarrativeLayout";
 import { bodyTypeSx } from "../typography";
 import styles from "../ArStoryTeller.module.scss";
 
@@ -102,7 +103,12 @@ const Team = ({ data }: TeamProps) => {
   const memberRows = chunkRowPairs(members);
 
   return (
-    <section aria-labelledby={headingId} className={styles['panel-subsection']}>
+    <Box
+      component="section"
+      aria-labelledby={headingId}
+      className={styles['panel-subsection']}
+      sx={overviewNarrativeBlockSx}
+    >
       <SectionTitle id={headingId} title={title} />
       <Box
         sx={{
@@ -158,7 +164,7 @@ const Team = ({ data }: TeamProps) => {
           ))}
         </Stack>
       </Box>
-    </section>
+    </Box>
   );
 };
 

@@ -5,8 +5,7 @@ import SectionTitle from '../SectionTitle';
 import ParagraphText from '../ParagraphText';
 import styles from '../../ArStoryTeller.module.scss';
 import { MainDemo } from '../main-demo/MainDemo';
-import { OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX } from '../../layoutConfig';
-import { breakpointMediaQuery } from '@/lib/responsive/breakpoints';
+import { overviewNarrativeBlockSx } from '../../overviewNarrativeLayout';
 
 import type { OverviewSectionData } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 
@@ -46,23 +45,13 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-once="true"
-                sx={{
-                    width: '100%',
-                    maxWidth: '100%',
-                    mx: 'auto',
-                    [breakpointMediaQuery.tabletUp]: {
-                        maxWidth: `${OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX.tablet}px`,
-                    },
-                    [breakpointMediaQuery.desktopUp]: {
-                        maxWidth: `${OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX.desktop}px`,
-                    },
-                }}
+                sx={overviewNarrativeBlockSx}
             >
                 <SectionTitle title="Project Overview" />
                 <ParagraphText text={PROJECT_OVERVIEW_COPY} />
             </Box>
 
-            <div className={styles['content-group']}>
+            <Box className={styles['content-group']} sx={overviewNarrativeBlockSx}>
                 {solution.title ? (
                     <SectionTitle
                         title={solution.title}
@@ -71,7 +60,7 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                     />
                 ) : null}
                 <MainDemo />
-            </div>
+            </Box>
         </section>
     );
 }

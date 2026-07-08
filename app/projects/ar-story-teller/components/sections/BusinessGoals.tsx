@@ -3,6 +3,7 @@ import { SectionTitle } from "../SectionTitle";
 import { PANEL_BLOCK_PADDINGS } from "../../layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { BusinessGoalsData } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import { overviewNarrativeBlockSx } from "../../overviewNarrativeLayout";
 import { bodyTypeSx } from "../../typography";
 import styles from "../../ArStoryTeller.module.scss";
 
@@ -18,7 +19,12 @@ const BusinessGoals = ({ data }: BusinessGoalsProps) => {
   const headingId = "business-goals-heading";
 
   return (
-    <section aria-labelledby={headingId} className={styles['panel-subsection']}>
+    <Box
+      component="section"
+      aria-labelledby={headingId}
+      className={styles['panel-subsection']}
+      sx={overviewNarrativeBlockSx}
+    >
       <SectionTitle id={headingId} title={title} />
       <Box
         sx={{
@@ -66,7 +72,7 @@ const BusinessGoals = ({ data }: BusinessGoalsProps) => {
           </Box>
         </Stack>
       </Box>
-    </section>
+    </Box>
   );
 };
 

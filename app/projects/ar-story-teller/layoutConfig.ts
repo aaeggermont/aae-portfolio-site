@@ -140,9 +140,9 @@ export const getUsableLayoutWidth = (
 export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth('desktop');
 
 /**
- * Centered overview narrative block (Project Overview copy).
+ * Centered overview narrative block (Project Overview copy + Solution demo).
  * Desktop 910px ≈ 82.7% of usable desktop width (`PANEL_CONTENT_MAX_WIDTH_PX`);
- * tablet scales by the same ratio on usable tablet width (944px → 780px).
+ * tablet scales by the same ratio on usable tablet width (944px → 781px).
  * Mobile uses full container width (16px side margins) — ~328px at 360px viewport.
  */
 export const OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX = {
@@ -151,12 +151,18 @@ export const OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX = {
 } as const;
 
 /**
- * Cinematic main demo canvas (16:9). Desktop 1100×620; tablet ~900×506.
+ * Cinematic main demo canvas (16:9) — capped to match `OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX`.
  * Mobile fills available width at the same aspect ratio.
  */
 export const MAIN_DEMO_CANVAS = {
-    desktop: { width: 1100, height: 620 },
-    tablet: { width: 900, height: 506 },
+    desktop: {
+        width: OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX.desktop,
+        height: Math.round((OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX.desktop * 9) / 16),
+    },
+    tablet: {
+        width: OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX.tablet,
+        height: Math.round((OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX.tablet * 9) / 16),
+    },
 } as const;
 
 type PanelPaddingBreakpoint = keyof PanelBlockPaddings['x'];
