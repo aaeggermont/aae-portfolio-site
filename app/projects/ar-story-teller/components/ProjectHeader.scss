@@ -123,7 +123,7 @@
 
 @media #{$desktop} {
   .storyteller-banner__hero .banner-text-subtitle {
-    max-width: 65%;
+    max-width: 70%;
     text-align: left;
   }
 }
@@ -139,7 +139,7 @@
 
     .storyteller-banner {
         /* Tweak vertical offset of hero copy; does not use `position: relative`. */
-        --banner-titles-overlay-top: -60%;
+        --banner-titles-overlay-top: -45%;
 
         .banner-titles {
             top: var(--banner-titles-overlay-top);

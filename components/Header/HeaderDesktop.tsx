@@ -30,7 +30,7 @@ export function HeaderDesktop({
           </Link>
         </div>
 
-        <div className="primary_menu" id="menu">
+        <div className={styles.primary_menu} id="menu">
           <nav className={styles.main_menu} aria-label="Main navigation">
             <ul>
               {HEADER_NAV_ITEMS.map((item) => {
