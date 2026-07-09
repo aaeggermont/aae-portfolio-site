@@ -5,7 +5,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 import ProjectImage from "@/lib/media/ProjectImage";
-import { getUsableLayoutWidth, PANEL_BLOCK_PADDINGS, LAYOUT_DIMENSIONS, cssLengthToPx } from "../layoutConfig";
+import { getUsableLayoutWidth, getPanelInnerWidthPx, PANEL_BLOCK_PADDINGS, LAYOUT_DIMENSIONS, cssLengthToPx } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 import { bodyTypeSx } from "../typography";
 
@@ -15,20 +15,21 @@ import { bodyTypeSx } from "../typography";
    component looking right if it's ever rendered outside the page wrapper. */
 const CONTEXT_NOTIFICATIONS_MAX_WIDTH = getUsableLayoutWidth("desktop");
 const CONTEXT_NOTIFICATIONS_DESKTOP_STACK_GAP_PX = 64;
-const CONTEXT_NOTIFICATIONS_DESKTOP_COLUMN_MAX_WIDTH = `${
-  (getUsableLayoutWidth("desktop") -
-    CONTEXT_NOTIFICATIONS_DESKTOP_STACK_GAP_PX) /
-  2
-}px`;
+/** Desktop row split: text ~40%, image ~60% (text column ~20% narrower than 50/50). */
+const CONTEXT_NOTIFICATIONS_TEXT_COLUMN_FLEX = 2;
+const CONTEXT_NOTIFICATIONS_IMAGE_COLUMN_FLEX = 3;
 
-/** Notification mockup: `next/image` uses 400×323; layout caps below.
- *  - Mobile: fluid, full width of padded panel.
- *  - Tablet: max 360px wide (~90% of desktop) for stacked layout.
- *  - Desktop: 400×323 display. */
-const NOTIFICATION_IMAGE_INTRINSIC_WIDTH = 400;
-const NOTIFICATION_IMAGE_INTRINSIC_HEIGHT = 323;
-const NOTIFICATION_IMAGE_MAX_WIDTH_DESKTOP_PX = 400;
-const NOTIFICATION_IMAGE_MAX_WIDTH_TABLET_PX = 360;
+/** Notification carousel frames are 16:9 (uploaded assets: 1024×573). */
+const NOTIFICATION_IMAGE_ASPECT_RATIO = "16 / 9";
+const NOTIFICATION_IMAGE_MAX_WIDTH_DESKTOP_PX = Math.round(
+  ((getPanelInnerWidthPx("desktop", CONTEXT_NOTIFICATIONS_MAX_WIDTH) -
+    CONTEXT_NOTIFICATIONS_DESKTOP_STACK_GAP_PX) *
+    CONTEXT_NOTIFICATIONS_IMAGE_COLUMN_FLEX) /
+    (CONTEXT_NOTIFICATIONS_TEXT_COLUMN_FLEX +
+      CONTEXT_NOTIFICATIONS_IMAGE_COLUMN_FLEX),
+);
+
+const NOTIFICATION_IMAGE_BORDER_RADIUS_PX = 15;
 
 const NOTIFICATION_CAROUSEL_INTERVAL_MS = 3500;
 
@@ -39,9 +40,10 @@ const NOTIFICATION_IMAGE_SIZES = [
   `(max-width: ${breakpointPx.mobileMax}px) calc(100vw - ${
     cssLengthToPx(LAYOUT_DIMENSIONS.mobile.margin) * 2
   }px)`,
-  `(max-width: ${breakpointPx.tabletMax}px) min(calc(100vw - ${
-    cssLengthToPx(LAYOUT_DIMENSIONS.tablet.margin) * 2
-  }px), ${NOTIFICATION_IMAGE_MAX_WIDTH_TABLET_PX}px)`,
+  `(max-width: ${breakpointPx.tabletMax}px) calc(100vw - ${
+    cssLengthToPx(LAYOUT_DIMENSIONS.tablet.margin) * 2 +
+    cssLengthToPx(PANEL_BLOCK_PADDINGS.x.tablet) * 2
+  }px)`,
   `${NOTIFICATION_IMAGE_MAX_WIDTH_DESKTOP_PX}px`,
 ].join(", ");
 
@@ -149,7 +151,8 @@ export const ContextualNotifications = ({
               width: "100%",
               maxWidth: "100%",
               [DESKTOP_BREAKPOINT_MQ]: {
-                maxWidth: CONTEXT_NOTIFICATIONS_DESKTOP_COLUMN_MAX_WIDTH,
+                flex: `${CONTEXT_NOTIFICATIONS_TEXT_COLUMN_FLEX} 1 0`,
+                minWidth: 0,
               },
             }}
           >
@@ -165,42 +168,34 @@ export const ContextualNotifications = ({
           </Stack>
           <Stack
             spacing={3}
-            alignItems="center"
+            alignItems="stretch"
             sx={{
               flex: 1,
               width: "100%",
               maxWidth: "100%",
-              alignSelf: "center",
               [DESKTOP_BREAKPOINT_MQ]: {
-                maxWidth: CONTEXT_NOTIFICATIONS_DESKTOP_COLUMN_MAX_WIDTH,
-                alignSelf: "auto",
+                flex: `${CONTEXT_NOTIFICATIONS_IMAGE_COLUMN_FLEX} 1 0`,
+                minWidth: 0,
               },
             }}
           >
             {currentImage ? (
               <Box
                 sx={{
+                  position: "relative",
                   width: "100%",
-                  maxWidth: "100%",
-                  [TABLET_STACKED_MQ]: {
-                    maxWidth: NOTIFICATION_IMAGE_MAX_WIDTH_TABLET_PX,
-                    width: `min(100%, ${NOTIFICATION_IMAGE_MAX_WIDTH_TABLET_PX}px)`,
-                  },
-                  [DESKTOP_BREAKPOINT_MQ]: {
-                    maxWidth: NOTIFICATION_IMAGE_MAX_WIDTH_DESKTOP_PX,
-                  },
+                  aspectRatio: NOTIFICATION_IMAGE_ASPECT_RATIO,
+                  borderRadius: `${NOTIFICATION_IMAGE_BORDER_RADIUS_PX}px`,
+                  overflow: "hidden",
                 }}
               >
-                {/* `width` / `height` = intrinsic aspect for next/image; rendered width is
-                    the parent `Box`. `sizes` guides srcset when `unoptimized={false}` (public Storage). */}
                 <ProjectImage
                   objectPath={currentImage}
                   alt={`${alt} ${currentImageIndex + 1}`}
-                  width={NOTIFICATION_IMAGE_INTRINSIC_WIDTH}
-                  height={NOTIFICATION_IMAGE_INTRINSIC_HEIGHT}
+                  fill
                   sizes={NOTIFICATION_IMAGE_SIZES}
-                  unoptimized={false}
-                  style={{ display: "block", width: "100%", height: "auto" }}
+                  unoptimized
+                  style={{ objectFit: "cover" }}
                 />
               </Box>
             ) : null}

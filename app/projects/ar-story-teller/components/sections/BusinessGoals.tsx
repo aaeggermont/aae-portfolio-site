@@ -2,21 +2,100 @@ import { Box, Stack, Typography } from "@mui/material";
 import { SectionTitle } from "../SectionTitle";
 import { PANEL_BLOCK_PADDINGS } from "../../layoutConfig";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
-import type { BusinessGoalsData } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import type {
+  BusinessGoalItem,
+  BusinessGoalsData,
+} from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import {
+  DEFAULT_BUSINESS_GOAL_ITEMS,
+} from "../../lib/businessGoalsDefaults";
 import { overviewNarrativeBlockSx } from "../../overviewNarrativeLayout";
 import { bodyTypeSx } from "../../typography";
 import styles from "../../ArStoryTeller.module.scss";
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
+const TABLET_UP_MQ = breakpointMediaQuery.tabletUp;
+
+const panelBodySx = bodyTypeSx("panelBody");
 
 interface BusinessGoalsProps {
   data: BusinessGoalsData;
 }
 
+function goalRowKey(item: BusinessGoalItem) {
+  return item.title;
+}
+
+function GoalRowDesktop({ item }: { item: BusinessGoalItem }) {
+  return (
+    <Stack
+      direction="row"
+      justifyContent="center"
+      alignItems="flex-start"
+      sx={{ width: "100%" }}
+    >
+      <Box sx={{ width: "40%", flexShrink: 0, pr: { xs: 1, md: 2 } }}>
+        <Typography
+          component="p"
+          sx={{
+            m: 0,
+            textAlign: "right",
+            ...panelBodySx,
+            fontWeight: 600,
+          }}
+        >
+          {item.title}
+        </Typography>
+      </Box>
+      <Box sx={{ width: "40%", flexShrink: 0, pl: { xs: 1, md: 2 } }}>
+        <Typography
+          component="p"
+          sx={{
+            m: 0,
+            textAlign: "left",
+            ...panelBodySx,
+          }}
+        >
+          {item.description}
+        </Typography>
+      </Box>
+    </Stack>
+  );
+}
+
+function GoalRowMobile({ item }: { item: BusinessGoalItem }) {
+  return (
+    <Box sx={{ width: "100%", textAlign: "center" }}>
+      <Typography
+        component="p"
+        sx={{
+          m: 0,
+          ...panelBodySx,
+          fontWeight: 600,
+        }}
+      >
+        {item.title}
+      </Typography>
+      <Typography
+        component="p"
+        sx={{
+          m: 0,
+          mt: 0.5,
+          ...panelBodySx,
+        }}
+      >
+        {item.description}
+      </Typography>
+    </Box>
+  );
+}
+
 const BusinessGoals = ({ data }: BusinessGoalsProps) => {
-  const { title, intro, goals } = data;
+  const { title, items } = data;
   const headingId = "business-goals-heading";
+  const goalItems =
+    items && items.length > 0 ? items : [...DEFAULT_BUSINESS_GOAL_ITEMS];
 
   return (
     <Box
@@ -44,32 +123,32 @@ const BusinessGoals = ({ data }: BusinessGoalsProps) => {
           width: "100%",
         }}
       >
-        <Stack spacing={2} sx={{ maxWidth: "100%" }}>
-          <Typography component="p" sx={{ m: 0, ...bodyTypeSx("panelBody") }}>
-            {intro}
-          </Typography>
-          <Box
-            component="ul"
-            sx={{
-              m: 0,
-              pl: { xs: 3, md: 4 },
-              listStyleType: "disc",
-            }}
-          >
-            {goals.map((goal) => (
-              <Typography
-                key={goal}
-                component="li"
-                sx={{
-                  ...bodyTypeSx("panelBody"),
-                  display: "list-item",
-                  "&:not(:first-of-type)": { mt: 1.5 },
-                }}
-              >
-                {goal}
-              </Typography>
-            ))}
-          </Box>
+        <Stack
+          spacing={3}
+          alignItems="center"
+          sx={{
+            display: "flex",
+            width: "100%",
+            [TABLET_UP_MQ]: { display: "none" },
+          }}
+        >
+          {goalItems.map((item) => (
+            <GoalRowMobile key={goalRowKey(item)} item={item} />
+          ))}
+        </Stack>
+
+        <Stack
+          spacing={2.5}
+          sx={{
+            display: "none",
+            width: "100%",
+            mx: "auto",
+            [TABLET_UP_MQ]: { display: "flex" },
+          }}
+        >
+          {goalItems.map((item) => (
+            <GoalRowDesktop key={goalRowKey(item)} item={item} />
+          ))}
         </Stack>
       </Box>
     </Box>

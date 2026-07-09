@@ -25,11 +25,20 @@ export type TeamData = {
   members: TeamMember[];
 };
 
-/** Firestore `content.businessGoals` — intro panel below overview. */
+/** Firestore `content.businessGoals` — two-column goal rows below overview. */
+export type BusinessGoalItem = {
+  title: string;
+  description: string;
+};
+
 export type BusinessGoalsData = {
   title: string;
-  intro: string;
-  goals: string[];
+  /** Two-column rows (title | description). Falls back to defaults when omitted. */
+  items?: BusinessGoalItem[];
+  /** @deprecated Legacy intro paragraph — no longer rendered. */
+  intro?: string;
+  /** @deprecated Legacy bullet list — no longer rendered. */
+  goals?: string[];
 };
 
 /** Firestore `content.projectOverview` — roles, timeline, category columns. */
