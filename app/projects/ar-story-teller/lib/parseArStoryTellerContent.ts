@@ -2,6 +2,7 @@ import type {
   ARAsNarrativeTool,
   ArStoryTellerCaseStudy,
   ArStoryTellerContent,
+  BusinessGoalItem,
   BusinessGoalsData,
   MagicExperience,
   MagicExperiences,
@@ -52,6 +53,19 @@ function parseSolutionBlock(value: unknown, path: string): SolutionBlock {
   return solution;
 }
 
+function parseBusinessGoalItem(
+  value: unknown,
+  path: string,
+): BusinessGoalItem {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  return {
+    title: requireString(value.title, `${path}.title`),
+    description: requireString(value.description, `${path}.description`),
+  };
+}
+
 function parseBusinessGoalsData(
   value: unknown,
   path: string,
@@ -59,11 +73,29 @@ function parseBusinessGoalsData(
   if (!isRecord(value)) {
     throw new Error(`Invalid ${path}: expected object`);
   }
-  return {
+
+  const data: BusinessGoalsData = {
     title: requireString(value.title, `${path}.title`),
-    intro: requireString(value.intro, `${path}.intro`),
-    goals: parseStringArray(value.goals, `${path}.goals`),
   };
+
+  if (value.items !== undefined) {
+    if (!Array.isArray(value.items)) {
+      throw new Error(`Invalid ${path}.items: expected array`);
+    }
+    data.items = value.items.map((item, index) =>
+      parseBusinessGoalItem(item, `${path}.items[${index}]`),
+    );
+  }
+
+  if (value.intro !== undefined) {
+    data.intro = requireString(value.intro, `${path}.intro`);
+  }
+
+  if (value.goals !== undefined) {
+    data.goals = parseStringArray(value.goals, `${path}.goals`);
+  }
+
+  return data;
 }
 
 function parseTeamData(value: unknown, path: string): TeamData {

@@ -4,7 +4,6 @@ import styles from './ArStoryTeller.module.scss';
 import { ProjectHeader } from './components/ProjectHeader';
 import { OverviewSection } from './components/sections/OverviewSection';
 import { TeamSection } from './components/sections/TeamSection';
-import { ProjectOverviewSection } from './components/sections/ProjectOverviewSection';
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
 import { DesignSystemSection } from './sections/DesignSystemSection';
 import ConclusionsAndImpactSection from './components/sections/ConclusionsAndImpactSection';
@@ -15,7 +14,7 @@ import {
   defaultHeaderState,
   headerState,
 } from "@/components/Header/HeaderState";
-import { AR_STORY_TELLER_HEADER_LOGO } from "./headerTheme";
+import { AR_STORY_TELLER_HEADER_THEME } from "./headerTheme";
 import type { ArStoryTellerContent } from '@/app/projects/ar-story-teller/types/arStoryTellerContent';
 import BusinessGoals from './components/sections/BusinessGoals';
 import {
@@ -96,10 +95,7 @@ export function ArStoryTellerPage({
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
     setHeaderState({
-      position: "absolute",
-      isDark: true,
-      logoPrimaryColor: "#D3D3D3",
-      logoAccentColor: AR_STORY_TELLER_HEADER_LOGO.accent,
+      ...AR_STORY_TELLER_HEADER_THEME,
     });
 
     return () => {
@@ -123,7 +119,6 @@ export function ArStoryTellerPage({
             }}
           />
           <BusinessGoals data={projectData.businessGoals} />
-          <ProjectOverviewSection data={{ projectOverview: projectData.projectOverview }} />
           <TeamSection data={{ team: projectData.team }} />
           <CaseStudyOverviewSection data={{ caseStudy: projectData.caseStudy }} />
           <DesignSystemSection data={{ caseStudy: projectData.caseStudy }} />

@@ -25,12 +25,12 @@
     }
 
     .title {
-        @include video-title-type(26px);
+        @include video-title-type(28px);
         padding-top: 6rem;
     }
 
     .description {
-        @include video-description-type(20px);
+        @include video-description-type(22px);
         padding-top: 3rem;
     }
 }
@@ -43,13 +43,13 @@
     justify-content: center;
 
     .title {
-        @include video-title-type(24px);
+        @include video-title-type(26px);
         padding-top: 2rem;
         padding-bottom: 1rem;
     }
 
     .description {
-        @include video-description-type(20px);
+        @include video-description-type(22px);
     }
 }
 

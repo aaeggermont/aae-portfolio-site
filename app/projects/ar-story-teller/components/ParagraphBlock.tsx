@@ -29,7 +29,8 @@ function ReadMoreButton({ onClick, isShowingFull = false }: ReadMoreButtonProps)
     return (
         <button
             onClick={onClick}
-            style={{ color: '#00577F', fontSize: '1rem' }}
+            style={{ color: '#00577F' }}
+            className="paragraph-block__read-more"
         >
             {isShowingFull ? 'Show less' : 'Read more ...'}
         </button>

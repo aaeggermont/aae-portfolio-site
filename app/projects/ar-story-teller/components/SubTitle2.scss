@@ -15,14 +15,14 @@
     .st-subtitle2-container {
         padding-top: 3rem;
         padding-bottom: 1.5rem;
-        @include subtitle2-label(26px);
+        @include subtitle2-label(28px);
     }
 }
 
 @media #{$tablet} {
     .st-subtitle2-container {
         padding-top: 3rem;
-        @include subtitle2-label(24px);
+        @include subtitle2-label(26px);
     }
 }
 

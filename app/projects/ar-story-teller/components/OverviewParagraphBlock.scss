@@ -6,12 +6,25 @@
     gap: var(--title-content-gap);
 }
 
+@mixin overview-background {
+    background-image: var(--overview-bg-image);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+.overview-paragraph-block {
+    @include overview-background;
+}
+
 @media #{$desktop} {
-    .project-summary {
+    .overview-paragraph-block--desktop {
         margin-top: 200px;
+        /* Room for the Ferris wheel + crowd silhouette at `contain` scale. */
+        min-height: clamp(480px, 52vw, 720px);
     }
 
-    .project-summary .project-summary-container {
+    .overview-paragraph-block--desktop .project-summary-container {
         .storyteller-laptoplg-content-left {
             @include overview-content-column;
             justify-content: flex-start;
@@ -41,6 +54,10 @@
 }
 
 @media #{$tablet} {
+    .overview-paragraph-block--tablet {
+        min-height: clamp(420px, 70vw, 640px);
+    }
+
     .project-summary-container {
         padding-top: 4rem;
         margin: auto;
@@ -55,6 +72,10 @@
 }
 
 @media #{$mobile} {
+    .overview-paragraph-block--mobile {
+        min-height: clamp(360px, 95vw, 520px);
+    }
+
     .storyteller-mobile-paragraph-container {
         max-width: 428px;
         padding-top: 4rem;

@@ -14,13 +14,13 @@
 .desktop-subtitle-container {
     max-width: 2500px;
     margin: auto;
-    @include subtitle-label-type(22px);
+    @include subtitle-label-type(24px);
 }
 
 .lgmd-subtitle-container {
     max-width: 1366px;
     margin: auto;
-    @include subtitle-label-type(20px);
+    @include subtitle-label-type(22px);
 }
 
 .xssm-subtitle-container {

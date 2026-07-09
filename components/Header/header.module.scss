@@ -3,11 +3,21 @@
 .header_area {
   position: relative;
   z-index: 100;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Project pages use `position: absolute` — without this, the bar shrink-wraps and nav sits beside the logo. */
+.header_area_full_bleed {
+  left: 0;
+  right: 0;
+  width: 100%;
 }
 
 .header_sticky {
   position: sticky;
   top: 0;
+  /* Only when no project `backgroundColor` inline override is set (see `Header/index.tsx`). */
   background-color: var(--page-canvas);
 }
 

@@ -4,6 +4,16 @@
     text-align: center;
 }
 
+.paragraph-block__read-more {
+    font-size: 16px;
+}
+
+@media #{$tablet} {
+    .paragraph-block__read-more {
+        font-size: 18px;
+    }
+}
+
 .paragraph-block__subtitle {
     padding-top: 1.5rem;
     padding-bottom: 0.5rem;

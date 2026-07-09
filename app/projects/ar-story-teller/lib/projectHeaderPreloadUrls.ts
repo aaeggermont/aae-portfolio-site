@@ -1,53 +1,46 @@
-import type { StaticImageData } from "next/image";
-
-import CloudsLayer1 from "../Images/cloud-1.png";
-import CloudsLayer2 from "../Images/cloud-2.png";
-import CloudsLayer3 from "../Images/cloud-3.png";
-import CloudsLayer4 from "../Images/cloud-4.png";
-import CloudsLayerMobile1 from "../Images/clouds-layer-1.png";
-import CloudsLayerMobile2 from "../Images/clouds-layer-2.png";
-import CloudsLayerMobile3 from "../Images/clouds-layer-3.png";
-import CloudsLayerMobile4 from "../Images/clouds-layer-4.png";
-import CrowdsWaitingDesktop from "../Images/CrowdsWaiting-Desktop.png";
+import {
+  OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS,
+  PROJECT_HEADER_CROWD_OBJECT_PATH,
+  PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS,
+  PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS,
+} from "./projectHeaderAssets";
 
 export type ViewportBand = "mobile" | "tablet" | "desktop";
 
-function staticSrc(image: StaticImageData): string {
-  return image.src;
+const DESKTOP_CLOUD_OBJECT_PATHS = [
+  PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer4,
+  PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer3,
+  PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer2,
+  PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer1,
+];
+
+const MOBILE_CLOUD_OBJECT_PATHS = [
+  PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer4,
+  PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer3,
+  PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer2,
+  PROJECT_HEADER_MOBILE_CLOUD_OBJECT_PATHS.layer1,
+];
+
+/** Cloud layers + crowd strip for the active viewport band. */
+export function getProjectHeaderPreloadObjectPaths(
+  band: ViewportBand,
+): string[] {
+  const cloudPaths =
+    band === "mobile" ? MOBILE_CLOUD_OBJECT_PATHS : DESKTOP_CLOUD_OBJECT_PATHS;
+
+  return [...cloudPaths, PROJECT_HEADER_CROWD_OBJECT_PATH];
 }
 
-const DESKTOP_HEADER_IMAGES = [
-  CloudsLayer1,
-  CloudsLayer2,
-  CloudsLayer3,
-  CloudsLayer4,
-  CrowdsWaitingDesktop,
-];
+export function getOverviewWaitingPeoplePreloadObjectPath(
+  band: ViewportBand,
+): string {
+  if (band === "mobile") {
+    return OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS.mobile;
+  }
 
-const TABLET_HEADER_IMAGES = [
-  CloudsLayer1,
-  CloudsLayer2,
-  CloudsLayer3,
-  CloudsLayer4,
-  CrowdsWaitingDesktop,
-];
+  if (band === "tablet") {
+    return OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS.tablet;
+  }
 
-const MOBILE_HEADER_IMAGES = [
-  CloudsLayerMobile1,
-  CloudsLayerMobile2,
-  CloudsLayerMobile3,
-  CloudsLayerMobile4,
-  CrowdsWaitingDesktop,
-];
-
-/** Static `ProjectHeader` artwork for the active viewport band. */
-export function getProjectHeaderPreloadUrls(band: ViewportBand): string[] {
-  const images =
-    band === "mobile"
-      ? MOBILE_HEADER_IMAGES
-      : band === "tablet"
-        ? TABLET_HEADER_IMAGES
-        : DESKTOP_HEADER_IMAGES;
-
-  return images.map(staticSrc);
+  return OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS.desktop;
 }

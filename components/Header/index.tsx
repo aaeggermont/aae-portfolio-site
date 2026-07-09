@@ -6,6 +6,7 @@ import { defaultHeaderState, headerState } from "./HeaderState";
 import { useAtomValue } from "jotai";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import type { CSSProperties } from "react";
 import styles from "./header.module.scss";
 
 export type HeaderProps = {
@@ -24,7 +25,7 @@ export default function Header({
   logoFontColor: logoFontColorProp,
 }: HeaderProps) {
   const pathname = usePathname();
-  const { isDark, position, logoPrimaryColor, logoAccentColor } =
+  const { isDark, position, logoPrimaryColor, logoAccentColor, backgroundColor } =
     useAtomValue(headerState);
 
   let fontColor = fontColorProp || "#064c5f";
@@ -45,10 +46,23 @@ export default function Header({
   const useStickyHomeHeader =
     pathname === "/" && position === defaultHeaderState.position;
 
+  const isOverlayPosition =
+    !useStickyHomeHeader &&
+    (position === "absolute" || position === "fixed");
+
+  const headerStyle: CSSProperties = {
+    position: useStickyHomeHeader ? "sticky" : position,
+    ...(backgroundColor !== undefined ? { backgroundColor } : {}),
+  };
+
   return (
     <header
-      className={clsx(styles.header_area, useStickyHomeHeader && styles.header_sticky)}
-      style={{ position: useStickyHomeHeader ? "sticky" : position }}
+      className={clsx(
+        styles.header_area,
+        useStickyHomeHeader && styles.header_sticky,
+        isOverlayPosition && styles.header_area_full_bleed,
+      )}
+      style={headerStyle}
     >
       <div className={styles.headerContentCap}>
         <HeaderMobile

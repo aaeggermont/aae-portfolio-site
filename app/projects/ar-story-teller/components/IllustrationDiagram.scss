@@ -12,7 +12,7 @@
 
     span {
         @include typo.ar-st-body-type;
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 500;
     }
 
@@ -33,7 +33,7 @@
         width: 50%;
         padding-top: 1rem;
         @include typo.ar-st-body-type;
-        font-size: 20px;
+        font-size: 22px;
     }
 }
 
@@ -78,14 +78,14 @@
 
     .illustration-title {
         @include typo.ar-st-title-type(600);
-        font-size: 20px;
+        font-size: 22px;
     }
 
     .text-description {
         width: 80%;
         padding-top: 1rem;
         @include typo.ar-st-body-type;
-        font-size: 20px;
+        font-size: 22px;
     }
 }
 

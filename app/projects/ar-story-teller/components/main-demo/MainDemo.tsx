@@ -7,6 +7,7 @@ import ProjectImage from '@/lib/media/ProjectImage';
 import { DemoVideo } from '../demo-video/DemoVideo';
 import styles from './MainDemo.module.scss';
 import { useMainDemoTimeline } from './useMainDemoTimeline';
+import { MAIN_DEMO_CANVAS } from '../../layoutConfig';
 
 const MAIN_DEMO_BACKGROUND_OBJECT_PATH =
     'projects/project_2/demo/TowerofTerrorFullShotParkImage.png';
@@ -38,8 +39,8 @@ const MAIN_DEMO_IPHONE_FRAME_INTRINSIC_HEIGHT = 1617;
 
 const mainDemoImageSizes = [
     '100vw',
-    '(min-width: 768px) 900px',
-    '(min-width: 1024px) 1100px',
+    `(min-width: 768px) ${MAIN_DEMO_CANVAS.tablet.width}px`,
+    `(min-width: 1024px) ${MAIN_DEMO_CANVAS.desktop.width}px`,
 ].join(', ');
 
 const mainDemoNotificationSizes = [
