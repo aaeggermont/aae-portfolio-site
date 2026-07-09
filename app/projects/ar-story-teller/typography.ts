@@ -76,7 +76,7 @@ export type BodyTypographyScaleKey = Extract<
 
 const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
   heroTitle: 600,
-  heroSubtitle: 600,
+  heroSubtitle: 550,
   sectionTitle: 700,
   sectionSubTitle: 700,
   panelHeading: 700,
