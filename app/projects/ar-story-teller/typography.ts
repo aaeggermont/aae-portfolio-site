@@ -32,19 +32,19 @@ export const TYPOGRAPHY = {
   /** Subsections under a section (`SectionSubTitle`, e.g. “Developing Specifications”). */
   sectionSubTitle: { mobile: "24px", tablet: "28px", desktop: "32px" },
   /** Nested subtitles (`PanelSubTitle`) and in-panel headings (interaction design, user modes). */
-  panelHeading: { mobile: "22px", tablet: "24px", desktop: "26px" },
+  panelHeading: { mobile: "22px", tablet: "26px", desktop: "28px" },
   /** Card / column titles (AR mockups, research cards, mode titles). */
-  cardTitle: { mobile: "18px", tablet: "20px", desktop: "22px" },
+  cardTitle: { mobile: "18px", tablet: "22px", desktop: "24px" },
   /** Long-form prose (`ParagraphBlock`, overview copy). */
-  bodyText: { mobile: "18px", tablet: "20px", desktop: "20px" },
+  bodyText: { mobile: "18px", tablet: "22px", desktop: "22px" },
   /** Grey inset panels (`ArAsNarrative`, Business Goals, Team, etc.). */
-  panelBody: { mobile: "18px", tablet: "20px", desktop: "20px" },
+  panelBody: { mobile: "18px", tablet: "22px", desktop: "22px" },
   /** Emphasized body — list intros; use sparingly. */
-  bodyTextMedium: { mobile: "18px", tablet: "20px", desktop: "20px" },
+  bodyTextMedium: { mobile: "18px", tablet: "22px", desktop: "22px" },
   /** Dense UI copy (accordions, compact lists). */
-  smallBody: { mobile: "16px", tablet: "17px", desktop: "18px" },
+  smallBody: { mobile: "16px", tablet: "18px", desktop: "20px" },
   /** Image annotations and diagram labels. */
-  caption: { mobile: "14px", tablet: "15px", desktop: "16px" },
+  caption: { mobile: "14px", tablet: "16px", desktop: "17px" },
   /** White title on the case study banner image. */
   caseStudyBannerTitle: { mobile: "20px", tablet: "24px", desktop: "28px" },
   /** Optional labels / meta text. */
@@ -134,7 +134,7 @@ export function bodyTypeSx(
   const responsive: SxProps<Theme> = {
     fontFamily: AR_STORY_TELLER_BODY_FONT,
     fontWeight: BODY_FONT_WEIGHT[scaleKey],
-    lineHeight: 1.35,
+    lineHeight: 1.4,
     color: AR_STORY_TELLER_TEXT_COLOR,
     fontSize: TYPOGRAPHY[scaleKey].mobile,
     [breakpointMediaQuery.tabletUp]: {

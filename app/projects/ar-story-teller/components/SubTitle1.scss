@@ -15,7 +15,7 @@
     .st-subtitle1-container {
         padding-top: 5rem;
         padding-bottom: 1.5rem;
-        @include subtitle1-label(26px);
+        @include subtitle1-label(28px);
     }
 }
 
@@ -23,7 +23,7 @@
     .st-subtitle1-container {
         margin: auto;
         padding-top: 3rem;
-        @include subtitle1-label(24px);
+        @include subtitle1-label(26px);
 
         .subtitle-paragraph {
             padding-top: 1.25rem;

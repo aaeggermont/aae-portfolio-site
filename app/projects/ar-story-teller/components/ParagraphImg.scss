@@ -73,11 +73,11 @@
         }
 
         &__title {
-            @include paragraph-img-title-type(20px);
+            @include paragraph-img-title-type(22px);
         }
 
         &__description {
-            @include paragraph-img-description-type(20px);
+            @include paragraph-img-description-type(22px);
             text-align: left;
             padding-left: 10%;
             padding-right: 10%;
@@ -92,11 +92,11 @@
         }
 
         &__title {
-            @include paragraph-img-title-type(20px);
+            @include paragraph-img-title-type(22px);
         }
 
         &__description {
-            @include paragraph-img-description-type(20px);
+            @include paragraph-img-description-type(22px);
             padding-left: 15%;
             padding-right: 15%;
         }
