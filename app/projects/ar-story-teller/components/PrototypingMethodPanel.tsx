@@ -177,10 +177,7 @@ function CopyImageSplitLayout({
           }}
         >
           {hasAccordion && accordionSections ? (
-            <PanelAccordionList
-              items={accordionSections}
-              bodyMaxWidthDesktop={360}
-            />
+            <PanelAccordionList items={accordionSections} />
           ) : (
             <ParagraphBlock paragraphs={paragraphs} />
           )}
