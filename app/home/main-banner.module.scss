@@ -173,6 +173,13 @@
       /* ~10% of portrait height — margin avoids fighting GSAP transform on this node */
       margin: -1.875rem 0 0;
       filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
+
+      /* Wide mobile / large-phone edge (e.g. 767px): portrait was undersized vs full-width copy */
+      @media (min-width: 600px) {
+        height: clamp(300px, 56vh, 480px);
+        max-width: min(58vw, 440px);
+        margin: -1.25rem 0 0;
+      }
     }
   }
 
