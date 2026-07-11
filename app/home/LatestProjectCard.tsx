@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -14,9 +15,10 @@ export type LatestProjectProps = {
   title: string;
   thumbnailImg: StaticImageData;
   description: string[];
+  href?: string;
 };
 
-function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectProps) {
+function LatestProjectCard({ title, thumbnailImg, description, href }: LatestProjectProps) {
   const { widthPx, heightPx, contentPaddingPx } = SELECTED_WORK_CARD;
   const bleedX = contentPaddingPx * 2;
 
@@ -43,6 +45,9 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
       raised
     >
       <CardActionArea
+        {...(href
+          ? { component: Link, href }
+          : { disableRipple: true })}
         sx={{
           height: "100%",
           display: "flex",
@@ -51,6 +56,7 @@ function LatestProjectCard({ title, thumbnailImg, description }: LatestProjectPr
           boxSizing: "border-box",
           padding: `${contentPaddingPx}px`,
           paddingBottom: 0,
+          ...(href ? {} : { cursor: "default" }),
         }}
       >
         <CardMedia

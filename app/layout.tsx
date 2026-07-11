@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
-import { IBM_Plex_Sans, Inter, Poppins, Montserrat, Figtree } from "next/font/google";
+import { IBM_Plex_Sans, Inter, Maven_Pro, Poppins, Montserrat, Figtree } from "next/font/google";
 import localFont from "next/font/local";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
@@ -41,6 +41,14 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+/* Maven Pro — DCL Revenue Management project header. */
+const mavenPro = Maven_Pro({
+  subsets: ["latin"],
+  weight: ["600", "800"],
+  variable: "--font-maven-pro",
   display: "swap",
 });
 
@@ -108,7 +116,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable} ${ibmPlexSans.variable} ${inter.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable} ${ibmPlexSans.variable} ${inter.variable} ${mavenPro.variable}`}
       style={{ ["--page-canvas" as string]: PAGE_CANVAS }}
     >
       <Aos/>
