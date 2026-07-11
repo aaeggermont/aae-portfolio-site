@@ -107,6 +107,7 @@ function LatestProjects() {
                 title={item.title}
                 description={item.description}
                 thumbnailImg={item.img}
+                href={item.href}
               />
             </div>
           ))}
@@ -141,6 +142,7 @@ function LatestProjects() {
                   title={item.title}
                   description={item.description}
                   thumbnailImg={item.img}
+                  href={item.href}
                 />
               </div>
             </SwiperSlide>

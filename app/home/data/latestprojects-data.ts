@@ -9,6 +9,8 @@ export type LatestProjectItem = {
   title: string;
   img: StaticImageData;
   description: string[];
+  /** Optional route for Selected Work cards that already have a project page. */
+  href?: string;
 };
 
 export const latestProjectsItems: LatestProjectItem[] = [
@@ -25,6 +27,7 @@ export const latestProjectsItems: LatestProjectItem[] = [
     description: [
       "Led front-end redesign of dashboards, data grids, and ingestion workflows for pricing and inventory insights."
     ],
+    href: "/work/dcl-revenue-management",
   },
   {
     title: "R-3X – Automatic Seating Assignments",
