@@ -124,11 +124,13 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
         <Stack
           component="header"
           spacing={{ xs: 0.5, md: 0.75 }}
+          alignItems={{ xs: "center", md: "flex-start" }}
           sx={{
             position: "absolute",
             zIndex: 1,
             top: {
-              xs: `calc(${PROJECT_HEADER_NAV_CLEARANCE.mobile} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.mobile} + 10%)`,
+              // Mobile: 20% higher than the shared +10% offset → net −10% of banner height.
+              xs: `calc(${PROJECT_HEADER_NAV_CLEARANCE.mobile} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.mobile} - 10%)`,
               md: `calc(${PROJECT_HEADER_NAV_CLEARANCE.tablet} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.tablet} + 10%)`,
               lg: `calc(${PROJECT_HEADER_NAV_CLEARANCE.desktop} + ${PROJECT_HEADER_EXTRA_TOP_PADDING.desktop} + 10%)`,
             },
@@ -142,7 +144,7 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
               md: "auto",
             },
             maxWidth: { xs: "100%", md: 560, lg: 640 },
-            textAlign: "left",
+            textAlign: { xs: "center", md: "left" },
             pointerEvents: "none",
             [breakpointMediaQuery.desktopUp]: {
               left: LAYOUT_DIMENSIONS.desktop.margin,

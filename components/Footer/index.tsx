@@ -5,6 +5,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import { HeaderLogo } from '@/components/Header/HeaderLogo';
+import { isHomeNavActive, type HomeNavKey } from '@/lib/home/homeAnchors';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
@@ -20,6 +21,12 @@ type FooterProps = {
   logoAccentColor?: string;
   fontColor?: string;
   backgroundColor?: string;
+};
+
+type FooterMenuLink = {
+  path: string;
+  name: string;
+  navKey: HomeNavKey;
 };
 
 export function Footer(props: FooterProps = {}) {
@@ -38,15 +45,17 @@ export function Footer(props: FooterProps = {}) {
         logoAccentColor: props.logoAccentColor,
       });
 
-    const MenuLinks = [
-        { path: '/', name: 'Home' },
-        { path: '/aboutme', name: 'About Me' },
-        { path: '/mywork', name: 'My Work' },
-        { path: '/contact', name: 'Contact' },
-    ].map((link, index) =>
+    const menuLinks: FooterMenuLink[] = [
+        { path: '/', name: 'Home', navKey: 'home' },
+        { path: '/aboutme', name: 'About Me', navKey: 'about' },
+        { path: '/mywork', name: 'My Work', navKey: 'work' },
+        { path: '/contact', name: 'Contact', navKey: 'contact' },
+    ];
+
+    const MenuLinks = menuLinks.map((link, index) =>
         <span key={`menu-link-${index}`}>
             <Link
-                className={pathname === link.path
+                className={isHomeNavActive(pathname, '', link.navKey)
                     ? styles['active_link']
                     : ''}
                 href={link.path}>
