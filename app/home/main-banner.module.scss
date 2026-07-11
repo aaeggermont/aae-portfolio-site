@@ -160,18 +160,26 @@
     }
 
     @media screen and #{$mobile} {
-      /* ~25% larger than prior mobile cap; text reserve tightened to keep headline in view */
+      /* ~10% larger than prior mobile cap; shifted up so the 3 intro lines stay in view */
       height: clamp(
-        188px,
-        calc(100dvh - var(--header-height, 80px) - 8.25rem),
-        300px
+        207px,
+        calc(100dvh - var(--header-height, 80px) - 7.5rem),
+        330px
       );
       width: auto;
-      max-width: min(78vw, 263px);
+      max-width: min(86vw, 289px);
       aspect-ratio: 3 / 4;
       flex: 0 0 auto;
-      margin: 0;
+      /* ~10% of portrait height — margin avoids fighting GSAP transform on this node */
+      margin: -1.875rem 0 0;
       filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
+
+      /* Wide mobile / large-phone edge (e.g. 767px): portrait was undersized vs full-width copy */
+      @media (min-width: 600px) {
+        height: clamp(300px, 56vh, 480px);
+        max-width: min(58vw, 440px);
+        margin: -1.25rem 0 0;
+      }
     }
   }
 
@@ -304,7 +312,6 @@
 
 .floatLayer {
   @include home.home-float-layer-bleed;
-  overflow: hidden;
 }
 
 .floatImg {

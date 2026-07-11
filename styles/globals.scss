@@ -6,6 +6,9 @@ html, body {
   padding: 0;
   /* Token from `lib/theme/pageCanvas.ts` via `--page-canvas` on `<html>` */
   background-color: var(--page-canvas);
+  /* Prevent accidental sideways scroll on mobile (prefer clip over hidden for sticky). */
+  overflow-x: clip;
+  max-width: 100%;
 }
 
 /* Mobile hamburger + slide-out drawer — single navy (matches headerTheme.ts) */

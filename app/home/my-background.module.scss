@@ -72,6 +72,16 @@ $what-i-do-gap-desktop: 32px;
   gap: $what-i-do-gap-mobile;
   grid-template-columns: minmax(0, $what-i-do-card-width-mobile);
 
+  /* Wide mobile — 2×2 with phone card size (168×206) */
+  @media screen and (min-width: 600px) and (max-width: $mobile-max) {
+    gap: $what-i-do-gap-mobile;
+    grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width-mobile));
+    width: min(
+      100%,
+      calc(#{$what-i-do-card-width-mobile} * 2 + #{$what-i-do-gap-mobile})
+    );
+  }
+
   /* Tablet — 2×2, 24px gap (proportional to desktop 32px) */
   @media screen and #{$tablet} {
     gap: $what-i-do-gap-tablet;

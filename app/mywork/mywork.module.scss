@@ -39,6 +39,11 @@
         max-width: 420px;
       }
 
+      /* Wide mobile: match 2×320px project cards + 1rem column-gap */
+      @media screen and (min-width: 600px) and (max-width: $mobile-max) {
+        max-width: min(100%, calc(2 * 320px + 1rem));
+      }
+
       @include fluid-type(16px, 20px, 24px);
       font-family: var(--font-figtree);
       color: $font-color-bold;
