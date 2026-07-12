@@ -9,9 +9,9 @@ import { layoutState } from "@/app/(public)/layout-state";
 
 // Views
 import { AboutMeIntro } from './components/AboutMeIntro';
-import { AboutMeLocation } from './components/AboutMeLocation';
-import { AboutMeEngineeringSkills } from './components/AboutMeEngineeringSkills';
-import { AboutMeDesignSkills } from './components/AboutMeDesignSkills';
+// Temporary: hide location map while iterating on Capability Map
+// import { AboutMeLocation } from './components/AboutMeLocation';
+import { CapabilityMap } from './components/CapabilityMap';
 import { AboutMeMore } from './components/AboutMeMore';
 
 export default function AboutMePage() {
@@ -26,9 +26,9 @@ export default function AboutMePage() {
     <div className={styles.aboutMePage}>
       <section className={styles.aboutMePageContent}>
         <AboutMeIntro />
-        <AboutMeLocation />
-        <AboutMeEngineeringSkills />
-        <AboutMeDesignSkills />
+        {/* Temporary: hide location map while iterating on Capability Map */}
+        {/* <AboutMeLocation /> */}
+        <CapabilityMap />
         <AboutMeMore />
       </section>
     </div>

@@ -1,0 +1,122 @@
+.capabilityMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  margin-bottom: 4rem;
+  color: $font-color-bold;
+
+  @media #{$sm}, #{$xs} {
+    margin-bottom: 2.5rem;
+  }
+
+  &Header {
+    text-align: center;
+    max-width: 40rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &Title {
+    font-family: var(--font-montserrat);
+    font-size: clamp(1.15rem, 3.5vw, 1.75rem);
+    font-weight: 700;
+    color: $font-color-bold;
+    margin: 0 0 0.5rem;
+  }
+
+  &Tagline {
+    font-family: var(--font-poppins);
+    font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+    font-weight: 500;
+    color: #2a8a8a;
+    margin: 0 0 0.75rem;
+  }
+
+  &Description {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+    line-height: 1.55;
+    color: #3a5560;
+    margin: 0;
+  }
+
+  &ChartWrap {
+    position: relative;
+    width: 100%;
+    height: min(100vw, 680px);
+    min-height: 360px;
+    margin: 0.5rem 0 1.75rem;
+  }
+
+  &Chart {
+    display: block;
+    margin: 0 auto;
+    overflow: visible;
+  }
+
+  &Ring {
+    fill: none;
+    stroke: rgba(6, 76, 95, 0.16);
+    stroke-width: 1;
+  }
+
+  &Divider {
+    stroke: rgba(6, 76, 95, 0.22);
+    stroke-width: 1;
+  }
+
+  &DomainLabel {
+    font-family: var(--font-montserrat);
+    font-size: clamp(0.58rem, 1.4vw, 0.78rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  &SkillLabel {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.5rem, 1.05vw, 0.68rem);
+    font-weight: 500;
+  }
+
+  &Hub {
+    fill: #ffffff;
+    stroke: rgba(6, 76, 95, 0.28);
+    stroke-width: 1.5;
+  }
+
+  &HubName {
+    font-family: var(--font-montserrat);
+    font-size: clamp(0.7rem, 1.8vw, 0.95rem);
+    font-weight: 700;
+    fill: $font-color-bold;
+  }
+
+  &HubRole {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.42rem, 1.1vw, 0.58rem);
+    font-weight: 500;
+    fill: #3a5560;
+  }
+
+  &Footer {
+    text-align: center;
+    max-width: 38rem;
+  }
+
+  &FooterTitle {
+    font-family: var(--font-montserrat);
+    font-size: clamp(1rem, 2.6vw, 1.25rem);
+    font-weight: 700;
+    color: $font-color-bold;
+    margin: 0 0 0.5rem;
+  }
+
+  &FooterDescription {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+    line-height: 1.55;
+    color: #3a5560;
+    margin: 0;
+  }
+}
