@@ -16,20 +16,31 @@ type CapabilityMapChartProps = {
   showSkillLabels?: boolean;
 };
 
-/** Inner decorative grid rings (tight). Last value is the inner edge of the skill band. */
-const GRID_RING_RATIOS = [0.28, 0.46, 0.52];
+/**
+ * Expertise-level grid rings (outside the hub).
+ * Last value is the inner edge of the skill-label band.
+ * With scores later: map proficiency onto these radii.
+ */
+const GRID_RING_RATIOS = [0.4, 0.52, 0.64, 0.76];
 /** Outer rim — creates a wide band between last grid ring and this circle for skill labels. */
 const OUTER_RIM_RATIO = 1.09;
 const HUB_RATIO = 0.3;
 /** Domain titles sit clearly outside the outer rim. */
 const DOMAIN_LABEL_RATIO = 1.34;
+/** Pull top/bottom domain labels closer (vertical stack clears the rim more). */
+const DOMAIN_LABEL_VERTICAL_INSET = 0.1;
+/** Push left/right domain labels farther out (text extends into the chart). */
+const DOMAIN_LABEL_SIDE_OUTSET = 0.06;
 /** Skill labels sit mid-band between last grid ring and outer rim. */
-const SKILL_LABEL_RATIO = 0.88;
+const SKILL_LABEL_RATIO = 0.93;
 /** Soft wrap length for skill labels (keeps rim labels compact). */
 const SKILL_LABEL_MAX_CHARS = 12;
-/** Spokes stop inside the skill band so labels stay readable. */
-const SPOKE_OUTER_RATIO = 0.67;
-const SPOKE_INNER_RATIO = 0.28;
+/** Spokes stop near the outermost expertise ring. */
+const SPOKE_OUTER_RATIO = 0.76;
+/** Spokes begin at the hub edge. */
+const SPOKE_INNER_RATIO = 0.3;
+/** Endpoint dot size as a fraction of chart radius. */
+const SPOKE_DOT_RADIUS_RATIO = 0.01;
 
 function wrapLabel(label: string, maxChars: number): string[] {
   if (label.length <= maxChars) return [label];
@@ -52,6 +63,24 @@ function wrapLabel(label: string, maxChars: number): string[] {
   return lines.slice(0, 3);
 }
 
+/** Domain labels: pull in at top/bottom; push out on sides (horizontal text overlaps the rim). */
+function domainLabelRatioForAngle(angleRadians: number): number {
+  const deg = (((angleRadians * 180) / Math.PI) % 360 + 360) % 360;
+  // Narrow bands so only near-vertical domains (e.g. Strategy) get pulled in.
+  const nearBottom = deg > 160 && deg < 210;
+  const nearTop = deg < 25 || deg > 335;
+  const nearSide =
+    (deg > 55 && deg < 125) || (deg > 235 && deg < 305);
+
+  if (nearBottom || nearTop) {
+    return DOMAIN_LABEL_RATIO - DOMAIN_LABEL_VERTICAL_INSET;
+  }
+  if (nearSide) {
+    return DOMAIN_LABEL_RATIO + DOMAIN_LABEL_SIDE_OUTSET;
+  }
+  return DOMAIN_LABEL_RATIO;
+}
+
 export function CapabilityMapChart({
   data,
   width,
@@ -72,6 +101,7 @@ export function CapabilityMapChart({
   const hubRadius = radius * HUB_RATIO;
   const outerRimRadius = radius * OUTER_RIM_RATIO;
   const spokeOuterRadius = radius * SPOKE_OUTER_RATIO;
+  const spokeDotRadius = Math.max(2.5, radius * SPOKE_DOT_RADIUS_RATIO);
 
   // Center hub text block (name + roles) vertically in the hub circle.
   const hubRoles = data.hub.roles.slice(0, 3);
@@ -145,16 +175,24 @@ export function CapabilityMapChart({
           );
           const outer = polarToCartesian(0, 0, spokeOuterRadius, skill.angle);
           return (
-            <line
-              key={`spoke-${skill.id}`}
-              x1={inner.x}
-              y1={inner.y}
-              x2={outer.x}
-              y2={outer.y}
-              stroke={skill.color}
-              strokeOpacity={0.35}
-              strokeWidth={1}
-            />
+            <g key={`spoke-${skill.id}`}>
+              <line
+                x1={inner.x}
+                y1={inner.y}
+                x2={outer.x}
+                y2={outer.y}
+                stroke={skill.color}
+                strokeOpacity={0.35}
+                strokeWidth={1}
+              />
+              <circle
+                cx={outer.x}
+                cy={outer.y}
+                r={spokeDotRadius}
+                className={styles.capabilityMapSpokeDot}
+                fill={skill.color}
+              />
+            </g>
           );
         })}
 
@@ -195,10 +233,11 @@ export function CapabilityMapChart({
           })}
 
         {layout.domains.map((domain) => {
+          const labelRatio = domainLabelRatioForAngle(domain.midAngle);
           const point = polarToCartesian(
             0,
             0,
-            radius * DOMAIN_LABEL_RATIO,
+            radius * labelRatio,
             domain.midAngle,
           );
           const lines = wrapLabel(domain.label, 18);

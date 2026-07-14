@@ -93,6 +93,12 @@
     stroke-width: 1;
   }
 
+  &SpokeDot {
+    fill-opacity: 0.85;
+    stroke: #ffffff;
+    stroke-width: 1;
+  }
+
   &DomainLabel {
     font-family: var(--font-montserrat);
     font-size: clamp(0.62rem, 1.5vw, 0.85rem);
