@@ -1,6 +1,7 @@
 import {
   CAPABILITY_COLOR_HEX,
   type CapabilityDomain,
+  type CapabilityExpertiseLevel,
   type CapabilityMapData,
 } from "@/app/aboutme/data/capability-map-data";
 
@@ -20,6 +21,7 @@ export type CapabilitySkillLayout = {
   domainId: string;
   color: string;
   angle: number;
+  level: CapabilityExpertiseLevel;
 };
 
 export type CapabilityMapLayout = {
@@ -101,6 +103,7 @@ export function buildCapabilityMapLayout(
         domainId: domain.id,
         color,
         angle,
+        level: skill.level,
       });
     });
   });

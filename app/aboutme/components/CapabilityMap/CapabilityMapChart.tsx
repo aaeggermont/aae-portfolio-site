@@ -18,10 +18,10 @@ type CapabilityMapChartProps = {
 
 /**
  * Expertise-level grid rings (outside the hub).
- * Last value is the inner edge of the skill-label band.
- * With scores later: map proficiency onto these radii.
+ * Index 0 → level 1 (low), index 3 → level 4 (high).
+ * Ring 1 sits near the hub; rings 2–4 step outward with room before skill labels.
  */
-const GRID_RING_RATIOS = [0.4, 0.52, 0.64, 0.76];
+const GRID_RING_RATIOS = [0.43, 0.53, 0.63, 0.73];
 /** Outer rim — creates a wide band between last grid ring and this circle for skill labels. */
 const OUTER_RIM_RATIO = 1.09;
 const HUB_RATIO = 0.3;
@@ -31,16 +31,24 @@ const DOMAIN_LABEL_RATIO = 1.34;
 const DOMAIN_LABEL_VERTICAL_INSET = 0.1;
 /** Push left/right domain labels farther out (text extends into the chart). */
 const DOMAIN_LABEL_SIDE_OUTSET = 0.06;
-/** Skill labels sit mid-band between last grid ring and outer rim. */
+/** Skill labels sit outside the outermost expertise ring. */
 const SKILL_LABEL_RATIO = 0.93;
 /** Soft wrap length for skill labels (keeps rim labels compact). */
 const SKILL_LABEL_MAX_CHARS = 12;
-/** Spokes stop near the outermost expertise ring. */
-const SPOKE_OUTER_RATIO = 0.76;
 /** Spokes begin at the hub edge. */
 const SPOKE_INNER_RATIO = 0.3;
+/**
+ * Spoke lines extend past the last expertise ring toward the labels.
+ * Expertise dots sit on GRID_RING_RATIOS by level.
+ */
+const SPOKE_LINE_OUTER_RATIO = 0.88;
 /** Endpoint dot size as a fraction of chart radius. */
 const SPOKE_DOT_RADIUS_RATIO = 0.01;
+
+/** Ring radius for a skill's expertise level (1–4 → four grid rings). */
+function expertiseRingRatio(level: 1 | 2 | 3 | 4): number {
+  return GRID_RING_RATIOS[level - 1] ?? GRID_RING_RATIOS[GRID_RING_RATIOS.length - 1];
+}
 
 function wrapLabel(label: string, maxChars: number): string[] {
   if (label.length <= maxChars) return [label];
@@ -100,7 +108,6 @@ export function CapabilityMapChart({
   const layout = buildCapabilityMapLayout(data);
   const hubRadius = radius * HUB_RATIO;
   const outerRimRadius = radius * OUTER_RIM_RATIO;
-  const spokeOuterRadius = radius * SPOKE_OUTER_RATIO;
   const spokeDotRadius = Math.max(2.5, radius * SPOKE_DOT_RADIUS_RATIO);
 
   // Center hub text block (name + roles) vertically in the hub circle.
@@ -115,6 +122,17 @@ export function CapabilityMapChart({
   // Optical nudge: SVG baselines sit slightly below letter visual centers.
   const hubOpticalNudge = 0.03;
   const hubNameY = (-hubBlockMid + hubOpticalNudge) * hubRadius;
+
+  // Closed expertise polygon — connect dots in angular order (Core Expertise overlay).
+  const expertisePoints = [...layout.skills]
+    .sort((a, b) => a.angle - b.angle)
+    .map((skill) => {
+      const levelRadius = radius * expertiseRingRatio(skill.level);
+      return polarToCartesian(0, 0, levelRadius, skill.angle);
+    });
+  const expertisePolygonPoints = expertisePoints
+    .map((point) => `${point.x},${point.y}`)
+    .join(" ");
 
   return (
     <svg
@@ -166,28 +184,38 @@ export function CapabilityMapChart({
           );
         })}
 
+        {expertisePoints.length >= 3 && (
+          <polygon
+            points={expertisePolygonPoints}
+            className={styles.capabilityMapExpertiseArea}
+          />
+        )}
+
         {layout.skills.map((skill) => {
+          const levelRadius = radius * expertiseRingRatio(skill.level);
+          const lineOuterRadius = radius * SPOKE_LINE_OUTER_RATIO;
           const inner = polarToCartesian(
             0,
             0,
             radius * SPOKE_INNER_RATIO,
             skill.angle,
           );
-          const outer = polarToCartesian(0, 0, spokeOuterRadius, skill.angle);
+          const lineEnd = polarToCartesian(0, 0, lineOuterRadius, skill.angle);
+          const dot = polarToCartesian(0, 0, levelRadius, skill.angle);
           return (
             <g key={`spoke-${skill.id}`}>
               <line
                 x1={inner.x}
                 y1={inner.y}
-                x2={outer.x}
-                y2={outer.y}
+                x2={lineEnd.x}
+                y2={lineEnd.y}
                 stroke={skill.color}
                 strokeOpacity={0.35}
                 strokeWidth={1}
               />
               <circle
-                cx={outer.x}
-                cy={outer.y}
+                cx={dot.x}
+                cy={dot.y}
                 r={spokeDotRadius}
                 className={styles.capabilityMapSpokeDot}
                 fill={skill.color}

@@ -5,6 +5,7 @@ import {
   capabilityMapFallback,
   type CapabilityColorKey,
   type CapabilityDomain,
+  type CapabilityExpertiseLevel,
   type CapabilityIconKey,
   type CapabilityMapData,
   type CapabilitySkill,
@@ -37,6 +38,14 @@ function asNumber(value: unknown, fallback = 0): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
+function asExpertiseLevel(value: unknown): CapabilityExpertiseLevel {
+  const n = asNumber(value, 3);
+  if (n <= 1) return 1;
+  if (n === 2) return 2;
+  if (n === 3) return 3;
+  return 4;
+}
+
 function parseSkill(raw: unknown, index: number): CapabilitySkill | null {
   if (!raw || typeof raw !== "object") return null;
   const record = raw as Record<string, unknown>;
@@ -48,6 +57,7 @@ function parseSkill(raw: unknown, index: number): CapabilitySkill | null {
     id,
     label,
     order: asNumber(record.order, index),
+    level: asExpertiseLevel(record.level),
   };
 }
 

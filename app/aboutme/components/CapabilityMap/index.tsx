@@ -28,7 +28,7 @@ export function CapabilityMap() {
     <section
       className={styles.capabilityMap}
       aria-labelledby="capability-map-title"
-      style={{ maxWidth: sizeStyles.maxWidth }}
+      style={{ maxWidth: sizeStyles.sectionMaxWidth }}
     >
       <header className={styles.capabilityMapHeader}>
         <h3 id="capability-map-title" className={styles.capabilityMapTitle}>
@@ -40,10 +40,7 @@ export function CapabilityMap() {
 
       <div
         className={styles.capabilityMapChartWrap}
-        style={{
-          height: sizeStyles.height,
-          minHeight: sizeStyles.minHeight,
-        }}
+        style={{ maxWidth: sizeStyles.chartMaxSize }}
       >
         {hasMounted ? (
           <ParentSize

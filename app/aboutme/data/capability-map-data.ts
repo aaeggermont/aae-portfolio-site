@@ -1,6 +1,6 @@
 /**
- * Capability map content model (v1).
- * Layer scores are intentionally omitted until a later phase.
+ * Capability map content model.
+ * Expertise level: 1 (low) → 4 (high), mapped to the four chart rings.
  */
 
 export type CapabilityIconKey =
@@ -17,10 +17,15 @@ export type CapabilityColorKey =
   | "domain-design"
   | "domain-data";
 
+/** Skill expertise level: 1 = lowest ring, 4 = highest / outermost. */
+export type CapabilityExpertiseLevel = 1 | 2 | 3 | 4;
+
 export type CapabilitySkill = {
   id: string;
   label: string;
   order: number;
+  /** Simulated expertise level (1–4). */
+  level: CapabilityExpertiseLevel;
 };
 
 export type CapabilityDomain = {
@@ -83,11 +88,11 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "brain",
       order: 1,
       skills: [
-        { id: "ai-product-design", label: "AI Product Design", order: 0 },
-        { id: "prompt-engineering", label: "Prompt Engineering", order: 1 },
-        { id: "computer-vision", label: "Computer Vision", order: 2 },
-        { id: "human-centered-ai", label: "Human-Centered AI", order: 3 },
-        { id: "ai-agents", label: "AI Agents", order: 4 },
+        { id: "ai-product-design", label: "AI Product Design", order: 0, level: 4 },
+        { id: "prompt-engineering", label: "Prompt Engineering", order: 1, level: 3 },
+        { id: "computer-vision", label: "Computer Vision", order: 2, level: 1 },
+        { id: "human-centered-ai", label: "Human-Centered AI", order: 3, level: 4 },
+        { id: "ai-agents", label: "AI Agents", order: 4, level: 2 },
       ],
     },
     {
@@ -97,12 +102,12 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "code",
       order: 0,
       skills: [
-        { id: "react-nextjs", label: "React / Next.js", order: 0 },
-        { id: "angular", label: "Angular", order: 1 },
-        { id: "typescript", label: "TypeScript / JavaScript", order: 2 },
-        { id: "python-django", label: "Python / Django", order: 3 },
-        { id: "firebase-cloud", label: "Firebase / Cloud", order: 4 },
-        { id: "apis-integrations", label: "APIs & Integrations", order: 5 },
+        { id: "react-nextjs", label: "React / Next.js", order: 0, level: 4 },
+        { id: "angular", label: "Angular", order: 1, level: 4 },
+        { id: "typescript", label: "TypeScript / JavaScript", order: 2, level: 4 },
+        { id: "python-django", label: "Python / Django", order: 3, level: 3 },
+        { id: "firebase-cloud", label: "Firebase / Cloud", order: 4, level: 3 },
+        { id: "apis-integrations", label: "APIs & Integrations", order: 5, level: 4 },
       ],
     },
     {
@@ -112,10 +117,10 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "people",
       order: 2,
       skills: [
-        { id: "systems-thinking", label: "Systems Thinking", order: 0 },
-        { id: "product-strategy", label: "Product Strategy", order: 1 },
-        { id: "workshops", label: "Workshops & Facilitation", order: 2 },
-        { id: "storytelling", label: "Storytelling", order: 3 },
+        { id: "systems-thinking", label: "Systems Thinking", order: 0, level: 4 },
+        { id: "product-strategy", label: "Product Strategy", order: 1, level: 3 },
+        { id: "workshops", label: "Workshops & Facilitation", order: 2, level: 3 },
+        { id: "storytelling", label: "Storytelling", order: 3, level: 4 },
       ],
     },
     {
@@ -125,11 +130,11 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "person",
       order: 4,
       skills: [
-        { id: "user-research", label: "User Research", order: 0 },
-        { id: "journey-mapping", label: "Journey Mapping", order: 1 },
-        { id: "information-architecture", label: "Information Architecture", order: 2 },
-        { id: "interaction-design", label: "Interaction Design", order: 3 },
-        { id: "prototyping-testing", label: "Prototyping", order: 4 },
+        { id: "user-research", label: "User Research", order: 0, level: 4 },
+        { id: "journey-mapping", label: "Journey Mapping", order: 1, level: 3 },
+        { id: "information-architecture", label: "Information Architecture", order: 2, level: 4 },
+        { id: "interaction-design", label: "Interaction Design", order: 3, level: 4 },
+        { id: "prototyping-testing", label: "Prototyping", order: 4, level: 4 },
       ],
     },
     {
@@ -139,10 +144,10 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "chart",
       order: 3,
       skills: [
-        { id: "data-visualization", label: "Data Visualization", order: 0 },
-        { id: "dashboard-design", label: "Dashboard Design", order: 1 },
-        { id: "analytics-insights", label: "Analytics & Insights", order: 2 },
-        { id: "metrics-kpis", label: "Metrics & KPIs", order: 3 },
+        { id: "data-visualization", label: "Data Visualization", order: 0, level: 4 },
+        { id: "dashboard-design", label: "Dashboard Design", order: 1, level: 4 },
+        { id: "analytics-insights", label: "Analytics & Insights", order: 2, level: 3 },
+        { id: "metrics-kpis", label: "Metrics & KPIs", order: 3, level: 3 },
       ],
     },
   ],

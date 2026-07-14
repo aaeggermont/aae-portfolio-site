@@ -1,31 +1,27 @@
 /**
  * Visual sizing knobs for the capability map chart.
- * Adjust `scale` to grow/shrink the whole viz (1 = baseline).
+ *
+ * The chart area is a 1:1 square. Its size is `min(available width, maxChartSize)`.
+ * Lower `maxChartSize` to shrink the block and reduce empty space around the map.
  */
 export const CAPABILITY_MAP_SIZE = {
-  /** Overall viz scale. 1.15 ≈ 15% larger than the baseline. */
-  scale: 2.50,
-  /** Baseline section max width before scale (px). */
-  baseMaxWidth: 1100,
-  /** Baseline chart wrap height cap before scale (px). */
-  baseChartHeight: 984,
-  /** Baseline min height before scale (px). */
-  baseMinHeight: 504,
-  /** Mobile/fluid height factor before scale (vw). */
-  baseHeightVw: 138,
+  /**
+   * Hard cap on the square chart width/height (px).
+   * Example: 800 → viz block is at most 800×800.
+   */
+  maxChartSize: 1000,
+  /** Max width for the section (header/footer copy); chart is capped separately. */
+  sectionMaxWidth: 1100,
 } as const;
 
 export function getCapabilityMapSizeStyles(): {
-  maxWidth: number;
-  height: string;
-  minHeight: number;
+  sectionMaxWidth: number;
+  chartMaxSize: number;
 } {
-  const { scale, baseMaxWidth, baseChartHeight, baseMinHeight, baseHeightVw } =
-    CAPABILITY_MAP_SIZE;
+  const { maxChartSize, sectionMaxWidth } = CAPABILITY_MAP_SIZE;
 
   return {
-    maxWidth: Math.round(baseMaxWidth * scale),
-    height: `min(${baseHeightVw * scale}vw, ${Math.round(baseChartHeight * scale)}px)`,
-    minHeight: Math.round(baseMinHeight * scale),
+    sectionMaxWidth,
+    chartMaxSize: maxChartSize,
   };
 }
