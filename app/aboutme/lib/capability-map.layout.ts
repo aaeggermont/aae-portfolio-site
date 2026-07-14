@@ -42,18 +42,27 @@ export function polarToCartesian(
 
 /**
  * Build angular layout for domains and skills.
- * Domains share equal wedges; skills are spaced evenly inside each wedge.
+ * Domain wedge size is proportional to skill count (min weight 1).
+ * Skills are spaced evenly inside each wedge.
  */
 export function buildCapabilityMapLayout(
   data: CapabilityMapData,
 ): CapabilityMapLayout {
   const domainsSorted = [...data.domains].sort((a, b) => a.order - b.order);
-  const domainCount = Math.max(domainsSorted.length, 1);
-  const wedge = (Math.PI * 2) / domainCount;
 
+  const weights = domainsSorted.map((domain) =>
+    Math.max(domain.skills.length, 1),
+  );
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+  const fullCircle = Math.PI * 2;
+
+  let angleCursor = 0;
   const domains: CapabilityDomainLayout[] = domainsSorted.map((domain, index) => {
-    const startAngle = index * wedge;
+    const wedge = (weights[index] / totalWeight) * fullCircle;
+    const startAngle = angleCursor;
     const endAngle = startAngle + wedge;
+    angleCursor = endAngle;
+
     return {
       id: domain.id,
       label: domain.label,
@@ -68,7 +77,9 @@ export function buildCapabilityMapLayout(
   const skills: CapabilitySkillLayout[] = [];
 
   domainsSorted.forEach((domain, domainIndex) => {
-    const startAngle = domainIndex * wedge;
+    const domainLayout = domains[domainIndex];
+    const wedge = domainLayout.endAngle - domainLayout.startAngle;
+    const startAngle = domainLayout.startAngle;
     const skillsSorted = [...domain.skills].sort((a, b) => a.order - b.order);
     const skillCount = skillsSorted.length;
     if (skillCount === 0) return;

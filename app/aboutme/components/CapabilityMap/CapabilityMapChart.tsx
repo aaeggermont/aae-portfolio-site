@@ -16,10 +16,19 @@ type CapabilityMapChartProps = {
   showSkillLabels?: boolean;
 };
 
-const RING_RATIOS = [0.28, 0.48, 0.68, 0.88];
-const HUB_RATIO = 0.22;
-const DOMAIN_LABEL_RATIO = 0.78;
-const SKILL_LABEL_RATIO = 0.98;
+/** Inner decorative grid rings (tight). Last value is the inner edge of the skill band. */
+const GRID_RING_RATIOS = [0.28, 0.46, 0.52];
+/** Outer rim — creates a wide band between last grid ring and this circle for skill labels. */
+const OUTER_RIM_RATIO = 1.09;
+const HUB_RATIO = 0.3;
+/** Domain titles sit clearly outside the outer rim. */
+const DOMAIN_LABEL_RATIO = 1.34;
+/** Skill labels sit mid-band between last grid ring and outer rim. */
+const SKILL_LABEL_RATIO = 0.88;
+/** Soft wrap length for skill labels (keeps rim labels compact). */
+const SKILL_LABEL_MAX_CHARS = 12;
+/** Spokes stop inside the skill band so labels stay readable. */
+const SPOKE_OUTER_RATIO = 0.67;
 const SPOKE_INNER_RATIO = 0.28;
 
 function wrapLabel(label: string, maxChars: number): string[] {
@@ -43,25 +52,6 @@ function wrapLabel(label: string, maxChars: number): string[] {
   return lines.slice(0, 3);
 }
 
-function labelAnchor(angle: number): {
-  textAnchor: "start" | "middle" | "end";
-  dy: number;
-} {
-  const deg = ((angle * 180) / Math.PI) % 360;
-  const normalized = deg < 0 ? deg + 360 : deg;
-
-  if (normalized > 20 && normalized < 160) {
-    return { textAnchor: "start", dy: 0 };
-  }
-  if (normalized > 200 && normalized < 340) {
-    return { textAnchor: "end", dy: 0 };
-  }
-  if (normalized >= 160 && normalized <= 200) {
-    return { textAnchor: "middle", dy: 10 };
-  }
-  return { textAnchor: "middle", dy: -4 };
-}
-
 export function CapabilityMapChart({
   data,
   width,
@@ -70,21 +60,38 @@ export function CapabilityMapChart({
 }: CapabilityMapChartProps) {
   if (width < 120 || height < 120) return null;
 
+  // Square canvas keeps concentric rings truly circular (no rectangular stretch).
   const size = Math.min(width, height);
-  const margin = showSkillLabels ? size * 0.14 : size * 0.08;
+  // Extra margin so outside domain labels are not clipped by ParentSize overflow.
+  const margin = showSkillLabels ? size * 0.26 : size * 0.16;
   const radius = (size - margin * 2) / 2;
-  const cx = width / 2;
-  const cy = height / 2;
+  const cx = size / 2;
+  const cy = size / 2;
 
   const layout = buildCapabilityMapLayout(data);
   const hubRadius = radius * HUB_RATIO;
+  const outerRimRadius = radius * OUTER_RIM_RATIO;
+  const spokeOuterRadius = radius * SPOKE_OUTER_RATIO;
+
+  // Center hub text block (name + roles) vertically in the hub circle.
+  const hubRoles = data.hub.roles.slice(0, 3);
+  const hubNameToRoleGap = 0.3;
+  const hubRoleStep = 0.16;
+  const hubBlockBottom =
+    hubRoles.length === 0
+      ? 0
+      : hubNameToRoleGap + (hubRoles.length - 1) * hubRoleStep;
+  const hubBlockMid = hubBlockBottom / 2;
+  // Optical nudge: SVG baselines sit slightly below letter visual centers.
+  const hubOpticalNudge = 0.03;
+  const hubNameY = (-hubBlockMid + hubOpticalNudge) * hubRadius;
 
   return (
     <svg
       className={styles.capabilityMapChart}
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
       role="img"
       aria-label={`${data.header.title}: capability domains and skills`}
     >
@@ -93,31 +100,30 @@ export function CapabilityMapChart({
           <Arc
             key={`wedge-${domain.id}`}
             innerRadius={hubRadius}
-            outerRadius={radius * RING_RATIOS[RING_RATIOS.length - 1]}
+            outerRadius={outerRimRadius}
             startAngle={domain.startAngle}
             endAngle={domain.endAngle}
             fill={domain.color}
             fillOpacity={0.1}
-            padAngle={0.012}
           />
         ))}
 
-        {RING_RATIOS.map((ratio) => (
+        {GRID_RING_RATIOS.map((ratio) => (
           <circle
-            key={`ring-${ratio}`}
+            key={`grid-ring-${ratio}`}
             r={radius * ratio}
             className={styles.capabilityMapRing}
           />
         ))}
 
+        <circle
+          r={outerRimRadius}
+          className={styles.capabilityMapOuterRim}
+        />
+
         {layout.domains.map((domain) => {
           const inner = polarToCartesian(0, 0, hubRadius, domain.startAngle);
-          const outer = polarToCartesian(
-            0,
-            0,
-            radius * RING_RATIOS[RING_RATIOS.length - 1],
-            domain.startAngle,
-          );
+          const outer = polarToCartesian(0, 0, outerRimRadius, domain.startAngle);
           return (
             <line
               key={`divider-${domain.id}`}
@@ -137,12 +143,7 @@ export function CapabilityMapChart({
             radius * SPOKE_INNER_RATIO,
             skill.angle,
           );
-          const outer = polarToCartesian(
-            0,
-            0,
-            radius * RING_RATIOS[RING_RATIOS.length - 1],
-            skill.angle,
-          );
+          const outer = polarToCartesian(0, 0, spokeOuterRadius, skill.angle);
           return (
             <line
               key={`spoke-${skill.id}`}
@@ -157,6 +158,42 @@ export function CapabilityMapChart({
           );
         })}
 
+        {showSkillLabels &&
+          layout.skills.map((skill) => {
+            const point = polarToCartesian(
+              0,
+              0,
+              radius * SKILL_LABEL_RATIO,
+              skill.angle,
+            );
+            const lines = wrapLabel(skill.label, SKILL_LABEL_MAX_CHARS);
+            // Middle-align every label so centers sit on one circle
+            // (start/end anchors made left/right labels push outward).
+            const wrapDy = lines.length > 1 ? -((lines.length - 1) * 5) : 0;
+
+            return (
+              <text
+                key={`skill-label-${skill.id}`}
+                x={point.x}
+                y={point.y}
+                textAnchor="middle"
+                dy={wrapDy}
+                className={styles.capabilityMapSkillLabel}
+                fill={skill.color}
+              >
+                {lines.map((line, index) => (
+                  <tspan
+                    key={`${skill.id}-line-${index}`}
+                    x={point.x}
+                    dy={index === 0 ? 0 : "1.1em"}
+                  >
+                    {line}
+                  </tspan>
+                ))}
+              </text>
+            );
+          })}
+
         {layout.domains.map((domain) => {
           const point = polarToCartesian(
             0,
@@ -164,15 +201,16 @@ export function CapabilityMapChart({
             radius * DOMAIN_LABEL_RATIO,
             domain.midAngle,
           );
-          const lines = wrapLabel(domain.label, 16);
-          const { textAnchor, dy } = labelAnchor(domain.midAngle);
+          const lines = wrapLabel(domain.label, 18);
+          // Outside labels stay centered on the sector midpoint.
+          const dy = lines.length > 1 ? -((lines.length - 1) * 6) : 0;
 
           return (
             <text
               key={`domain-label-${domain.id}`}
               x={point.x}
               y={point.y}
-              textAnchor={textAnchor}
+              textAnchor="middle"
               dy={dy}
               className={styles.capabilityMapDomainLabel}
               fill={domain.color}
@@ -190,45 +228,23 @@ export function CapabilityMapChart({
           );
         })}
 
-        {showSkillLabels &&
-          layout.skills.map((skill) => {
-            const point = polarToCartesian(
-              0,
-              0,
-              radius * SKILL_LABEL_RATIO,
-              skill.angle,
-            );
-            const { textAnchor, dy } = labelAnchor(skill.angle);
-
-            return (
-              <text
-                key={`skill-label-${skill.id}`}
-                x={point.x}
-                y={point.y}
-                textAnchor={textAnchor}
-                dy={dy}
-                className={styles.capabilityMapSkillLabel}
-                fill={skill.color}
-              >
-                {skill.label}
-              </text>
-            );
-          })}
-
         <circle r={hubRadius} className={styles.capabilityMapHub} />
         <text
           textAnchor="middle"
           className={styles.capabilityMapHubName}
-          y={-hubRadius * 0.18}
+          y={hubNameY}
         >
           {data.hub.name}
         </text>
-        {data.hub.roles.slice(0, 3).map((role, index) => (
+        {hubRoles.map((role, index) => (
           <text
             key={`role-${role}`}
             textAnchor="middle"
             className={styles.capabilityMapHubRole}
-            y={hubRadius * (0.12 + index * 0.28)}
+            y={
+              (hubNameToRoleGap + index * hubRoleStep - hubBlockMid + hubOpticalNudge) *
+              hubRadius
+            }
           >
             {role}
           </text>
