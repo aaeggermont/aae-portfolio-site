@@ -1,6 +1,10 @@
-import { TimelineData } from '@/app/aboutme/data/aboutme-data';
+'use client';
+
 import { Timeline } from '@/components/Timeline';
+import { toExperienceTimeline } from '@/app/aboutme/data/experience-training-logos';
+import { useExperienceTrainingData } from '../ExperienceTrainingContext';
 
 export function AboutMeMoreProfesionalExperience() {
-  return <Timeline data={TimelineData.experience} />
+  const data = useExperienceTrainingData();
+  return <Timeline data={toExperienceTimeline(data.experience)} />;
 }

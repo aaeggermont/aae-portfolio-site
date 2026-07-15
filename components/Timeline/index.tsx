@@ -25,6 +25,13 @@ export type TimelineProps = {
   data: TimelinePeriodProps[];
 }
 
+export function splitDetailParagraphs(details: string): string[] {
+  return details
+    .split(/\n\s*\n/)
+    .map((part) => part.replace(/\s+/g, ' ').trim())
+    .filter(Boolean);
+}
+
 export function Timeline({ data }: TimelineProps) {
   return <div className={styles.timeline}>
     {
@@ -80,7 +87,9 @@ export function Timeline({ data }: TimelineProps) {
                       <div className={styles.timelinePeriod_endDot}></div>
                     </div>
                     <div className={styles.timelineDetails}>
-                      <p>{position.details}</p>
+                      {splitDetailParagraphs(position.details).map((paragraph, paragraphIndex) => (
+                        <p key={`details-${indexPos}-${paragraphIndex}`}>{paragraph}</p>
+                      ))}
                     </div>
                   </div>
               </div>

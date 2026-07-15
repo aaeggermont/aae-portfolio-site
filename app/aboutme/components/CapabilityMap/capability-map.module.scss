@@ -4,12 +4,7 @@
   align-items: center;
   width: 100%;
   max-width: 1100px; // overridden by CAPABILITY_MAP_SIZE.scale via inline style
-  margin-bottom: 0rem;
   color: $font-color-bold;
-
-  @media #{$sm}, #{$xs} {
-    margin-bottom: 1rem;
-  }
 
   &Header {
     text-align: center;
@@ -18,19 +13,22 @@
   }
 
   &Title {
+    // Same family/weight as About Me intro title (h1), ~80% scale for section subtitle.
     font-family: var(--font-montserrat);
-    font-size: clamp(1.15rem, 3.5vw, 1.75rem);
-    font-weight: 700;
+    @include fluid-type(16px, 20px, 22px);
+    font-weight: bold;
     color: $font-color-bold;
     margin: 0 0 0.5rem;
+    text-align: center;
   }
 
   &Tagline {
     font-family: var(--font-poppins);
     font-size: clamp(0.95rem, 2.4vw, 1.1rem);
     font-weight: 500;
-    color: #2a8a8a;
+    color: $font-color-bold;
     margin: 0 0 0.75rem;
+    text-align: left;
   }
 
   &Description {
@@ -39,6 +37,7 @@
     line-height: 1.55;
     color: #3a5560;
     margin: 0;
+    text-align: left;
   }
 
   &ChartWrap {

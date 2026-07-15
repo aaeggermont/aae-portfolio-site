@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './education.module.scss';
-import { TimelineProps } from '@/components/Timeline';
+import { splitDetailParagraphs, type TimelineProps } from '@/components/Timeline';
 
 export function Education ({ data = [] }: TimelineProps) {
   return <div className={styles.educationContainer}>
@@ -26,7 +26,11 @@ export function Education ({ data = [] }: TimelineProps) {
             <span className={styles.educationSchoolName}>{val.school}</span>
             <h5 className={styles.educationLocation}> {val.location}</h5>
             <div className={styles.educationPeriodBackground}>{val.year} </div>
-            <p className={styles.educationDetails}>{val.details}</p>
+            <div className={styles.educationDetails}>
+              {splitDetailParagraphs(val.details ?? '').map((paragraph, paragraphIndex) => (
+                <p key={`education-details-${i}-${paragraphIndex}`}>{paragraph}</p>
+              ))}
+            </div>
           </div>
         </div>
       ))}

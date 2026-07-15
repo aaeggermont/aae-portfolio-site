@@ -67,10 +67,10 @@ export const CAPABILITY_COLOR_HEX: Record<CapabilityColorKey, string> = {
 export const capabilityMapFallback: CapabilityMapData = {
   version: 1,
   header: {
-    title: "Antonio's Capability Map",
-    tagline: "I design and build intelligent systems that connect human needs, business goals, and emerging technologies.",
-    description:
-      "I bridge technology, design, and data to create human-centered solutions that drive measurable impact and empower better decisions..",
+    title: "Where I add Value",
+    tagline:
+      "I bridge technology, design, and data to create human-centered solutions that drive measurable impact and empower better decisions.",
+    description: "",
   },
   hub: {
     name: "Antonio",

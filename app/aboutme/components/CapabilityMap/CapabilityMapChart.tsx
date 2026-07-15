@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Group } from "@visx/group";
 import { Arc } from "@visx/shape";
 import type { CapabilityMapData } from "@/app/aboutme/data/capability-map-data";
@@ -52,10 +52,86 @@ const SPOKE_DOT_RADIUS_RATIO = 0.01;
 const HOVER_SCALE = 1.06;
 /** Hover: radial lift as a fraction of chart radius. */
 const HOVER_LIFT_RATIO = 0.028;
+/** Hover zoom / lift ease duration. */
+const HOVER_MOTION_MS = 320;
+
+function easeOutCubic(t: number): number {
+  return 1 - (1 - t) ** 3;
+}
+
+/** Animate 0→1 (or reverse) when `active` flips; preserves mid-flight progress. */
+function useHoverProgress(active: boolean, durationMs = HOVER_MOTION_MS): number {
+  const [progress, setProgress] = useState(0);
+  const progressRef = useRef(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const from = progressRef.current;
+    const to = active ? 1 : 0;
+    if (Math.abs(from - to) < 0.0001) {
+      progressRef.current = to;
+      setProgress(to);
+      return;
+    }
+
+    const start = performance.now();
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / durationMs);
+      const next = from + (to - from) * easeOutCubic(t);
+      progressRef.current = next;
+      setProgress(next);
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        progressRef.current = to;
+        setProgress(to);
+        rafRef.current = null;
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [active, durationMs]);
+
+  return progress;
+}
 
 /** Ring radius for a skill's expertise level (1–4 → four grid rings). */
 function expertiseRingRatio(level: 1 | 2 | 3 | 4): number {
   return GRID_RING_RATIOS[level - 1] ?? GRID_RING_RATIOS[GRID_RING_RATIOS.length - 1];
+}
+
+function DomainMotionGroup({
+  isHovered,
+  midAngle,
+  liftPx,
+  className,
+  children,
+}: {
+  isHovered: boolean;
+  midAngle: number;
+  liftPx: number;
+  className?: string;
+  children: ReactNode;
+}) {
+  const progress = useHoverProgress(isHovered);
+  const scale = 1 + (HOVER_SCALE - 1) * progress;
+  const { x, y } = polarToCartesian(0, 0, liftPx * progress, midAngle);
+  const transform =
+    progress < 0.001 ? undefined : `translate(${x} ${y}) scale(${scale})`;
+
+  return (
+    <g
+      className={className}
+      transform={transform}
+      style={{ pointerEvents: "none" }}
+    >
+      {children}
+    </g>
+  );
 }
 
 function wrapLabel(label: string, maxChars: number): string[] {
@@ -97,12 +173,6 @@ function domainLabelRatioForAngle(angleRadians: number): number {
 }
 
 type ExpertiseVertex = CapabilitySkillLayout & { x: number; y: number };
-
-function domainHoverTransform(midAngle: number, liftPx: number): string {
-  const { x, y } = polarToCartesian(0, 0, liftPx, midAngle);
-  // SVG user-space transform — scales from hub (Group origin at chart center).
-  return `translate(${x} ${y}) scale(${HOVER_SCALE})`;
-}
 
 export function CapabilityMapChart({
   data,
@@ -240,15 +310,12 @@ export function CapabilityMapChart({
           const isHovered = hoveredDomainId === domain.id;
 
           return (
-            <g
+            <DomainMotionGroup
               key={`domain-${domain.id}`}
               className={styles.capabilityMapDomainGroup}
-              transform={
-                isHovered
-                  ? domainHoverTransform(domain.midAngle, hoverLiftPx)
-                  : undefined
-              }
-              style={{ pointerEvents: "none" }}
+              isHovered={isHovered}
+              midAngle={domain.midAngle}
+              liftPx={hoverLiftPx}
             >
               <Arc
                 innerRadius={hubRadius}
@@ -369,7 +436,7 @@ export function CapabilityMapChart({
                 })}
 
               <DomainLabel domain={domain} radius={radius} />
-            </g>
+            </DomainMotionGroup>
           );
         })}
 

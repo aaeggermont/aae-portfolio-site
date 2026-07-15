@@ -11,7 +11,9 @@
     "seed:project-2": "tsx scripts/seed-project-2.ts",
     "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts",
     "seed:main-banner": "tsx scripts/seed-main-banner.ts",
-    "seed:capability-map": "tsx scripts/seed-capability-map.ts"
+    "seed:capability-map": "tsx scripts/seed-capability-map.ts",
+    "seed:about-intro": "tsx scripts/seed-about-intro.ts",
+    "seed:experience-training": "tsx scripts/seed-experience-training.ts"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

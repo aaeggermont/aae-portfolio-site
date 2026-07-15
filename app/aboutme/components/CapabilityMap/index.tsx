@@ -31,11 +31,13 @@ export function CapabilityMap() {
       style={{ maxWidth: sizeStyles.sectionMaxWidth }}
     >
       <header className={styles.capabilityMapHeader}>
-        <h3 id="capability-map-title" className={styles.capabilityMapTitle}>
+        <h2 id="capability-map-title" className={styles.capabilityMapTitle}>
           {data.header.title}
-        </h3>
+        </h2>
         <p className={styles.capabilityMapTagline}>{data.header.tagline}</p>
-        <p className={styles.capabilityMapDescription}>{data.header.description}</p>
+        {data.header.description ? (
+          <p className={styles.capabilityMapDescription}>{data.header.description}</p>
+        ) : null}
       </header>
 
       <div

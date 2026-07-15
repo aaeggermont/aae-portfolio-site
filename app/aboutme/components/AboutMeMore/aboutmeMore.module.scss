@@ -4,6 +4,23 @@
 .aboutmeMore{
   display: flex;
   flex-direction: column;
+  width: 100%;
+  align-items: center;
+
+  &Header {
+    text-align: center;
+    max-width: 40rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &Title {
+    // Match Capability Map section subtitle ("Where I add Value").
+    font-family: var(--font-montserrat);
+    @include fluid-type(16px, 20px, 22px);
+    font-weight: bold;
+    color: $font-color-bold;
+    margin: 0;
+  }
 
   .aboutmeMoreCards {
     display: flex;
@@ -23,7 +40,6 @@
     }
 
     justify-content: center;
-    margin-top: 0.75rem;
   }
 
  
