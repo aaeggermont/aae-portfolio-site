@@ -1,11 +1,14 @@
 "use client";
 
+import { useState } from "react";
 import { Group } from "@visx/group";
 import { Arc } from "@visx/shape";
 import type { CapabilityMapData } from "@/app/aboutme/data/capability-map-data";
 import {
   buildCapabilityMapLayout,
   polarToCartesian,
+  type CapabilityDomainLayout,
+  type CapabilitySkillLayout,
 } from "@/app/aboutme/lib/capability-map.layout";
 import styles from "./capability-map.module.scss";
 
@@ -45,6 +48,11 @@ const SPOKE_LINE_OUTER_RATIO = 0.78;
 /** Endpoint dot size as a fraction of chart radius. */
 const SPOKE_DOT_RADIUS_RATIO = 0.01;
 
+/** Hover: light zoom from chart center. */
+const HOVER_SCALE = 1.06;
+/** Hover: radial lift as a fraction of chart radius. */
+const HOVER_LIFT_RATIO = 0.028;
+
 /** Ring radius for a skill's expertise level (1–4 → four grid rings). */
 function expertiseRingRatio(level: 1 | 2 | 3 | 4): number {
   return GRID_RING_RATIOS[level - 1] ?? GRID_RING_RATIOS[GRID_RING_RATIOS.length - 1];
@@ -74,7 +82,6 @@ function wrapLabel(label: string, maxChars: number): string[] {
 /** Domain labels: pull in at top/bottom; push out on sides (horizontal text overlaps the rim). */
 function domainLabelRatioForAngle(angleRadians: number): number {
   const deg = (((angleRadians * 180) / Math.PI) % 360 + 360) % 360;
-  // Narrow bands so only near-vertical domains (e.g. Strategy) get pulled in.
   const nearBottom = deg > 160 && deg < 210;
   const nearTop = deg < 25 || deg > 335;
   const nearSide =
@@ -89,17 +96,25 @@ function domainLabelRatioForAngle(angleRadians: number): number {
   return DOMAIN_LABEL_RATIO;
 }
 
+type ExpertiseVertex = CapabilitySkillLayout & { x: number; y: number };
+
+function domainHoverTransform(midAngle: number, liftPx: number): string {
+  const { x, y } = polarToCartesian(0, 0, liftPx, midAngle);
+  // SVG user-space transform — scales from hub (Group origin at chart center).
+  return `translate(${x} ${y}) scale(${HOVER_SCALE})`;
+}
+
 export function CapabilityMapChart({
   data,
   width,
   height,
   showSkillLabels = true,
 }: CapabilityMapChartProps) {
+  const [hoveredDomainId, setHoveredDomainId] = useState<string | null>(null);
+
   if (width < 120 || height < 120) return null;
 
-  // Square canvas keeps concentric rings truly circular (no rectangular stretch).
   const size = Math.min(width, height);
-  // Extra margin so outside domain labels are not clipped by ParentSize overflow.
   const margin = showSkillLabels ? size * 0.22 : size * 0.16;
   const radius = (size - margin * 2) / 2;
   const cx = size / 2;
@@ -109,8 +124,9 @@ export function CapabilityMapChart({
   const hubRadius = radius * HUB_RATIO;
   const outerRimRadius = radius * OUTER_RIM_RATIO;
   const spokeDotRadius = Math.max(2.5, radius * SPOKE_DOT_RADIUS_RATIO);
+  const hoverLiftPx = radius * HOVER_LIFT_RATIO;
+  const isHovering = hoveredDomainId !== null;
 
-  // Center hub text block (name + roles) vertically in the hub circle.
   const hubRoles = data.hub.roles.slice(0, 3);
   const hubNameToRoleGap = 0.3;
   const hubRoleStep = 0.16;
@@ -119,33 +135,28 @@ export function CapabilityMapChart({
       ? 0
       : hubNameToRoleGap + (hubRoles.length - 1) * hubRoleStep;
   const hubBlockMid = hubBlockBottom / 2;
-  // Optical nudge: SVG baselines sit slightly below letter visual centers.
   const hubOpticalNudge = 0.03;
   const hubNameY = (-hubBlockMid + hubOpticalNudge) * hubRadius;
 
-  // Expertise overlay vertices (angular order) for domain-colored fill + links.
-  const expertiseVertices = [...layout.skills]
+  const expertiseVertices: ExpertiseVertex[] = [...layout.skills]
     .sort((a, b) => a.angle - b.angle)
     .map((skill) => {
       const levelRadius = radius * expertiseRingRatio(skill.level);
       const point = polarToCartesian(0, 0, levelRadius, skill.angle);
-      return {
-        ...skill,
-        x: point.x,
-        y: point.y,
-      };
+      return { ...skill, x: point.x, y: point.y };
     });
 
-  // Per-domain polygons extend to sector edges so fills cover the full wedge
-  // even when skill dots aren't exactly on the domain boundaries.
-  // Outline links stay skill-to-skill (straight), including across domains.
   const domainOverlays = layout.domains.map((domain) => {
     const skills = expertiseVertices
       .filter((skill) => skill.domainId === domain.id)
       .sort((a, b) => a.angle - b.angle);
 
     if (skills.length === 0) {
-      return { domain, fillPoints: [] as { x: number; y: number }[] };
+      return {
+        domain,
+        skills: [] as ExpertiseVertex[],
+        fillPoints: [] as { x: number; y: number }[],
+      };
     }
 
     const startRadius = radius * expertiseRingRatio(skills[0].level);
@@ -153,13 +164,29 @@ export function CapabilityMapChart({
     const edgeStart = polarToCartesian(0, 0, startRadius, domain.startAngle);
     const edgeEnd = polarToCartesian(0, 0, endRadius, domain.endAngle);
 
-    const fillPoints = [
-      edgeStart,
-      ...skills.map((skill) => ({ x: skill.x, y: skill.y })),
-      edgeEnd,
-    ];
+    return {
+      domain,
+      skills,
+      fillPoints: [
+        edgeStart,
+        ...skills.map((skill) => ({ x: skill.x, y: skill.y })),
+        edgeEnd,
+      ],
+    };
+  });
 
-    return { domain, fillPoints };
+  // Cross-domain chords stay in a fixed underlay and fade while hovering.
+  const crossDomainLinks = expertiseVertices.flatMap((skill, index) => {
+    const next = expertiseVertices[(index + 1) % expertiseVertices.length];
+    if (skill.domainId === next.domainId) return [];
+    return [{ skill, next }];
+  });
+
+  // Hovered domain last so it paints above siblings.
+  const orderedOverlays = [...domainOverlays].sort((a, b) => {
+    if (a.domain.id === hoveredDomainId) return 1;
+    if (b.domain.id === hoveredDomainId) return -1;
+    return 0;
   });
 
   return (
@@ -172,18 +199,7 @@ export function CapabilityMapChart({
       aria-label={`${data.header.title}: capability domains and skills`}
     >
       <Group left={cx} top={cy}>
-        {layout.domains.map((domain) => (
-          <Arc
-            key={`wedge-${domain.id}`}
-            innerRadius={hubRadius}
-            outerRadius={outerRimRadius}
-            startAngle={domain.startAngle}
-            endAngle={domain.endAngle}
-            fill={domain.color}
-            fillOpacity={0.1}
-          />
-        ))}
-
+        {/* Shared chrome — does not rise with a domain */}
         {GRID_RING_RATIOS.map((ratio) => (
           <circle
             key={`grid-ring-${ratio}`}
@@ -191,11 +207,6 @@ export function CapabilityMapChart({
             className={styles.capabilityMapRing}
           />
         ))}
-
-        <circle
-          r={outerRimRadius}
-          className={styles.capabilityMapOuterRim}
-        />
 
         {layout.domains.map((domain) => {
           const inner = polarToCartesian(0, 0, hubRadius, domain.startAngle);
@@ -212,146 +223,180 @@ export function CapabilityMapChart({
           );
         })}
 
-        {/* Per-domain expertise area: hub → domain edge → skill dots → domain edge → hub */}
-        {domainOverlays.map(({ domain, fillPoints }) => {
-          if (fillPoints.length === 0) return null;
+        {crossDomainLinks.map(({ skill, next }) => (
+          <line
+            key={`cross-link-${skill.id}-${next.id}`}
+            x1={skill.x}
+            y1={skill.y}
+            x2={next.x}
+            y2={next.y}
+            stroke={skill.color}
+            className={styles.capabilityMapExpertiseAreaStroke}
+            style={{ opacity: isHovering ? 0.15 : undefined }}
+          />
+        ))}
 
-          const path = [
-            "M 0 0",
-            ...fillPoints.map((point) => `L ${point.x} ${point.y}`),
-            "Z",
-          ].join(" ");
+        {orderedOverlays.map(({ domain, skills, fillPoints }) => {
+          const isHovered = hoveredDomainId === domain.id;
 
           return (
-            <path
-              key={`expertise-fill-${domain.id}`}
-              d={path}
-              fill={domain.color}
-              className={styles.capabilityMapExpertiseAreaFill}
-            />
-          );
-        })}
-
-        {/* Straight skill-to-skill links (including across domain boundaries) */}
-        {expertiseVertices.map((skill, index) => {
-          const next = expertiseVertices[(index + 1) % expertiseVertices.length];
-          return (
-            <line
-              key={`expertise-link-${skill.id}-${next.id}`}
-              x1={skill.x}
-              y1={skill.y}
-              x2={next.x}
-              y2={next.y}
-              stroke={skill.color}
-              className={styles.capabilityMapExpertiseAreaStroke}
-            />
-          );
-        })}
-
-        {layout.skills.map((skill) => {
-          const levelRadius = radius * expertiseRingRatio(skill.level);
-          const lineOuterRadius = radius * SPOKE_LINE_OUTER_RATIO;
-          const inner = polarToCartesian(
-            0,
-            0,
-            radius * SPOKE_INNER_RATIO,
-            skill.angle,
-          );
-          const lineEnd = polarToCartesian(0, 0, lineOuterRadius, skill.angle);
-          const dot = polarToCartesian(0, 0, levelRadius, skill.angle);
-          return (
-            <g key={`spoke-${skill.id}`}>
-              <line
-                x1={inner.x}
-                y1={inner.y}
-                x2={lineEnd.x}
-                y2={lineEnd.y}
-                stroke={skill.color}
-                strokeOpacity={0.35}
-                strokeWidth={1}
+            <g
+              key={`domain-${domain.id}`}
+              className={styles.capabilityMapDomainGroup}
+              transform={
+                isHovered
+                  ? domainHoverTransform(domain.midAngle, hoverLiftPx)
+                  : undefined
+              }
+              style={{ pointerEvents: "none" }}
+            >
+              <Arc
+                innerRadius={hubRadius}
+                outerRadius={outerRimRadius}
+                startAngle={domain.startAngle}
+                endAngle={domain.endAngle}
+                fill={domain.color}
+                fillOpacity={isHovered ? 0.18 : 0.1}
               />
-              <circle
-                cx={dot.x}
-                cy={dot.y}
-                r={spokeDotRadius}
-                className={styles.capabilityMapSpokeDot}
-                fill={skill.color}
+
+              {fillPoints.length > 0 && (
+                <path
+                  d={[
+                    "M 0 0",
+                    ...fillPoints.map((point) => `L ${point.x} ${point.y}`),
+                    "Z",
+                  ].join(" ")}
+                  fill={domain.color}
+                  className={styles.capabilityMapExpertiseAreaFill}
+                />
+              )}
+
+              {/* Intra-domain expertise outline */}
+              {skills.map((skill, index) => {
+                if (index >= skills.length - 1) return null;
+                const next = skills[index + 1];
+                return (
+                  <line
+                    key={`intra-link-${skill.id}-${next.id}`}
+                    x1={skill.x}
+                    y1={skill.y}
+                    x2={next.x}
+                    y2={next.y}
+                    stroke={skill.color}
+                    className={styles.capabilityMapExpertiseAreaStroke}
+                  />
+                );
+              })}
+
+              {skills.map((skill) => {
+                const lineOuterRadius = radius * SPOKE_LINE_OUTER_RATIO;
+                const inner = polarToCartesian(
+                  0,
+                  0,
+                  radius * SPOKE_INNER_RATIO,
+                  skill.angle,
+                );
+                const lineEnd = polarToCartesian(
+                  0,
+                  0,
+                  lineOuterRadius,
+                  skill.angle,
+                );
+                return (
+                  <g key={`spoke-${skill.id}`}>
+                    <line
+                      x1={inner.x}
+                      y1={inner.y}
+                      x2={lineEnd.x}
+                      y2={lineEnd.y}
+                      stroke={skill.color}
+                      strokeOpacity={0.35}
+                      strokeWidth={1}
+                    />
+                    <circle
+                      cx={skill.x}
+                      cy={skill.y}
+                      r={spokeDotRadius}
+                      className={styles.capabilityMapSpokeDot}
+                      fill={skill.color}
+                    />
+                  </g>
+                );
+              })}
+
+              {/* Outer rim segment — scales with the domain on hover */}
+              <Arc
+                innerRadius={outerRimRadius - 0.625}
+                outerRadius={outerRimRadius + 0.625}
+                startAngle={domain.startAngle}
+                endAngle={domain.endAngle}
+                className={styles.capabilityMapOuterRim}
               />
+
+              {showSkillLabels &&
+                skills.map((skill) => {
+                  const point = polarToCartesian(
+                    0,
+                    0,
+                    radius * SKILL_LABEL_RATIO,
+                    skill.angle,
+                  );
+                  const lines = wrapLabel(skill.label, SKILL_LABEL_MAX_CHARS);
+                  const wrapDy =
+                    lines.length > 1 ? -((lines.length - 1) * 5) : 0;
+
+                  return (
+                    <text
+                      key={`skill-label-${skill.id}`}
+                      x={point.x}
+                      y={point.y}
+                      textAnchor="middle"
+                      dy={wrapDy}
+                      className={styles.capabilityMapSkillLabel}
+                      fill={skill.color}
+                    >
+                      {lines.map((line, index) => (
+                        <tspan
+                          key={`${skill.id}-line-${index}`}
+                          x={point.x}
+                          dy={index === 0 ? 0 : "1.1em"}
+                        >
+                          {line}
+                        </tspan>
+                      ))}
+                    </text>
+                  );
+                })}
+
+              <DomainLabel domain={domain} radius={radius} />
             </g>
           );
         })}
 
-        {showSkillLabels &&
-          layout.skills.map((skill) => {
-            const point = polarToCartesian(
-              0,
-              0,
-              radius * SKILL_LABEL_RATIO,
-              skill.angle,
-            );
-            const lines = wrapLabel(skill.label, SKILL_LABEL_MAX_CHARS);
-            // Middle-align every label so centers sit on one circle
-            // (start/end anchors made left/right labels push outward).
-            const wrapDy = lines.length > 1 ? -((lines.length - 1) * 5) : 0;
-
-            return (
-              <text
-                key={`skill-label-${skill.id}`}
-                x={point.x}
-                y={point.y}
-                textAnchor="middle"
-                dy={wrapDy}
-                className={styles.capabilityMapSkillLabel}
-                fill={skill.color}
-              >
-                {lines.map((line, index) => (
-                  <tspan
-                    key={`${skill.id}-line-${index}`}
-                    x={point.x}
-                    dy={index === 0 ? 0 : "1.1em"}
-                  >
-                    {line}
-                  </tspan>
-                ))}
-              </text>
-            );
-          })}
-
+        {/* Fixed hit wedges (above visuals, below hub) — stable while domains rise */}
         {layout.domains.map((domain) => {
           const labelRatio = domainLabelRatioForAngle(domain.midAngle);
-          const point = polarToCartesian(
-            0,
-            0,
-            radius * labelRatio,
-            domain.midAngle,
+          const hitOuter = Math.max(
+            outerRimRadius,
+            radius * labelRatio + spokeDotRadius * 4,
           );
-          const lines = wrapLabel(domain.label, 18);
-          // Outside labels stay centered on the sector midpoint.
-          const dy = lines.length > 1 ? -((lines.length - 1) * 6) : 0;
-
           return (
-            <text
-              key={`domain-label-${domain.id}`}
-              x={point.x}
-              y={point.y}
-              textAnchor="middle"
-              dy={dy}
-              className={styles.capabilityMapDomainLabel}
-              fill={domain.color}
-            >
-              {lines.map((line, index) => (
-                <tspan
-                  key={`${domain.id}-line-${index}`}
-                  x={point.x}
-                  dy={index === 0 ? 0 : "1.15em"}
-                >
-                  {line}
-                </tspan>
-              ))}
-            </text>
+            <Arc
+              key={`domain-hit-${domain.id}`}
+              innerRadius={hubRadius}
+              outerRadius={hitOuter}
+              startAngle={domain.startAngle}
+              endAngle={domain.endAngle}
+              fill="transparent"
+              className={styles.capabilityMapDomainHit}
+              onPointerEnter={() => setHoveredDomainId(domain.id)}
+              onPointerLeave={() => setHoveredDomainId(null)}
+              style={{ cursor: "pointer" }}
+            />
           );
         })}
 
+        {/* Hub stays fixed above rising domains */}
         <circle r={hubRadius} className={styles.capabilityMapHub} />
         <text
           textAnchor="middle"
@@ -375,5 +420,39 @@ export function CapabilityMapChart({
         ))}
       </Group>
     </svg>
+  );
+}
+
+function DomainLabel({
+  domain,
+  radius,
+}: {
+  domain: CapabilityDomainLayout;
+  radius: number;
+}) {
+  const labelRatio = domainLabelRatioForAngle(domain.midAngle);
+  const point = polarToCartesian(0, 0, radius * labelRatio, domain.midAngle);
+  const lines = wrapLabel(domain.label, 18);
+  const dy = lines.length > 1 ? -((lines.length - 1) * 6) : 0;
+
+  return (
+    <text
+      x={point.x}
+      y={point.y}
+      textAnchor="middle"
+      dy={dy}
+      className={styles.capabilityMapDomainLabel}
+      fill={domain.color}
+    >
+      {lines.map((line, index) => (
+        <tspan
+          key={`${domain.id}-line-${index}`}
+          x={point.x}
+          dy={index === 0 ? 0 : "1.15em"}
+        >
+          {line}
+        </tspan>
+      ))}
+    </text>
   );
 }
