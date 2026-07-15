@@ -48,7 +48,8 @@ export type CapabilityMapData = {
     name: string;
     roles: string[];
   };
-  footer: {
+  /** Optional — footer UI is currently hidden. */
+  footer?: {
     title: string;
     description: string;
   };
@@ -67,18 +68,13 @@ export const capabilityMapFallback: CapabilityMapData = {
   version: 1,
   header: {
     title: "Antonio's Capability Map",
-    tagline: "Helping people make better decisions.",
+    tagline: "I design and build intelligent systems that connect human needs, business goals, and emerging technologies.",
     description:
-      "I design and build intelligent systems that connect human needs, business goals, and emerging technologies.",
+      "I bridge technology, design, and data to create human-centered solutions that drive measurable impact and empower better decisions..",
   },
   hub: {
     name: "Antonio",
     roles: ["UX Engineer", "Full Stack Developer", "AI-Powered Experiences"],
-  },
-  footer: {
-    title: "Bringing It All Together",
-    description:
-      "I bridge technology, design, and data to create human-centered solutions that drive measurable impact and empower better decisions.",
   },
   domains: [
     {
@@ -117,7 +113,7 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "people",
       order: 2,
       skills: [
-        { id: "systems-thinking", label: "Systems Thinking", order: 0, level: 4 },
+        { id: "systems-thinking", label: "Systems Thinking", order: 0, level: 3 },
         { id: "product-strategy", label: "Product Strategy", order: 1, level: 3 },
         { id: "workshops", label: "Workshops & Facilitation", order: 2, level: 3 },
         { id: "storytelling", label: "Storytelling", order: 3, level: 4 },
@@ -130,7 +126,7 @@ export const capabilityMapFallback: CapabilityMapData = {
       icon: "person",
       order: 4,
       skills: [
-        { id: "user-research", label: "User Research", order: 0, level: 4 },
+        { id: "user-research", label: "User Research", order: 0, level: 3 },
         { id: "journey-mapping", label: "Journey Mapping", order: 1, level: 3 },
         { id: "information-architecture", label: "Information Architecture", order: 2, level: 4 },
         { id: "interaction-design", label: "Interaction Design", order: 3, level: 4 },

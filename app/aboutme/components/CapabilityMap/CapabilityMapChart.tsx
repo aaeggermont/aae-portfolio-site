@@ -36,12 +36,12 @@ const SKILL_LABEL_RATIO = 0.93;
 /** Soft wrap length for skill labels (keeps rim labels compact). */
 const SKILL_LABEL_MAX_CHARS = 12;
 /** Spokes begin at the hub edge. */
-const SPOKE_INNER_RATIO = 0.3;
+const SPOKE_INNER_RATIO = 0.2;
 /**
  * Spoke lines extend past the last expertise ring toward the labels.
  * Expertise dots sit on GRID_RING_RATIOS by level.
  */
-const SPOKE_LINE_OUTER_RATIO = 0.88;
+const SPOKE_LINE_OUTER_RATIO = 0.78;
 /** Endpoint dot size as a fraction of chart radius. */
 const SPOKE_DOT_RADIUS_RATIO = 0.01;
 
@@ -100,7 +100,7 @@ export function CapabilityMapChart({
   // Square canvas keeps concentric rings truly circular (no rectangular stretch).
   const size = Math.min(width, height);
   // Extra margin so outside domain labels are not clipped by ParentSize overflow.
-  const margin = showSkillLabels ? size * 0.26 : size * 0.16;
+  const margin = showSkillLabels ? size * 0.22 : size * 0.16;
   const radius = (size - margin * 2) / 2;
   const cx = size / 2;
   const cy = size / 2;
@@ -123,16 +123,44 @@ export function CapabilityMapChart({
   const hubOpticalNudge = 0.03;
   const hubNameY = (-hubBlockMid + hubOpticalNudge) * hubRadius;
 
-  // Closed expertise polygon — connect dots in angular order (Core Expertise overlay).
-  const expertisePoints = [...layout.skills]
+  // Expertise overlay vertices (angular order) for domain-colored fill + links.
+  const expertiseVertices = [...layout.skills]
     .sort((a, b) => a.angle - b.angle)
     .map((skill) => {
       const levelRadius = radius * expertiseRingRatio(skill.level);
-      return polarToCartesian(0, 0, levelRadius, skill.angle);
+      const point = polarToCartesian(0, 0, levelRadius, skill.angle);
+      return {
+        ...skill,
+        x: point.x,
+        y: point.y,
+      };
     });
-  const expertisePolygonPoints = expertisePoints
-    .map((point) => `${point.x},${point.y}`)
-    .join(" ");
+
+  // Per-domain polygons extend to sector edges so fills cover the full wedge
+  // even when skill dots aren't exactly on the domain boundaries.
+  // Outline links stay skill-to-skill (straight), including across domains.
+  const domainOverlays = layout.domains.map((domain) => {
+    const skills = expertiseVertices
+      .filter((skill) => skill.domainId === domain.id)
+      .sort((a, b) => a.angle - b.angle);
+
+    if (skills.length === 0) {
+      return { domain, fillPoints: [] as { x: number; y: number }[] };
+    }
+
+    const startRadius = radius * expertiseRingRatio(skills[0].level);
+    const endRadius = radius * expertiseRingRatio(skills[skills.length - 1].level);
+    const edgeStart = polarToCartesian(0, 0, startRadius, domain.startAngle);
+    const edgeEnd = polarToCartesian(0, 0, endRadius, domain.endAngle);
+
+    const fillPoints = [
+      edgeStart,
+      ...skills.map((skill) => ({ x: skill.x, y: skill.y })),
+      edgeEnd,
+    ];
+
+    return { domain, fillPoints };
+  });
 
   return (
     <svg
@@ -184,12 +212,41 @@ export function CapabilityMapChart({
           );
         })}
 
-        {expertisePoints.length >= 3 && (
-          <polygon
-            points={expertisePolygonPoints}
-            className={styles.capabilityMapExpertiseArea}
-          />
-        )}
+        {/* Per-domain expertise area: hub → domain edge → skill dots → domain edge → hub */}
+        {domainOverlays.map(({ domain, fillPoints }) => {
+          if (fillPoints.length === 0) return null;
+
+          const path = [
+            "M 0 0",
+            ...fillPoints.map((point) => `L ${point.x} ${point.y}`),
+            "Z",
+          ].join(" ");
+
+          return (
+            <path
+              key={`expertise-fill-${domain.id}`}
+              d={path}
+              fill={domain.color}
+              className={styles.capabilityMapExpertiseAreaFill}
+            />
+          );
+        })}
+
+        {/* Straight skill-to-skill links (including across domain boundaries) */}
+        {expertiseVertices.map((skill, index) => {
+          const next = expertiseVertices[(index + 1) % expertiseVertices.length];
+          return (
+            <line
+              key={`expertise-link-${skill.id}-${next.id}`}
+              x1={skill.x}
+              y1={skill.y}
+              x2={next.x}
+              y2={next.y}
+              stroke={skill.color}
+              className={styles.capabilityMapExpertiseAreaStroke}
+            />
+          );
+        })}
 
         {layout.skills.map((skill) => {
           const levelRadius = radius * expertiseRingRatio(skill.level);

@@ -104,14 +104,14 @@ export function parseCapabilityMapDocument(
   const footerRaw =
     data.footer && typeof data.footer === "object"
       ? (data.footer as Record<string, unknown>)
-      : {};
+      : null;
 
   const title = asString(headerRaw.title);
   const tagline = asString(headerRaw.tagline);
   const description = asString(headerRaw.description);
   const name = asString(hubRaw.name);
-  const footerTitle = asString(footerRaw.title);
-  const footerDescription = asString(footerRaw.description);
+  const footerTitle = footerRaw ? asString(footerRaw.title) : "";
+  const footerDescription = footerRaw ? asString(footerRaw.description) : "";
 
   if (!title || !name) {
     throw new Error(
@@ -144,10 +144,14 @@ export function parseCapabilityMapDocument(
       name,
       roles,
     },
-    footer: {
-      title: footerTitle || capabilityMapFallback.footer.title,
-      description: footerDescription || capabilityMapFallback.footer.description,
-    },
+    ...(footerTitle || footerDescription
+      ? {
+          footer: {
+            title: footerTitle,
+            description: footerDescription,
+          },
+        }
+      : {}),
     domains,
   };
 }

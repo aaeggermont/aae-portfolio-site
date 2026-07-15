@@ -68,13 +68,6 @@ export function CapabilityMap() {
           <div className={styles.capabilityMapChartPlaceholder} aria-hidden />
         )}
       </div>
-
-      <footer className={styles.capabilityMapFooter}>
-        <h4 className={styles.capabilityMapFooterTitle}>{data.footer.title}</h4>
-        <p className={styles.capabilityMapFooterDescription}>
-          {data.footer.description}
-        </p>
-      </footer>
     </section>
   );
 }
