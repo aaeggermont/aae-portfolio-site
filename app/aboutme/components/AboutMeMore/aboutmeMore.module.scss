@@ -10,7 +10,16 @@
   &Header {
     text-align: center;
     max-width: 40rem;
-    margin-bottom: 1.5rem;
+    // Gap before cards — same rhythm as cards → timeline (30 / 50 / 80).
+    margin-bottom: 30px;
+
+    @media screen and (min-width: $tablet-min) {
+      margin-bottom: 50px;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      margin-bottom: 80px;
+    }
   }
 
   &Title {
@@ -52,7 +61,18 @@
   }
 
   &Section {
-    margin-top: 2.5rem;
+    // Gap between cards and timeline — proportional to desktop 80px (3:5:8 rhythm).
+    margin-top: 30px; // mobile (~3/8 of 80)
+    max-width: 800px;
+    width: 100%;
+
+    @media screen and (min-width: $tablet-min) {
+      margin-top: 50px; // tablet (~5/8 of 80)
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      margin-top: 80px;
+    }
   }
 
   @media #{$sm} {

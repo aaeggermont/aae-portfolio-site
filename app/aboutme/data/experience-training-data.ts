@@ -68,7 +68,7 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
           position: "Senior Software Engineer",
           location: "Palo Alto, CA",
           details:
-            "Developed Web applications in content management systems and data access systems, tools for data exploration, data visualizations, backend services, and proof of concepts to define requirements for data driven workflows.",
+            "Designed and developed enterprise analytics platforms that enabled business intelligence teams and data scientists to explore, query, and visualize analytics data for Disney Interactive's mobile games. I also developed a centralized data access platform that unified multiple data warehouses—including Vertica and Google BigQuery—making enterprise data more accessible through reusable queries and a streamlined user experience.",
         },
       ],
     },
@@ -81,7 +81,7 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
           position: "Senior Applications Developer",
           location: "Boston, MA",
           details:
-            "Developed web applications and an API for the support of the GNET project which visualizes global traffic patterns among Akamai customers. The GNET project provides with a suite of 3D interactive visualization applications in WebGL to visualize Internet traffic patterns for content delivery, streaming media, firewall web applications, and static media assets storage on Akamai distributed network",
+            "Developed data APIs for GNET, a customer-facing WebGL platform that visualized global Internet traffic across Akamai’s distributed content delivery network. The applications helped CDN customers explore traffic patterns related to content delivery, streaming media, web security, and static asset distribution through interactive 3D visualizations.",
         },
       ],
     },
@@ -94,7 +94,7 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
           position: "Staff Engineer",
           location: "San Francisco, CA",
           details:
-            "Architecting and implementing workflows for the acquisition, encoding, transcoding, and publishing of video content and metadata from external partners to public sites and CBS video players. Workflow components included a Java API to interface with a external video publisher (thePlatform/MPX ), job schedulers, and a content management system.",
+            "Designed and developed backend services supporting the acquisition, transcoding, and publication of video content for TV.com. Built Java APIs, workflow automation services, and content management tools that streamlined media publishing and integrated external video providers into CBS's digital media platform.",
         },
       ],
     },
@@ -107,7 +107,7 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
           position: "Technical Director",
           location: "San Francisco, CA",
           details:
-            "Developed and engineered media file based workflows for the production of stereoscopic imagery. Projects involved developing applications APIs to extend and implement features for 3D animation, bitmap manipulation, encoding of media and integration of queuing systems and management controls of high-performance server enclosures for the rendering of stereoscopic imagery.",
+            "Designed and developed production workflow systems supporting the creation of stereoscopic imagery for feature film productions. Built engineering tools for media processing, texture management, rendering workflows, and high-performance computing infrastructure that helped automate complex digital production pipelines.",
         },
       ],
     },
@@ -120,7 +120,7 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
           position: "Production Services Techician",
           location: "Los Angeles, CA",
           details:
-            "Assisted in the technical aspects for the production of the motion picture “Valkyrie”, directed by Bryan Singer. Main projects and activities included visual quality assurance on all outputs before they go to film and prepared daily reports for reviews, processing image conversions from all supported formats at Sony Imageworks for testing and pre-visualization of shots, and monitoring, troubleshooting and verification for the completion of renders in the rendering queue.",
+            "Supported the digital production of the feature film Valkyrie by ensuring the quality and reliability of visual effects workflows. Responsibilities included image quality assurance, media processing and format conversions, render queue monitoring, and production reporting, helping maintain the efficiency and integrity of large-scale digital production pipelines.",
         },
       ],
     },
@@ -133,7 +133,7 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
           position: "Software Engineer",
           location: "Cambridge, MA",
           details:
-            "Development and integration of an innovative system architecture for the production of digital video and multimedia content for the first distance education project at Harvard University. The project gained national acclaim in the fields of digital video technology, distance education and streaming media",
+            "Architected and developed a digital learning platform and multimedia framework for one of Harvard University's pioneering distance education initiatives. The platform integrated digital video, streaming media, and multimedia publishing technologies, enabling the program to grow from a single computer science course to more than 30 online courses across multiple academic disciplines.",
         },
       ],
     },
