@@ -14,15 +14,19 @@ import { db } from "@/firebase";
 import PdfModal from "@/lib/pdf/PdfModal";
 import Typewriter from "typewriter-effect";
 import AOS from "aos";
-import { MyWorkPageData } from "./data/mywork-data";
+import {
+  myWorkPageFallback,
+  type MyWorkPageData,
+} from "./data/mywork-data";
+import { subscribeMyWorkPageData } from "./lib/mywork-page.firestore";
 
 const FLOAT_COUNT = 14;
 
-function MyWorkTitleTypewriter() {
+function MyWorkTitleTypewriter({ title }: { title: string }) {
   return (
     <Typewriter
       options={{
-        strings: MyWorkPageData.pageTitle,
+        strings: title,
         autoStart: true,
         loop: false,
         deleteSpeed: 50,
@@ -49,6 +53,7 @@ export default function MyWorkPageView() {
   const setLayoutState = useSetAtom(layoutState);
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const [projects, setProjects] = useState<ProjectDoc[]>([]);
+  const [pageData, setPageData] = useState<MyWorkPageData>(myWorkPageFallback);
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -94,7 +99,7 @@ export default function MyWorkPageView() {
     setFloaters(generated);
   }, []);
 
-  // Firestore subscription
+  // Firestore subscription — project cards
   useEffect(() => {
     const entriesQuery = query(
       collection(db, "projects_data"),
@@ -123,6 +128,11 @@ export default function MyWorkPageView() {
     );
 
     return () => unsubscribe();
+  }, []);
+
+  // Firestore subscription — page title + summary
+  useEffect(() => {
+    return subscribeMyWorkPageData(setPageData);
   }, []);
 
   useEffect(() => {
@@ -165,7 +175,7 @@ export default function MyWorkPageView() {
             data-aos="fade-up"
             data-aos-duration="1000"
           >
-            <MyWorkTitleTypewriter />
+            <MyWorkTitleTypewriter title={pageData.pageTitle} />
           </h2>
 
           <div
@@ -175,13 +185,7 @@ export default function MyWorkPageView() {
             data-aos-duration="1000"
           >
             <span className={styles.summarySectionText}>
-              I build and contribute to end-to-end applications using technologies such as
-              Angular, React, Node.js, and iOS, bridging UX design and engineering to
-              deliver polished, scalable user experiences. I apply user-centered design
-              methodologies—including Design Thinking, Human-Centered Design, and Human-
-              Computer Interaction—while also leveraging AI/ML product development practices
-              to create intelligent interfaces, improve decision-making workflows, and
-              introduce meaningful automation.
+              {pageData.summary}
             </span>
           </div>
 
