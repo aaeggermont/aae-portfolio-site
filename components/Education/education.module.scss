@@ -11,21 +11,32 @@
         margin-bottom: 2rem;
     }
 
+    &Logo {
+        flex-shrink: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    &LogoImg {
+        // Match Professional Experience timeline logos (64px desktop / tablet).
+        width: 4rem;
+        height: 4rem;
+        max-width: 64px;
+        max-height: 64px;
+        object-fit: contain;
+        border-radius: 0.85rem;
+    }
+
     &Info {
-        padding-left: 3rem;
+        padding-left: 1.75rem;
         display: flex;
         flex-direction: column;
         gap: 6px;
+        min-width: 0;
     }
 
     // `&Degree-title` compiled to `.educationDegree-title`, which did not match `styles.educationDegreeTitle`.
-    &PeriodBackground {
-        font-size: 1rem;
-        font-weight: normal;
-        color: #022c38;
-        margin-bottom: 15px;
-    }
-
     &DegreeTitle {
         font-weight: 600;
         color: #022c38;
@@ -55,6 +66,15 @@
     &Details {
         font-size: 1rem;
         line-height: 120%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        // Extra separation between location and the description block.
+        margin-top: 10px; // 6px Info gap + 10px = 16px total
+
+        p {
+            margin: 0;
+        }
     }
 
     @media #{$sm} {
@@ -62,10 +82,19 @@
             flex-direction: column;
             align-items: center;
             padding: 0;
+        }
 
-            img {
-                margin-bottom: 15px;
-            }
+        &Logo {
+            margin-bottom: 15px;
+        }
+
+        &LogoImg {
+            // Match Professional Experience mobile logo size.
+            width: 2.6rem;
+            height: 2.6rem;
+            max-width: 2.6rem;
+            max-height: 2.6rem;
+            border-radius: 0.65rem;
         }
 
         &Info {

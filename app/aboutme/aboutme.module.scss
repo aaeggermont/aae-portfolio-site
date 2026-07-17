@@ -9,22 +9,21 @@
     width: 100%;
     position: relative;
     z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // Major section rhythm — matches home page (3rem / 5rem / 8rem ≈ 48 / 80 / 128px).
+    gap: 3rem;
+    margin-top: 1rem;
 
-    @media screen and #{$desktop-device} {
+    @media screen and (min-width: $tablet-min) {
+      gap: 5rem;
+      margin-top: 2rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      gap: 8rem;
       padding-bottom: 1rem;
-      margin-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    @media screen and #{$tablet} {
-      margin-top: 2rem;
-    }
-
-    @media screen and #{$mobile} {
-      margin-top: 1rem;
     }
   }
 }

@@ -1,6 +1,10 @@
-import { TimelineData } from '@/app/aboutme/data/aboutme-data';
+'use client';
+
 import { Education } from '@/components/Education';
+import { toEducationTimeline } from '@/app/aboutme/data/experience-training-logos';
+import { useExperienceTrainingData } from '../ExperienceTrainingContext';
 
 export function AboutMeMoreEducation() {
-  return <Education data={TimelineData.education} />
+  const data = useExperienceTrainingData();
+  return <Education data={toEducationTimeline(data.education)} />;
 }

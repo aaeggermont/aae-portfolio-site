@@ -1,0 +1,208 @@
+@use "../../../home/home-layout" as home;
+
+.capabilityMapBand {
+  // Edge-to-edge band behind title + tagline + chart.
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+  background-color: #F7FBFF;
+  // Vertical padding — 3:5:8 rhythm scaled to 80px desktop.
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  @media screen and (min-width: $tablet-min) {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+
+.capabilityMapBandInner {
+  // Re-align content with About Me page gutters after the viewport breakout.
+  @include home.home-page-gutter;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.capabilityMap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px; // overridden by CAPABILITY_MAP_SIZE.scale via inline style
+  color: $font-color-bold;
+
+  &Header {
+    text-align: center;
+    max-width: 40rem;
+    margin-bottom: 0rem;
+  }
+
+  &Title {
+    // Same typography as About Me intro title ("Hello, I'm Antonio").
+    font-family: var(--font-montserrat);
+    @include fluid-type(20px, 26px, 26px);
+    font-weight: bold;
+    color: $font-color-bold;
+    margin: 0 0 0.5rem;
+    text-align: center;
+  }
+
+  &Tagline {
+    // Match About Me intro paragraphs (`aboutmeIntroDesc p`).
+    @include fluid-type(16px, 20px, 24px);
+    font-weight: 500;
+    color: $font-color-bold;
+    margin: 0 0 0.75rem;
+    text-align: left;
+  }
+
+  &Description {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+    line-height: 1.55;
+    color: #3a5560;
+    margin: 0;
+    text-align: left;
+  }
+
+  &ChartWrap {
+    position: relative;
+    width: 100%;
+    // max-width comes from CAPABILITY_MAP_SIZE.maxChartSize (inline).
+    // Square box sized by width — avoids tall empty space above the SVG.
+    aspect-ratio: 1 / 1;
+    height: auto;
+    margin: -5.25rem auto 0;
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &ChartInner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  &ChartPlaceholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  &Chart {
+    display: block;
+    flex-shrink: 0;
+    overflow: visible;
+    // Preserve 1:1 geometry — never stretch the SVG.
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+    height: auto;
+  }
+
+  &DomainHit {
+    pointer-events: all;
+  }
+
+  &Ring {
+    fill: none;
+    stroke: rgba(6, 76, 95, 0.16);
+    stroke-width: 1;
+  }
+
+  &OuterRim {
+    fill: rgba(6, 76, 95, 0.28);
+    stroke: none;
+  }
+
+  &Divider {
+    stroke: rgba(6, 76, 95, 0.22);
+    stroke-width: 1;
+  }
+
+  &SpokeDot {
+    fill-opacity: 0.9;
+    stroke: #ffffff;
+    stroke-width: 1.25;
+  }
+
+  &ExpertiseAreaFill {
+    fill-opacity: 0.18;
+    stroke: none;
+  }
+
+  &ExpertiseAreaStroke {
+    fill: none;
+    stroke-opacity: 0.75;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    transition: opacity 200ms ease;
+  }
+
+  &DomainLabel {
+    font-family: var(--font-montserrat);
+    font-size: clamp(0.62rem, 1.5vw, 0.85rem);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  &SkillLabel {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.5rem, 1.05vw, 0.68rem);
+    font-weight: 500;
+  }
+
+  &Hub {
+    fill: #ffffff;
+    stroke: rgba(6, 76, 95, 0.28);
+    stroke-width: 1.5;
+  }
+
+  &HubName {
+    font-family: var(--font-montserrat);
+    font-size: clamp(0.7rem, 1.8vw, 0.95rem);
+    font-weight: 700;
+    fill: $font-color-bold;
+  }
+
+  &HubRole {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.42rem, 1.1vw, 0.58rem);
+    font-weight: 500;
+    fill: #3a5560;
+  }
+
+  &Footer {
+    text-align: center;
+    max-width: 38rem;
+  }
+
+  &FooterTitle {
+    font-family: var(--font-montserrat);
+    font-size: clamp(1rem, 2.6vw, 1.25rem);
+    font-weight: 700;
+    color: $font-color-bold;
+    margin: 0 0 0.5rem;
+  }
+
+  &FooterDescription {
+    font-family: var(--font-figtree);
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+    line-height: 1.55;
+    color: #3a5560;
+    margin: 0;
+  }
+}

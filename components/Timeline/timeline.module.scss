@@ -1,31 +1,64 @@
 .timeline {
+  width: 100%;
+
   &Container {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
     flex-direction: column;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 700px;
+    margin-bottom: 2.5rem;
   }
 
-  &Info {
+  &Row {
     display: grid;
-    grid-template-columns: 1fr 140px 1fr;
-    grid-template-rows: auto;
-    align-items: start;
-    align-content: start;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    // Rail width matches scaled logo (~4rem) so icon centers under the rail.
+    grid-template-columns: 4rem minmax(0, 1fr);
+    column-gap: 1.75rem;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  &Rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
   }
 
   &Image {
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-shrink: 0;
+    // Match position title line-box (~20px * 1.2) so logo top reads level with the title.
+    // Logo itself is the visual anchor; no extra top offset.
+  }
+
+  &LogoImg {
+    // ~20% smaller than the previous 5rem (80px) icons.
+    width: 4rem;
+    height: 4rem;
+    object-fit: contain;
+    border-radius: 0.85rem;
+  }
+
+  &Content {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding-bottom: 1.75rem;
+    text-align: left;
+  }
+
+  &Row:last-child &Content {
+    padding-bottom: 0;
   }
 
   &Company {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 20px 0;
+    margin-bottom: 0.85rem;
 
     // Reset UA / inherited heading margins so role → company spacing is only `gap`
     h5 {
@@ -52,68 +85,75 @@
       line-height: 1.2;
       letter-spacing: 0%;
     }
+
+    &Year {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.2;
+    }
   }
 
   &Details {
     font-size: 18px;
     line-height: 120%;
     letter-spacing: 0%;
-    padding: 20px 0;
-  }
-
-  &Period {
-    width: 140px;
-    height: 100%;
-    align-self: stretch;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: 0.85rem;
 
-    &_startDot,
-    &_endDot{
-      width: 16px;
-      height: 16px;
-      background: #4D8390;
-      border-radius: 16px;
+    p {
+      margin: 0;
     }
+  }
 
-    &_line {
-      height: calc(100% - 32px);
-      width: 2px;
-      background: #4D8390;
-    }
+  &Period_startDot,
+  &Period_endDot {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    background: #4D8390;
+    border-radius: 16px;
+  }
 
-    &Mobile {
-      display: none;
-    }
+  &Period_line {
+    flex: 1;
+    width: 2px;
+    min-height: 1.5rem;
+    background: #4D8390;
   }
 
   @media #{$sm} {
-    &Info {
-      display: grid;
-      grid-template-columns: 1fr;
+    &Row {
+      grid-template-columns: 2.6rem minmax(0, 1fr);
+      column-gap: 1rem;
+    }
+
+    &LogoImg {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 0.65rem;
     }
 
     &Company {
-      order: 1;
+      &Position {
+        font-size: 18px;
+      }
+
+      &Name,
+      &Location,
+      &Year {
+        font-size: 16px;
+      }
     }
 
     &Details {
-      order: 2;
+      font-size: 16px;
     }
 
-    &Timeline {
-      display: none;
-
-      &Mobile {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        height: 62px;
-        flex-shrink: 0;
-        width: 100%;
-        margin-bottom: 10px;
-      }
+    &Period_startDot,
+    &Period_endDot {
+      width: 12px;
+      height: 12px;
     }
   }
 }

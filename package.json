@@ -10,7 +10,10 @@
     "seed:project-1": "tsx scripts/seed-project-1.ts",
     "seed:project-2": "tsx scripts/seed-project-2.ts",
     "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts",
-    "seed:main-banner": "tsx scripts/seed-main-banner.ts"
+    "seed:main-banner": "tsx scripts/seed-main-banner.ts",
+    "seed:capability-map": "tsx scripts/seed-capability-map.ts",
+    "seed:about-intro": "tsx scripts/seed-about-intro.ts",
+    "seed:experience-training": "tsx scripts/seed-experience-training.ts"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -22,6 +25,10 @@
     "@mui/material-nextjs": "^7.3.7",
     "@openai/agents": "^0.11.6",
     "@types/react": "19.2.7",
+    "@visx/group": "^4.0.0",
+    "@visx/responsive": "^4.0.0",
+    "@visx/scale": "^4.0.0",
+    "@visx/shape": "^4.0.0",
     "aos": "^2.3.4",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
