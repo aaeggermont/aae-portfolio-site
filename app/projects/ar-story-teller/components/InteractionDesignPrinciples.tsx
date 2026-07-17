@@ -282,7 +282,6 @@ export const InteractionDesignPrinciples = ({
                     alt={image.alt}
                     width={illustrationMaxWidthPx}
                     height={ILLUSTRATION_INTRINSIC_HEIGHT_PX}
-                    unoptimized={false}
                     sizes={[
                       `(max-width: ${breakpointPx.mobileMax}px) 100vw`,
                       `(max-width: ${breakpointPx.tabletMax}px) 90vw`,

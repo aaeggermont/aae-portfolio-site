@@ -285,7 +285,6 @@ export function Storyboard({ title, slides }: StoryboardProps) {
                         alt=""
                         width={THUMB_IMAGE_SIZE}
                         height={THUMB_IMAGE_SIZE}
-                        unoptimized={false}
                         sizes={THUMB_IMAGE_SIZES}
                         style={{
                           display: "block",

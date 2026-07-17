@@ -148,7 +148,6 @@ export const UserModeInteractions = ({
                     alt={item.image.alt}
                     width={INTERACTION_MODE_IMAGE_INTRINSIC_SIZE_PX}
                     height={INTERACTION_MODE_IMAGE_INTRINSIC_SIZE_PX}
-                    unoptimized={false}
                     sizes={INTERACTION_MODE_IMAGE_SIZES}
                     borderRadius={16}
                     style={{
