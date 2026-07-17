@@ -7,6 +7,7 @@ import type { CapabilityMapData } from "@/app/aboutme/data/capability-map-data";
 import { capabilityMapFallback } from "@/app/aboutme/data/capability-map-data";
 import { subscribeCapabilityMapData } from "@/app/aboutme/lib/capability-map.firestore";
 import { CapabilityMapChart } from "./CapabilityMapChart";
+import { CapabilityMapLabels } from "./CapabilityMapLabels";
 import { getCapabilityMapSizeStyles } from "./capability-map.size";
 import styles from "./capability-map.module.scss";
 
@@ -79,6 +80,10 @@ export function CapabilityMap() {
             ) : (
               <div className={styles.capabilityMapChartPlaceholder} aria-hidden />
             )}
+          </div>
+
+          <div className={styles.capabilityMapLabelsWrap}>
+            <CapabilityMapLabels />
           </div>
         </div>
       </div>
