@@ -1,3 +1,37 @@
+@use "../../../home/home-layout" as home;
+
+.capabilityMapBand {
+  // Edge-to-edge band behind title + tagline + chart.
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  box-sizing: border-box;
+  background-color: #F7FBFF;
+  // Vertical padding — 3:5:8 rhythm scaled to 80px desktop.
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  @media screen and (min-width: $tablet-min) {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+
+.capabilityMapBandInner {
+  // Re-align content with About Me page gutters after the viewport breakout.
+  @include home.home-page-gutter;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .capabilityMap {
   display: flex;
   flex-direction: column;
@@ -13,9 +47,9 @@
   }
 
   &Title {
-    // Same family/weight as About Me intro title (h1), ~80% scale for section subtitle.
+    // Same typography as About Me intro title ("Hello, I'm Antonio").
     font-family: var(--font-montserrat);
-    @include fluid-type(16px, 20px, 22px);
+    @include fluid-type(20px, 26px, 26px);
     font-weight: bold;
     color: $font-color-bold;
     margin: 0 0 0.5rem;

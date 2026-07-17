@@ -23,9 +23,9 @@
   }
 
   &Title {
-    // Match Capability Map section subtitle ("Where I add Value").
+    // Same typography as About Me intro title ("Hello, I'm Antonio").
     font-family: var(--font-montserrat);
-    @include fluid-type(16px, 20px, 22px);
+    @include fluid-type(20px, 26px, 26px);
     font-weight: bold;
     color: $font-color-bold;
     margin: 0;
@@ -63,7 +63,7 @@
   &Section {
     // Gap between cards and timeline — proportional to desktop 80px (3:5:8 rhythm).
     margin-top: 30px; // mobile (~3/8 of 80)
-    max-width: 800px;
+    max-width: 700px;
     width: 100%;
 
     @media screen and (min-width: $tablet-min) {

@@ -26,49 +26,61 @@ export function CapabilityMap() {
 
   return (
     <section
-      className={styles.capabilityMap}
+      className={styles.capabilityMapBand}
       aria-labelledby="capability-map-title"
-      style={{ maxWidth: sizeStyles.sectionMaxWidth }}
     >
-      <header className={styles.capabilityMapHeader}>
-        <h2 id="capability-map-title" className={styles.capabilityMapTitle}>
-          {data.header.title}
-        </h2>
-        <p className={styles.capabilityMapTagline}>{data.header.tagline}</p>
-        {data.header.description ? (
-          <p className={styles.capabilityMapDescription}>{data.header.description}</p>
-        ) : null}
-      </header>
+      <div className={styles.capabilityMapBandInner}>
+        <div
+          className={styles.capabilityMap}
+          style={{ maxWidth: sizeStyles.sectionMaxWidth }}
+        >
+          <header className={styles.capabilityMapHeader}>
+            <h2 id="capability-map-title" className={styles.capabilityMapTitle}>
+              {data.header.title}
+            </h2>
+            <p className={styles.capabilityMapTagline}>{data.header.tagline}</p>
+            {data.header.description ? (
+              <p className={styles.capabilityMapDescription}>
+                {data.header.description}
+              </p>
+            ) : null}
+          </header>
 
-      <div
-        className={styles.capabilityMapChartWrap}
-        style={{ maxWidth: sizeStyles.chartMaxSize }}
-      >
-        {hasMounted ? (
-          <ParentSize
-            debounceTime={10}
-            parentSizeStyles={{ width: "100%", height: "100%", overflow: "visible" }}
+          <div
+            className={styles.capabilityMapChartWrap}
+            style={{ maxWidth: sizeStyles.chartMaxSize }}
           >
-            {({ width, height }) => {
-              if (width < 120 || height < 120) {
-                return null;
-              }
+            {hasMounted ? (
+              <ParentSize
+                debounceTime={10}
+                parentSizeStyles={{
+                  width: "100%",
+                  height: "100%",
+                  overflow: "visible",
+                }}
+              >
+                {({ width, height }) => {
+                  if (width < 120 || height < 120) {
+                    return null;
+                  }
 
-              return (
-                <div className={styles.capabilityMapChartInner}>
-                  <CapabilityMapChart
-                    data={data}
-                    width={width}
-                    height={height}
-                    showSkillLabels={width >= 640}
-                  />
-                </div>
-              );
-            }}
-          </ParentSize>
-        ) : (
-          <div className={styles.capabilityMapChartPlaceholder} aria-hidden />
-        )}
+                  return (
+                    <div className={styles.capabilityMapChartInner}>
+                      <CapabilityMapChart
+                        data={data}
+                        width={width}
+                        height={height}
+                        showSkillLabels={width >= 640}
+                      />
+                    </div>
+                  );
+                }}
+              </ParentSize>
+            ) : (
+              <div className={styles.capabilityMapChartPlaceholder} aria-hidden />
+            )}
+          </div>
+        </div>
       </div>
     </section>
   );
