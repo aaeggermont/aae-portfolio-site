@@ -141,39 +141,33 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
   education: [
     {
       year: "2022",
-      degree: "MS - Human Centered Design",
+      degree: "Master of Science — Human Centered Design & Engineering",
       logoKey: "uw",
       location: "Seattle, WA",
-      school: "UNIVERSITY OF WASHINGTOWN",
-      details:
-        "Research and course work includes Human Centered Design, Design Thinking, User Interaction Design and Prototyping, Visual Communication, VR/AR prototyping, Usability Studies, Digital Fabrication, IoT and Physical Computing, Information Design, Design and Management of Complex Systems.",
-    },
-    {
-      year: "2019",
-      degree: "GRADUATE CERTIFICATE -  User Centered Design",
-      logoKey: "uw",
-      location: "Seattle, WA",
-      school: "UNIVERSITY OF WASHINGTOWN",
-      details:
-        "Research and course work includes Human Centered Design, Design Thinking, User Interaction Design and Prototyping, Visual Communication, VR/AR prototyping, Usability Studies, Digital Fabrication, IoT and Physical Computing, Information Design, Design and Management of Complex Systems.",
+      school: "University of Washington",
+      details: `Graduate studies focused on human-centered design, user research, interaction design, information visualization, accessibility, and emerging technologies including virtual and augmented reality. Through interdisciplinary research and project-based learning, I developed a design approach that combines systems thinking, human-centered research, and rapid prototyping to create intuitive solutions for complex technical and organizational challenges.
+
+Notable research projects included AR Magic Tours, an augmented reality experience exploring immersive storytelling within theme parks, and a capstone research project investigating how speculative design can foster trust, reflection, and cross-disciplinary collaboration in scientific research.`,
     },
     {
       year: "2007",
-      degree: "MA - Media Arts",
+      degree: "Master of Arts — Media Arts",
       logoKey: "emerson",
       location: "Boston, MA",
-      school: "EMERSON COLLEGE",
-      details:
-        "My course work included television studio production, graduate film production, computer animation using Maya, digital compositing, research methods in media arts, and traditional cinematography.",
+      school: "Emerson College",
+      details: `Graduate studies explored the intersection of storytelling, visual communication, film production, computer animation, and digital media technologies. Through hands-on production and interdisciplinary collaboration, I developed a strong foundation in creating engaging visual experiences that combine technical execution with narrative design.
+
+My master's project involved producing an original narrative film that integrated live-action cinematography with computer-generated imagery (CGI) and traditional animation, providing early experience in designing interactive and multimedia experiences across multiple creative disciplines.`,
     },
     {
       year: "2003",
-      degree: "GRADUATE CERTIFICATE APPLIED SCIENCES",
+      degree: "Graduate Certificate — Applied Sciences",
       logoKey: "harvard",
       location: "Cambridge, MA",
-      school: "HARVARD UNIVERSITY",
-      details:
-        "My course work included introduction to computer science using C and C++, data structures and algorithms, communication systems and technology, Web programming in Perl, Unix systems programming, Java for distributed systems, communication protocols and Internet architectures, and the study of computer network systems and the development of multimedia applications over high speed networking systems.",
+      school: "Harvard University",
+      details: `Graduate studies established a strong foundation in computer science, software engineering, distributed systems, networking, and multimedia technologies. Coursework emphasized software architecture, algorithms, communication protocols, and the design of scalable applications running across networked environments.
+
+The program strengthened my ability to bridge software engineering with digital media, providing the technical foundation that would later support my work building enterprise platforms, interactive applications, and large-scale production systems.`,
     },
   ],
   certification: [
@@ -188,21 +182,13 @@ I collaborate with multidisciplinary teams throughout the entire product lifecyc
     },
     {
       year: "2025",
-      degree: "Designing and Building AR Applications",
+      degree: "Professional Certificate — Virtual Reality and Augmented Reality",
       logoKey: "mit",
       location: "Cambridge, Massachusetts - on-line",
-      school: "MIT xPro",
-      details:
-        "Study of the design principles and applications of different artificial intelligence (AI) technologies across different industries. Topics included the four stages of AI product design, study of different machine learning algorithms, applying machine learning methods to practical problems, design of intelligent human-machine interfaces, analysis of technical and operational requirements to build AI models, and the Lawler Model for defining an AI problem and identify hey steps to build an organization case.",
-    },
-    {
-      year: "2019",
-      degree: "Graduate Certificate - User Centered Design",
-      logoKey: "uw",
-      location: "Seattle, Washington",
-      school: "University of Washington",
-      details:
-        "My course work included television studio production, graduate film production, computer animation using Maya, digital compositing, research methods in media arts, and traditional cinematography.",
+      school: "MIT xPRO",
+      details: `Professional studies focused on the design, development, and evaluation of extended reality (XR) experiences, including augmented reality (AR), virtual reality (VR), and mixed reality (MR). The program explored human-centered XR design principles, immersive interaction techniques, spatial computing, and the technical foundations required to conceive, prototype, and communicate end-to-end XR solutions.
+
+The knowledge and methodologies developed through the program directly informed the AR Magic Tours research project, where immersive storytelling, contextual interactions, and augmented reality were explored to transform attraction wait times into engaging guest experiences.`,
     },
   ],
 };
