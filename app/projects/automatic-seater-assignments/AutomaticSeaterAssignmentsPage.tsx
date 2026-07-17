@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
+import { useSetAtom } from "jotai";
 
 import styles from "./automatic-seater-assignments.module.scss";
 import TestSignOutButton from "./components/Signout";
@@ -25,8 +26,14 @@ import {
   sectionGapSx,
   sectionRowGapSx,
 } from "./layoutConfig";
+import { AUTOMATIC_SEATER_HEADER_THEME } from "./headerTheme";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+import { layoutState } from "@/app/(public)/layout-state";
+import {
+  defaultHeaderState,
+  headerState,
+} from "@/components/Header/HeaderState";
 
 type AutomaticSeaterAssignmentsPageProps = {
   project: AutomaticSeaterAssignmentsProjectDocument;
@@ -36,9 +43,21 @@ export function AutomaticSeaterAssignmentsPage({
   project,
 }: AutomaticSeaterAssignmentsPageProps) {
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
+  const setLayoutState = useSetAtom(layoutState);
+  const setHeaderState = useSetAtom(headerState);
 
   const viewportBand =
     isMobile ? "mobile" : isTablet ? "tablet" : isDesktopOrLaptop ? "desktop" : "unknown";
+
+  useEffect(() => {
+    setLayoutState({ isFullWidth: true });
+    setHeaderState({ ...AUTOMATIC_SEATER_HEADER_THEME });
+
+    return () => {
+      setLayoutState({ isFullWidth: false });
+      setHeaderState({ ...defaultHeaderState });
+    };
+  }, [setLayoutState, setHeaderState]);
 
   return (
     <div className={styles.pageClipViewport}>

@@ -2,12 +2,12 @@ import { db } from "@/firebase";
 import { doc, getDoc, onSnapshot } from "firebase/firestore";
 
 import {
-  automaticSeaterAssignmentsDataProject,
+  AUTOMATIC_SEATER_PROJECT_KEY,
   type AutomaticSeaterAssignmentsDataProjectDocument,
-} from "@/scripts/automatic-seater-assignments.data";
+} from "@/app/projects/automatic-seater-assignments/types/automaticSeaterAssignmentsContent";
 
 const COLLECTION = "projects_content";
-const PROJECT_KEY = automaticSeaterAssignmentsDataProject.project.projectKey;
+const PROJECT_KEY = AUTOMATIC_SEATER_PROJECT_KEY;
 const NESTED_ARRAY_WRAPPER_KEY = "__firestoreNestedArray";
 
 export type AutomaticSeaterAssignmentsProjectDocument =
@@ -54,9 +54,13 @@ export async function fetchAutomaticSeaterAssignmentsProject(): Promise<Automati
   return decodeFirestoreNestedArrays(content) as AutomaticSeaterAssignmentsDataProjectDocument;
 }
 
+/**
+ * Live Firestore subscription. No local fallback — errors surface via `onError`
+ * so case-study copy is not shipped in the client bundle.
+ */
 export function subscribeAutomaticSeaterAssignmentsProject(
   onData: (project: AutomaticSeaterAssignmentsDataProjectDocument) => void,
-  onError?: (error: Error) => void,
+  onError: (error: Error) => void,
 ) {
   const docRef = doc(db, COLLECTION, PROJECT_KEY);
 
@@ -82,11 +86,21 @@ export function subscribeAutomaticSeaterAssignmentsProject(
       } catch (err) {
         const parsedError =
           err instanceof Error ? err : new Error("Unknown snapshot parsing error");
-        onError?.(parsedError);
+        if (process.env.NODE_ENV !== "production") {
+          console.error(
+            "[automatic-seater-assignments] Failed to parse Firestore content:",
+            parsedError.message,
+          );
+        }
+        onError(parsedError);
       }
     },
     (firestoreError) => {
-      onError?.(firestoreError as Error);
+      onError(
+        firestoreError instanceof Error
+          ? firestoreError
+          : new Error("Firestore subscription failed"),
+      );
     },
   );
 }

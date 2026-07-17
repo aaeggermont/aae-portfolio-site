@@ -123,9 +123,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body>
         <AppRouterCacheProvider options={{ key: "mui" }}>
           <AppProviders>
-            <Header />
-            {children}
-            <ConditionalFooter />
+            <div className="app-shell">
+              <Header />
+              <div className="app-shell-main">{children}</div>
+              <ConditionalFooter />
+            </div>
           </AppProviders>
         </AppRouterCacheProvider>
       </body>

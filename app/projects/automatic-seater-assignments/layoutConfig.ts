@@ -165,13 +165,11 @@ export const imageBannerOverlayMaxWidthSx: SxProps<Theme> = {
 };
 
 /**
- * `ImageBanner` band — spans the full viewport width up to a `1260px` cap, with no side
- * padding, so the hero image overflows the standard left/right content paddings that other
- * sections respect. Centered via `mx: auto`; on narrower viewports it fills 100% width.
+ * `ImageBanner` band — edge-to-edge under the absolute global nav (no max-width cap).
  */
 export const imageBannerBandContentSx: SxProps<Theme> = {
   width: "100%",
-  maxWidth: LAYOUT_DIMENSIONS.desktop.maxWidth,
+  maxWidth: "none",
   px: 0,
   mx: "auto",
   boxSizing: "border-box",

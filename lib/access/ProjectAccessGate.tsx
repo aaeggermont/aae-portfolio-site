@@ -407,7 +407,15 @@ export default function ProjectAccessGate({
     return (
       <>
         {sessionDialog}
-        <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center", px: 2 }}>
+        <Box
+          sx={{
+            flex: 1,
+            display: "grid",
+            placeItems: "center",
+            px: 2,
+            minHeight: { xs: "40vh", md: "50vh" },
+          }}
+        >
           <Stack spacing={2} alignItems="center" sx={{ width: "100%", maxWidth: 360 }}>
             <CircularProgress />
             <Typography variant="body2" color="text.secondary" textAlign="center">
@@ -447,7 +455,20 @@ export default function ProjectAccessGate({
   return (
     <>
       {sessionDialog}
-      <Box sx={{ maxWidth: 720, mx: "auto", py: { xs: 5, md: 8 }, px: 2 }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          maxWidth: 720,
+          width: "100%",
+          mx: "auto",
+          py: { xs: 5, md: 8 },
+          px: 2,
+          boxSizing: "border-box",
+        }}
+      >
         <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 2 }}>
         <Stack spacing={2}>
           <Typography variant="h4" sx={{ fontWeight: 800 }}>
