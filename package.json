@@ -13,7 +13,8 @@
     "seed:main-banner": "tsx scripts/seed-main-banner.ts",
     "seed:capability-map": "tsx scripts/seed-capability-map.ts",
     "seed:about-intro": "tsx scripts/seed-about-intro.ts",
-    "seed:experience-training": "tsx scripts/seed-experience-training.ts"
+    "seed:experience-training": "tsx scripts/seed-experience-training.ts",
+    "seed:mywork-page": "tsx scripts/seed-mywork-page.ts"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
