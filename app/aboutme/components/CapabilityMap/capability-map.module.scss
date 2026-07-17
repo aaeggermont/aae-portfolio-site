@@ -102,6 +102,209 @@
     height: 100%;
   }
 
+  &LabelsWrap {
+    // Compact legend card under the chart, right-aligned.
+    // Negative margin pulls it into the empty square below the circular map.
+    align-self: flex-end;
+    width: fit-content;
+    max-width: 100%;
+    margin-top: -4.5rem;
+    position: relative;
+    z-index: 1;
+
+    @media screen and (min-width: $tablet-min) {
+      margin-top: -7rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      margin-top: -11rem;
+    }
+  }
+
+  &Labels {
+    box-sizing: border-box;
+    width: fit-content;
+    max-width: 100%;
+    // Mobile-first; scale up at tablet / desktop.
+    padding: 0.55rem 0.7rem 0.6rem;
+    border: 0.75px solid #A9C4FA;
+    border-radius: 6px;
+    background-color: #f9fcff;
+
+    @media screen and (min-width: $tablet-min) {
+      padding: 0.7rem 0.85rem 0.75rem;
+      border-width: 1.25px;
+      border-radius: 7px;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      padding: 0.875rem 1.05rem 0.95rem;
+      border-width: 1.5px;
+      border-radius: 8px;
+    }
+  }
+
+  &LabelsTitle {
+    margin: 0 0 0.75rem;
+    text-align: center;
+    font-family: var(--font-montserrat);
+    font-size: 0.58rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $font-color-bold;
+
+    @media screen and (min-width: $tablet-min) {
+      margin-bottom: 0.95rem;
+      font-size: 0.65rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      margin-bottom: 1.15rem;
+      font-size: 16px;
+    }
+  }
+
+  &LabelsList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    @media screen and (min-width: $tablet-min) {
+      gap: 0.5rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      gap: 0.63rem;
+    }
+  }
+
+  &LabelsRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+
+    @media screen and (min-width: $tablet-min) {
+      gap: 0.5rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      gap: 0.6rem;
+    }
+  }
+
+  &LabelCircleSlot {
+    width: 1.25rem;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @media screen and (min-width: $tablet-min) {
+      width: 1.55rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      width: 1.925rem;
+    }
+  }
+
+  &LabelCircle {
+    box-sizing: border-box;
+    flex-shrink: 0;
+    border: 1px solid $font-color-bold;
+    border-radius: 50%;
+    background: transparent;
+
+    @media screen and (min-width: $tablet-min) {
+      border-width: 1.15px;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      border-width: 1.25px;
+    }
+  }
+
+  &LabelCircleSm {
+    width: 0.4rem;
+    height: 0.4rem;
+
+    @media screen and (min-width: $tablet-min) {
+      width: 0.5rem;
+      height: 0.5rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      width: 0.61rem;
+      height: 0.61rem;
+    }
+  }
+
+  &LabelCircleMd {
+    width: 0.62rem;
+    height: 0.62rem;
+
+    @media screen and (min-width: $tablet-min) {
+      width: 0.78rem;
+      height: 0.78rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      width: 0.96rem;
+      height: 0.96rem;
+    }
+  }
+
+  &LabelCircleLg {
+    width: 0.9rem;
+    height: 0.9rem;
+
+    @media screen and (min-width: $tablet-min) {
+      width: 1.15rem;
+      height: 1.15rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      width: 1.4rem;
+      height: 1.4rem;
+    }
+  }
+
+  &LabelCircleXl {
+    width: 1.2rem;
+    height: 1.2rem;
+
+    @media screen and (min-width: $tablet-min) {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      width: 1.84rem;
+      height: 1.84rem;
+    }
+  }
+
+  &LabelText {
+    font-family: var(--font-montserrat);
+    font-size: 0.58rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: $font-color-bold;
+    white-space: nowrap;
+
+    @media screen and (min-width: $tablet-min) {
+      font-size: 0.65rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      font-size: 0.735rem;
+    }
+  }
+
   &Chart {
     display: block;
     flex-shrink: 0;
@@ -154,7 +357,7 @@
 
   &DomainLabel {
     font-family: var(--font-montserrat);
-    font-size: clamp(0.62rem, 1.5vw, 0.85rem);
+    font-size: clamp(0.62rem, 1.5vw, 0.90rem);
     font-weight: 700;
     letter-spacing: 0.01em;
   }
