@@ -7,7 +7,6 @@ import Stack from "@mui/material/Stack";
 import { useSetAtom } from "jotai";
 
 import styles from "./automatic-seater-assignments.module.scss";
-import TestSignOutButton from "./components/Signout";
 import ImageBanner from "./components/ImageBanner";
 import OverviewSection from "./components/OverviewSection";
 import MyContributions from "./components/MyContributions";
@@ -27,6 +26,7 @@ import {
   sectionRowGapSx,
 } from "./layoutConfig";
 import { AUTOMATIC_SEATER_HEADER_THEME } from "./headerTheme";
+import { AUTOMATIC_SEATER_FOOTER_THEME } from "./footerTheme";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import { layoutState } from "@/app/(public)/layout-state";
@@ -34,6 +34,10 @@ import {
   defaultHeaderState,
   headerState,
 } from "@/components/Header/HeaderState";
+import {
+  defaultFooterState,
+  footerState,
+} from "@/components/Footer/FooterState";
 
 type AutomaticSeaterAssignmentsPageProps = {
   project: AutomaticSeaterAssignmentsProjectDocument;
@@ -45,6 +49,7 @@ export function AutomaticSeaterAssignmentsPage({
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
+  const setFooterState = useSetAtom(footerState);
 
   const viewportBand =
     isMobile ? "mobile" : isTablet ? "tablet" : isDesktopOrLaptop ? "desktop" : "unknown";
@@ -52,12 +57,14 @@ export function AutomaticSeaterAssignmentsPage({
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
     setHeaderState({ ...AUTOMATIC_SEATER_HEADER_THEME });
+    setFooterState({ ...AUTOMATIC_SEATER_FOOTER_THEME });
 
     return () => {
       setLayoutState({ isFullWidth: false });
       setHeaderState({ ...defaultHeaderState });
+      setFooterState({ ...defaultFooterState });
     };
-  }, [setLayoutState, setHeaderState]);
+  }, [setLayoutState, setHeaderState, setFooterState]);
 
   return (
     <div className={styles.pageClipViewport}>
@@ -203,10 +210,6 @@ export function AutomaticSeaterAssignmentsPage({
             </Container>
           </Box>
         </FullBleedBand>
-
-        <div className={styles.container}>
-          <TestSignOutButton />
-        </div>
       </div>
     </div>
   );
