@@ -20,8 +20,11 @@ import {
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
@@ -60,6 +63,36 @@ type ApprovedUserRow = {
   displayName?: string | null;
 };
 
+type AccessCodeRow = {
+  id: string;
+  projectKey?: string;
+  projectKeys?: string[];
+  label?: string;
+  reference?: string;
+  codeHint?: string;
+  /** Plaintext code when available (newer codes). */
+  accessCode?: string;
+  enabled?: boolean;
+  expiresAt?: { seconds?: number; toDate?: () => Date } | null;
+  redemptionCount?: number;
+  maxRedemptions?: number | null;
+  createdAt?: { seconds?: number; toDate?: () => Date } | null;
+};
+
+/** Known protected portfolio projects (shown as multi-select for access codes). */
+const PROTECTED_PROJECT_OPTIONS = [
+  { key: "project_1", label: "AR Story Teller" },
+  { key: "project_2", label: "Finding Nemo" },
+  { key: "project_3", label: "DCL Revenue Management" },
+  { key: "project_4", label: "Automatic Seating Assignments" },
+] as const;
+
+function accessCodeProjectKeys(c: AccessCodeRow): string[] {
+  if (Array.isArray(c.projectKeys) && c.projectKeys.length > 0) return c.projectKeys;
+  if (c.projectKey) return [c.projectKey];
+  return [];
+}
+
 function normalizeEmail(email?: string | null) {
   return (email ?? "").trim().toLowerCase();
 }
@@ -68,17 +101,46 @@ function uniq(arr: string[]) {
   return Array.from(new Set(arr));
 }
 
+function formatAccessCodeDate(value?: AccessCodeRow["expiresAt"]): string {
+  if (!value) return "—";
+  try {
+    if (typeof value.toDate === "function") {
+      return value.toDate().toLocaleDateString();
+    }
+    if (typeof value.seconds === "number") {
+      return new Date(value.seconds * 1000).toLocaleDateString();
+    }
+  } catch {
+    // ignore
+  }
+  return "—";
+}
+
 export default function AdminAccessPage() {
   const [pendingRequests, setPendingRequests] = React.useState<AccessRequest[]>([]);
   const [allowlists, setAllowlists] = React.useState<Record<string, AllowlistDoc>>({});
   const [approvedByProject, setApprovedByProject] = React.useState<Record<string, ApprovedUserRow[]>>(
     {}
   );
+  const [accessCodes, setAccessCodes] = React.useState<AccessCodeRow[]>([]);
 
   // manual add panel (keep if useful)
   const [manualProjectKey, setManualProjectKey] = React.useState("project_4");
   const [manualUid, setManualUid] = React.useState("");
   const [manualEmail, setManualEmail] = React.useState("");
+
+  // access code generator
+  const [codeProjectKeys, setCodeProjectKeys] = React.useState<string[]>(["project_4"]);
+  const [codeReference, setCodeReference] = React.useState("");
+  const [codeDays, setCodeDays] = React.useState("30");
+  const [codeBusy, setCodeBusy] = React.useState(false);
+  const [codeError, setCodeError] = React.useState<string | null>(null);
+  const [lastGeneratedCode, setLastGeneratedCode] = React.useState<{
+    code: string;
+    reference: string;
+    projectKeys: string[];
+    expiresAt: string;
+  } | null>(null);
 
   React.useEffect(() => {
     // 1) Pending requests
@@ -118,26 +180,34 @@ export default function AdminAccessPage() {
         const uid = String(data.uid || "");
         if (!projectKey || !uid) return;
 
-        const row: ApprovedUserRow = {
+        if (!map[projectKey]) map[projectKey] = [];
+        map[projectKey].push({
           uid,
           email: data.email ?? null,
           displayName: data.displayName ?? null,
-        };
-
-        map[projectKey] = map[projectKey] ?? [];
-        // de-dupe by uid
-        if (!map[projectKey].some((x) => x.uid === uid)) {
-          map[projectKey].push(row);
-        }
+        });
       });
-
       setApprovedByProject(map);
+    });
+
+    const unsubCodes = onSnapshot(collection(db, "project_access_codes"), (snap) => {
+      const rows: AccessCodeRow[] = snap.docs.map((d) => {
+        const data = d.data() as Omit<AccessCodeRow, "id">;
+        return { id: d.id, ...data };
+      });
+      rows.sort((a, b) => {
+        const aSec = a.createdAt?.seconds ?? 0;
+        const bSec = b.createdAt?.seconds ?? 0;
+        return bSec - aSec;
+      });
+      setAccessCodes(rows);
     });
 
     return () => {
       unsubPending();
       unsubAllow();
       unsubApproved();
+      unsubCodes();
     };
   }, []);
 
@@ -145,7 +215,7 @@ export default function AdminAccessPage() {
     await signOut(auth);
     // optional: hard redirect so auth state fully resets in UI
     window.location.href = "/";
-};
+  };
 
   const approveRequest = async (req: AccessRequest) => {
     console.info(
@@ -298,25 +368,319 @@ export default function AdminAccessPage() {
     setManualEmail("");
   };
 
+  const toggleCodeProjectKey = (key: string) => {
+    setCodeProjectKeys((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+    );
+  };
+
+  const generateAccessCode = async () => {
+    setCodeBusy(true);
+    setCodeError(null);
+    setLastGeneratedCode(null);
+
+    try {
+      const reference = codeReference.trim();
+      const projectKeys = codeProjectKeys;
+      const days = Number(codeDays);
+      if (projectKeys.length === 0 || !reference) {
+        setCodeError("Select at least one project and enter a reference.");
+        return;
+      }
+      if (!Number.isFinite(days) || days <= 0) {
+        setCodeError("Days must be a positive number.");
+        return;
+      }
+
+      const idToken = await auth.currentUser?.getIdToken(true);
+      if (!idToken) {
+        setCodeError("Admin session missing. Sign in again.");
+        return;
+      }
+
+      const res = await fetch("/api/admin/access-codes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ projectKeys, reference, days }),
+      });
+
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        reason?: string;
+        code?: string;
+        reference?: string;
+        projectKeys?: string[];
+        expiresAt?: string;
+        message?: string;
+      } | null;
+
+      if (!res.ok || !data?.ok || !data.code) {
+        setCodeError(data?.message || data?.reason || `Failed (${res.status})`);
+        return;
+      }
+
+      setLastGeneratedCode({
+        code: data.code,
+        reference: data.reference ?? reference,
+        projectKeys: data.projectKeys ?? projectKeys,
+        expiresAt: data.expiresAt ?? "",
+      });
+      setCodeReference("");
+    } catch (e: unknown) {
+      setCodeError(e instanceof Error ? e.message : "Failed to generate code.");
+    } finally {
+      setCodeBusy(false);
+    }
+  };
+
+  const revokeAccessCode = async (codeHash: string) => {
+    const idToken = await auth.currentUser?.getIdToken(true);
+    if (!idToken) return;
+
+    await fetch("/api/admin/access-codes", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({ codeHash, enabled: false }),
+    });
+  };
+
+  const restoreAccessCode = async (codeHash: string) => {
+    const idToken = await auth.currentUser?.getIdToken(true);
+    if (!idToken) return;
+
+    await fetch("/api/admin/access-codes", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${idToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({ codeHash, enabled: true }),
+    });
+  };
+
+  const copyGeneratedCode = async () => {
+    if (!lastGeneratedCode) return;
+    try {
+      await navigator.clipboard.writeText(lastGeneratedCode.code);
+    } catch {
+      // ignore
+    }
+  };
+
+  const copyListedAccessCode = async (code: string) => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch {
+      // ignore
+    }
+  };
+
   return (
     <Box sx={{ p: { xs: 2, md: 3 }, maxWidth: 1100, mx: "auto" }}>
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ fontWeight: 800 }}>
-          Admin · Project Access
-
-                  <Button variant="outlined" color="inherit" onClick={onLogout}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          spacing={1}
+        >
+          <Typography variant="h4" sx={{ fontWeight: 800 }}>
+            Admin · Project Access
+          </Typography>
+          <Button variant="outlined" color="inherit" onClick={onLogout}>
             Sign out
-        </Button>
-        </Typography>
-
-
+          </Button>
+        </Stack>
 
         <Typography variant="body2" color="text.secondary">
-          Approve/revoke reviewers and control per-project allowlists.
+          Approve/revoke reviewers, issue access codes for job applications, and
+          control per-project allowlists.
         </Typography>
 
-
         <Divider />
+
+        {/* Access codes */}
+        <Paper sx={{ p: 2, borderRadius: 2 }}>
+          <Stack spacing={1.5}>
+            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+              Access codes
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Generate one 6-digit code for a company or person that unlocks one or
+              more protected projects. Codes stay visible here so you can re-send
+              them. Revoking a code immediately ends live reviewer sessions.
+            </Typography>
+
+            <TextField
+              label="Reference (company or person)"
+              value={codeReference}
+              onChange={(e) => setCodeReference(e.target.value)}
+              placeholder="Acme Corp – May 2026"
+              fullWidth
+            />
+
+            <Stack spacing={0.5}>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                Projects this code unlocks
+              </Typography>
+              <FormGroup row>
+                {PROTECTED_PROJECT_OPTIONS.map((p) => (
+                  <FormControlLabel
+                    key={p.key}
+                    control={
+                      <Checkbox
+                        checked={codeProjectKeys.includes(p.key)}
+                        onChange={() => toggleCodeProjectKey(p.key)}
+                      />
+                    }
+                    label={`${p.label} (${p.key})`}
+                  />
+                ))}
+              </FormGroup>
+            </Stack>
+
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems={{ sm: "center" }}>
+              <TextField
+                label="Valid days"
+                value={codeDays}
+                onChange={(e) => setCodeDays(e.target.value)}
+                sx={{ minWidth: { sm: 140 } }}
+              />
+              <Button
+                variant="contained"
+                onClick={generateAccessCode}
+                disabled={codeBusy}
+                sx={{ whiteSpace: "nowrap" }}
+              >
+                Generate
+              </Button>
+            </Stack>
+
+            {codeError && (
+              <Typography variant="body2" color="error">
+                {codeError}
+              </Typography>
+            )}
+
+            {lastGeneratedCode && (
+              <Paper
+                variant="outlined"
+                sx={{
+                  p: 1.5,
+                  borderRadius: 2,
+                  bgcolor: "rgba(6, 76, 95, 0.06)",
+                }}
+              >
+                <Stack spacing={1}>
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    New code for {lastGeneratedCode.reference}
+                  </Typography>
+                  <Typography variant="h5" sx={{ fontFamily: "monospace", letterSpacing: 4 }}>
+                    {lastGeneratedCode.code}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Projects: {lastGeneratedCode.projectKeys.join(", ")}
+                    {lastGeneratedCode.expiresAt
+                      ? ` · expires ${new Date(lastGeneratedCode.expiresAt).toLocaleString()}`
+                      : ""}
+                    {" · also saved in the list below for re-send"}
+                  </Typography>
+                  <Button size="small" variant="outlined" onClick={copyGeneratedCode} sx={{ alignSelf: "flex-start" }}>
+                    Copy code
+                  </Button>
+                </Stack>
+              </Paper>
+            )}
+
+            {accessCodes.length === 0 ? (
+              <Typography variant="body2" color="text.secondary">
+                No access codes yet.
+              </Typography>
+            ) : (
+              <Stack spacing={1}>
+                {accessCodes.map((c) => {
+                  const reference = c.reference || c.label || "(no reference)";
+                  const keys = accessCodeProjectKeys(c);
+                  const revoked = c.enabled === false;
+                  const storedCode =
+                    typeof c.accessCode === "string" && /^\d{6}$/.test(c.accessCode)
+                      ? c.accessCode
+                      : null;
+                  return (
+                    <Paper key={c.id} variant="outlined" sx={{ p: 1.5, borderRadius: 2 }}>
+                      <Stack
+                        direction={{ xs: "column", md: "row" }}
+                        spacing={1}
+                        alignItems={{ md: "center" }}
+                        justifyContent="space-between"
+                      >
+                        <Stack spacing={0.5} sx={{ minWidth: 0, flex: 1 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                            {reference}
+                          </Typography>
+                          {storedCode ? (
+                            <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                              <Typography
+                                variant="h6"
+                                sx={{ fontFamily: "monospace", letterSpacing: 3, m: 0 }}
+                              >
+                                {storedCode}
+                              </Typography>
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={() => copyListedAccessCode(storedCode)}
+                              >
+                                Copy
+                              </Button>
+                            </Stack>
+                          ) : (
+                            <Typography variant="body2" color="text.secondary">
+                              Code not stored (hint {c.codeHint ?? "••••••"}) — generate a new
+                              code to re-share.
+                            </Typography>
+                          )}
+                          <Typography variant="body2" color="text.secondary">
+                            {keys.join(", ") || "(no projects)"} · uses {c.redemptionCount ?? 0}
+                            {typeof c.maxRedemptions === "number"
+                              ? ` / ${c.maxRedemptions}`
+                              : ""}{" "}
+                            · expires {formatAccessCodeDate(c.expiresAt)}
+                          </Typography>
+                          <Chip
+                            size="small"
+                            label={revoked ? "Revoked" : "Active"}
+                            color={revoked ? "default" : "success"}
+                            sx={{ alignSelf: "flex-start" }}
+                          />
+                        </Stack>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          color={revoked ? "primary" : "error"}
+                          onClick={() =>
+                            revoked ? restoreAccessCode(c.id) : revokeAccessCode(c.id)
+                          }
+                        >
+                          {revoked ? "Restore" : "Revoke"}
+                        </Button>
+                      </Stack>
+                    </Paper>
+                  );
+                })}
+              </Stack>
+            )}
+          </Stack>
+        </Paper>
 
         {/* Pending requests */}
         <Paper sx={{ p: 2, borderRadius: 2 }}>

@@ -1,18 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+
 import { getAdmin } from "@/lib/firebase/admin";
-import {
-  evaluateProjectSessionWindow,
-  getProjectSessionCookieName,
-  hardExpiredProjectSessionResponse,
-  isHardExpiredFromAuthTime,
-} from "@/lib/auth/projectSessionWindow";
+import { authorizeProjectMediaAccess } from "@/lib/auth/authorizeProjectMediaAccess";
+import { applyProjectSessionStartCookie } from "@/lib/auth/projectSessionWindow";
 
 export const runtime = "nodejs";
-
-function normalizeEmail(email?: string | null) {
-  return (email ?? "").trim().toLowerCase();
-}
 
 export async function GET(req: Request) {
   try {
@@ -30,53 +23,23 @@ export async function GET(req: Request) {
       return NextResponse.json({ ok: false, reason: "invalid_path" }, { status: 400 });
     }
 
-    const session = cookieStore.get("session")?.value;
-    if (!session) {
-      return NextResponse.json({ ok: false, reason: "no_session" }, { status: 401 });
-    }
+    const authResult = await authorizeProjectMediaAccess({
+      auth,
+      db,
+      projectKey,
+      cookieStore,
+    });
 
-    let decoded: { uid: string; email?: string | null };
-    try {
-      decoded = (await auth.verifySessionCookie(session, false)) as {
-        uid: string;
-        email?: string | null;
-      };
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error);
-      return NextResponse.json({ ok: false, reason: "bad_session", message }, { status: 401 });
-    }
-
-    const projSnap = await db.collection("projects_data").doc(projectKey).get();
-    const visibility = (projSnap.exists ? (projSnap.data() as any)?.visibility : "restricted") as
-      | "public"
-      | "restricted";
-
-    if (visibility !== "public") {
-      const email = normalizeEmail(decoded.email);
-      const allowSnap = await db.collection("access_allowlist").doc(projectKey).get();
-      const allow = (allowSnap.exists ? allowSnap.data() : {}) as any;
-      const enabled = allow?.enabled !== false;
-      const uidOk = Array.isArray(allow?.allowedUids) && allow.allowedUids.includes(decoded.uid);
-      const emailOk =
-        !!email &&
-        Array.isArray(allow?.allowedEmails) &&
-        allow.allowedEmails.map(normalizeEmail).includes(email);
-
-      if (!enabled || (!uidOk && !emailOk)) {
-        return NextResponse.json({ ok: false, reason: "not_allowed" }, { status: 403 });
-      }
-
-      if (isHardExpiredFromAuthTime((decoded as { auth_time?: number }).auth_time)) {
-        return hardExpiredProjectSessionResponse(projectKey);
-      }
-
-      const projectSessionState = evaluateProjectSessionWindow(
-        projectKey,
-        cookieStore.get(getProjectSessionCookieName(projectKey))?.value,
+    if (!authResult.ok) {
+      if (authResult.hardExpiredResponse) return authResult.hardExpiredResponse;
+      return NextResponse.json(
+        {
+          ok: false,
+          reason: authResult.reason,
+          ...(authResult.message ? { message: authResult.message } : {}),
+        },
+        { status: authResult.status },
       );
-      if (projectSessionState.hardExpired) {
-        return hardExpiredProjectSessionResponse(projectKey);
-      }
     }
 
     const file = bucket.file(objectPath);
@@ -89,13 +52,19 @@ export async function GET(req: Request) {
     const fileBuffer = await file.download();
     const contentType = metadata.contentType || "application/octet-stream";
 
-    return new Response(new Uint8Array(fileBuffer[0]), {
+    const res = new NextResponse(new Uint8Array(fileBuffer[0]), {
       status: 200,
       headers: {
         "Content-Type": contentType,
         "Cache-Control": "private, max-age=300",
       },
     });
+
+    if (authResult.shouldSetStartCookie) {
+      applyProjectSessionStartCookie(res, projectKey, authResult.startCookieAtSeconds);
+    }
+
+    return res;
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     return NextResponse.json({ ok: false, reason: "proxy_failed", message }, { status: 500 });
