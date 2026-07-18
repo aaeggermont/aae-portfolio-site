@@ -33,6 +33,7 @@ import Typography from "@mui/material/Typography";
 
 import { auth, db } from "@/firebase";
 import SessionAccessDialog from "@/lib/access/SessionAccessDialog";
+import { notifyPortfolioAccessChanged } from "@/lib/auth/portfolioAccessEvents";
 import { signOutSessionAndReloadForSignIn } from "@/lib/auth/signInAgainNavigation";
 import { ProjectAccessContext } from "./ProjectAccessContext";
 
@@ -377,6 +378,7 @@ export default function ProjectAccessGate({
 
       setAccessCodeAllowed(true);
       setAccessCode("");
+      notifyPortfolioAccessChanged();
     } catch {
       setMsg("Could not redeem access code. Please try again.");
     } finally {
