@@ -1,6 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 
 import { overviewParagraphMaxWidthSx } from "../layoutConfig";
+import { aosFadeUp } from "../aosProps";
 import {
   AUTOMATIC_SEATER_OVERVIEW_TITLE_COLOR,
   bodyTypeSx,
@@ -20,7 +21,12 @@ export const MainSolutionParagraph = ({ data }: Props) => {
   const { title, body } = data;
 
   return (
-    <Stack spacing={4} alignItems="center" sx={{ width: "100%" }}>
+    <Stack
+      spacing={4}
+      alignItems="center"
+      sx={{ width: "100%" }}
+      {...aosFadeUp({ once: true, duration: 800, offset: 140 })}
+    >
       <Typography
         component="h2"
         textAlign="center"

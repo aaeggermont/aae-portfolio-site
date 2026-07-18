@@ -15,10 +15,7 @@ import {
 } from "firebase/firestore";
 import {
   GoogleAuthProvider,
-  createUserWithEmailAndPassword,
   onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   type User,
@@ -36,6 +33,7 @@ import Typography from "@mui/material/Typography";
 
 import { auth, db } from "@/firebase";
 import SessionAccessDialog from "@/lib/access/SessionAccessDialog";
+import { notifyPortfolioAccessChanged } from "@/lib/auth/portfolioAccessEvents";
 import { signOutSessionAndReloadForSignIn } from "@/lib/auth/signInAgainNavigation";
 import { ProjectAccessContext } from "./ProjectAccessContext";
 
@@ -59,8 +57,8 @@ type AccessRequestDoc = {
   email?: string | null;
   displayName?: string | null;
   status: "pending" | "approved" | "rejected";
-  createdAt: any;
-  resolvedAt?: any;
+  createdAt: unknown;
+  resolvedAt?: unknown;
   resolvedBy?: string | null;
 };
 
@@ -90,25 +88,50 @@ export default function ProjectAccessGate({
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState(true);
 
-  const [allow, setAllow] = React.useState<AllowlistDoc | null>(null);
   const [allowed, setAllowed] = React.useState(false);
+  const [accessCodeAllowed, setAccessCodeAllowed] = React.useState(false);
+  const [accessCodeStatusReady, setAccessCodeStatusReady] = React.useState(false);
 
   const [reqStatus, setReqStatus] = React.useState<
     AccessRequestDoc["status"] | null
   >(null);
 
   const [visibility, setVisibility] = React.useState<"public" | "restricted">(
-    "restricted"
+    "restricted",
   );
   const [visibilityLoading, setVisibilityLoading] = React.useState(true);
   /** False until first allowlist snapshot (or error) when restricted + signed in. */
   const [allowlistReady, setAllowlistReady] = React.useState(false);
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [accessCode, setAccessCode] = React.useState("");
   const [authBusy, setAuthBusy] = React.useState(false);
   const [msg, setMsg] = React.useState<string | null>(null);
   const [sessionHardExpired, setSessionHardExpired] = React.useState(false);
+
+  const refreshAccessCodeStatus = React.useCallback(async () => {
+    try {
+      const res = await fetch(
+        `/api/access/session-status?projectKey=${encodeURIComponent(projectKey)}`,
+        { credentials: "include" },
+      );
+      const data = (await res.json().catch(() => null)) as {
+        allowed?: boolean;
+        via?: string;
+        visibility?: "public" | "restricted";
+      } | null;
+
+      if (data?.visibility === "public" || data?.visibility === "restricted") {
+        setVisibility(data.visibility);
+        setVisibilityLoading(false);
+      }
+
+      setAccessCodeAllowed(Boolean(data?.allowed && data?.via === "access_code"));
+    } catch {
+      setAccessCodeAllowed(false);
+    } finally {
+      setAccessCodeStatusReady(true);
+    }
+  }, [projectKey]);
 
   React.useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => {
@@ -121,6 +144,10 @@ export default function ProjectAccessGate({
   }, []);
 
   React.useEffect(() => {
+    void refreshAccessCodeStatus();
+  }, [refreshAccessCodeStatus]);
+
+  React.useEffect(() => {
     let alive = true;
     setVisibilityLoading(true);
 
@@ -128,11 +155,12 @@ export default function ProjectAccessGate({
       const q = query(
         collection(db, "projects_data"),
         where("projectKey", "==", projectKey),
-        limit(1)
+        limit(1),
       );
 
       const snap = await getDocs(q);
-      const v = (snap.docs[0]?.data() as any)?.visibility;
+      const v = (snap.docs[0]?.data() as { visibility?: string } | undefined)
+        ?.visibility;
 
       if (!alive) return;
 
@@ -140,12 +168,11 @@ export default function ProjectAccessGate({
       setVisibilityLoading(false);
     }
 
-    loadVisibility()
-      .catch(() => {
-        if (!alive) return;
-        setVisibility("restricted");
-        setVisibilityLoading(false);
-      });
+    loadVisibility().catch(() => {
+      if (!alive) return;
+      setVisibility("restricted");
+      setVisibilityLoading(false);
+    });
 
     return () => {
       alive = false;
@@ -156,14 +183,12 @@ export default function ProjectAccessGate({
     if (visibilityLoading) return;
 
     if (visibility === "public") {
-      setAllow(null);
       setAllowed(true);
       setAllowlistReady(true);
       return;
     }
 
     if (!user) {
-      setAllow(null);
       setAllowed(false);
       setAllowlistReady(true);
       return;
@@ -175,11 +200,9 @@ export default function ProjectAccessGate({
     const unsub = onSnapshot(
       allowRef,
       (snap) => {
-        const data = (snap.exists()
-          ? (snap.data() as AllowlistDoc)
-          : {}) as AllowlistDoc;
-
-        setAllow(data);
+        const data = (
+          snap.exists() ? (snap.data() as AllowlistDoc) : {}
+        ) as AllowlistDoc;
 
         const enabled = data.enabled !== false;
         const uidOk = (data.allowedUids ?? []).includes(user.uid);
@@ -191,10 +214,9 @@ export default function ProjectAccessGate({
         setAllowlistReady(true);
       },
       () => {
-        setAllow(null);
         setAllowed(false);
         setAllowlistReady(true);
-      }
+      },
     );
 
     return () => unsub();
@@ -203,7 +225,7 @@ export default function ProjectAccessGate({
   React.useEffect(() => {
     if (visibilityLoading) return;
     if (visibility === "public") return;
-    if (!user || allowed) return;
+    if (!user || allowed || accessCodeAllowed) return;
 
     const reqRef = doc(db, "access_requests", requestId(projectKey, user.uid));
     const unsub = onSnapshot(reqRef, (snap) => {
@@ -217,11 +239,19 @@ export default function ProjectAccessGate({
     });
 
     return () => unsub();
-  }, [user, allowed, projectKey, visibility, visibilityLoading]);
+  }, [
+    user,
+    allowed,
+    accessCodeAllowed,
+    projectKey,
+    visibility,
+    visibilityLoading,
+  ]);
 
   React.useEffect(() => {
     if (visibilityLoading) return;
     if (visibility !== "restricted" || !user || sessionHardExpired) return;
+    if (accessCodeAllowed) return;
 
     const signedInUser = user;
     const refreshEveryMs = getSilentRefreshIntervalMs();
@@ -268,14 +298,21 @@ export default function ProjectAccessGate({
       window.clearInterval(intervalId);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [user, visibility, visibilityLoading, sessionHardExpired, projectKey]);
+  }, [
+    user,
+    visibility,
+    visibilityLoading,
+    sessionHardExpired,
+    projectKey,
+    accessCodeAllowed,
+  ]);
 
   const handleSessionDialogSignInAgain = React.useCallback(() => {
-    void signOutSessionAndReloadForSignIn(auth);
-  }, []);
+    void signOutSessionAndReloadForSignIn(auth, projectKey);
+  }, [projectKey]);
 
-  async function mintSessionCookie(user: User) {
-    const idToken = await user.getIdToken(true);
+  async function mintSessionCookie(nextUser: User) {
+    const idToken = await nextUser.getIdToken(true);
 
     const res = await fetch("/api/auth/session", {
       method: "POST",
@@ -300,56 +337,50 @@ export default function ProjectAccessGate({
       if (visibility === "restricted") {
         await mintSessionCookie(cred.user);
       }
-    } catch (e: any) {
-      setMsg(e?.message ?? "Google sign-in failed.");
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : "Google sign-in failed.";
+      setMsg(message);
     } finally {
       setAuthBusy(false);
     }
   };
 
-  const handleEmailSignIn = async () => {
+  const handleRedeemAccessCode = async () => {
     setAuthBusy(true);
     setMsg(null);
 
     try {
-      const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
+      const res = await fetch("/api/access/redeem-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ projectKey, code: accessCode }),
+      });
 
-      if (visibility === "restricted") {
-        await mintSessionCookie(cred.user);
+      const data = (await res.json().catch(() => null)) as {
+        ok?: boolean;
+        reason?: string;
+      } | null;
+
+      if (!res.ok || !data?.ok) {
+        const reason = data?.reason;
+        if (reason === "invalid_code") setMsg("That access code is not valid.");
+        else if (reason === "code_expired") setMsg("That access code has expired.");
+        else if (reason === "code_disabled" || reason === "code_revoked")
+          setMsg("That access code has been revoked.");
+        else if (reason === "code_exhausted")
+          setMsg("That access code has reached its use limit.");
+        else if (reason === "rate_limited")
+          setMsg("Too many attempts. Please try again later.");
+        else setMsg("Could not redeem access code. Please try again.");
+        return;
       }
-    } catch (e: any) {
-      setMsg(e?.message ?? "Email sign-in failed.");
-    } finally {
-      setAuthBusy(false);
-    }
-  };
 
-  const handleEmailCreate = async () => {
-    setAuthBusy(true);
-    setMsg(null);
-
-    try {
-      const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
-
-      if (visibility === "restricted") {
-        await mintSessionCookie(cred.user);
-      }
-    } catch (e: any) {
-      setMsg(e?.message ?? "Account creation failed.");
-    } finally {
-      setAuthBusy(false);
-    }
-  };
-
-  const handleReset = async () => {
-    setAuthBusy(true);
-    setMsg(null);
-
-    try {
-      await sendPasswordResetEmail(auth, email.trim());
-      setMsg("Password reset email sent.");
-    } catch (e: any) {
-      setMsg(e?.message ?? "Password reset failed.");
+      setAccessCodeAllowed(true);
+      setAccessCode("");
+      notifyPortfolioAccessChanged();
+    } catch {
+      setMsg("Could not redeem access code. Please try again.");
     } finally {
       setAuthBusy(false);
     }
@@ -384,14 +415,32 @@ export default function ProjectAccessGate({
         method: "POST",
         credentials: "include",
       });
-    } catch {}
+    } catch {
+      // ignore
+    }
+
+    try {
+      await fetch("/api/access/clear-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ projectKey }),
+      });
+    } catch {
+      // ignore
+    }
 
     await signOut(auth);
     window.location.reload();
   };
 
   const accessPending =
-    visibility === "restricted" && !!user && !allowlistReady;
+    visibility === "restricted" &&
+    !!user &&
+    !allowlistReady &&
+    !accessCodeAllowed;
+
+  const gateReady = accessCodeStatusReady && !visibilityLoading;
 
   const sessionDialog = (
     <SessionAccessDialog
@@ -401,13 +450,21 @@ export default function ProjectAccessGate({
     />
   );
 
-  if (loading || visibilityLoading || accessPending) {
-    const verifyingOnly = accessPending && !loading && !visibilityLoading;
+  if (loading || !gateReady || accessPending) {
+    const verifyingOnly = accessPending && !loading && gateReady;
 
     return (
       <>
         {sessionDialog}
-        <Box sx={{ minHeight: "60vh", display: "grid", placeItems: "center", px: 2 }}>
+        <Box
+          sx={{
+            flex: 1,
+            display: "grid",
+            placeItems: "center",
+            px: 2,
+            minHeight: { xs: "40vh", md: "50vh" },
+          }}
+        >
           <Stack spacing={2} alignItems="center" sx={{ width: "100%", maxWidth: 360 }}>
             <CircularProgress />
             <Typography variant="body2" color="text.secondary" textAlign="center">
@@ -422,18 +479,7 @@ export default function ProjectAccessGate({
     );
   }
 
-  if (visibility === "public") {
-    return (
-      <>
-        {sessionDialog}
-        <ProjectAccessContext.Provider value={{ projectKey, visibility }}>
-          {children}
-        </ProjectAccessContext.Provider>
-      </>
-    );
-  }
-
-  if (user && allowed) {
+  if (visibility === "public" || (user && allowed) || accessCodeAllowed) {
     return (
       <>
         {sessionDialog}
@@ -447,126 +493,162 @@ export default function ProjectAccessGate({
   return (
     <>
       {sessionDialog}
-      <Box sx={{ maxWidth: 720, mx: "auto", py: { xs: 5, md: 8 }, px: 2 }}>
+      <Box
+        sx={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          maxWidth: 720,
+          width: "100%",
+          mx: "auto",
+          py: { xs: 5, md: 8 },
+          px: 2,
+          boxSizing: "border-box",
+        }}
+      >
         <Paper sx={{ p: { xs: 2, md: 3 }, borderRadius: 2 }}>
-        <Stack spacing={2}>
-          <Typography variant="h4" sx={{ fontWeight: 800 }}>
-            {title}
-          </Typography>
+          <Stack spacing={2}>
+            <Typography variant="h4" sx={{ fontWeight: 800 }}>
+              {title}
+            </Typography>
 
-          <Typography color="text.secondary">
-            This page is restricted.
-          </Typography>
+            <Typography color="text.secondary">This page is restricted.</Typography>
 
-          <Divider />
+            <Divider />
 
-          {!user ? (
-            <Stack spacing={2}>
-              <Button
-                variant="contained"
-                onClick={handleGoogle}
-                disabled={authBusy}
-              >
-                Sign in with Google
-              </Button>
-
-              <Divider>or</Divider>
-
-              <Stack spacing={1.25}>
-                <TextField
-                  label="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                />
-                <TextField
-                  label="Password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                />
-
-                <Stack direction="row" spacing={1} flexWrap="wrap">
-                  <Button
-                    variant="contained"
-                    onClick={handleEmailSignIn}
-                    disabled={authBusy}
-                  >
-                    Sign in
-                  </Button>
-
-                  <Button
-                    variant="outlined"
-                    onClick={handleEmailCreate}
-                    disabled={authBusy}
-                  >
-                    Create account
-                  </Button>
-
-                  <Button
-                    variant="text"
-                    onClick={handleReset}
-                    disabled={authBusy || !email.trim()}
-                  >
-                    Forgot password
-                  </Button>
-                </Stack>
-              </Stack>
-
-              {msg && (
-                <Typography variant="body2" color="error">
-                  {msg}
-                </Typography>
-              )}
-            </Stack>
-          ) : (
-            <Stack spacing={1.5}>
-              <Typography variant="body2" color="text.secondary">
-                Signed in as <strong>{user.email ?? user.uid}</strong>
-              </Typography>
-
-              <Stack direction="row" spacing={1} flexWrap="wrap">
-                <Button variant="outlined" onClick={handleSignOut}>
-                  Sign out
-                </Button>
-
+            {!user ? (
+              <Stack spacing={2}>
                 <Button
                   variant="contained"
-                  onClick={handleRequestAccess}
-                  disabled={reqStatus === "pending" || reqStatus === "approved"}
+                  onClick={handleGoogle}
+                  disabled={authBusy}
                 >
-                  {reqStatus === "pending"
-                    ? "Request sent"
-                    : reqStatus === "rejected"
-                    ? "Request rejected"
-                    : reqStatus === "approved"
-                    ? "Approved (refresh)"
-                    : "Request access"}
+                  Sign in with Google
                 </Button>
-              </Stack>
 
-              {reqStatus === "pending" && (
+                <Divider>or</Divider>
+
                 <Typography variant="body2" color="text.secondary">
-                  Your request is pending approval. Once approved, refresh this
-                  page.
+                  Have an access code from a job application or invite?
                 </Typography>
-              )}
 
-              {reqStatus === "rejected" && (
-                <Typography variant="body2" color="error">
-                  Your request was rejected. Contact the site owner if this is a
-                  mistake.
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={1}
+                  alignItems={{ sm: "flex-start" }}
+                >
+                  <TextField
+                    label="Access code"
+                    value={accessCode}
+                    onChange={(e) =>
+                      setAccessCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                      maxLength: 6,
+                      autoComplete: "one-time-code",
+                    }}
+                    placeholder="6-digit code"
+                    sx={{ flex: 1 }}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={handleRedeemAccessCode}
+                    disabled={authBusy || accessCode.length !== 6}
+                    sx={{ whiteSpace: "nowrap", minHeight: 56 }}
+                  >
+                    Enter code
+                  </Button>
+                </Stack>
+
+                {msg && (
+                  <Typography variant="body2" color="error">
+                    {msg}
+                  </Typography>
+                )}
+              </Stack>
+            ) : (
+              <Stack spacing={1.5}>
+                <Typography variant="body2" color="text.secondary">
+                  Signed in as <strong>{user.email ?? user.uid}</strong>
                 </Typography>
-              )}
 
-              <Typography variant="caption" color="text.secondary">
-                Allowlist enabled: {String(allow?.enabled !== false)} ·
-                projectKey: {projectKey}
-              </Typography>
-            </Stack>
-          )}
-        </Stack>
+                <Stack direction="row" spacing={1} flexWrap="wrap">
+                  <Button variant="outlined" onClick={handleSignOut}>
+                    Sign out
+                  </Button>
+
+                  <Button
+                    variant="contained"
+                    onClick={handleRequestAccess}
+                    disabled={reqStatus === "pending" || reqStatus === "approved"}
+                  >
+                    {reqStatus === "pending"
+                      ? "Request sent"
+                      : reqStatus === "rejected"
+                        ? "Request rejected"
+                        : reqStatus === "approved"
+                          ? "Approved (refresh)"
+                          : "Request access"}
+                  </Button>
+                </Stack>
+
+                <Divider>or use an access code</Divider>
+
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={1}
+                  alignItems={{ sm: "flex-start" }}
+                >
+                  <TextField
+                    label="Access code"
+                    value={accessCode}
+                    onChange={(e) =>
+                      setAccessCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
+                    inputProps={{
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                      maxLength: 6,
+                      autoComplete: "one-time-code",
+                    }}
+                    placeholder="6-digit code"
+                    sx={{ flex: 1 }}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={handleRedeemAccessCode}
+                    disabled={authBusy || accessCode.length !== 6}
+                    sx={{ whiteSpace: "nowrap", minHeight: 56 }}
+                  >
+                    Enter code
+                  </Button>
+                </Stack>
+
+                {reqStatus === "pending" && (
+                  <Typography variant="body2" color="text.secondary">
+                    Your request is pending approval. Once approved, refresh this
+                    page.
+                  </Typography>
+                )}
+
+                {reqStatus === "rejected" && (
+                  <Typography variant="body2" color="error">
+                    Your request was rejected. Contact the site owner if this is a
+                    mistake.
+                  </Typography>
+                )}
+
+                {msg && (
+                  <Typography variant="body2" color="error">
+                    {msg}
+                  </Typography>
+                )}
+              </Stack>
+            )}
+          </Stack>
         </Paper>
       </Box>
     </>

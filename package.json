@@ -10,6 +10,7 @@
     "seed:project-1": "tsx scripts/seed-project-1.ts",
     "seed:project-2": "tsx scripts/seed-project-2.ts",
     "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts",
+    "create:access-code": "tsx scripts/create-project-access-code.ts",
     "seed:main-banner": "tsx scripts/seed-main-banner.ts",
     "seed:capability-map": "tsx scripts/seed-capability-map.ts",
     "seed:about-intro": "tsx scripts/seed-about-intro.ts",

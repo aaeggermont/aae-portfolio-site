@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
+import { useSetAtom } from "jotai";
 
 import styles from "./automatic-seater-assignments.module.scss";
-import TestSignOutButton from "./components/Signout";
 import ImageBanner from "./components/ImageBanner";
 import OverviewSection from "./components/OverviewSection";
 import MyContributions from "./components/MyContributions";
@@ -17,6 +17,9 @@ import StandardParagraphBlock from "./components/StandardParagraphBlock";
 import ResearchMethod from "./components/ResearchMethod";
 import { ResearchMethodImageBlock } from "./components/ResearchMethodImageBlock";
 import FullBleedBand from "./components/FullBleedBand";
+import StarFieldAtmosphere from "./components/StarFieldAtmosphere";
+import StarToursCaseStudyLogo from "./components/StarToursCaseStudyLogo";
+import { useBandParallax } from "./components/useBandParallax";
 import type { AutomaticSeaterAssignmentsProjectDocument } from "./lib/automatic-seater-assignments.firestore";
 import {
   FULL_BLEED_BAND_PADDINGS,
@@ -25,8 +28,19 @@ import {
   sectionGapSx,
   sectionRowGapSx,
 } from "./layoutConfig";
+import { AUTOMATIC_SEATER_HEADER_THEME } from "./headerTheme";
+import { AUTOMATIC_SEATER_FOOTER_THEME } from "./footerTheme";
 import { useResponsive } from "@/lib/responsive/ResponsiveQueryProvider";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+import { layoutState } from "@/app/(public)/layout-state";
+import {
+  defaultHeaderState,
+  headerState,
+} from "@/components/Header/HeaderState";
+import {
+  defaultFooterState,
+  footerState,
+} from "@/components/Footer/FooterState";
 
 type AutomaticSeaterAssignmentsPageProps = {
   project: AutomaticSeaterAssignmentsProjectDocument;
@@ -36,9 +50,29 @@ export function AutomaticSeaterAssignmentsPage({
   project,
 }: AutomaticSeaterAssignmentsPageProps) {
   const { isDesktopOrLaptop, isTablet, isMobile } = useResponsive();
+  const setLayoutState = useSetAtom(layoutState);
+  const setHeaderState = useSetAtom(headerState);
+  const setFooterState = useSetAtom(footerState);
+  /** Panels drift only a few pixels vs. the stronger star parallax. */
+  const panelParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.035,
+    maxPx: 6,
+  });
 
   const viewportBand =
     isMobile ? "mobile" : isTablet ? "tablet" : isDesktopOrLaptop ? "desktop" : "unknown";
+
+  useEffect(() => {
+    setLayoutState({ isFullWidth: true });
+    setHeaderState({ ...AUTOMATIC_SEATER_HEADER_THEME });
+    setFooterState({ ...AUTOMATIC_SEATER_FOOTER_THEME });
+
+    return () => {
+      setLayoutState({ isFullWidth: false });
+      setHeaderState({ ...defaultHeaderState });
+      setFooterState({ ...defaultFooterState });
+    };
+  }, [setLayoutState, setHeaderState, setFooterState]);
 
   return (
     <div className={styles.pageClipViewport}>
@@ -78,6 +112,8 @@ export function AutomaticSeaterAssignmentsPage({
           constrainContent={false}
           withVerticalPadding={false}
           sx={{
+            position: "relative",
+            isolation: "isolate",
             background:
               "linear-gradient(180deg, rgba(64,126,192,1) 0%, rgba(3,4,5,1) 10%)",
             minHeight: "100vh",
@@ -88,12 +124,28 @@ export function AutomaticSeaterAssignmentsPage({
             [breakpointMediaQuery.desktopUp]: {
               py: FULL_BLEED_BAND_PADDINGS.y.desktop,
             },
-            gap: { xs: 2, sm: 2, md: 2, lg: 3 },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
+          <StarFieldAtmosphere />
+
+          <Box
+            ref={panelParallaxRef}
+            sx={{
+              position: "relative",
+              zIndex: 1,
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: { xs: 2, sm: 2, md: 2, lg: 3 },
+              willChange: "transform",
+            }}
+          >
+          <StarToursCaseStudyLogo />
+
           <StandardParagraphBlock
             title={project.narrative.starToursCaseStudyTitle}
             subtitle={project.narrative.starToursCaseStudySubtitle}
@@ -127,7 +179,11 @@ export function AutomaticSeaterAssignmentsPage({
           >
             <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: 2 }}>
               <ResearchMethodImageBlock
-                block={project.figures.humanCenteredDesignIllustration}
+                block={{
+                  ...project.figures.humanCenteredDesignIllustration,
+                  // Light diagram text needs a dark lightbox scrim for contrast.
+                  lightboxModalBackground: "rgba(8, 12, 18, 0.97)",
+                }}
               />
             </Container>
 
@@ -183,11 +239,8 @@ export function AutomaticSeaterAssignmentsPage({
               </Stack>
             </Container>
           </Box>
+          </Box>
         </FullBleedBand>
-
-        <div className={styles.container}>
-          <TestSignOutButton />
-        </div>
       </div>
     </div>
   );

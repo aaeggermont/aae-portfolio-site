@@ -2,6 +2,7 @@
 
 import IconButton from '@mui/material/IconButton';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import { useAtomValue } from 'jotai';
 
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 import { HeaderLogo } from '@/components/Header/HeaderLogo';
@@ -13,15 +14,8 @@ import {
   getFooterThemeStyle,
   resolveFooterLogoColors,
 } from './footerTheme';
+import { footerState } from './FooterState';
 import styles from './footer.module.scss';
-
-type FooterProps = {
-  isDark?: boolean;
-  logoFontColor?: string;
-  logoAccentColor?: string;
-  fontColor?: string;
-  backgroundColor?: string;
-};
 
 type FooterMenuLink = {
   path: string;
@@ -29,20 +23,29 @@ type FooterMenuLink = {
   navKey: HomeNavKey;
 };
 
-export function Footer(props: FooterProps = {}) {
+export function Footer() {
     const screenDevice = useResponsive();
     const pathname = usePathname();
+    const {
+      isDark,
+      fontColor,
+      background,
+      backgroundColor,
+      logoFontColor,
+      logoAccentColor,
+    } = useAtomValue(footerState);
 
     const footerThemeStyle = getFooterThemeStyle({
-      isDark: props.isDark,
-      fontColor: props.fontColor,
-      backgroundColor: props.backgroundColor,
+      isDark,
+      fontColor,
+      background,
+      backgroundColor,
     });
-    const { primary: logoPrimaryColor, accent: logoAccentColor } =
+    const { primary: logoPrimaryColor, accent: resolvedLogoAccent } =
       resolveFooterLogoColors({
-        isDark: props.isDark,
-        logoFontColor: props.logoFontColor,
-        logoAccentColor: props.logoAccentColor,
+        isDark,
+        logoFontColor,
+        logoAccentColor,
       });
 
     const menuLinks: FooterMenuLink[] = [
@@ -78,12 +81,16 @@ export function Footer(props: FooterProps = {}) {
               width="140"
               height="37"
               primaryColor={logoPrimaryColor}
-              accentColor={logoAccentColor}
+              accentColor={resolvedLogoAccent}
             />
           </Link>
           {!screenDevice.isMobile ? (
             <div className={styles.footer_linkedin}>
-              <IconButton color="primary" component="label" onClick={handleLinkedIn}>
+              <IconButton
+                component="label"
+                onClick={handleLinkedIn}
+                sx={{ color: 'var(--footer-text-color)' }}
+              >
                 <LinkedInIcon />
               </IconButton>
             </div>
@@ -110,31 +117,35 @@ export function Footer(props: FooterProps = {}) {
 
     if (screenDevice.isMobile) {
         return (
-            <div
-              className={clsx(wrapperClass, styles.footerMobileWrapper)}
-              style={footerThemeStyle}
-            >
+            <div className={styles.footerShell} style={footerThemeStyle}>
                 <div
-                    className={styles['footer-container']}
-                    style={footerThemeStyle}
+                  className={clsx(wrapperClass, styles.footerMobileWrapper)}
+                  style={footerThemeStyle}
                 >
-                    {logoBlock}
-                    {navigationBlock}
-                    {copyrightBlock}
+                    <div
+                        className={styles['footer-container']}
+                        style={footerThemeStyle}
+                    >
+                        {logoBlock}
+                        {navigationBlock}
+                        {copyrightBlock}
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className={wrapperClass}>
-            <div
-              className={styles['footer-container']}
-              style={footerThemeStyle}
-            >
-                {logoBlock}
-                {copyrightBlock}
-                {navigationBlock}
+        <div className={styles.footerShell} style={footerThemeStyle}>
+            <div className={wrapperClass}>
+                <div
+                  className={styles['footer-container']}
+                  style={footerThemeStyle}
+                >
+                    {logoBlock}
+                    {copyrightBlock}
+                    {navigationBlock}
+                </div>
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ export function LayoutMainComponent({ children }: { children: ReactNode }) {
 
     return (
         <main
-          className={`${isFullWidth ? "" : "global-container"} flex-1 w-full min-w-0`}
+          className={`${isFullWidth ? "" : "global-container"} flex-1 w-full min-w-0 flex flex-col`}
         >
           {children}
         </main>

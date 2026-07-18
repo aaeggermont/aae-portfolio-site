@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Stack, Typography } from "@mui/material";
 
 import { overviewParagraphMaxWidthSx } from "../layoutConfig";
@@ -6,6 +8,7 @@ import {
   bodyTypeSx,
   titleTypeSx,
 } from "../typography";
+import { useScrollReveal } from "./useScrollReveal";
 
 export type OverviewSectionData = {
   title: string;
@@ -19,9 +22,23 @@ type Props = {
 
 export const OverviewSection = ({ data }: Props) => {
   const { title, paragraphs } = data;
+  const { ref, revealSx } = useScrollReveal<HTMLDivElement>({
+    effect: "zoom-in",
+    hideUntilReveal: false,
+    armAfterScrollY: 56,
+    rootMargin: "0px 0px -8% 0px",
+    threshold: 0.15,
+    scaleFrom: 0.96,
+    durationMs: 900,
+  });
 
   return (
-    <Stack spacing={4} alignItems="center" sx={{ width: "100%" }}>
+    <Stack
+      ref={ref}
+      spacing={4}
+      alignItems="center"
+      sx={{ width: "100%", ...revealSx }}
+    >
       <Typography
         component="h2"
         textAlign="center"

@@ -147,8 +147,8 @@ export default function GatedImage({
     );
 
   const handleSignInAgain = React.useCallback(() => {
-    void signOutSessionAndReloadForSignIn(auth);
-  }, []);
+    void signOutSessionAndReloadForSignIn(auth, projectKey);
+  }, [projectKey]);
 
   return (
     <Box

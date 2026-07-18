@@ -18,7 +18,7 @@ import { ResearchMethodCardShell } from "./ResearchMethodCardShell";
 import StandardParagraphBlock from "./StandardParagraphBlock";
 
 type Props = {
-  /** One item from `automaticSeaterAssignmentsDataProject.researchMethods` (static today; Firestore later). */
+  /** One research-method block from Firestore `researchMethods`. */
   data: ResearchMethodBlockData;
 };
 
