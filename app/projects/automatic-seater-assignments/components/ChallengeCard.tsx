@@ -6,6 +6,7 @@ import {
   bodyTypeSx,
   titleTypeSx,
 } from "../typography";
+import { aosIntroFadeUp } from "../aosProps";
 
 const CHALLENGE_CARD_BACKGROUND = "#FFFFFF";
 
@@ -29,6 +30,7 @@ export default function ChallengeCard({ data }: Props) {
     <Paper
       component="section"
       elevation={6}
+      {...aosIntroFadeUp()}
       sx={{
         width: "100%",
         maxWidth: 660,
