@@ -1,0 +1,99 @@
+"use client";
+
+import Box from "@mui/material/Box";
+import { keyframes } from "@mui/system";
+
+import { STAR_FIELD_STARS, type StarSpec } from "./starFieldStars";
+
+const twinkleA = keyframes`
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+`;
+
+const twinkleB = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+`;
+
+/**
+ * Hard-edged pinpricks — no soft glow falloff (that read as blurry blobs).
+ */
+function starsToRadialBackground(stars: StarSpec[]): string {
+  return stars
+    .map((star) => {
+      const r = star.size / 2;
+      return `radial-gradient(circle ${r}px at ${star.left}% ${star.top}%, rgba(255,255,255,${star.opacity}) 0%, rgba(255,255,255,${star.opacity}) 70%, transparent 71%)`;
+    })
+    .join(", ");
+}
+
+/** Chunk stars so no single `background-image` exceeds browser layer limits. */
+function chunkStars(stars: StarSpec[], chunkCount: number): StarSpec[][] {
+  const chunks: StarSpec[][] = Array.from({ length: chunkCount }, () => []);
+  stars.forEach((star, i) => {
+    chunks[i % chunkCount].push(star);
+  });
+  return chunks;
+}
+
+const STAR_CHUNKS = chunkStars(STAR_FIELD_STARS, 6).map(starsToRadialBackground);
+
+type StarFieldAtmosphereProps = {
+  className?: string;
+};
+
+/**
+ * Dense, slow-twinkle star layer for the Star Tours dark narrative band.
+ * Decorative only — sits behind content and ignores pointer events.
+ */
+export default function StarFieldAtmosphere({
+  className,
+}: StarFieldAtmosphereProps) {
+  return (
+    <Box
+      className={className}
+      aria-hidden
+      sx={{
+        position: "absolute",
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        zIndex: 0,
+        pointerEvents: "none",
+        overflow: "hidden",
+        // Ease in through the blue→black fade so stars read from the
+        // start of the Star Tours section, not only deeper in the band.
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.35) 4%, #000 10%)",
+        maskImage:
+          "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.35) 4%, #000 10%)",
+        "@media (prefers-reduced-motion: reduce)": {
+          "& > *": {
+            animation: "none !important",
+            opacity: "0.9 !important",
+          },
+        },
+      }}
+    >
+      {STAR_CHUNKS.map((backgroundImage, index) => (
+        <Box
+          key={index}
+          sx={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "100% 100%",
+            animation: `${index % 2 === 0 ? twinkleA : twinkleB} ${
+              9 + (index % 3) * 2
+            }s ease-in-out ${index * 0.6}s infinite`,
+            // Keep a lighter set on small screens.
+            display:
+              index >= 3 ? { xs: "none", md: "block" } : "block",
+          }}
+        />
+      ))}
+    </Box>
+  );
+}
