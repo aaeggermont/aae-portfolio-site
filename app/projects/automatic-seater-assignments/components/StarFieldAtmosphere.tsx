@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import { keyframes } from "@mui/system";
 
 import { STAR_FIELD_STARS, type StarSpec } from "./starFieldStars";
+import { useBandParallax } from "./useBandParallax";
 
 const twinkleA = keyframes`
   0%, 100% { opacity: 0.75; }
@@ -14,6 +15,12 @@ const twinkleB = keyframes`
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 `;
+
+/** How strongly stars lag behind scroll (0 = locked to panels, 1 = viewport-fixed). */
+const STAR_PARALLAX_FACTOR = 0.22;
+
+/** Extra height on the moving layer so translateY never shows empty edges. */
+const PARALLAX_OVERSCAN = "18%";
 
 /**
  * Hard-edged pinpricks — no soft glow falloff (that read as blurry blobs).
@@ -44,11 +51,16 @@ type StarFieldAtmosphereProps = {
 
 /**
  * Dense, slow-twinkle star layer for the Star Tours dark narrative band.
+ * Subtle scroll parallax vs. panels; disabled under `prefers-reduced-motion`.
  * Decorative only — sits behind content and ignores pointer events.
  */
 export default function StarFieldAtmosphere({
   className,
 }: StarFieldAtmosphereProps) {
+  const parallaxRef = useBandParallax<HTMLDivElement>({
+    factor: STAR_PARALLAX_FACTOR,
+  });
+
   return (
     <Box
       className={className}
@@ -69,31 +81,42 @@ export default function StarFieldAtmosphere({
         maskImage:
           "linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.35) 4%, #000 10%)",
         "@media (prefers-reduced-motion: reduce)": {
-          "& > *": {
+          "& [data-star-layer]": {
             animation: "none !important",
             opacity: "0.9 !important",
           },
         },
       }}
     >
-      {STAR_CHUNKS.map((backgroundImage, index) => (
-        <Box
-          key={index}
-          sx={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "100% 100%",
-            animation: `${index % 2 === 0 ? twinkleA : twinkleB} ${
-              9 + (index % 3) * 2
-            }s ease-in-out ${index * 0.6}s infinite`,
-            // Keep a lighter set on small screens.
-            display:
-              index >= 3 ? { xs: "none", md: "block" } : "block",
-          }}
-        />
-      ))}
+      <Box
+        ref={parallaxRef}
+        sx={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: `-${PARALLAX_OVERSCAN}`,
+          bottom: `-${PARALLAX_OVERSCAN}`,
+          willChange: "transform",
+        }}
+      >
+        {STAR_CHUNKS.map((backgroundImage, index) => (
+          <Box
+            key={index}
+            data-star-layer=""
+            sx={{
+              position: "absolute",
+              inset: 0,
+              backgroundImage,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "100% 100%",
+              animation: `${index % 2 === 0 ? twinkleA : twinkleB} ${
+                9 + (index % 3) * 2
+              }s ease-in-out ${index * 0.6}s infinite`,
+              display: index >= 3 ? { xs: "none", md: "block" } : "block",
+            }}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }
