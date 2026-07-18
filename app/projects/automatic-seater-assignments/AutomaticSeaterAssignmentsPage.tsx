@@ -19,6 +19,7 @@ import { ResearchMethodImageBlock } from "./components/ResearchMethodImageBlock"
 import FullBleedBand from "./components/FullBleedBand";
 import StarFieldAtmosphere from "./components/StarFieldAtmosphere";
 import StarToursCaseStudyLogo from "./components/StarToursCaseStudyLogo";
+import { useBandParallax } from "./components/useBandParallax";
 import type { AutomaticSeaterAssignmentsProjectDocument } from "./lib/automatic-seater-assignments.firestore";
 import {
   FULL_BLEED_BAND_PADDINGS,
@@ -52,6 +53,11 @@ export function AutomaticSeaterAssignmentsPage({
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
   const setFooterState = useSetAtom(footerState);
+  /** Panels drift only a few pixels vs. the stronger star parallax. */
+  const panelParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.035,
+    maxPx: 6,
+  });
 
   const viewportBand =
     isMobile ? "mobile" : isTablet ? "tablet" : isDesktopOrLaptop ? "desktop" : "unknown";
@@ -126,6 +132,7 @@ export function AutomaticSeaterAssignmentsPage({
           <StarFieldAtmosphere />
 
           <Box
+            ref={panelParallaxRef}
             sx={{
               position: "relative",
               zIndex: 1,
@@ -134,6 +141,7 @@ export function AutomaticSeaterAssignmentsPage({
               flexDirection: "column",
               alignItems: "center",
               gap: { xs: 2, sm: 2, md: 2, lg: 3 },
+              willChange: "transform",
             }}
           >
           <StarToursCaseStudyLogo />
