@@ -179,7 +179,11 @@ export function AutomaticSeaterAssignmentsPage({
           >
             <Container maxWidth={false} sx={{ ...layoutContentContainerSx, pt: 2 }}>
               <ResearchMethodImageBlock
-                block={project.figures.humanCenteredDesignIllustration}
+                block={{
+                  ...project.figures.humanCenteredDesignIllustration,
+                  // Light diagram text needs a dark lightbox scrim for contrast.
+                  lightboxModalBackground: "rgba(8, 12, 18, 0.97)",
+                }}
               />
             </Container>
 
