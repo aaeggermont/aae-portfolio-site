@@ -26,7 +26,8 @@ export function useBandParallax<T extends HTMLElement>({
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (motionQuery.matches) return;
 
-    const band = el.parentElement;
+    const band =
+      el.closest("section") ?? el.parentElement;
     if (!band) return;
 
     let frame = 0;
