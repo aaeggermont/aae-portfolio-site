@@ -3,8 +3,10 @@
 import type { HeaderLogoColorProps, HeaderProps } from ".";
 import Link from 'next/link';
 import { HeaderLogo } from './HeaderLogo';
+import { HeaderSignOut } from './HeaderSignOut';
 import { HEADER_NAV_ITEMS } from './navConfig';
 import { useHeaderNav } from './useHeaderNav';
+import { useHeaderSignOutVisibility } from './useHeaderSignOut';
 
 import styles from './header.module.scss';
 
@@ -15,6 +17,7 @@ export function HeaderDesktop({
   resumeHref,
 }: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
   const { getHref, isActive } = useHeaderNav(resumeHref);
+  const { ready: signOutReady, showSignOut } = useHeaderSignOutVisibility();
 
   return <>
     <div className={styles.site_menu}>
@@ -66,6 +69,14 @@ export function HeaderDesktop({
                   </li>
                 );
               })}
+              {signOutReady && showSignOut ? (
+                <li className={styles.menu_item}>
+                  <HeaderSignOut
+                    color={fontColor}
+                    className={styles.header_sign_out_in_item}
+                  />
+                </li>
+              ) : null}
             </ul>
           </nav>
         </div>
