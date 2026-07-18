@@ -113,6 +113,8 @@ export const footerMobileLayoutStyle = {
 export type FooterThemeOptions = {
   isDark?: boolean;
   fontColor?: string;
+  /** CSS `background` (solid or gradient); wins over `backgroundColor`. */
+  background?: string;
   backgroundColor?: string;
 };
 
@@ -127,10 +129,14 @@ export function resolveFooterBorderColor(options: FooterThemeOptions = {}): stri
   return options.isDark ? FOOTER_COLORS.borderDark : FOOTER_COLORS.borderLight;
 }
 
-export function resolveFooterBackgroundColor(
+export function resolveFooterBackground(
   options: FooterThemeOptions = {},
 ): string {
-  return options.backgroundColor ?? FOOTER_COLORS.background;
+  return (
+    options.background ??
+    options.backgroundColor ??
+    FOOTER_COLORS.background
+  );
 }
 
 export function resolveFooterLogoColors(options: {
@@ -155,7 +161,7 @@ export function getFooterThemeStyle(
     ...footerMobileLayoutStyle,
     "--footer-text-color": resolveFooterTextColor(options),
     "--footer-border-color": resolveFooterBorderColor(options),
-    "--footer-background-color": resolveFooterBackgroundColor(options),
+    "--footer-background": resolveFooterBackground(options),
     "--footer-active-underline-color": FOOTER_COLORS.activeUnderline,
   } as CSSProperties;
 }
