@@ -1,5 +1,10 @@
 @use '../../app/home/home-layout' as home;
 
+.footerShell {
+  width: 100%;
+  background: var(--footer-background, #ffffff);
+}
+
 .footerContentCap {
   @include home.home-page-gutter;
 }
@@ -51,7 +56,7 @@
   border-top-color: var(--footer-border-color);
   border-top-width: 0.1rem;
   margin-top: 3rem;
-  background-color: var(--footer-background-color);
+  background: var(--footer-background);
 
   @media #{$sm}, #{$xs} {
     height: auto;
