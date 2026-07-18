@@ -17,6 +17,8 @@ import StandardParagraphBlock from "./components/StandardParagraphBlock";
 import ResearchMethod from "./components/ResearchMethod";
 import { ResearchMethodImageBlock } from "./components/ResearchMethodImageBlock";
 import FullBleedBand from "./components/FullBleedBand";
+import StarFieldAtmosphere from "./components/StarFieldAtmosphere";
+import StarToursCaseStudyLogo from "./components/StarToursCaseStudyLogo";
 import type { AutomaticSeaterAssignmentsProjectDocument } from "./lib/automatic-seater-assignments.firestore";
 import {
   FULL_BLEED_BAND_PADDINGS,
@@ -104,6 +106,8 @@ export function AutomaticSeaterAssignmentsPage({
           constrainContent={false}
           withVerticalPadding={false}
           sx={{
+            position: "relative",
+            isolation: "isolate",
             background:
               "linear-gradient(180deg, rgba(64,126,192,1) 0%, rgba(3,4,5,1) 10%)",
             minHeight: "100vh",
@@ -114,12 +118,26 @@ export function AutomaticSeaterAssignmentsPage({
             [breakpointMediaQuery.desktopUp]: {
               py: FULL_BLEED_BAND_PADDINGS.y.desktop,
             },
-            gap: { xs: 2, sm: 2, md: 2, lg: 3 },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
+          <StarFieldAtmosphere />
+
+          <Box
+            sx={{
+              position: "relative",
+              zIndex: 1,
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: { xs: 2, sm: 2, md: 2, lg: 3 },
+            }}
+          >
+          <StarToursCaseStudyLogo />
+
           <StandardParagraphBlock
             title={project.narrative.starToursCaseStudyTitle}
             subtitle={project.narrative.starToursCaseStudySubtitle}
@@ -208,6 +226,7 @@ export function AutomaticSeaterAssignmentsPage({
                 />
               </Stack>
             </Container>
+          </Box>
           </Box>
         </FullBleedBand>
       </div>
