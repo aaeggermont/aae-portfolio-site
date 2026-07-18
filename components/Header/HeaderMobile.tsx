@@ -10,12 +10,17 @@ import HomeIcon from "@mui/icons-material/Home";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import WorkIcon from "@mui/icons-material/Work";
 import MailIcon from "@mui/icons-material/Mail";
+import LogoutIcon from "@mui/icons-material/Logout";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import type { HeaderLogoColorProps, HeaderProps } from ".";
 import { HeaderLogo } from './HeaderLogo';
 import { clsx } from 'clsx';
 import { HEADER_NAV_ITEMS, type HeaderNavKey } from './navConfig';
 import { useHeaderNav } from './useHeaderNav';
+import {
+  signOutEverywhere,
+  useHeaderSignOutVisibility,
+} from './useHeaderSignOut';
 import {
   HEADER_MOBILE_NAVY,
   HEADER_SIDEBAR_LOGO_ACCENT,
@@ -49,6 +54,7 @@ export function HeaderMobile({
   resumeHref,
 }: HeaderProps & HeaderLogoColorProps & { resumeHref: string }) {
   const { getHref, isActive } = useHeaderNav(resumeHref);
+  const { ready: signOutReady, showSignOut } = useHeaderSignOutVisibility();
 
   const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
@@ -203,6 +209,23 @@ export function HeaderMobile({
                 </li>
               );
             })}
+            {signOutReady && showSignOut ? (
+              <li className="menu-item">
+                <button
+                  type="button"
+                  className={styles.header_sign_out_mobile}
+                  onClick={() => {
+                    closeMenu();
+                    void signOutEverywhere();
+                  }}
+                >
+                  <span className={styles.menu_icon} aria-hidden>
+                    <LogoutIcon style={{ height: "26px" }} />
+                  </span>
+                  Sign out
+                </button>
+              </li>
+            ) : null}
           </ul>
         </div>
       </div>
