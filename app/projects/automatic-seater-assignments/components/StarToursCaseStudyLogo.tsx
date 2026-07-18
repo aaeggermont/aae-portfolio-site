@@ -6,6 +6,7 @@ import Container from "@mui/material/Container";
 import GatedImage from "@/lib/media/GatedImage";
 import { layoutContentContainerSx } from "../layoutConfig";
 import { AUTOMATIC_SEATER_PROJECT_KEY } from "../types/automaticSeaterAssignmentsContent";
+import { useBandParallax } from "./useBandParallax";
 
 /** Firebase Storage object for the Star Tours case-study header mark. */
 export const STAR_TOURS_CASE_STUDY_LOGO_OBJECT_PATH =
@@ -20,13 +21,20 @@ const LOGO_INTRINSIC_HEIGHT = 420;
  * inside the dark narrative band.
  */
 export default function StarToursCaseStudyLogo() {
+  const logoParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.08,
+    maxPx: 18,
+  });
+
   return (
     <Container maxWidth={false} sx={layoutContentContainerSx}>
       <Box
+        ref={logoParallaxRef}
         sx={{
           display: "flex",
           justifyContent: "center",
           width: "100%",
+          willChange: "transform",
           "& img": {
             width: "100%",
             height: "auto",
