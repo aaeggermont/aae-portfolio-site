@@ -17,7 +17,7 @@ function TypewriterComponent() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   if (prefersReducedMotion) {
-    return <>Hello, my name is Antonio</>;
+    return <>Antonio Aranda Eggermont</>;
   }
 
   return (
@@ -28,7 +28,7 @@ function TypewriterComponent() {
         deleteSpeed: 50,
       }}
       onInit={(typewriter) => {
-        typewriter.typeString("Hello, my name is Antonio").pauseFor(2500).start();
+        typewriter.typeString("Antonio Aranda Eggermont").pauseFor(2500).start();
       }}
     />
   );

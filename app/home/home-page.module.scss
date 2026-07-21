@@ -1,7 +1,11 @@
 /* app/home/home-page.module.scss */
+@use './home-layout' as home;
 
 .homePage {
   width: 100%;
+  max-width: home.$home-layout-max-width-desktop; /* 1260px */
+  margin-left: auto;
+  margin-right: auto;
   background-color: var(--page-canvas);
   display: flex;
   flex-direction: column;

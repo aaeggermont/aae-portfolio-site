@@ -45,7 +45,7 @@
     justify-content: center;
   
     .summarySectionText {
-      @include fluid-type(16px, 22px, 32px);
+      @include home-fluid-type(16px, 22px, 32px);
       font-family: var(--font-figtree);
       color: $font-color-bold;
       line-height: 1.6;
