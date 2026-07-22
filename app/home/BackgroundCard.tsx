@@ -16,9 +16,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import styles from "./background.module.scss";
 import type { BackgroundItem } from "@/app/home/data/background-data";
+import { buildPublicStorageUrl } from "@/lib/firebase/publicStorageUrl";
 
-const DIALOG_ICON_OPACITY = 0.80;
-const CARD_ICON_OPACITY = 0.80;
+const DIALOG_ICON_OPACITY = 1;
+const CARD_ICON_OPACITY = 1;
 
 type BackgroundCardProps = {
   info: BackgroundItem;
@@ -27,14 +28,21 @@ type BackgroundCardProps = {
 export default function BackgroundCard({ info }: BackgroundCardProps) {
   const [open, setOpen] = useState(false);
 
-  const { title, img, description } = info;
+  const {
+    title,
+    iconObjectPath,
+    iconWidth = 36,
+    iconHeight = 36,
+    summary,
+    description,
+  } = info;
+  const iconSrc = buildPublicStorageUrl(iconObjectPath);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      {/* Dialog with full description */}
       <Dialog
         fullWidth
         maxWidth="lg"
@@ -62,14 +70,14 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           </Tooltip>
         </div>
 
-        {/* Header: icon + title */}
         <div className={styles.dialogHeader}>
           <div className={styles.dialogHeaderMain}>
             <div className={styles.dialogIcon}>
               <Image
-                src={img}
+                src={iconSrc}
                 alt={title}
                 fill
+                unoptimized
                 style={{ objectFit: "contain", opacity: DIALOG_ICON_OPACITY }}
               />
             </div>
@@ -96,7 +104,6 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           </div>
         </div>
 
-        {/* Body: paragraphs */}
         <DialogContent dividers id="background-dialog-description">
           {description.map((paragraph, index) => (
             <DialogContentText
@@ -125,7 +132,6 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Card */}
       <Card
         onClick={handleClickOpen}
         className={styles.fullHeightCard}
@@ -144,27 +150,42 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         }}
         raised
       >
-        <CardActionArea sx={{ height: "100%" }}>
+        <CardActionArea
+          className={styles.cardActionArea}
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            padding: "24px",
+            boxSizing: "border-box",
+            gap: "16px",
+          }}
+        >
           <div className={styles.cardIconArea}>
-            <div className={styles.cardIcon}>
+            <div
+              className={styles.cardIcon}
+              style={{ width: iconWidth, height: iconHeight }}
+            >
               <Image
-                src={img}
+                src={iconSrc}
                 alt={title}
                 fill
+                unoptimized
                 style={{ objectFit: "contain", opacity: CARD_ICON_OPACITY }}
               />
             </div>
           </div>
 
-          {/* Title */}
-          <CardContent>
+          <CardContent className={styles.cardContent}>
             <div className={styles.backgroundTitle}>
               <span className={styles.backgroundTitleLabel}>{title}</span>
             </div>
+            <p className={styles.cardSummary}>{summary}</p>
           </CardContent>
         </CardActionArea>
       </Card>
     </>
   );
 }
-

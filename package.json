@@ -12,6 +12,7 @@
     "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts",
     "create:access-code": "tsx scripts/create-project-access-code.ts",
     "seed:main-banner": "tsx scripts/seed-main-banner.ts",
+    "seed:what-i-do": "tsx scripts/seed-what-i-do.ts",
     "seed:capability-map": "tsx scripts/seed-capability-map.ts",
     "seed:about-intro": "tsx scripts/seed-about-intro.ts",
     "seed:experience-training": "tsx scripts/seed-experience-training.ts"

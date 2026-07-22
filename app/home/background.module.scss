@@ -4,18 +4,42 @@
   max-width: 100%;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+}
+
+.cardActionArea {
+  /* Layout + 24px padding also set via MUI `sx` so they win over CardActionArea defaults */
+  height: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  padding: 24px !important;
+  box-sizing: border-box !important;
+  gap: 16px;
 }
 
 .cardIconArea {
   display: flex;
-  justify-content: center;
-  padding-top: 0.65rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0;
+  width: 100%;
 }
 
 .cardIcon {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.cardContent {
+  /* Kill MUI CardContent’s default 16px padding so the 24px card padding is the only inset */
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100%;
+  flex: 0 0 auto;
 }
 
 .dialogPaper {
@@ -81,41 +105,28 @@
   }
 }
 
-@media screen and #{$mobile} {
-  .backgroundTitle {
-    text-align: center;
-    .backgroundTitleLabel {
-      margin-bottom: 30px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: #074C5F;
-      font-family: var(--font-montserrat);
-    }
+.backgroundTitle {
+  text-align: left;
+  width: 100%;
+
+  .backgroundTitleLabel {
+    display: block;
+    margin-bottom: 0;
+    font-family: var(--font-poppins);
+    font-size: 18px;
+    font-weight: 500;
+    color: #074c5f;
+    line-height: 1.3;
   }
 }
 
-@media screen and #{$tablet} {
-  .backgroundTitle {
-    text-align: center;
-    .backgroundTitleLabel {
-      margin-bottom: 30px;
-      font-weight: 600;
-      font-size: 1rem;
-      color: #074C5F;
-      font-family: var(--font-montserrat);
-    }
-  }
-}
-
-@media screen and #{$desktop-device} {
-  .backgroundTitle {
-    text-align: center;
-    .backgroundTitleLabel {
-      margin-bottom: 2rem;
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: #074C5F;
-      font-family: var(--font-montserrat);
-    }
-  }
+.cardSummary {
+  margin: 0.5rem 0 0;
+  padding: 0;
+  text-align: left;
+  font-family: var(--font-poppins);
+  font-size: 16px;
+  font-weight: 300;
+  color: #074c5f;
+  line-height: 1.4;
 }
