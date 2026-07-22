@@ -11,17 +11,28 @@
   margin-right: calc(50% - 50vw);
   background-color: #f9f7f2;
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
   overflow-x: clip;
   overflow-y: visible;
   padding-block: 2rem;
+  /* Gutter aligns carousel first card with heading (mirrors Guest Needs) */
+  --what-i-do-gutter: #{home.$home-layout-margin-mobile};
 
   @media screen and (min-width: $tablet-min) {
     padding-block: 3rem;
+    --what-i-do-gutter: calc(
+      (100vw - min(100vw, #{home.$home-layout-max-width-tablet})) / 2 +
+        #{home.$home-layout-margin-tablet}
+    );
   }
 
   @media screen and (min-width: $desktop-min) {
     padding-block: 4rem;
+    --what-i-do-gutter: calc(
+      (100vw - min(100vw, #{home.$home-layout-max-width-desktop})) / 2 +
+        #{home.$home-layout-margin-desktop}
+    );
   }
 }
 
@@ -29,7 +40,6 @@
   @include home.home-page-gutter;
   text-align: center;
   width: 100%;
-  padding-bottom: 2rem;
 }
 
 .heading {
@@ -46,113 +56,6 @@
   }
 }
 
-
-.placeholder {
-  @include home-fluid-type(16px, 18px, 20px);
-  font-family: var(--font-figtree);
-  color: $font-color-bold;
-  opacity: 0.75;
-}
-
-.backgroundsContainer {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    gap: 5%;
-}
-
-$what-i-do-card-width-mobile: 152px;
-$what-i-do-card-height-mobile: 140px;
-$what-i-do-card-width-tablet: 183px;
-$what-i-do-card-height-tablet: 168px;
-$what-i-do-card-width: 280px;
-$what-i-do-card-height: 210px;
-$what-i-do-gap-mobile: 48px;
-$what-i-do-gap-tablet: 82px;
-$what-i-do-gap-desktop: 24px;
-
-.cardsGrid {
-  display: grid;
-  width: min(100%, $what-i-do-card-width-mobile);
-  margin-inline: auto;
-  justify-content: center;
-  justify-items: center;
-  gap: $what-i-do-gap-mobile;
-  grid-template-columns: minmax(0, $what-i-do-card-width-mobile);
-
-  /* Wide mobile — 2×2 */
-  @media screen and (min-width: 600px) and (max-width: $mobile-max) {
-    gap: $what-i-do-gap-mobile;
-    grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width-mobile));
-    width: min(
-      100%,
-      calc(#{$what-i-do-card-width-mobile} * 2 + #{$what-i-do-gap-mobile})
-    );
-  }
-
-  /* Tablet — 2×2 */
-  @media screen and #{$tablet} {
-    gap: $what-i-do-gap-tablet;
-    grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width-tablet));
-    width: min(
-      100%,
-      calc(#{$what-i-do-card-width-tablet} * 2 + #{$what-i-do-gap-tablet})
-    );
-  }
-
-  /* Desktop — 1×4 row, 280×210 cards */
-  @media screen and #{$desktop-device} {
-    gap: $what-i-do-gap-desktop;
-    grid-template-columns: repeat(4, $what-i-do-card-width);
-    width: min(
-      100%,
-      calc(
-        #{$what-i-do-card-width} * 4 + #{$what-i-do-gap-desktop} * 3
-      )
-    );
-    justify-content: space-between;
-  }
-}
-
-.cardWrapper {
-  width: $what-i-do-card-width-mobile;
-  max-width: 100%;
-
-  @media screen and #{$tablet} {
-    width: $what-i-do-card-width-tablet;
-  }
-
-  @media screen and #{$desktop-device} {
-    width: $what-i-do-card-width;
-  }
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-  opacity 0.6s ease-out,
-  transform 0.6s ease-out;
-}
-
-.cardInView {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.floatLayer {
-  @include home.home-float-layer-bleed;
-}
-
-.floatImg {
-  position: absolute;
-  opacity: 1;
-  animation: slowFloat 12s ease-in-out infinite alternate;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
-}
-
-@keyframes slowFloat {
-  0%   { transform: translate(-10px, 240px) scale(0.5); }
-  100% { transform: translate(10px, -28px) scale(1.06); }
-}
-
 .summarySection {
   width: 100%;
   margin: 0 auto 2.5rem;
@@ -166,10 +69,41 @@ $what-i-do-gap-desktop: 24px;
     line-height: 1.6;
     opacity: 0.9;
     text-align: left;
+
+    @media screen and #{$mobile} {
+      text-align: center;
+    }
   }
 }
 
-/* Style the built-in cursor */
+.carouselStrip {
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+  padding-bottom: 2rem;
+}
+
+.floatLayer {
+  @include home.home-float-layer-bleed;
+}
+
+.floatImg {
+  position: absolute;
+  opacity: 1;
+  animation: slowFloat 12s ease-in-out infinite alternate;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+@keyframes slowFloat {
+  0% {
+    transform: translate(-10px, 240px) scale(0.5);
+  }
+  100% {
+    transform: translate(10px, -28px) scale(1.06);
+  }
+}
+
 :global(.Typewriter__cursor) {
   display: inline-block;
   margin-left: 0.08em;
@@ -179,19 +113,19 @@ $what-i-do-gap-desktop: 24px;
 }
 
 @keyframes twBlink {
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .floatImg {
     animation: none !important;
-  }
-
-  .cardWrapper {
-    opacity: 1;
-    transform: none;
-    transition: none;
   }
 
   :global(.Typewriter__cursor) {
