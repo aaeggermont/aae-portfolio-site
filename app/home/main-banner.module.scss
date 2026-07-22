@@ -131,6 +131,12 @@
     padding: 2.5rem 0;
     z-index: 2;
 
+    @media screen and (min-width: 1258px) {
+      /* Prefer headline width, but keep a usable portrait size */
+      min-width: min(100%, 36rem);
+      flex: 1 1 auto;
+    }
+
     @media screen and #{$mobile} {
       align-items: center;
       flex: 0 0 auto;
@@ -152,6 +158,10 @@
     filter: drop-shadow(0 22px 48px rgba(15, 23, 42, 0.22))
       drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
 
+    @media screen and (min-width: 1258px) {
+      flex: 0 0 auto;
+      width: clamp(240px, 34%, 420px);
+    }
     @media screen and #{$tablet} {
       width: clamp(220px, 40%, 420px);
     }
@@ -224,7 +234,7 @@
     }
 
     @media screen and #{$desktop-device} {
-      font-size: 32px;
+      font-size: 28px;
     }
 
     @media screen and #{$mobile} {
@@ -262,7 +272,42 @@
     @media screen and #{$desktop-device} {
       min-width: 0;
       opacity: 0.93;
-      font-size: 40px;
+      font-size: 35px;
+    }
+
+    /*
+     * ≥1258px: exactly two lines —
+     *   UX Engineer · Full-stack applications ·
+     *   AI-powered experiences
+     */
+    @media screen and (min-width: 1258px) {
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .titleFirstLine {
+      @media screen and (min-width: 1258px) {
+        display: inline-block;
+        white-space: nowrap;
+      }
+    }
+
+    .titleBreak {
+      display: none;
+
+      @media screen and (min-width: 1258px) {
+        display: block;
+        height: 0;
+        width: 100%;
+        overflow: hidden;
+      }
+    }
+
+    .titleSecondLine {
+      @media screen and (min-width: 1258px) {
+        display: inline-block;
+        white-space: nowrap;
+      }
     }
   }
 

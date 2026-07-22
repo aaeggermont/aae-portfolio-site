@@ -2,12 +2,18 @@
 @use './home-layout' as home;
 
 .myBackgroundSection {
-  width: 100%;
-  background-color: var(--page-canvas);
+  /* Full-bleed cream band — breaks out of the 1260px home shell */
+  position: relative;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  background-color: #f9f7f2;
   display: flex;
   align-items: flex-start;
-  overflow: visible;
-  position: relative;
+  overflow-x: clip;
+  overflow-y: visible;
   padding-block: 2rem;
 
   @media screen and (min-width: $tablet-min) {
@@ -31,8 +37,8 @@
   font-size: clamp(1.8rem, 4vw, 2.2rem);
   font-weight: 600;
   color: #074C5F;
-  margin-bottom: 2rem;
-  padding-bottom: 2vh;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0;
   text-align: left;
 
   @media screen and #{$mobile} {
@@ -55,13 +61,15 @@
     gap: 5%;
 }
 
-$what-i-do-card-width-mobile: 168px;
-$what-i-do-card-height-mobile: 206px;
-$what-i-do-card-width: 212px;
-$what-i-do-card-height: 260px;
-$what-i-do-gap-mobile: 24px;
-$what-i-do-gap-tablet: 24px;
-$what-i-do-gap-desktop: 32px;
+$what-i-do-card-width-mobile: 152px;
+$what-i-do-card-height-mobile: 140px;
+$what-i-do-card-width-tablet: 183px;
+$what-i-do-card-height-tablet: 168px;
+$what-i-do-card-width: 280px;
+$what-i-do-card-height: 210px;
+$what-i-do-gap-mobile: 48px;
+$what-i-do-gap-tablet: 82px;
+$what-i-do-gap-desktop: 24px;
 
 .cardsGrid {
   display: grid;
@@ -72,7 +80,7 @@ $what-i-do-gap-desktop: 32px;
   gap: $what-i-do-gap-mobile;
   grid-template-columns: minmax(0, $what-i-do-card-width-mobile);
 
-  /* Wide mobile — 2×2 with phone card size (168×206) */
+  /* Wide mobile — 2×2 */
   @media screen and (min-width: 600px) and (max-width: $mobile-max) {
     gap: $what-i-do-gap-mobile;
     grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width-mobile));
@@ -82,26 +90,27 @@ $what-i-do-gap-desktop: 32px;
     );
   }
 
-  /* Tablet — 2×2, 24px gap (proportional to desktop 32px) */
+  /* Tablet — 2×2 */
   @media screen and #{$tablet} {
     gap: $what-i-do-gap-tablet;
-    grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width));
+    grid-template-columns: repeat(2, minmax(0, $what-i-do-card-width-tablet));
     width: min(
       100%,
-      calc(#{$what-i-do-card-width} * 2 + #{$what-i-do-gap-tablet})
+      calc(#{$what-i-do-card-width-tablet} * 2 + #{$what-i-do-gap-tablet})
     );
   }
 
-  /* Desktop — 1×4 row, 32px gap */
+  /* Desktop — 1×4 row, 280×210 cards */
   @media screen and #{$desktop-device} {
     gap: $what-i-do-gap-desktop;
-    grid-template-columns: repeat(4, minmax(0, $what-i-do-card-width));
+    grid-template-columns: repeat(4, $what-i-do-card-width);
     width: min(
       100%,
       calc(
         #{$what-i-do-card-width} * 4 + #{$what-i-do-gap-desktop} * 3
       )
     );
+    justify-content: space-between;
   }
 }
 
@@ -109,7 +118,11 @@ $what-i-do-gap-desktop: 32px;
   width: $what-i-do-card-width-mobile;
   max-width: 100%;
 
-  @media screen and (min-width: $tablet-min) {
+  @media screen and #{$tablet} {
+    width: $what-i-do-card-width-tablet;
+  }
+
+  @media screen and #{$desktop-device} {
     width: $what-i-do-card-width;
   }
   opacity: 0;
@@ -144,7 +157,8 @@ $what-i-do-gap-desktop: 32px;
   width: 100%;
   margin: 0 auto 2.5rem;
   display: flex;
-  justify-content: center;  // center the text block horizontally
+  justify-content: flex-start;
+
   .summarySectionText {
     @include home-fluid-type(16px, 22px, 32px);
     font-family: var(--font-figtree);
