@@ -56,7 +56,7 @@ type FloaterConfig = {
   duration: string;
 };
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 6;
 
 type MainBannerProps = {
   banner: MainBannerData;

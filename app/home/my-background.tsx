@@ -9,7 +9,7 @@ import { backgroundFloatImages } from "./background-float-images";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 import { WhatIDoCarousel } from "./components/WhatIDoCarousel";
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 6;
 
 type FloaterConfig = {
   img: any;

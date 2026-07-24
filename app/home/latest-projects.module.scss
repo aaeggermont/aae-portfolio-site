@@ -61,15 +61,15 @@
       display: grid;
       grid-template-columns: repeat(
         3,
-        var(--selected-work-card-width, 294px)
+        var(--selected-work-card-width, 300px)
       );
-      gap: 2rem;
+      gap: 16px;
       justify-content: center;
       align-items: center;
       width: min(
         100%,
         calc(
-          var(--selected-work-card-width, 294px) * 3 + 2rem * 2
+          var(--selected-work-card-width, 300px) * 3 + 16px * 2
         )
       );
       margin-inline: auto;
@@ -78,7 +78,7 @@
 
   .projectsGridItem {
     display: flex;
-    width: var(--selected-work-card-width, 294px);
+    width: var(--selected-work-card-width, 300px);
     min-width: 0;
     justify-content: center;
     transform: scale(var(--selected-work-carousel-inactive-scale, 0.94));
@@ -127,7 +127,7 @@
 
     :global(.swiper-slide) {
       display: flex;
-      width: var(--selected-work-card-width, 294px);
+      width: var(--selected-work-card-width, 300px);
       box-sizing: border-box;
       justify-content: center;
       height: auto;

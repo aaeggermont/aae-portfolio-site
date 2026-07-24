@@ -18,7 +18,7 @@ import { latestProjectsItems } from "./data/latestprojects-data";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 import { selectedWorkLayoutStyle } from "./selectedWorkCardLayout";
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 6;
 
 type FloaterConfig = {
   img: any;
@@ -105,7 +105,9 @@ function LatestProjects() {
             <div key={item.title} className={styles.projectsGridItem}>
               <LatestProjectCard
                 title={item.title}
+                role={item.role}
                 description={item.description}
+                outcome={item.outcome}
                 thumbnailImg={item.img}
                 href={item.href}
               />
@@ -130,7 +132,7 @@ function LatestProjects() {
             },
             768: {
               slidesPerView: "auto",
-              spaceBetween: 24,
+              spaceBetween: 16,
               centeredSlides: false,
             },
           }}
@@ -140,7 +142,9 @@ function LatestProjects() {
               <div className={styles.carouselCardShell}>
                 <LatestProjectCard
                   title={item.title}
+                  role={item.role}
                   description={item.description}
+                  outcome={item.outcome}
                   thumbnailImg={item.img}
                   href={item.href}
                 />

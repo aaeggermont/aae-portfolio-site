@@ -11,7 +11,7 @@ import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
 import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 
-const FLOAT_COUNT = 24;
+const FLOAT_COUNT = 6;
 
 type FloaterConfig = {
   img: any;
