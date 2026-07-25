@@ -13,11 +13,24 @@ import { backgroundFloatImages } from "./background-float-images";
 import type { MainBannerData } from "./data/main-banner-data";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
+function splitBannerTitle(title: string): { lead: string; rest: string } | null {
+  const sep = " · ";
+  const parts = title.split(sep);
+  if (parts.length < 3) return null;
+  // Match desired wrap beyond 1258px:
+  //   UX Engineer · Full-stack applications ·
+  //   AI-powered experiences
+  return {
+    lead: `${parts[0]}${sep}${parts[1]}${sep}`,
+    rest: parts.slice(2).join(sep),
+  };
+}
+
 function TypewriterComponent() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   if (prefersReducedMotion) {
-    return <>Hello, my name is Antonio</>;
+    return <>Antonio Aranda Eggermont</>;
   }
 
   return (
@@ -28,7 +41,7 @@ function TypewriterComponent() {
         deleteSpeed: 50,
       }}
       onInit={(typewriter) => {
-        typewriter.typeString("Hello, my name is Antonio").pauseFor(2500).start();
+        typewriter.typeString("Antonio Aranda Eggermont").pauseFor(2500).start();
       }}
     />
   );
@@ -43,7 +56,7 @@ type FloaterConfig = {
   duration: string;
 };
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 6;
 
 type MainBannerProps = {
   banner: MainBannerData;
@@ -136,6 +149,8 @@ function MainBanner({ banner }: MainBannerProps) {
     );
   };
 
+  const titleSplit = splitBannerTitle(banner.title);
+
   return (
     <section className={styles.mainBanner}>
       {/* Full-bleed behind orb + copy + portrait (see .floatLayer z-index) */}
@@ -173,7 +188,17 @@ function MainBanner({ banner }: MainBannerProps) {
           <TypewriterComponent key={`hero-${typewriterKey}`} />
         </h1>
 
-        <h2 className={styles.backgroundText}>{banner.title}</h2>
+        <h2 className={styles.backgroundText}>
+          {titleSplit ? (
+            <>
+              <span className={styles.titleFirstLine}>{titleSplit.lead}</span>
+              <span className={styles.titleBreak} aria-hidden="true" />
+              <span className={styles.titleSecondLine}>{titleSplit.rest}</span>
+            </>
+          ) : (
+            banner.title
+          )}
+        </h2>
 
         <p className={styles.description}>{banner.description}</p>
 

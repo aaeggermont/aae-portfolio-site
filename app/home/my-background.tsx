@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+
 import styles from "./my-background.module.scss";
 import backgroundItems from "@/app/home/data/background-data";
-import BackgroundCard from "@/app/home/BackgroundCard";
-import Image from "next/image";
 import { backgroundFloatImages } from "./background-float-images";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
-import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
+import { WhatIDoCarousel } from "./components/WhatIDoCarousel";
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 6;
 
 type FloaterConfig = {
   img: any;
@@ -20,65 +20,10 @@ type FloaterConfig = {
   duration: string;
 };
 
-function AnimatedCardWrapper({
-  children,
-  index,
-}: {
-  children: React.ReactNode;
-  index: number;
-}) {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [inView, setInView] = useState(prefersReducedMotion);
-
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      setInView(true);
-      return;
-    }
-
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setInView(true);
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        root: null,
-        threshold: 0.15,
-        rootMargin: "0px 0px -10% 0px",
-      }
-    );
-
-    observer.observe(el);
-
-    return () => observer.disconnect();
-  }, [prefersReducedMotion]);
-
-  return (
-    <div
-      ref={ref}
-      className={`${styles.cardWrapper} ${inView ? styles.cardInView : ""}`}
-      style={{
-        transitionDelay: inView && !prefersReducedMotion ? `${index * 90}ms` : "0ms",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
 export default function MyBackground() {
   const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
 
   useEffect(() => {
-    // This runs ONLY in the browser, after hydration ✅
     const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
       () => {
         const img =
@@ -90,11 +35,11 @@ export default function MyBackground() {
           img,
           top: `${Math.random() * 90}%`,
           left: `${Math.random() * 90}%`,
-          size: `${40 + Math.random() * 120}px`, // 40–160px
+          size: `${40 + Math.random() * 120}px`,
           delay: `${Math.random() * 5}s`,
           duration: `${10 + Math.random() * 10}s`,
         };
-      }
+      },
     );
 
     setFloaters(generated);
@@ -102,7 +47,6 @@ export default function MyBackground() {
 
   return (
     <section className={styles.myBackgroundSection} id="my-background">
-      {/* Decorative floating images – render only after we have client-side config */}
       <div className={styles.floatLayer}>
         {floaters.map((f, i) => (
           <Image
@@ -126,7 +70,6 @@ export default function MyBackground() {
       </div>
 
       <div className={styles.content}>
-
         <SectionTypewriterHeading
           as="div"
           text="What I do"
@@ -135,24 +78,14 @@ export default function MyBackground() {
 
         <div className={styles.summarySection}>
           <p className={styles.summarySectionText}>
-            I transform user insights into meaningful, well-crafted digital
-            experiences that balance clarity, creativity, and usability. By
-            combining UX design, frontend engineering, AI-driven application
-            development, and system integration, I build seamless, intelligent
-            products that feel intuitive and human from end to end. I've applied
-            this across theme parks, revenue systems, and operational tools at
-            scale.
+            A blend of design, engineering, and systems thinking — applied end to
+            end.
           </p>
         </div>
+      </div>
 
-        <div className={styles.cardsGrid}>
-          {backgroundItems.map((item, index) => (
-            <AnimatedCardWrapper key={item.title} index={index}>
-              <BackgroundCard info={item} />
-            </AnimatedCardWrapper>
-          ))}
-        </div>
-       
+      <div className={styles.carouselStrip}>
+        <WhatIDoCarousel items={backgroundItems} />
       </div>
     </section>
   );

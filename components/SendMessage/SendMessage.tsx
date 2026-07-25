@@ -1,26 +1,29 @@
-
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./send-message.module.scss"
-import TextField from '@mui/material/TextField';
-import emailjs from '@emailjs/browser';
+import React, { useRef, useState } from "react";
+import styles from "./send-message.module.scss";
+import TextField from "@mui/material/TextField";
+import emailjs from "@emailjs/browser";
 
-export default function SendMessage() {
+type SendMessageProps = {
+  /** Compact layout for modal / embedded use (no full-page chrome). */
+  compact?: boolean;
+};
+
+export default function SendMessage({ compact = false }: SendMessageProps) {
   const form = useRef<HTMLFormElement | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [emailError, setEmailError] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState<{
     message: string;
     type: "success" | "error";
   } | null>(null);
-    
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isSending) return; // guard for double-clicks
+    if (isSending) return;
 
     if (!form.current) return;
 
@@ -32,7 +35,7 @@ export default function SendMessage() {
         "service_9vnb61i",
         "template_4jckt0n",
         form.current,
-        { publicKey: "vF8vNTkUpDVRI5ITP" }
+        { publicKey: "vF8vNTkUpDVRI5ITP" },
       );
 
       setToast({
@@ -40,16 +43,14 @@ export default function SendMessage() {
         type: "success",
       });
 
-      // reset form + local state
       form.current.reset();
       setName("");
       setEmail("");
       setMessage("");
-    } catch (error: any) {
-      console.error("FAILED…", error?.text || error);
+    } catch (error: unknown) {
+      console.error("FAILED…", error);
       setToast({
-        message:
-          "Oops, something went wrong. Please try again in a moment.",
+        message: "Oops, something went wrong. Please try again in a moment.",
         type: "error",
       });
     } finally {
@@ -57,75 +58,77 @@ export default function SendMessage() {
     }
   };
 
-
   return (
-    <div className={styles.contactMeSection}>
+    <div
+      className={`${styles.contactMeSection} ${compact ? styles.compact : ""}`}
+    >
       <div className={styles.content}>
-        {/* Contact Form */}
         <div className={styles.contactFormContainer}>
-          <span> Send me a Message </span>
+          {!compact && <span> Send me a Message </span>}
           <form ref={form} onSubmit={handleSubmit}>
             <div className={styles.formFields}>
               <TextField
                 sx={{
-                    width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
+                  width: { xs: "100%", sm: "300px", md: "300px", lg: "350px" },
+                  maxWidth: "100%",
                 }}
                 required
                 type="text"
                 name="from_name"
                 label="Your name"
                 variant="filled"
-                onChange={e => setName(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-            
+
               <TextField
                 required
                 sx={{
-                    width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
+                  width: { xs: "100%", sm: "300px", md: "300px", lg: "350px" },
+                  maxWidth: "100%",
                 }}
-                id="outlined-required"
+                id="contact-email"
                 label="Your email"
                 type="email"
                 name="user_email"
-                defaultValue=""
                 variant="filled"
-                onChange={e => setEmail(e.target.value)}
-                  />
-        
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
               <TextField
                 required
                 multiline
                 rows={4}
                 sx={{
-                      width: { xs: "300px", sm: "300px", md: "300px", lg: "350px" },
+                  width: { xs: "100%", sm: "300px", md: "300px", lg: "350px" },
+                  maxWidth: "100%",
                 }}
-                id="outlined-required"
+                id="contact-message"
                 label="Your message"
                 name="message"
-                defaultValue=""
                 variant="filled"
-                onChange={e => setMessage(e.target.value)}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
             </div>
             <div className={styles.formActions}>
               <button
                 type="submit"
-                  disabled={isSending}
+                disabled={isSending}
                 className={styles.submitButton}
               >
-
-              {isSending && (
-                <span className={styles.spinner} aria-hidden="true" />
-              )}
-
+                {isSending && (
+                  <span className={styles.spinner} aria-hidden="true" />
+                )}
                 <span className={styles.submitLabel}>
                   {isSending ? "Sending…" : "Send message"}
                 </span>
               </button>
             </div>
           </form>
+        </div>
       </div>
-    </div>
       {toast && (
         <div
           className={`${styles.toast} ${

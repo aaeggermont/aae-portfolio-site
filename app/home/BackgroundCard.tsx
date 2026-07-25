@@ -16,9 +16,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import styles from "./background.module.scss";
 import type { BackgroundItem } from "@/app/home/data/background-data";
+import { buildPublicStorageUrl } from "@/lib/firebase/publicStorageUrl";
 
-const DIALOG_ICON_OPACITY = 0.80;
-const CARD_ICON_OPACITY = 0.80;
+const DIALOG_ICON_OPACITY = 1;
+const CARD_ICON_OPACITY = 1;
 
 type BackgroundCardProps = {
   info: BackgroundItem;
@@ -27,14 +28,21 @@ type BackgroundCardProps = {
 export default function BackgroundCard({ info }: BackgroundCardProps) {
   const [open, setOpen] = useState(false);
 
-  const { title, img, description } = info;
+  const {
+    title,
+    iconObjectPath,
+    iconWidth = 36,
+    iconHeight = 36,
+    summary,
+    description,
+  } = info;
+  const iconSrc = buildPublicStorageUrl(iconObjectPath);
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <>
-      {/* Dialog with full description */}
       <Dialog
         fullWidth
         maxWidth="lg"
@@ -62,14 +70,17 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           </Tooltip>
         </div>
 
-        {/* Header: icon + title */}
         <div className={styles.dialogHeader}>
           <div className={styles.dialogHeaderMain}>
-            <div className={styles.dialogIcon}>
+            <div
+              className={styles.dialogIcon}
+              style={{ width: iconWidth, height: iconHeight }}
+            >
               <Image
-                src={img}
+                src={iconSrc}
                 alt={title}
                 fill
+                unoptimized
                 style={{ objectFit: "contain", opacity: DIALOG_ICON_OPACITY }}
               />
             </div>
@@ -96,8 +107,10 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           </div>
         </div>
 
-        {/* Body: paragraphs */}
-        <DialogContent dividers id="background-dialog-description">
+        <DialogContent
+          id="background-dialog-description"
+          className={styles.dialogContent}
+        >
           {description.map((paragraph, index) => (
             <DialogContentText
               key={index}
@@ -110,11 +123,9 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
                 },
                 fontWeight: 400,
                 fontFamily: "Poppins, sans-serif",
-                margin: {
-                  xs: "0.75rem 0.75rem",
-                  sm: "1rem 1.5rem",
-                  md: "1rem 2rem",
-                  lg: "1rem 2.5rem",
+                margin: 0,
+                "&:not(:last-of-type)": {
+                  mb: { xs: "0.75rem", sm: "1rem" },
                 },
                 color: "#011114",
               }}
@@ -125,13 +136,13 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         </DialogContent>
       </Dialog>
 
-      {/* Card */}
       <Card
         onClick={handleClickOpen}
         className={styles.fullHeightCard}
         sx={{
           cursor: "pointer",
           borderRadius: 3,
+          overflow: "hidden",
           boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",
           backgroundColor: "#ffffff",
           transition:
@@ -139,32 +150,53 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           "&:hover": {
             transform: "translateY(-6px)",
             boxShadow: "0 18px 45px rgba(0, 0, 0, 0.18)",
-            backgroundColor: "#f7fbff",
+            backgroundColor: "#efe9dc",
           },
         }}
         raised
       >
-        <CardActionArea sx={{ height: "100%" }}>
+        <CardActionArea
+          className={styles.cardActionArea}
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            padding: "24px",
+            boxSizing: "border-box",
+            gap: "16px",
+            borderRadius: "inherit",
+            overflow: "hidden",
+            // Keep hover color on the Card; don’t let MUI’s overlay square the corners
+            "& .MuiCardActionArea-focusHighlight": {
+              backgroundColor: "transparent",
+            },
+          }}
+        >
           <div className={styles.cardIconArea}>
-            <div className={styles.cardIcon}>
+            <div
+              className={styles.cardIcon}
+              style={{ width: iconWidth, height: iconHeight }}
+            >
               <Image
-                src={img}
+                src={iconSrc}
                 alt={title}
                 fill
+                unoptimized
                 style={{ objectFit: "contain", opacity: CARD_ICON_OPACITY }}
               />
             </div>
           </div>
 
-          {/* Title */}
-          <CardContent>
+          <CardContent className={styles.cardContent}>
             <div className={styles.backgroundTitle}>
               <span className={styles.backgroundTitleLabel}>{title}</span>
             </div>
+            <p className={styles.cardSummary}>{summary}</p>
           </CardContent>
         </CardActionArea>
       </Card>
     </>
   );
 }
-

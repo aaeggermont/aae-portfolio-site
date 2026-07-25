@@ -1,199 +1,94 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
+import Dialog from "@mui/material/Dialog";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import NorthEastIcon from "@mui/icons-material/NorthEast";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+
 import styles from "./contact-me.module.scss";
-import Image from "next/image";
-import { backgroundFloatImages } from "./background-float-images";
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import emailjs from '@emailjs/browser';
-import QrFloatingCard from "@/components/QrFloatingCard/QrFloatingCard";
-import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
+import SendMessage from "@/components/SendMessage/SendMessage";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 
-const FLOAT_COUNT = 24;
-
-type FloaterConfig = {
-  img: any;
-  top: string;
-  left: string;
-  size: string;
-  delay: string;
-  duration: string;
-};
+const LINKEDIN_URL =
+  "https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/";
 
 function ContactMe() {
-  const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
-  const form = useRef<HTMLFormElement | null>(null);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [emailError, setEmailError] = useState(false);
-
-  const [isSending, setIsSending] = useState(false);
-  const [toast, setToast] = useState<{
-    message: string;
-    type: "success" | "error";
-  } | null>(null);
-
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      if (isSending) return; // guard for double-clicks
-
-      if (!form.current) return;
-
-      try {
-        setIsSending(true);
-        setToast(null);
-
-        await emailjs.sendForm(
-          "service_9vnb61i",
-          "template_4jckt0n",
-          form.current,
-          { publicKey: "vF8vNTkUpDVRI5ITP" }
-        );
-
-        setToast({
-          message: "Thanks! Your message was sent successfully.",
-          type: "success",
-        });
-
-        // reset form + local state
-        form.current.reset();
-        setName("");
-        setEmail("");
-        setMessage("");
-      } catch (error: any) {
-        console.error("FAILED…", error?.text || error);
-        setToast({
-          message:
-            "Oops, something went wrong. Please try again in a moment.",
-          type: "error",
-        });
-      } finally {
-        setIsSending(false);
-      }
-    };
-
-
-  useEffect(() => {
-    // This runs ONLY in the browser, after hydration ✅
-    const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
-      () => {
-        const img =
-          backgroundFloatImages[
-            Math.floor(Math.random() * backgroundFloatImages.length)
-          ];
-
-        return {
-          img,
-          top: `${Math.random() * 90}%`,
-          left: `${Math.random() * 90}%`,
-          size: `${40 + Math.random() * 120}px`, // 40–160px
-          delay: `${Math.random() * 5}s`,
-          duration: `${10 + Math.random() * 10}s`,
-        };
-      }
-    );
-
-    setFloaters(generated);
-  }, []);
-
-
-  useEffect(() => {
-    if (!toast) return;
-
-    const timer = setTimeout(() => {
-      setToast(null);
-    }, 4000);
-
-    return () => clearTimeout(timer);
-  }, [toast]);
-
-
-  const handleLinkedIn = () => {
-    window.location.href = 'https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/';
-  };
-
-  const mainContent = (
-    <div className={styles.content}>
-      <SectionTypewriterHeading text="Get in Touch" className={styles.heading} />
-      <div className={styles.summarySection}>
-        <span className={styles.summarySectionText}>
-          I&apos;m open to full-time roles, consulting, and partnerships—especially
-          in product design, frontend, and AI-driven experiences.
-        </span>
-      </div>
-
-      <div className={styles.contactFormContainer}>
-        <QrFloatingCard src="/images/qr/AAEQRImage.png" title="Scan me" />
-        <div className={styles.contacMeContainer}>
-          <div className={styles.contactRow}>
-            <PhoneIphoneIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
-            <span> USA: +206 556 8918</span>
-          </div>
-          <div className={styles.contactRow}>
-            <PhoneIphoneIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
-            <span> Mexico: +52 55 36 71 57 12</span>
-          </div>
-          <div className={styles.contactRow}>
-            <AlternateEmailIcon sx={{ color: "#02232c" }} style={{ fontSize: 40 }} />
-            <span> aaeggermont@outlook.com</span>
-          </div>
-          <div className={`${styles.contactRow} ${styles.contactLinkedInRow}`}>
-            <LinkedInProfileButton onClick={handleLinkedIn} />
-            <span
-              className={styles.contactLinkedInLabel}
-              onClick={handleLinkedIn}
-            >
-              LinkedIn
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
     <section className={styles.contactMeSection} id="contact-me">
-       {/* Decorative floating images – render only after we have client-side config */}
-      <div className={styles.floatLayer}>
-        {floaters.map((f, i) => (
-          <Image
-            key={`float-${i}-${f.top}-${f.left}`}
-            src={f.img}
-            alt=""
-            aria-hidden="true"
-            className={styles.floatImg}
-            width={150}
-            height={150}
-            style={{
-              top: f.top,
-              left: f.left,
-              width: f.size,
-              height: "auto",
-              animationDelay: f.delay,
-              animationDuration: f.duration,
-            }}
-          />
-        ))}
+      <div className={styles.ctaCard}>
+        <SectionTypewriterHeading
+          text="Let's build something"
+          className={styles.heading}
+        />
+        <p className={styles.summary}>
+          Have a project in mind, or just want to say hello? I&apos;m always
+          open to talking through ideas and opportunities.
+        </p>
+
+        <div className={styles.actions}>
+          <button
+            type="button"
+            className={styles.primaryButton}
+            onClick={() => setIsFormOpen(true)}
+          >
+            <MailOutlineIcon className={styles.buttonIcon} aria-hidden />
+            <span>Get in touch</span>
+            <NorthEastIcon className={styles.buttonIconEnd} aria-hidden />
+          </button>
+
+          <a
+            className={styles.secondaryButton}
+            href={LINKEDIN_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <LinkedInIcon className={styles.buttonIcon} aria-hidden />
+            <span>LinkedIn</span>
+          </a>
+        </div>
       </div>
 
-      {mainContent}
-  
-      {toast && (
-        <div
-          className={`${styles.toast} ${
-            toast.type === "success"
-              ? styles.toastSuccess
-              : styles.toastError
-          } ${styles.toastVisible}`}
-          role="status"
-          aria-live="polite"
+      <Dialog
+        open={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        fullWidth
+        maxWidth="sm"
+        aria-labelledby="contact-form-title"
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            overflow: "hidden",
+          },
+        }}
+      >
+        <DialogTitle
+          id="contact-form-title"
+          sx={{
+            fontFamily: "Poppins, sans-serif",
+            fontWeight: 600,
+            pr: 6,
+          }}
         >
-          {toast.message}
-        </div>
-      )}
+          Get in touch
+          <IconButton
+            aria-label="Close contact form"
+            onClick={() => setIsFormOpen(false)}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <SendMessage compact />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

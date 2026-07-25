@@ -58,3 +58,45 @@
   width: clamp($minWidth, 16vw, $maxWidth);
   height: clamp($minHeight, 26vw, $maxHeight);
 }
+
+/**
+ * Landing-page fluid type — same curve as `fluid-type`, but `100vw` is capped at the
+ * 1260px home shell so type does not keep growing on wider viewports.
+ */
+@mixin home-fluid-type($mobile-size, $desktop-size, $large-size: null) {
+  // Keep in sync with `$home-layout-max-width-desktop` in `app/home/home-layout.scss`.
+  $home-shell-max: 1260px;
+
+  font-size: $mobile-size;
+
+  @media screen and (min-width: $mobile-min) and (max-width: #{$desktop-min - 1px}) {
+    font-size: clamp(
+      $mobile-size,
+      calc(
+        #{$mobile-size} + (#{$desktop-size} - #{$mobile-size}) *
+        ((100vw - #{$mobile-min}) / (#{$desktop-min} - #{$mobile-min}))
+      ),
+      $desktop-size
+    );
+  }
+
+  @if $large-size != null {
+    @media screen and (min-width: $desktop-min) {
+      font-size: clamp(
+        $desktop-size,
+        calc(
+          #{$desktop-size} + (#{$large-size} - #{$desktop-size}) *
+          (
+            (min(100vw, #{$home-shell-max}) - #{$desktop-min}) /
+            (#{$desktop-max} - #{$desktop-min})
+          )
+        ),
+        $large-size
+      );
+    }
+  } @else {
+    @media screen and (min-width: $desktop-min) {
+      font-size: $desktop-size;
+    }
+  }
+}

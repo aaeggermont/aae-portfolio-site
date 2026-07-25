@@ -2,8 +2,10 @@ import type { CSSProperties } from "react";
 
 /** Selected Work project cards — single source of truth for dimensions. */
 export const SELECTED_WORK_CARD = {
-  widthPx: 294,
+  widthPx: 300,
   heightPx: 390,
+  /** Hero image height — leave enough band for title / role / summary / outcome. */
+  imageHeightPx: 185,
   contentPaddingPx: 20,
 } as const;
 

@@ -4,6 +4,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./latest-projects.module.scss";
 import Image from "next/image";
+import Link from "next/link";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -18,7 +20,7 @@ import { latestProjectsItems } from "./data/latestprojects-data";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 import { selectedWorkLayoutStyle } from "./selectedWorkCardLayout";
 
-const FLOAT_COUNT = 14;
+const FLOAT_COUNT = 6;
 
 type FloaterConfig = {
   img: any;
@@ -105,7 +107,9 @@ function LatestProjects() {
             <div key={item.title} className={styles.projectsGridItem}>
               <LatestProjectCard
                 title={item.title}
+                role={item.role}
                 description={item.description}
+                outcome={item.outcome}
                 thumbnailImg={item.img}
                 href={item.href}
               />
@@ -130,7 +134,7 @@ function LatestProjects() {
             },
             768: {
               slidesPerView: "auto",
-              spaceBetween: 24,
+              spaceBetween: 16,
               centeredSlides: false,
             },
           }}
@@ -140,7 +144,9 @@ function LatestProjects() {
               <div className={styles.carouselCardShell}>
                 <LatestProjectCard
                   title={item.title}
+                  role={item.role}
                   description={item.description}
+                  outcome={item.outcome}
                   thumbnailImg={item.img}
                   href={item.href}
                 />
@@ -148,6 +154,13 @@ function LatestProjects() {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        <div className={styles.viewAllWorkContainer}>
+          <Link href="/mywork" className={styles.viewAllWorkButton}>
+            <span>View all work</span>
+            <ArrowForwardIcon aria-hidden className={styles.viewAllWorkIcon} />
+          </Link>
+        </div>
       </div>
     </section>
   );

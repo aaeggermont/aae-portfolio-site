@@ -1,0 +1,139 @@
+@use '../home-layout' as home;
+
+$card-width: 280px;
+$card-height: 210px;
+$card-gap: 24px;
+
+.carousel {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  /*
+   * Hover uses translateY(-6px) + box-shadow 0 18px 45px.
+   * Scroll tracks clip overflow, so pad enough for lift + shadow,
+   * then pull layout back with negative margins.
+   */
+  padding-top: 14px;
+  padding-bottom: 56px;
+  margin-top: -14px;
+  margin-bottom: -16px;
+  scroll-padding-inline: var(--what-i-do-gutter, #{home.$home-layout-margin-mobile});
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.gutterSpacer {
+  flex: 0 0 var(--what-i-do-gutter, #{home.$home-layout-margin-mobile});
+  width: var(--what-i-do-gutter, #{home.$home-layout-margin-mobile});
+  height: 1px;
+  pointer-events: none;
+}
+
+.cardShell {
+  flex: 0 0 auto;
+  width: $card-width;
+  height: $card-height;
+  scroll-snap-align: start;
+  display: flex;
+  border-radius: 12px; /* match MUI borderRadius: 3 → 12px */
+  overflow: visible;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+
+  /* Gap between cards only — not between gutter spacers and cards */
+  &:not(:nth-last-child(2)) {
+    margin-inline-end: $card-gap;
+  }
+
+  /* Ensure the card (and its hover fill) keep rounded corners inside the shell */
+  :global(.MuiPaper-root) {
+    border-radius: 12px !important;
+    overflow: hidden;
+  }
+}
+
+.cardInView {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
+  padding-inline: var(--what-i-do-gutter, #{home.$home-layout-margin-mobile});
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #f1f1f3;
+  color: #074c5f;
+  transition: background-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: #e8e8ec;
+  }
+
+  &:disabled {
+    cursor: default;
+    color: rgba(7, 76, 95, 0.28);
+  }
+}
+
+.navButtonNext {
+  background-color: #074c5f;
+  color: #ffffff;
+
+  &:hover:not(:disabled) {
+    background-color: #0a6280;
+  }
+
+  &:disabled {
+    background-color: #f1f1f3;
+    color: rgba(7, 76, 95, 0.28);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cardShell {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .track {
+    scroll-behavior: auto;
+  }
+}
