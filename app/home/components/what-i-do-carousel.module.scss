@@ -24,7 +24,15 @@ $card-gap: 24px;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   scroll-snap-type: x proximity;
-  padding-bottom: 0.25rem;
+  /*
+   * Hover uses translateY(-6px) + box-shadow 0 18px 45px.
+   * Scroll tracks clip overflow, so pad enough for lift + shadow,
+   * then pull layout back with negative margins.
+   */
+  padding-top: 14px;
+  padding-bottom: 56px;
+  margin-top: -14px;
+  margin-bottom: -16px;
   scroll-padding-inline: var(--what-i-do-gutter, #{home.$home-layout-margin-mobile});
 
   &::-webkit-scrollbar {
@@ -45,6 +53,8 @@ $card-gap: 24px;
   height: $card-height;
   scroll-snap-align: start;
   display: flex;
+  border-radius: 12px; /* match MUI borderRadius: 3 → 12px */
+  overflow: visible;
   opacity: 0;
   transform: translateY(24px);
   transition:
@@ -54,6 +64,12 @@ $card-gap: 24px;
   /* Gap between cards only — not between gutter spacers and cards */
   &:not(:nth-last-child(2)) {
     margin-inline-end: $card-gap;
+  }
+
+  /* Ensure the card (and its hover fill) keep rounded corners inside the shell */
+  :global(.MuiPaper-root) {
+    border-radius: 12px !important;
+    overflow: hidden;
   }
 }
 

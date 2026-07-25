@@ -72,7 +72,10 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
 
         <div className={styles.dialogHeader}>
           <div className={styles.dialogHeaderMain}>
-            <div className={styles.dialogIcon}>
+            <div
+              className={styles.dialogIcon}
+              style={{ width: iconWidth, height: iconHeight }}
+            >
               <Image
                 src={iconSrc}
                 alt={title}
@@ -104,7 +107,10 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           </div>
         </div>
 
-        <DialogContent dividers id="background-dialog-description">
+        <DialogContent
+          id="background-dialog-description"
+          className={styles.dialogContent}
+        >
           {description.map((paragraph, index) => (
             <DialogContentText
               key={index}
@@ -117,11 +123,9 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
                 },
                 fontWeight: 400,
                 fontFamily: "Poppins, sans-serif",
-                margin: {
-                  xs: "0.75rem 0.75rem",
-                  sm: "1rem 1.5rem",
-                  md: "1rem 2rem",
-                  lg: "1rem 2.5rem",
+                margin: 0,
+                "&:not(:last-of-type)": {
+                  mb: { xs: "0.75rem", sm: "1rem" },
                 },
                 color: "#011114",
               }}
@@ -138,6 +142,7 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
         sx={{
           cursor: "pointer",
           borderRadius: 3,
+          overflow: "hidden",
           boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",
           backgroundColor: "#ffffff",
           transition:
@@ -145,7 +150,7 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
           "&:hover": {
             transform: "translateY(-6px)",
             boxShadow: "0 18px 45px rgba(0, 0, 0, 0.18)",
-            backgroundColor: "#f7fbff",
+            backgroundColor: "#efe9dc",
           },
         }}
         raised
@@ -161,6 +166,12 @@ export default function BackgroundCard({ info }: BackgroundCardProps) {
             padding: "24px",
             boxSizing: "border-box",
             gap: "16px",
+            borderRadius: "inherit",
+            overflow: "hidden",
+            // Keep hover color on the Card; don’t let MUI’s overlay square the corners
+            "& .MuiCardActionArea-focusHighlight": {
+              backgroundColor: "transparent",
+            },
           }}
         >
           <div className={styles.cardIconArea}>

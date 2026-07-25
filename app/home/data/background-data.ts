@@ -50,8 +50,7 @@ export const backgroundItems: BackgroundItem[] = [
     summary:
       "Transforming complex data into actionable insights and intuitive visual experiences.",
     description: [
-      "I connect data, user experience, and application layers so that systems work together seamlessly and users get a unified view of the product or service. I focus on making frontends, backends, and data reliable and scalable as they grow.",
-      "I work with RESTful APIs, event-driven architecture and message queues for real-time and two-way communication, and cloud integrations—including AWS, GCP, and Snowflake—so that applications stay consistent and performant end to end.",
+      "I design and build enterprise data-driven applications, including analytics dashboards, interactive data grids, data ingestion workflows, and decision-support tools. My work centers on making complex enterprise systems easier to understand through intuitive data visualization and user-centered interfaces that support confident decision-making.",
     ],
   },
 ];
