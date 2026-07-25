@@ -4,6 +4,8 @@
 import React, { useEffect, useState } from "react";
 import styles from "./latest-projects.module.scss";
 import Image from "next/image";
+import Link from "next/link";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -152,6 +154,13 @@ function LatestProjects() {
             </SwiperSlide>
           ))}
         </Swiper>
+
+        <div className={styles.viewAllWorkContainer}>
+          <Link href="/mywork" className={styles.viewAllWorkButton}>
+            <span>View all work</span>
+            <ArrowForwardIcon aria-hidden className={styles.viewAllWorkIcon} />
+          </Link>
+        </div>
       </div>
     </section>
   );
