@@ -36,6 +36,7 @@ export function CapabilityMap() {
           style={{ maxWidth: sizeStyles.sectionMaxWidth }}
         >
           <header className={styles.capabilityMapHeader}>
+            <p className={styles.capabilityMapEyebrow}>Expertise</p>
             <h2 id="capability-map-title" className={styles.capabilityMapTitle}>
               {data.header.title}
             </h2>
@@ -47,43 +48,45 @@ export function CapabilityMap() {
             ) : null}
           </header>
 
-          <div
-            className={styles.capabilityMapChartWrap}
-            style={{ maxWidth: sizeStyles.chartMaxSize }}
-          >
-            {hasMounted ? (
-              <ParentSize
-                debounceTime={10}
-                parentSizeStyles={{
-                  width: "100%",
-                  height: "100%",
-                  overflow: "visible",
-                }}
-              >
-                {({ width, height }) => {
-                  if (width < 120 || height < 120) {
-                    return null;
-                  }
+          <div className={styles.capabilityMapCard}>
+            <div
+              className={styles.capabilityMapChartWrap}
+              style={{ maxWidth: sizeStyles.chartMaxSize }}
+            >
+              {hasMounted ? (
+                <ParentSize
+                  debounceTime={10}
+                  parentSizeStyles={{
+                    width: "100%",
+                    height: "100%",
+                    overflow: "visible",
+                  }}
+                >
+                  {({ width, height }) => {
+                    if (width < 120 || height < 120) {
+                      return null;
+                    }
 
-                  return (
-                    <div className={styles.capabilityMapChartInner}>
-                      <CapabilityMapChart
-                        data={data}
-                        width={width}
-                        height={height}
-                        showSkillLabels={width >= 640}
-                      />
-                    </div>
-                  );
-                }}
-              </ParentSize>
-            ) : (
-              <div className={styles.capabilityMapChartPlaceholder} aria-hidden />
-            )}
-          </div>
+                    return (
+                      <div className={styles.capabilityMapChartInner}>
+                        <CapabilityMapChart
+                          data={data}
+                          width={width}
+                          height={height}
+                          showSkillLabels={width >= 640}
+                        />
+                      </div>
+                    );
+                  }}
+                </ParentSize>
+              ) : (
+                <div className={styles.capabilityMapChartPlaceholder} aria-hidden />
+              )}
+            </div>
 
-          <div className={styles.capabilityMapLabelsWrap}>
-            <CapabilityMapLabels />
+            <div className={styles.capabilityMapLabelsWrap}>
+              <CapabilityMapLabels />
+            </div>
           </div>
         </div>
       </div>

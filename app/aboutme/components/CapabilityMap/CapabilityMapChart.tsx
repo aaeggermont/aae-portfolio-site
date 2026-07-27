@@ -185,7 +185,8 @@ export function CapabilityMapChart({
   if (width < 120 || height < 120) return null;
 
   const size = Math.min(width, height);
-  const margin = showSkillLabels ? size * 0.22 : size * 0.16;
+  // Fraction of the square reserved for domain/skill labels around the rings.
+  const margin = showSkillLabels ? size * 0.17 : size * 0.13;
   const radius = (size - margin * 2) / 2;
   const cx = size / 2;
   const cy = size / 2;
