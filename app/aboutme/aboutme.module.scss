@@ -14,15 +14,17 @@
     align-items: center;
     // Major section rhythm — matches home page (3rem / 5rem / 8rem ≈ 48 / 80 / 128px).
     gap: 3rem;
-    margin-top: 1rem;
+    // Extra headroom under the sticky header before "Hello, I'm Antonio".
+    margin-top: 2.5rem;
 
     @media screen and (min-width: $tablet-min) {
       gap: 5rem;
-      margin-top: 2rem;
+      margin-top: 3.5rem;
     }
 
     @media screen and (min-width: $desktop-min) {
       gap: 8rem;
+      margin-top: 4.5rem;
       padding-bottom: 1rem;
     }
   }

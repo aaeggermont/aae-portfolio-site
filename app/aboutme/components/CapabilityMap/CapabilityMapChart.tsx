@@ -32,8 +32,8 @@ const HUB_RATIO = 0.3;
 const DOMAIN_LABEL_RATIO = 1.34;
 /** Pull top/bottom domain labels closer (vertical stack clears the rim more). */
 const DOMAIN_LABEL_VERTICAL_INSET = 0.1;
-/** Push left/right domain labels farther out (text extends into the chart). */
-const DOMAIN_LABEL_SIDE_OUTSET = 0.06;
+/** Slight pull-in on left/right; textAnchor grows labels inward so they stay on-canvas. */
+const DOMAIN_LABEL_SIDE_OUTSET = -0.02;
 /** Skill labels sit outside the outermost expertise ring. */
 const SKILL_LABEL_RATIO = 0.93;
 /** Soft wrap length for skill labels (keeps rim labels compact). */
@@ -155,9 +155,14 @@ function wrapLabel(label: string, maxChars: number): string[] {
   return lines.slice(0, 3);
 }
 
-/** Domain labels: pull in at top/bottom; push out on sides (horizontal text overlaps the rim). */
+/** Normalize chart angle (0° at top, clockwise) to [0, 360). */
+function angleDegrees(angleRadians: number): number {
+  return (((angleRadians * 180) / Math.PI) % 360 + 360) % 360;
+}
+
+/** Domain labels: pull in at top/bottom; nudge sides (horizontal text overlaps the rim). */
 function domainLabelRatioForAngle(angleRadians: number): number {
-  const deg = (((angleRadians * 180) / Math.PI) % 360 + 360) % 360;
+  const deg = angleDegrees(angleRadians);
   const nearBottom = deg > 160 && deg < 210;
   const nearTop = deg < 25 || deg > 335;
   const nearSide =
@@ -170,6 +175,34 @@ function domainLabelRatioForAngle(angleRadians: number): number {
     return DOMAIN_LABEL_RATIO + DOMAIN_LABEL_SIDE_OUTSET;
   }
   return DOMAIN_LABEL_RATIO;
+}
+
+/**
+ * Side labels grow toward the hub so long titles (e.g. "Data & Analytics")
+ * stay inside the SVG instead of clipping past the left/right edge.
+ */
+function textAnchorForAngle(angleRadians: number): "start" | "middle" | "end" {
+  const deg = angleDegrees(angleRadians);
+  if (deg > 45 && deg < 135) return "end"; // right → grow left into chart
+  if (deg > 225 && deg < 315) return "start"; // left → grow right into chart
+  return "middle";
+}
+
+/**
+ * Clockwise label placement nudge (degrees). Wedge geometry stays put —
+ * only the title moves along the outer rim.
+ */
+function domainLabelAngleNudgeDegrees(domainId: string): number {
+  // Clockwise positive. Left-side labels need counter-clockwise to move down.
+  if (domainId === "ai-intelligent-systems") return 16;
+  if (domainId === "data-analytics") return -12;
+  return 0;
+}
+
+/** Prefer intentional wraps for long domain titles. */
+function wrapDomainLabel(label: string): string[] {
+  if (label === "Data & Analytics") return ["Data &", "Analytics"];
+  return wrapLabel(label, 18);
 }
 
 type ExpertiseVertex = CapabilitySkillLayout & { x: number; y: number };
@@ -185,7 +218,8 @@ export function CapabilityMapChart({
   if (width < 120 || height < 120) return null;
 
   const size = Math.min(width, height);
-  const margin = showSkillLabels ? size * 0.22 : size * 0.16;
+  // Fraction of the square reserved for domain/skill labels around the rings.
+  const margin = showSkillLabels ? size * 0.12 : size * 0.09;
   const radius = (size - margin * 2) / 2;
   const cx = size / 2;
   const cy = size / 2;
@@ -497,16 +531,24 @@ function DomainLabel({
   domain: CapabilityDomainLayout;
   radius: number;
 }) {
-  const labelRatio = domainLabelRatioForAngle(domain.midAngle);
-  const point = polarToCartesian(0, 0, radius * labelRatio, domain.midAngle);
-  const lines = wrapLabel(domain.label, 18);
-  const dy = lines.length > 1 ? -((lines.length - 1) * 6) : 0;
+  const labelAngle =
+    domain.midAngle +
+    (domainLabelAngleNudgeDegrees(domain.id) * Math.PI) / 180;
+  const labelRatio = domainLabelRatioForAngle(labelAngle);
+  const point = polarToCartesian(0, 0, radius * labelRatio, labelAngle);
+  const textAnchor = textAnchorForAngle(labelAngle);
+  const lines = wrapDomainLabel(domain.label);
+  // Side multi-line labels: keep baseline at the anchor (no upward pull into viz).
+  const dy =
+    textAnchor === "middle" && lines.length > 1
+      ? -((lines.length - 1) * 6)
+      : 0;
 
   return (
     <text
       x={point.x}
       y={point.y}
-      textAnchor="middle"
+      textAnchor={textAnchor}
       dy={dy}
       className={styles.capabilityMapDomainLabel}
       fill={domain.color}

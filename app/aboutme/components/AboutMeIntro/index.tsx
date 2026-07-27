@@ -1,12 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react';
-import Typewriter from 'typewriter-effect';
+import { useEffect, useState } from 'react'
+import Typewriter from 'typewriter-effect'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import styles from './aboutme_intro.module.scss'
-import { aboutIntroFallback, type AboutIntroData } from '../../data/about-intro-data';
-import { subscribeAboutIntroData } from '../../lib/about-intro.firestore';
-import { AboutMeMobileImg } from './AboutMeIntroMobileImg';
-import { AboutMeDesktopTabletImg } from './AboutMeIntroDesktopTabletImg';
+import { aboutIntroFallback, type AboutIntroData } from '../../data/about-intro-data'
+import { subscribeAboutIntroData } from '../../lib/about-intro.firestore'
+import { AboutMeMobileImg } from './AboutMeIntroMobileImg'
+import { AboutMeDesktopTabletImg } from './AboutMeIntroDesktopTabletImg'
 
 function TypewriterComponent({ title }: { title: string }) {
   return (
@@ -32,6 +33,7 @@ export function AboutMeIntro() {
     <div className={styles.aboutmeIntro}>
       <div className={styles.aboutmeIntroContainer}>
         <div className={styles.aboutmeIntroInfo}>
+          <p className={styles.aboutmeIntroEyebrow}>Profile</p>
           <h1 className={styles.aboutmeIntroTitle}>
             <TypewriterComponent title={intro.pageTitle} />
           </h1>
@@ -47,6 +49,16 @@ export function AboutMeIntro() {
               >{ paragraph }</p>
             )}
           </div>
+          <a
+            href="#about-me-more"
+            className={styles.aboutmeIntroBiographyLink}
+          >
+            <span>Read full biography</span>
+            <ArrowForwardIcon
+              aria-hidden
+              className={styles.aboutmeIntroBiographyIcon}
+            />
+          </a>
         </div>
         <AboutMeDesktopTabletImg />
       </div>

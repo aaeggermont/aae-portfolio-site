@@ -25,9 +25,24 @@
       }
     }
 
+    &Eyebrow {
+      margin: 0 0 0.55rem;
+      font-family: var(--font-poppins);
+      font-size: 0.75rem; /* ~12px — matches mockup PROFILE label */
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      line-height: 1.2;
+      text-transform: uppercase;
+      color: #f59f0a;
+
+      @media #{$xs}, #{$sm} {
+        text-align: center;
+      }
+    }
+
     &Title {
       font-family: var(--font-montserrat);
-      @include fluid-type(20px, 26px, 26px);
+      font-size: clamp(1.8rem, 4vw, 2.2rem);
       font-weight: bold;
       color: $font-color-bold;
       margin-bottom: 1rem;
@@ -45,6 +60,40 @@
         @include fluid-type(16px, 20px, 24px);
         font-weight: 500;
       }
+    }
+
+    &BiographyLink {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1.25rem;
+      color: #f59f0a;
+      font-family: var(--font-poppins);
+      font-size: 0.95rem;
+      font-weight: 500;
+      line-height: 1.2;
+      text-decoration: none;
+      transition: color 0.2s ease, gap 0.2s ease;
+
+      &:hover {
+        color: #d97706;
+        gap: 0.55rem;
+      }
+
+      &:focus-visible {
+        outline: 2px solid rgba(245, 159, 10, 0.55);
+        outline-offset: 4px;
+        border-radius: 2px;
+      }
+
+      @media #{$xs}, #{$sm} {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    &BiographyIcon {
+      font-size: 1rem !important;
     }
 
     &Img {
