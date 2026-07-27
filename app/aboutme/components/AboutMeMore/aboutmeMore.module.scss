@@ -1,15 +1,39 @@
+@use "../../../home/home-layout" as home;
 @import "@/styles/variables";
 @import "@/styles/mixins";
 
-.aboutmeMore{
+.aboutmeMore {
+  /* Break out of About Me page gutters so the carousel can edge-peek like What I do */
+  position: relative;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   display: flex;
   flex-direction: column;
-  width: 100%;
-  align-items: center;
+  align-items: stretch;
+  overflow-x: clip;
+  overflow-y: visible;
+  --about-me-more-gutter: #{home.$home-layout-margin-mobile};
+
+  @media screen and (min-width: $tablet-min) {
+    --about-me-more-gutter: calc(
+      (100vw - min(100vw, #{home.$home-layout-max-width-tablet})) / 2 +
+        #{home.$home-layout-margin-tablet}
+    );
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    --about-me-more-gutter: calc(
+      (100vw - min(100vw, #{home.$home-layout-max-width-desktop})) / 2 +
+        #{home.$home-layout-margin-desktop}
+    );
+  }
 
   &Header {
-    text-align: center;
-    max-width: 40rem;
+    @include home.home-page-gutter;
+    text-align: left;
     // Gap before cards — same rhythm as cards → timeline (30 / 50 / 80).
     margin-bottom: 30px;
 
@@ -23,51 +47,42 @@
   }
 
   &Title {
-    // Same typography as About Me intro title ("Hello, I'm Antonio").
     font-family: var(--font-montserrat);
-    @include fluid-type(20px, 26px, 26px);
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: bold;
     color: $font-color-bold;
     margin: 0;
   }
 
-  .aboutmeMoreCards {
-    display: flex;
-    flex-wrap: wrap;
-    //gap: 32px;
-
-    @media #{$lg} {
-      gap: 1.5rem;  
-    }
-
-    @media #{$md} {
-      gap: 1rem;  
-    }
-
-    @media #{$sm, $xs} {
-      gap: 0.5rem;  
-    }
-
-    justify-content: center;
+  &Eyebrow {
+    margin: 0 0 0.55rem;
+    font-family: var(--font-poppins);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: #f59f0a;
   }
 
- 
-  &Cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr;
-    grid-column-gap: 32px;
-    grid-row-gap: 0px;
+  &CarouselStrip {
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 2;
   }
 
   &Section {
+    @include home.home-page-gutter;
     // Gap between cards and timeline — proportional to desktop 80px (3:5:8 rhythm).
-    margin-top: 30px; // mobile (~3/8 of 80)
-    max-width: 700px;
+    margin-top: 30px;
     width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
 
     @media screen and (min-width: $tablet-min) {
-      margin-top: 50px; // tablet (~5/8 of 80)
+      margin-top: 50px;
     }
 
     @media screen and (min-width: $desktop-min) {
@@ -75,14 +90,8 @@
     }
   }
 
-  @media #{$sm} {
-    align-items: center;
-
-    &Cards {
-      width: 295px;
-      grid-template-columns: repeat(2, 1fr);
-      grid-column-gap: 15px;
-      grid-row-gap: 15px;
-    }
+  &SectionInner {
+    width: 100%;
+    max-width: 700px;
   }
 }
