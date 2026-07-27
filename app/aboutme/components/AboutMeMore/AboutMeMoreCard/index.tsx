@@ -30,6 +30,8 @@ const TypeCardImg: Record<AboutMeMoreCardType, StaticImageData> = {
 export type AboutMeMoreCardProps = {
   type: null | AboutMeMoreCardType;
   title: string;
+  /** Optional one-line blurb under the title. */
+  description?: string;
   selected: boolean;
   onClick: (type: AboutMeMoreCardType | null) => void;
 };
@@ -37,6 +39,7 @@ export type AboutMeMoreCardProps = {
 export function AboutMeMoreCard({
   type = null,
   title = "",
+  description,
   selected = false,
   onClick,
 }: AboutMeMoreCardProps) {
@@ -52,8 +55,11 @@ export function AboutMeMoreCard({
         backgroundColor: "#ffffff",
         transition:
           "transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, opacity 0.22s ease",
-        width: { xs: 120, sm: 142, md: 155, lg: 155, xl: 155 },
-        height: { xs: 166, sm: 196, md: 214, lg: 214, xl: 214 },
+        width: 280,
+        height: 210,
+        maxWidth: "100%",
+        flexShrink: 0,
+        overflow: "hidden",
 
         // selected state (subtle but clear)
         outline: selected ? "2px solid rgba(7, 76, 95, 0.55)" : "1px solid rgba(0,0,0,0.06)",
@@ -75,22 +81,24 @@ export function AboutMeMoreCard({
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: "flex-start",
-          py: { xs: 1.25, md: 2 },
+          padding: "24px",
+          boxSizing: "border-box",
+          gap: "16px",
+          borderRadius: "inherit",
+          overflow: "hidden",
+          "& .MuiCardActionArea-focusHighlight": {
+            backgroundColor: "transparent",
+          },
         }}
       >
         {/* Image */}
         <Box
           sx={{
             position: "relative",
-            width: "70%",            
-            maxWidth: { xs: 90, md: 150 },
-            minWidth: { xs: 20, md: 110 },
-
-            aspectRatio: "1 / 1",
-
-            mt: { xs: 0.5, md: 0.5 },
+            width: 37,
+            height: 37,
             flexShrink: 0,
           }}
         >
@@ -100,24 +108,24 @@ export function AboutMeMoreCard({
               alt={type ?? "about-me"}
               fill
               style={{ objectFit: "contain" }}
-              sizes="(max-width: 600px) 90px, 150px"
+              sizes="37px"
             />
           ) : null}
         </Box>
 
-
-        {/* Title */}
+        {/* Title + optional description */}
         <CardContent
           sx={{
-            pt: { xs: 1, md: 1.25 },
-            pb: { xs: 1.25, md: 2 },
-            px: { xs: 1.25, md: 2 },
+            padding: "0 !important",
             width: "100%",
             display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            textAlign: "left",
             flex: 1,
+            gap: "0.5rem",
+            minHeight: 0,
           }}
         >
           <Typography
@@ -125,13 +133,28 @@ export function AboutMeMoreCard({
             sx={{
               fontFamily: "var(--font-poppins)",
               fontWeight: 500,
-              color: "#011114",
-              lineHeight: 1.15,
-              fontSize: { xs: "1rem", md: "1.05rem" },
+              color: "#074c5f",
+              lineHeight: 1.3,
+              fontSize: "18px",
             }}
           >
             {title}
           </Typography>
+          {description ? (
+            <Typography
+              component="p"
+              sx={{
+                margin: 0,
+                fontFamily: "var(--font-poppins)",
+                fontWeight: 300,
+                color: "#074c5f",
+                lineHeight: 1.4,
+                fontSize: "16px",
+              }}
+            >
+              {description}
+            </Typography>
+          ) : null}
         </CardContent>
       </CardActionArea>
     </Card>
