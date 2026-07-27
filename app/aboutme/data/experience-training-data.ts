@@ -39,17 +39,56 @@ export type EducationEntryData = {
   details: string;
 };
 
+export type ExperienceTopicCardId =
+  | "professional_experience"
+  | "education"
+  | "certifications"
+  | "personal";
+
+export type ExperienceTopicCardData = {
+  id: ExperienceTopicCardId;
+  title: string;
+  /** Optional one-line blurb under the title on the Background cards. */
+  description?: string;
+};
+
 export type ExperienceTrainingData = {
   version: number;
   sectionTitle: string;
+  /** Topic cards in the Background carousel (title + summary). */
+  topicCards: ExperienceTopicCardData[];
   experience: ExperienceEntryData[];
   education: EducationEntryData[];
   certification: EducationEntryData[];
 };
 
 export const experienceTrainingFallback: ExperienceTrainingData = {
-  version: 1,
+  version: 2,
   sectionTitle: "Experience, Education & Formal Training",
+  topicCards: [
+    {
+      id: "professional_experience",
+      title: "Professional Experience",
+      description:
+        "Lead & senior engineering roles building interactive dashboards, web platforms, and AI-driven tools.",
+    },
+    {
+      id: "education",
+      title: "Education",
+      description:
+        "Formal training in computer science, design, and human-computer interaction.",
+    },
+    {
+      id: "certifications",
+      title: "Certifications",
+      description:
+        "Continuous learning in cloud, AI product design, and modern frontend frameworks.",
+    },
+    {
+      id: "personal",
+      title: "When I am not working...",
+    },
+  ],
   experience: [
     {
       logoKey: "disney",

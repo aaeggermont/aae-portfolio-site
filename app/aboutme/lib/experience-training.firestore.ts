@@ -7,6 +7,8 @@ import {
   type ExperienceEntryData,
   type ExperienceLogoKey,
   type ExperiencePositionData,
+  type ExperienceTopicCardData,
+  type ExperienceTopicCardId,
   type ExperienceTrainingData,
 } from "@/app/aboutme/data/experience-training-data";
 
@@ -23,6 +25,27 @@ const LOGO_KEYS = new Set<ExperienceLogoKey>([
   "emerson",
   "mit",
 ]);
+
+const TOPIC_CARD_IDS = new Set<ExperienceTopicCardId>([
+  "professional_experience",
+  "education",
+  "certifications",
+  "personal",
+]);
+
+function parseTopicCard(raw: unknown): ExperienceTopicCardData | null {
+  if (!raw || typeof raw !== "object") return null;
+  const record = raw as Record<string, unknown>;
+  const id = asString(record.id) as ExperienceTopicCardId;
+  const title = asString(record.title);
+  if (!TOPIC_CARD_IDS.has(id) || !title) return null;
+  const description = asString(record.description);
+  return {
+    id,
+    title,
+    ...(description ? { description } : {}),
+  };
+}
 
 function asString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -109,6 +132,11 @@ export function parseExperienceTrainingDocument(
     ? data.certification
     : [];
 
+  const topicCardsRaw = Array.isArray(data.topicCards) ? data.topicCards : [];
+  const topicCards = topicCardsRaw
+    .map(parseTopicCard)
+    .filter((c): c is ExperienceTopicCardData => c !== null);
+
   const experience = experienceRaw
     .map(parseExperienceEntry)
     .filter((e): e is ExperienceEntryData => e !== null);
@@ -128,6 +156,10 @@ export function parseExperienceTrainingDocument(
   return {
     version: asNumber(data.version, 1),
     sectionTitle,
+    topicCards:
+      topicCards.length > 0
+        ? topicCards
+        : experienceTrainingFallback.topicCards,
     experience:
       experience.length > 0
         ? experience
