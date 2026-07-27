@@ -48,11 +48,11 @@ export function CapabilityMap() {
             ) : null}
           </header>
 
-          <div className={styles.capabilityMapCard}>
-            <div
-              className={styles.capabilityMapChartWrap}
-              style={{ maxWidth: sizeStyles.chartMaxSize }}
-            >
+          <div
+            className={styles.capabilityMapCard}
+            style={{ maxWidth: sizeStyles.chartMaxSize }}
+          >
+            <div className={styles.capabilityMapChartWrap}>
               {hasMounted ? (
                 <ParentSize
                   debounceTime={10}

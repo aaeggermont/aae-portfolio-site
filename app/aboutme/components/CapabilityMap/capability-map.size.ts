@@ -9,7 +9,7 @@ export const CAPABILITY_MAP_SIZE = {
    * Hard cap on the square chart width/height (px).
    * Example: 800 → viz block is at most 800×800.
    */
-  maxChartSize: 1000,
+  maxChartSize: 780,
   /** Max width for the section (header/footer copy); chart is capped separately. */
   sectionMaxWidth: 1100,
 } as const;

@@ -117,25 +117,29 @@
 
   &Card {
     box-sizing: border-box;
+    // max-width comes from CAPABILITY_MAP_SIZE.maxChartSize (inline) so the
+    // white card hugs the viz instead of stretching full section width.
     width: 100%;
     margin-top: 1.75rem;
-    padding: 0.75rem 0.75rem 1.25rem;
+    // Keep horizontal padding tight — domain labels need the SVG edge.
+    padding: 0.5rem 0.35rem 1rem;
     background-color: #ffffff;
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(7, 76, 95, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: visible;
 
     @media screen and (min-width: $tablet-min) {
       margin-top: 2.25rem;
-      padding: 1rem 1rem 1.5rem;
+      padding: 0.65rem 0.4rem 1.15rem;
       border-radius: 18px;
     }
 
     @media screen and (min-width: $desktop-min) {
       margin-top: 2.75rem;
-      padding: 1.25rem 1.25rem 1.75rem;
+      padding: 0.75rem 0.5rem 1.35rem;
       border-radius: 20px;
     }
   }
