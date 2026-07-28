@@ -9,11 +9,11 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 import {
-  CHALLENGES_CARD_HEIGHT_PX,
   PRIMARY_USERS_CARD_HEIGHT_PX,
   PRIMARY_USERS_CARD_WIDTH_PX,
 } from "@/app/projects/finding-nemo/components/ContentCard";
 import DesigningHumanCenteredAiSection from "@/app/projects/finding-nemo/components/DesigningHumanCenteredAiSection";
+import IdentifyAiOpportunitySection from "@/app/projects/finding-nemo/components/IdentifyAiOpportunitySection";
 import ContentCardsRow from "@/app/projects/finding-nemo/components/ContentCardsRow";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
 import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
@@ -164,52 +164,11 @@ export function FindingNemoPage({
           ) : null}
           <MyContributions data={project.myContributions} />
           <DesigningHumanCenteredAiSection data={project.designingHumanCenteredAi} />
-          <FullBleedBand backgroundColor={BAND_COLORS.identifyAiOpportunity}>
-            <SectionParagraph title={project.problemSpaceFraming.title} />
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={sectionTitleContentGapMtSx}
-            >
-              <SectionParagraph
-                title={project.challenges.title}
-                body={project.challenges.paragraphs}
-                titleVariant="subtitle"
-              />
-              <ContentCardsRow
-                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
-                cards={project.challenges.cards.map((card) => ({
-                  title: card.title,
-                  description: card.description,
-                  heightPx: CHALLENGES_CARD_HEIGHT_PX,
-                }))}
-              />
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.businessOpportunities.title}
-                body={project.businessOpportunities.paragraphs}
-                titleVariant="subtitle"
-              />
-              <ContentCardsRow
-                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
-                cards={project.businessOpportunities.cards.map((card) => ({
-                  title: card.title,
-                  description: card.description,
-                }))}
-              />
-            </Stack>
-          </FullBleedBand>
+          <IdentifyAiOpportunitySection
+            framing={project.problemSpaceFraming}
+            challenges={project.challenges}
+            businessOpportunities={project.businessOpportunities}
+          />
           <FullBleedBand backgroundColor={BAND_COLORS.defineAiSolution}>
             <Stack spacing={{ xs: 4, md: 6 }}>
               <SectionParagraph title={project.solutionOverview.title} />

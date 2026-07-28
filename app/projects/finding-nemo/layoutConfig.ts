@@ -107,7 +107,7 @@ export const BAND_COLORS = {
   /** White inset / neutral full-bleed bands */
   neutralPanel: "#FFFFFF",
   /** `01 - Identify the AI Opportunity` */
-  identifyAiOpportunity: "#FFFFFF",
+  identifyAiOpportunity: "#EEF2F6",
   /** `02 - Define the AI-Assisted Solution` */
   defineAiSolution: "#EEF3F9",
   /** `04 — Design the Decision Support Experience` */
@@ -148,21 +148,45 @@ export const DEFINING_SUCCESS_KPI_CARD = {
   background: "#E6F1FF",
 } as const;
 
-/**
- * Four-stage framework cards (`Designing Human-Centered AI`).
- * 250×297px at all breakpoints so copy is not clipped on mobile.
- */
-export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
-  mobile: { width: 250, height: 297 },
-  tablet: { width: 250, height: 297 },
-  desktop: { width: 250, height: 297 },
+/** Stage 01 challenge + opportunity cards (`Identify the AI Opportunity`). */
+export const IDENTIFY_AI_OPPORTUNITY_CARD = {
+  background: "#FFFFFF",
+  border: "#D5DCE3",
+  challengeTitleColor: "#073B5E",
+  opportunityTitleColor: "#E89B0C",
+  bodyColor: "#3F5266",
+  borderRadiusPx: 16,
+  widthPx: {
+    mobile: 360,
+    tablet: 280,
+    desktop: 300,
+  },
+  gap: { mobile: 16, tablet: 20, desktop: 24 },
 } as const;
 
-/** Gaps between framework cards — mobile 16px; tablet 32px; desktop 16–32px (uses 32px). */
+/**
+ * Four-stage framework cards (`Designing Human-Centered AI`).
+ * Fixed widths match Stage 01 cards; wrap in a row on wider viewports.
+ */
+export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
+  background: "#FFFFFF",
+  border: "#D5DCE3",
+  numberColor: "#E89B0C",
+  titleColor: "#073B5E",
+  bodyColor: "#3F5266",
+  borderRadiusPx: 16,
+  widthPx: {
+    mobile: 360,
+    tablet: 280,
+    desktop: 300,
+  },
+} as const;
+
+/** Gaps between framework cards — mobile 16px; tablet 20px; desktop 24px. */
 export const HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP = {
   mobile: 16,
-  tablet: 32,
-  desktop: 32,
+  tablet: 20,
+  desktop: 24,
 } as const;
 
 /** Inset panel shell backgrounds (white panels inside full-bleed bands). */
