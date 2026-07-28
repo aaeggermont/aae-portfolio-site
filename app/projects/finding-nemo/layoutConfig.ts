@@ -122,12 +122,22 @@ export const BAND_COLORS = {
  */
 export const INTRO_SECTIONS_BACKGROUND = "#ffffff" as const;
 
-/** Inset card shell for the My Contributions block. */
+/** Inset card shell for the My Contributions block (legacy card surfaces). */
 export const MY_CONTRIBUTIONS_CARD = {
   background: "#F6FBFF",
   paddingPx: 64,
   maxWidthPx: 600,
   borderRadiusPx: 32,
+} as const;
+
+/** Full-bleed band + contribution tag chips for My Contributions. */
+export const MY_CONTRIBUTIONS_BAND = {
+  background: "#EEF2F6",
+  tagBackground: "#FFFFFF",
+  tagBorder: "#D5DCE3",
+  tagText: "#1F3347",
+  titleColor: "#0B6E9F",
+  tagGap: { mobile: 12, tablet: 14, desktop: 16 },
 } as const;
 
 /**
@@ -191,16 +201,15 @@ export const PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY = {
 /** Inset panel background for the problem demo carousel section. */
 export const PROBLEM_DEMO_PANEL_BACKGROUND = MY_CONTRIBUTIONS_CARD.background;
 
-/** Problem demo panel — copy column width when side-by-side at desktop (1260px+). */
+/** Problem demo panel — min copy column width when side-by-side at desktop (1024px+). */
 export const PROBLEM_DEMO_PANEL_COPY_WIDTH = {
-  desktop: 330,
+  desktop: 360,
 } as const;
 
-/** Gap between copy and carousel — stacked (vertical) vs side-by-side (horizontal at 1260px+). */
+/** Gap between copy and carousel — stacked (vertical) vs side-by-side (horizontal at desktop). */
 export const PROBLEM_DEMO_PANEL_GAP = {
   stacked: 64,
-  /** Fits copy (306) + carousel (450) inside 920px panel with md horizontal padding. */
-  sideBySide: 36,
+  sideBySide: 48,
 } as const;
 
 /**
@@ -255,10 +264,11 @@ export const PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE = {
  * Side-by-side copy + carousel only at this viewport width and above
  * (matches `LAYOUT_DIMENSIONS.desktop.maxWidth`).
  */
-export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1260 as const;
+/** @deprecated Prefer `breakpointMediaQuery.desktopUp` — kept for any remaining references. */
+export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1024 as const;
 
 /** Copy column minimum width when side-by-side at the desktop band. */
-export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 295 as const;
+export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 320 as const;
 
 /**
  * Solution overview hi-fi mockup display (402:874 intrinsic aspect ratio).

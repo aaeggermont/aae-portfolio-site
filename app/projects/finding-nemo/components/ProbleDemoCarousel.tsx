@@ -6,18 +6,12 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 
 import {
-  INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX,
-  INTRO_NARRATIVE_MAX_WIDTH_PX,
   INTRO_SECTIONS_BACKGROUND,
-  LAYOUT_DIMENSIONS,
   PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY,
-  PROBLEM_DEMO_PANEL_BACKGROUND,
-  PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX,
-  PROBLEM_DEMO_PANEL_COPY_WIDTH,
   PROBLEM_DEMO_PANEL_GAP,
-  PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX,
-  PROBLEM_DEMO_PANEL_TITLE_GAP,
   PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE,
+  PROJECT_CONTENT_CONTAINER_SX,
+  sectionTitleContentGapMbSx,
 } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, FINDING_NEMO_BODY_FONT, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
@@ -28,8 +22,7 @@ type ProblemDemoPanelProps = {
   data: NonNullable<FindingNemoDataProjectDocument["problemDemoPanel"]>;
 };
 
-const { desktop, tablet, mobile } = PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY;
-const copyWidth = PROBLEM_DEMO_PANEL_COPY_WIDTH;
+const { desktop } = PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY;
 const panelGap = PROBLEM_DEMO_PANEL_GAP;
 const captionFontSize = PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE;
 
@@ -50,87 +43,82 @@ const carouselCaptionSx = {
   },
 } as const;
 
-const sectionContentStackSx = {
-  width: "100%",
-  alignItems: "center",
-  gap: PROBLEM_DEMO_PANEL_TITLE_GAP.mobile,
-  [breakpointMediaQuery.tabletUp]: {
-    gap: PROBLEM_DEMO_PANEL_TITLE_GAP.tablet,
+const sectionLabelSx = [
+  titleTypeSx("heroSubtitle", {
+    fontWeight: 500,
+    color: "#0B6E9F",
+    lineHeight: 1.2,
+    mb: 1.5,
+    textTransform: "uppercase",
+  }),
+  {
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: "22px",
+    },
   },
-  [breakpointMediaQuery.desktopUp]: {
-    gap: PROBLEM_DEMO_PANEL_TITLE_GAP.desktop,
-  },
-} as const;
+] as const;
 
-const problemDemoPanelSideBySideMq = `@media (min-width: ${PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX}px)`;
+const sectionHeadlineSx = titleTypeSx("sectionTitle", {
+  fontWeight: 700,
+  color: "#073B5E",
+  lineHeight: 1.2,
+});
 
-/** Stacked below 1260px — copy width matches carousel; side-by-side uses fixed copy column. */
+/**
+ * Stacked on mobile/tablet at full content width (same as Overview);
+ * on desktop: ~60% copy / ~40% carousel (flex 3:2, gap excluded).
+ */
 const copyColumnSx = {
   width: "100%",
-  maxWidth: mobile.width,
-  flexShrink: 0,
-  [breakpointMediaQuery.tabletUp]: {
-    maxWidth: tablet.width,
-  },
-  [problemDemoPanelSideBySideMq]: {
-    width: copyWidth.desktop,
-    maxWidth: copyWidth.desktop,
-    minWidth: PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX,
-    flexShrink: 0,
+  maxWidth: "100%",
+  [breakpointMediaQuery.desktopUp]: {
+    flex: "3 1 0%",
+    width: "auto",
+    minWidth: 0,
+    maxWidth: "none",
   },
 } as const;
 
 const panelRowSx = {
+  width: "100%",
   flexDirection: "column",
-  alignItems: "center",
+  alignItems: "stretch",
   justifyContent: "space-between",
   gap: `${panelGap.stacked}px`,
-  [problemDemoPanelSideBySideMq]: {
+  [breakpointMediaQuery.desktopUp]: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: `${panelGap.sideBySide}px`,
   },
 } as const;
 
 const carouselImageSizes = [
-  `(max-width: 767px) ${mobile.width}px`,
-  `(max-width: 1023px) ${tablet.width}px`,
-  `${desktop.width}px`,
+  `(max-width: 767px) 100vw`,
+  `(max-width: 1023px) 100vw`,
+  `40vw`,
 ].join(", ");
 
-/** Fixed frame per breakpoint — steps down at tablet / mobile, no fluid scaling between bands. */
+/** Full-width fluid frame on mobile/tablet; ~40% column beside copy on desktop. */
 const carouselFrameSx = {
   position: "relative",
-  width: mobile.width,
-  height: mobile.height,
+  width: "100%",
+  aspectRatio: "524 / 330",
   maxWidth: "100%",
   overflow: "hidden",
   borderRadius: 5,
   flexShrink: 0,
-  [breakpointMediaQuery.tabletUp]: {
-    width: tablet.width,
-    height: tablet.height,
-    maxWidth: tablet.width,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    width: desktop.width,
-    height: desktop.height,
-    maxWidth: desktop.width,
-  },
 } as const;
 
 const carouselColumnSx = {
-  flexShrink: 0,
-  width: mobile.width,
+  width: "100%",
   maxWidth: "100%",
   alignItems: "stretch",
-  [breakpointMediaQuery.tabletUp]: {
-    width: tablet.width,
-    maxWidth: tablet.width,
-  },
   [breakpointMediaQuery.desktopUp]: {
-    width: desktop.width,
-    maxWidth: desktop.width,
+    flex: "2 1 0%",
+    width: "auto",
+    maxWidth: "none",
+    minWidth: 0,
   },
 } as const;
 
@@ -148,7 +136,7 @@ const navigationButtons = [
 ] as const;
 
 export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
-  const { sectionTitle, description, slides } = data;
+  const { sectionLabel, title, description, slides } = data;
   const [currentIndex, setCurrentIndex] = useState(0);
   const canNavigate = slides.length > 1;
   const currentSlide = slides[currentIndex];
@@ -172,131 +160,90 @@ export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
       component="section"
       sx={{
         bgcolor: INTRO_SECTIONS_BACKGROUND,
-        px: LAYOUT_DIMENSIONS.mobile.margin,
         pb: { xs: 8, md: 10, lg: 12 },
-        [breakpointMediaQuery.tabletUp]: {
-          px: LAYOUT_DIMENSIONS.tablet.margin,
-        },
-        [breakpointMediaQuery.desktopUp]: {
-          px: LAYOUT_DIMENSIONS.desktop.margin,
-        },
       }}
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: {
-            xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
-            md: LAYOUT_DIMENSIONS.tablet.maxWidth,
-            lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
-          },
-        }}
-      >
-        <Stack sx={sectionContentStackSx}>
-          <Typography
-            component="h2"
-            align="center"
-            sx={titleTypeSx("sectionTitle", {
-              width: "100%",
-              color: "text.primary",
-              fontWeight: 700,
-              lineHeight: 1.2,
-              m: 0,
-            })}
-          >
-            {sectionTitle}
-          </Typography>
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: "100%",
-              mx: "auto",
-              [breakpointMediaQuery.tabletOnly]: {
-                maxWidth: INTRO_INSET_CARD_TABLET_MAX_WIDTH_PX,
-              },
-              [breakpointMediaQuery.desktopUp]: {
-                maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
-              },
-              bgcolor: PROBLEM_DEMO_PANEL_BACKGROUND,
-              borderRadius: 5,
-              px: { xs: 3, sm: 5, md: 8 },
-              py: { xs: 4, sm: 5, md: 8 },
-            }}
-          >
-            <Stack sx={panelRowSx}>
-              <Box component="article" sx={copyColumnSx}>
-                <Typography
-                  component="p"
-                  sx={bodyTypeSx("sectionDescription", {
-                    color: "common.black",
-                    lineHeight: 1.5,
-                    fontWeight: 400,
-                    m: 0,
-                  })}
-                >
-                  {description}
-                </Typography>
+      <Container maxWidth={false} sx={PROJECT_CONTENT_CONTAINER_SX}>
+        <Stack sx={panelRowSx}>
+          <Stack spacing={3} sx={copyColumnSx}>
+            <Stack sx={sectionTitleContentGapMbSx}>
+              <Typography component="p" align="left" sx={sectionLabelSx}>
+                {sectionLabel}
+              </Typography>
+              <Typography component="h2" align="left" sx={sectionHeadlineSx}>
+                {title}
+              </Typography>
+            </Stack>
+            <Typography
+              component="p"
+              sx={bodyTypeSx("sectionDescription", {
+                color: "common.black",
+                lineHeight: 1.5,
+                fontWeight: 400,
+                m: 0,
+              })}
+            >
+              {description}
+            </Typography>
+          </Stack>
+          <Stack spacing={3} sx={carouselColumnSx}>
+            <Box component="figure" sx={{ m: 0, width: "100%" }}>
+              <Box sx={carouselFrameSx}>
+                <ProjectImage
+                  objectPath={currentSlide.objectPath}
+                  alt={currentSlide.alt}
+                  width={desktop.width}
+                  height={desktop.height}
+                  sizes={carouselImageSizes}
+                  priority={currentIndex === 0}
+                  style={{
+                    display: "block",
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
               </Box>
-              <Stack spacing={3} sx={carouselColumnSx}>
-                <Box component="figure" sx={{ m: 0, width: "100%" }}>
-                  <Box sx={carouselFrameSx}>
-                    <ProjectImage
-                      objectPath={currentSlide.objectPath}
-                      alt={currentSlide.alt}
-                      width={desktop.width}
-                      height={desktop.height}
-                      sizes={carouselImageSizes}
-                      priority={currentIndex === 0}
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="space-between"
-                  spacing={2}
-                  component="figcaption"
-                >
-                  <Box sx={{ flex: 1, minWidth: 0 }} aria-hidden />
-                  <Typography component="span" sx={carouselCaptionSx}>
-                    {currentSlide.caption}
-                  </Typography>
-                  <Stack
-                    direction="row"
-                    spacing={0.5}
-                    sx={{ flex: 1, minWidth: 0 }}
-                    justifyContent="flex-end"
+            </Box>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              spacing={2}
+              component="figcaption"
+            >
+              <Box sx={{ flex: 1, minWidth: 0 }} aria-hidden />
+              <Typography component="span" sx={carouselCaptionSx}>
+                {currentSlide.caption}
+              </Typography>
+              <Stack
+                direction="row"
+                spacing={0.5}
+                sx={{ flex: 1, minWidth: 0 }}
+                justifyContent="flex-end"
+              >
+                {navigationButtons.map((button) => (
+                  <IconButton
+                    key={button.key}
+                    aria-label={button.label}
+                    disabled={!canNavigate}
+                    onClick={
+                      button.key === "previous" ? goToPrevious : goToNext
+                    }
+                    size="small"
+                    sx={{
+                      color: "#8a8a8a",
+                      "&.Mui-disabled": {
+                        color: "rgba(138, 138, 138, 0.35)",
+                      },
+                    }}
                   >
-                    {navigationButtons.map((button) => (
-                      <IconButton
-                        key={button.key}
-                        aria-label={button.label}
-                        disabled={!canNavigate}
-                        onClick={
-                          button.key === "previous" ? goToPrevious : goToNext
-                        }
-                        size="small"
-                        sx={{
-                          color: "#8a8a8a",
-                          "&.Mui-disabled": {
-                            color: "rgba(138, 138, 138, 0.35)",
-                          },
-                        }}
-                      >
-                        {button.icon}
-                      </IconButton>
-                    ))}
-                  </Stack>
-                </Stack>
+                    {button.icon}
+                  </IconButton>
+                ))}
               </Stack>
             </Stack>
-          </Box>
+          </Stack>
         </Stack>
       </Container>
     </Box>

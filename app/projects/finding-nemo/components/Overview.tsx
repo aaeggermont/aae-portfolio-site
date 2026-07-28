@@ -1,6 +1,10 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 
-import { INTRO_SECTIONS_BACKGROUND, INTRO_NARRATIVE_MAX_WIDTH_PX, LAYOUT_DIMENSIONS, sectionTitleContentGapMbSx } from "@/app/projects/finding-nemo/layoutConfig";
+import {
+  INTRO_SECTIONS_BACKGROUND,
+  PROJECT_CONTENT_CONTAINER_SX,
+  sectionTitleContentGapMbSx,
+} from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
@@ -16,59 +20,59 @@ export default function OverviewSection({ data }: OverviewSectionProps) {
       sx={{
         bgcolor: INTRO_SECTIONS_BACKGROUND,
         py: { xs: 8, md: 10, lg: 12 },
-        px: LAYOUT_DIMENSIONS.mobile.margin,
-        [breakpointMediaQuery.tabletUp]: {
-          px: LAYOUT_DIMENSIONS.tablet.margin,
-        },
-        [breakpointMediaQuery.desktopUp]: {
-          px: LAYOUT_DIMENSIONS.desktop.margin,
-        },
       }}
     >
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: {
-            xs: LAYOUT_DIMENSIONS.mobile.maxWidth,
-            md: LAYOUT_DIMENSIONS.tablet.maxWidth,
-            lg: LAYOUT_DIMENSIONS.desktop.maxWidth,
-          },
-        }}
-      >
-        <Box
-          sx={{
-            maxWidth: INTRO_NARRATIVE_MAX_WIDTH_PX,
-            mx: "auto",
-          }}
-        >
+      <Container maxWidth={false} sx={PROJECT_CONTENT_CONTAINER_SX}>
+        <Stack sx={sectionTitleContentGapMbSx}>
+          {data.sectionLabel ? (
+            <Typography
+              component="p"
+              align="left"
+              sx={[
+                titleTypeSx("heroSubtitle", {
+                  fontWeight: 500,
+                  color: "#0B6E9F",
+                  lineHeight: 1.2,
+                  mb: 1.5,
+                  textTransform: "uppercase",
+                }),
+                {
+                  [breakpointMediaQuery.desktopUp]: {
+                    fontSize: "22px",
+                  },
+                },
+              ]}
+            >
+              {data.sectionLabel}
+            </Typography>
+          ) : null}
           <Typography
             component="h2"
-            align="center"
+            align="left"
             sx={titleTypeSx("sectionTitle", {
               fontWeight: 700,
-              color: "text.primary",
+              color: "#073B5E",
               lineHeight: 1.2,
-              ...sectionTitleContentGapMbSx,
             })}
           >
             {data.title}
           </Typography>
-          <Box component="article">
-            {data.paragraphs.map((paragraph, index) => (
-              <Typography
-                key={index}
-                component="p"
-                sx={bodyTypeSx("sectionDescription", {
-                  color: "text.primary",
-                  fontWeight: 400,
-                  lineHeight: 1.5,
-                  mb: index === data.paragraphs.length - 1 ? 0 : 3.5,
-                })}
-              >
-                {paragraph}
-              </Typography>
-            ))}
-          </Box>
+        </Stack>
+        <Box component="article">
+          {data.paragraphs.map((paragraph, index) => (
+            <Typography
+              key={index}
+              component="p"
+              sx={bodyTypeSx("sectionDescription", {
+                color: "#3F5266",
+                fontWeight: 400,
+                lineHeight: 1.5,
+                mb: index === data.paragraphs.length - 1 ? 0 : 3.5,
+              })}
+            >
+              {paragraph}
+            </Typography>
+          ))}
         </Box>
       </Container>
     </Box>
