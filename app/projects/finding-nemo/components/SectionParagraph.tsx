@@ -73,7 +73,6 @@ export default function SectionParagraph({
               key={index}
               component="p"
               sx={bodyTypeSx("sectionDescription", {
-                color: "common.black",
                 fontWeight: 400,
                 lineHeight: 1.5,
                 m: 0,

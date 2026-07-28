@@ -105,7 +105,6 @@ function ImageTextPanel({
         <Typography
           component="p"
           sx={bodyTypeSx("sectionDescription", {
-            color: "common.black",
             fontWeight: 400,
             lineHeight: 1.5,
             maxWidth: 540,
@@ -162,7 +161,6 @@ function PrinciplesImagePanel({
             <Typography
               component="p"
               sx={bodyTypeSx("contentCardBody", {
-                color: "common.black",
                 fontWeight: 400,
                 lineHeight: 1.6,
                 m: 0,
@@ -203,7 +201,6 @@ function TextPanel({
         <Typography
           component="p"
           sx={bodyTypeSx("sectionDescription", {
-            color: "common.black",
             fontWeight: 400,
             lineHeight: 1.5,
             m: 0,

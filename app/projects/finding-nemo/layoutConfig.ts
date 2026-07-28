@@ -109,7 +109,7 @@ export const BAND_COLORS = {
   /** `01 - Identify the AI Opportunity` */
   identifyAiOpportunity: "#EEF2F6",
   /** `02 - Define the AI-Assisted Solution` */
-  defineAiSolution: "#EEF3F9",
+  defineAiSolution: "#FFFFFF",
   /** `04 — Design the Decision Support Experience` */
   designDecisionSupportExperience: "#EEF3F9",
   /** Expected Impact + Reflections & Key Learnings */
@@ -135,7 +135,7 @@ export const MY_CONTRIBUTIONS_BAND = {
   background: "#EEF2F6",
   tagBackground: "#FFFFFF",
   tagBorder: "#D5DCE3",
-  tagText: "#1F3347",
+  tagText: "#3F5266",
   titleColor: "#0B6E9F",
   tagGap: { mobile: 12, tablet: 14, desktop: 16 },
 } as const;
@@ -162,6 +162,17 @@ export const IDENTIFY_AI_OPPORTUNITY_CARD = {
     desktop: 300,
   },
   gap: { mobile: 16, tablet: 20, desktop: 24 },
+} as const;
+
+/**
+ * Primary Users cards — match Persona card width (490px).
+ */
+export const PRIMARY_USERS_CARD = {
+  widthPx: {
+    mobile: 490,
+    tablet: 490,
+    desktop: 490,
+  },
 } as const;
 
 /**

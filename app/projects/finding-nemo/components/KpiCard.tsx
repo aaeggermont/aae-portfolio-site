@@ -1,10 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-import {
-  FINDING_NEMO_BODY_FONT,
-  FINDING_NEMO_TITLE_FONT,
-  TYPOGRAPHY,
-} from "@/app/projects/finding-nemo/typography";
+import { FINDING_NEMO_BODY_COLOR, FINDING_NEMO_BODY_FONT, FINDING_NEMO_TITLE_FONT, TYPOGRAPHY } from "@/app/projects/finding-nemo/typography";
 import {
   DEFINING_SUCCESS_KPI_CARD,
 } from "@/app/projects/finding-nemo/layoutConfig";
@@ -90,7 +86,7 @@ export default function KpiCard({ icon, title, description }: KpiCardProps) {
             fontFamily: FINDING_NEMO_BODY_FONT,
             fontWeight: 400,
             lineHeight: 1.5,
-            color: "common.black",
+            color: FINDING_NEMO_BODY_COLOR,
             fontSize: {
               xs: TYPOGRAPHY.kpiCardBody.mobile,
               md: TYPOGRAPHY.kpiCardBody.tablet,

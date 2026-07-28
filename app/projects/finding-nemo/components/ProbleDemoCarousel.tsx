@@ -13,7 +13,7 @@ import {
   PROJECT_CONTENT_CONTAINER_SX,
   sectionTitleContentGapMbSx,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { bodyTypeSx, FINDING_NEMO_BODY_FONT, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { bodyTypeSx, FINDING_NEMO_BODY_COLOR, FINDING_NEMO_BODY_FONT, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
@@ -28,7 +28,7 @@ const captionFontSize = PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE;
 
 const carouselCaptionSx = {
   fontFamily: FINDING_NEMO_BODY_FONT,
-  color: "#000",
+  color: FINDING_NEMO_BODY_COLOR,
   fontSize: captionFontSize.mobile,
   lineHeight: 1.3,
   fontWeight: 600,
@@ -176,12 +176,11 @@ export default function ProblemDemoPanel({ data }: ProblemDemoPanelProps) {
             </Stack>
             <Typography
               component="p"
-              sx={bodyTypeSx("sectionDescription", {
-                color: "common.black",
-                lineHeight: 1.5,
-                fontWeight: 400,
-                m: 0,
-              })}
+                sx={bodyTypeSx("sectionDescription", {
+                  fontWeight: 400,
+                  lineHeight: 1.5,
+                  m: 0,
+                })}
             >
               {description}
             </Typography>

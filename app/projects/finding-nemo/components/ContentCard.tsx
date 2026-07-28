@@ -156,7 +156,6 @@ export default function ContentCard({
                     {
                       display: "list-item",
                       py: 0.25,
-                      color: "common.black",
                     },
                     bodyTypeSx("contentCardBody", {
                       lineHeight: 1.6,
@@ -185,7 +184,6 @@ export default function ContentCard({
             component="p"
             sx={bodyTypeSx("contentCardBody", {
               width: "100%",
-              color: "common.black",
               lineHeight: 1.6,
               textAlign: descriptionTextAlign,
               fontWeight: 400,

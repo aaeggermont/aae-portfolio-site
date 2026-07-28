@@ -64,7 +64,6 @@ export default function OverviewSection({ data }: OverviewSectionProps) {
               key={index}
               component="p"
               sx={bodyTypeSx("sectionDescription", {
-                color: "#3F5266",
                 fontWeight: 400,
                 lineHeight: 1.5,
                 mb: index === data.paragraphs.length - 1 ? 0 : 3.5,

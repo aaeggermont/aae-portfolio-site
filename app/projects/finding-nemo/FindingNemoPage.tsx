@@ -8,13 +8,10 @@ import ListItem from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import {
-  PRIMARY_USERS_CARD_HEIGHT_PX,
-  PRIMARY_USERS_CARD_WIDTH_PX,
-} from "@/app/projects/finding-nemo/components/ContentCard";
 import DesigningHumanCenteredAiSection from "@/app/projects/finding-nemo/components/DesigningHumanCenteredAiSection";
 import IdentifyAiOpportunitySection from "@/app/projects/finding-nemo/components/IdentifyAiOpportunitySection";
-import ContentCardsRow from "@/app/projects/finding-nemo/components/ContentCardsRow";
+import StageSectionHeader from "@/app/projects/finding-nemo/components/StageSectionHeader";
+import StageInfoCardsRow from "@/app/projects/finding-nemo/components/StageInfoCardsRow";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
 import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
 import MyContributions from "@/app/projects/finding-nemo/components/MyContributions";
@@ -34,6 +31,7 @@ import {
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
   PANEL_SHELL_SX,
+  PRIMARY_USERS_CARD,
   SECTION_GAPS,
   sectionTitleContentGapMtSx,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
@@ -170,8 +168,56 @@ export function FindingNemoPage({
             businessOpportunities={project.businessOpportunities}
           />
           <FullBleedBand backgroundColor={BAND_COLORS.defineAiSolution}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
-              <SectionParagraph title={project.solutionOverview.title} />
+            <StageSectionHeader
+              sectionLabel={project.solutionOverview.sectionLabel}
+              title={project.solutionOverview.title}
+            />
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={sectionTitleContentGapMtSx}
+            >
+              <SectionParagraph
+                title={project.primaryUsers.title}
+                body={project.primaryUsers.paragraphs}
+                titleVariant="subtitle"
+              />
+              <StageInfoCardsRow
+                cards={project.primaryUsers.cards}
+                widthPx={PRIMARY_USERS_CARD.widthPx}
+                centered
+              />
+            </Stack>
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
+            >
+              <SectionParagraph
+                title={project.personas.title}
+                body={project.personas.paragraphs}
+                titleVariant="subtitle"
+              />
+              <PersonasRow personas={project.personas.items} />
+            </Stack>
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
+            >
               <SectionParagraph
                 title={project.solutionOverview.subtitle}
                 body={project.solutionOverview.paragraphs}
@@ -207,7 +253,6 @@ export function FindingNemoPage({
                     <Typography
                       component="p"
                       sx={bodyTypeSx("smallCaption", {
-                        color: "common.black",
                         fontWeight: 400,
                         lineHeight: 1.5,
                         textAlign: "center",
@@ -220,51 +265,6 @@ export function FindingNemoPage({
                   ) : null}
                 </Stack>
               </Box>
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.primaryUsers.title}
-                body={project.primaryUsers.paragraphs}
-                titleVariant="subtitle"
-              />
-              <ContentCardsRow
-                cards={project.primaryUsers.cards.map((card) => ({
-                  title: card.title,
-                  description: card.description,
-                  widthPx: PRIMARY_USERS_CARD_WIDTH_PX,
-                  heightPx: PRIMARY_USERS_CARD_HEIGHT_PX,
-                }))}
-              />
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.personas.title}
-                body={project.personas.paragraphs}
-                titleVariant="subtitle"
-              />
-              <PersonasRow personas={project.personas.items} />
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
@@ -310,7 +310,6 @@ export function FindingNemoPage({
                     <Typography
                       component="p"
                       sx={bodyTypeSx("smallCaption", {
-                        color: "common.black",
                         fontWeight: 400,
                         lineHeight: 1.5,
                         textAlign: "center",
@@ -324,7 +323,6 @@ export function FindingNemoPage({
                       <Typography
                         component="p"
                         sx={bodyTypeSx("smallCaption", {
-                          color: "common.black",
                           fontWeight: 400,
                           lineHeight: 1.5,
                           textAlign: "center",
@@ -401,7 +399,6 @@ export function FindingNemoPage({
                     <Typography
                       component="p"
                       sx={bodyTypeSx("smallCaption", {
-                        color: "common.black",
                         fontWeight: 400,
                         lineHeight: 1.5,
                         textAlign: "center",
@@ -418,7 +415,6 @@ export function FindingNemoPage({
                       <Typography
                         component="p"
                         sx={bodyTypeSx("smallCaption", {
-                          color: "common.black",
                           fontWeight: 400,
                           lineHeight: 1.5,
                           textAlign: "center",
@@ -584,7 +580,6 @@ export function FindingNemoPage({
                         sx={{
                           display: "list-item",
                           py: { xs: 1.5, md: 2 },
-                          color: "common.black",
                           "&:first-of-type": { pt: 0 },
                         }}
                       >
@@ -602,7 +597,6 @@ export function FindingNemoPage({
                           <Typography
                             component="p"
                             sx={bodyTypeSx("sectionDescription", {
-                              color: "common.black",
                               fontWeight: 400,
                               lineHeight: 1.5,
                               m: 0,

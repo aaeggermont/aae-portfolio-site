@@ -10,6 +10,9 @@ export const FINDING_NEMO_TITLE_FONT =
 export const FINDING_NEMO_BODY_FONT =
   'var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif';
 
+/** Default color for body / paragraph copy across the Finding Nemo case study. */
+export const FINDING_NEMO_BODY_COLOR = "#3F5266";
+
 /**
  * Finding Nemo responsive type scale (px).
  * Breakpoints match `styles/variables.scss` / `lib/responsive/breakpoints.ts`.
@@ -76,7 +79,9 @@ export function bodyTypeSx(
     },
   };
 
-  if (!extra) return responsive;
+  if (!extra) {
+    return { ...responsive, color: FINDING_NEMO_BODY_COLOR };
+  }
 
-  return { ...extra, ...responsive };
+  return { ...extra, ...responsive, color: FINDING_NEMO_BODY_COLOR };
 }

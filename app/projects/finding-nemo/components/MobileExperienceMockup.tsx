@@ -5,7 +5,7 @@ import {
   MOBILE_EXPERIENCE_NOTIFICATION_DISPLAY,
   PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { FINDING_NEMO_BODY_FONT } from "@/app/projects/finding-nemo/typography";
+import { FINDING_NEMO_BODY_COLOR, FINDING_NEMO_BODY_FONT } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
 import type { FindingNemoMobileMockupItem } from "@/scripts/project-2.data";
@@ -17,7 +17,7 @@ export type MobileExperienceMockupProps = FindingNemoMobileMockupItem & {
 
 const mockupAnnotationSx = {
   fontFamily: FINDING_NEMO_BODY_FONT,
-  color: "#000",
+  color: FINDING_NEMO_BODY_COLOR,
   fontSize: PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE.mobile,
   lineHeight: 1.3,
   fontWeight: 600,

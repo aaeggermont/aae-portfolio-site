@@ -143,7 +143,6 @@ export default function DesigningHumanCenteredAiSection({
                   key={index}
                   component="p"
                   sx={bodyTypeSx("sectionDescription", {
-                    color: "#3F5266",
                     fontWeight: 400,
                     lineHeight: 1.5,
                     textAlign: "left",
@@ -196,7 +195,6 @@ export default function DesigningHumanCenteredAiSection({
                 <Typography
                   component="p"
                   sx={bodyTypeSx("contentCardBody", {
-                    color: HUMAN_CENTERED_AI_FRAMEWORK_CARD.bodyColor,
                     fontWeight: 400,
                     lineHeight: 1.5,
                     textAlign: "left",
@@ -215,7 +213,6 @@ export default function DesigningHumanCenteredAiSection({
             <Typography
               component="p"
               sx={bodyTypeSx("sectionDescription", {
-                color: "#3F5266",
                 fontWeight: 400,
                 lineHeight: 1.5,
                 textAlign: "left",
