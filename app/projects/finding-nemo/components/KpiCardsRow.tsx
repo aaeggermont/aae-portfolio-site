@@ -4,19 +4,27 @@ import { useEffect, useRef, useState } from "react";
 import Box from "@mui/material/Box";
 
 import KpiCard from "@/app/projects/finding-nemo/components/KpiCard";
+import { IDENTIFY_AI_OPPORTUNITY_CARD } from "@/app/projects/finding-nemo/layoutConfig";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoKpiCardItem } from "@/scripts/project-2.data";
+
+const CARD_REVEAL_STAGGER_MS = 90;
 
 const kpiCardsRowSx = {
   width: "100%",
   display: "flex",
-  flexDirection: { xs: "column", md: "row" },
-  flexWrap: { xs: "nowrap", md: "wrap" },
+  flexDirection: "row",
+  flexWrap: "wrap",
+  alignItems: "stretch",
   justifyContent: "center",
-  alignItems: { xs: "center", md: "stretch" },
-  gap: { xs: 3, md: 3, lg: 4 },
+  gap: `${IDENTIFY_AI_OPPORTUNITY_CARD.gap.mobile}px`,
+  [breakpointMediaQuery.tabletUp]: {
+    gap: `${IDENTIFY_AI_OPPORTUNITY_CARD.gap.tablet}px`,
+  },
+  [breakpointMediaQuery.desktopUp]: {
+    gap: `${IDENTIFY_AI_OPPORTUNITY_CARD.gap.desktop}px`,
+  },
 } as const;
-
-const CARD_REVEAL_STAGGER_MS = 90;
 
 type KpiCardsRowProps = {
   cards: FindingNemoKpiCardItem[];
@@ -25,8 +33,8 @@ type KpiCardsRowProps = {
 };
 
 /**
- * KPI card row with the same scroll-reveal + stagger pattern as
- * `AnimatedCardWrapper` in `app/home/my-background.tsx`.
+ * KPI card row — Business Opportunities layout (wrapping fixed-width cards)
+ * with the same scroll-reveal stagger as StageInfoCardsRow.
  */
 export default function KpiCardsRow({ cards, rowIndex = 0 }: KpiCardsRowProps) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -65,7 +73,6 @@ export default function KpiCardsRow({ cards, rowIndex = 0 }: KpiCardsRowProps) {
         <Box
           key={card.title}
           sx={{
-            flexShrink: 0,
             opacity: inView ? 1 : 0,
             transform: inView ? "translateY(0)" : "translateY(24px)",
             transition: "opacity 0.6s ease-out, transform 0.6s ease-out",

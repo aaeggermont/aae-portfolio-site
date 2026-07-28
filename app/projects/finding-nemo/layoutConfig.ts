@@ -108,6 +108,8 @@ export const BAND_COLORS = {
   neutralPanel: "#FFFFFF",
   /** `01 - Identify the AI Opportunity` */
   identifyAiOpportunity: "#EEF2F6",
+  /** `03 - AI Technology & MVP Architecture` — same band as Stage 01 */
+  aiTechnologyMvpArchitecture: "#EEF2F6",
   /** `02 - Define the AI-Assisted Solution` */
   defineAiSolution: "#FFFFFF",
   /** `04 — Design the Decision Support Experience` */

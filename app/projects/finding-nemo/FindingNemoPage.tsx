@@ -21,18 +21,19 @@ import PanelSection from "@/app/projects/finding-nemo/components/PanelSection";
 import PersonasRow from "@/app/projects/finding-nemo/components/PersonasRow";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+import { bodyTypeSx, FINDING_NEMO_HEADLINE_COLOR, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import {
   BAND_COLORS,
   LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
-  MY_CONTRIBUTIONS_CARD,
   PANEL_CONTENT_MAX_WIDTH_PX,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
   PANEL_SHELL_SX,
   PRIMARY_USERS_CARD,
   SECTION_GAPS,
+  SECTION_TITLE_CONTENT_GAP,
   sectionTitleContentGapMtSx,
   SOLUTION_OVERVIEW_IMAGE_DISPLAY,
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
@@ -267,14 +268,29 @@ export function FindingNemoPage({
               </Box>
             </Stack>
           </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
+          <FullBleedBand backgroundColor={BAND_COLORS.aiTechnologyMvpArchitecture}>
             <Stack sx={panelSectionStackSx}>
-              <SectionParagraph title={project.systemWorkflowArchitecture.title} />
-              <SectionParagraph
-                title={project.systemWorkflowArchitecture.subtitle}
-                body={project.systemWorkflowArchitecture.paragraphs}
-                titleVariant="subtitle"
-              />
+              <Stack
+                sx={{
+                  gap: SECTION_TITLE_CONTENT_GAP.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    gap: SECTION_TITLE_CONTENT_GAP.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    gap: SECTION_TITLE_CONTENT_GAP.desktop,
+                  },
+                }}
+              >
+                <StageSectionHeader
+                  sectionLabel={project.systemWorkflowArchitecture.sectionLabel}
+                  title={project.systemWorkflowArchitecture.title}
+                />
+                <SectionParagraph
+                  title={project.systemWorkflowArchitecture.subtitle}
+                  body={project.systemWorkflowArchitecture.paragraphs}
+                  titleVariant="subtitle"
+                />
+              </Stack>
               <Box
                 sx={{
                   width: "100%",
@@ -346,7 +362,6 @@ export function FindingNemoPage({
                   project.systemWorkflowArchitecture.coreMvpComponents.principles
                 }
                 image={project.systemWorkflowArchitecture.coreMvpComponents.image}
-                panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
               />
               <SectionParagraph
                 title={
@@ -370,31 +385,43 @@ export function FindingNemoPage({
                   spacing={{ xs: 2, md: 2.5 }}
                   sx={conceptualMvpArchitectureImageBoxSx}
                 >
-                  <ProjectImageLightbox
-                    objectPath={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.objectPath
-                    }
-                    alt={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.alt
-                    }
-                    lightboxId={ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID}
-                    width={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.width
-                    }
-                    height={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.height
-                    }
-                    style={{
-                      display: "block",
+                  <Box
+                    sx={{
                       width: "100%",
-                      height: "auto",
-                      maxWidth: "100%",
+                      ...interactiveCardHoverSx,
+                      "&:hover": {
+                        ...interactiveCardHoverSx["&:hover"],
+                        bgcolor: "transparent",
+                        backgroundColor: "transparent",
+                      },
                     }}
-                  />
+                  >
+                    <ProjectImageLightbox
+                      objectPath={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.objectPath
+                      }
+                      alt={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.alt
+                      }
+                      lightboxId={ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID}
+                      width={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.width
+                      }
+                      height={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.height
+                      }
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "100%",
+                      }}
+                    />
+                  </Box>
                   <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
                     <Typography
                       component="p"
@@ -441,7 +468,7 @@ export function FindingNemoPage({
               {project.systemWorkflowArchitecture.definingSuccessPanel ? (
                 <PanelSection
                   {...project.systemWorkflowArchitecture.definingSuccessPanel}
-                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
+                  panelBackgroundColor="#FFFFFF"
                 />
               ) : null}
             </Stack>
@@ -589,7 +616,7 @@ export function FindingNemoPage({
                             sx={titleTypeSx("personaSectionTitle", {
                               fontWeight: 700,
                               lineHeight: 1.2,
-                              color: "common.black",
+                              color: FINDING_NEMO_HEADLINE_COLOR,
                             })}
                           >
                             {item.subtitle}

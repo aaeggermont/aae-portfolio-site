@@ -12,7 +12,7 @@ import {
 } from "@/app/projects/finding-nemo/layoutConfig";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
 import StageInfoCardsRow from "@/app/projects/finding-nemo/components/StageInfoCardsRow";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { bodyTypeSx, FINDING_NEMO_HEADLINE_COLOR, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
 
@@ -40,13 +40,13 @@ const sectionLabelSx = [
 
 const sectionHeadlineSx = titleTypeSx("sectionTitle", {
   fontWeight: 700,
-  color: "#073B5E",
+  color: FINDING_NEMO_HEADLINE_COLOR,
   lineHeight: 1.2,
 });
 
 const subsectionTitleSx = titleTypeSx("sectionSubtitle", {
   fontWeight: 700,
-  color: "#073B5E",
+  color: FINDING_NEMO_HEADLINE_COLOR,
   lineHeight: 1.2,
 });
 

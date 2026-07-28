@@ -13,6 +13,9 @@ export const FINDING_NEMO_BODY_FONT =
 /** Default color for body / paragraph copy across the Finding Nemo case study. */
 export const FINDING_NEMO_BODY_COLOR = "#3F5266";
 
+/** Headline / subtitle color (matches stage titles like “AI Technology & MVP Architecture”). */
+export const FINDING_NEMO_HEADLINE_COLOR = "#073B5E";
+
 /**
  * Finding Nemo responsive type scale (px).
  * Breakpoints match `styles/variables.scss` / `lib/responsive/breakpoints.ts`.
@@ -33,8 +36,8 @@ export const TYPOGRAPHY = {
   personaSectionTitle: { mobile: "17px", tablet: "19px", desktop: "20px" },
   /** `Persona` role description — Source Sans 3, fixed 16px all breakpoints. */
   personaRoleDescription: { mobile: "16px", tablet: "16px", desktop: "16px" },
-  /** `KpiCard` title — IBM Plex Sans Semibold. */
-  kpiCardTitle: { mobile: "18px", tablet: "19px", desktop: "20px" },
+  /** `KpiCard` title — IBM Plex Sans Bold; sits under row subtitles (e.g. AI Performance). */
+  kpiCardTitle: { mobile: "16px", tablet: "17px", desktop: "18px" },
   /** `KpiCard` description — Source Sans 3 Regular. */
   kpiCardBody: { mobile: "16px", tablet: "17px", desktop: "18px" },
   bodyText: { mobile: "17px", tablet: "18px", desktop: "18px" },

@@ -4,7 +4,11 @@ import {
   PANEL_CONTENT_MAX_WIDTH_PX,
   sectionTitleContentGapMbSx,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import {
+  bodyTypeSx,
+  FINDING_NEMO_HEADLINE_COLOR,
+  titleTypeSx,
+} from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 export type StageSectionHeaderProps = {
@@ -33,7 +37,7 @@ const sectionLabelSx = [
 
 const sectionHeadlineSx = titleTypeSx("sectionTitle", {
   fontWeight: 700,
-  color: "#073B5E",
+  color: FINDING_NEMO_HEADLINE_COLOR,
   lineHeight: 1.2,
 });
 
@@ -54,7 +58,7 @@ export default function StageSectionHeader({
         maxWidth: constrainIntroWidth ? PANEL_CONTENT_MAX_WIDTH_PX : "none",
       }}
     >
-      <Stack sx={sectionTitleContentGapMbSx}>
+      <Stack sx={paragraphs.length > 0 ? sectionTitleContentGapMbSx : undefined}>
         {sectionLabel ? (
           <Typography component="p" align="left" sx={sectionLabelSx}>
             {sectionLabel}
