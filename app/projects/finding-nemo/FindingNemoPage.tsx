@@ -474,7 +474,10 @@ export function FindingNemoPage({
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.designDecisionSupportExperience}>
-            <SectionParagraph title={project.mobileExperienceConcepts.title} />
+            <StageSectionHeader
+              sectionLabel={project.mobileExperienceConcepts.sectionLabel}
+              title={project.mobileExperienceConcepts.title}
+            />
             {project.mobileExperienceConcepts.paragraphAfterSubtitle ? (
               <Stack sx={sectionTitleContentGapMtSx}>
                 <SectionParagraph
@@ -496,7 +499,6 @@ export function FindingNemoPage({
               >
                 <PanelSection
                   {...project.mobileExperienceConcepts.conceptEvolutionPanel}
-                  panelBackgroundColor={PANEL_COLORS.default}
                 />
               </Stack>
             ) : null}

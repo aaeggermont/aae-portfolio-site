@@ -50,6 +50,24 @@ const corePrinciplesImageBoxSx = {
   },
 } as const;
 
+const panelInfoCardShellSx = {
+  width: "100%",
+  maxWidth: "100%",
+  boxSizing: "border-box",
+  borderRadius: `${IDENTIFY_AI_OPPORTUNITY_CARD.borderRadiusPx}px`,
+  bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+  backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+  border: `1px solid ${IDENTIFY_AI_OPPORTUNITY_CARD.border}`,
+  px: { xs: 2.5, md: 3, lg: 4 },
+  py: { xs: 3, md: 4 },
+  ...interactiveCardHoverSx,
+  "&:hover": {
+    ...interactiveCardHoverSx["&:hover"],
+    bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+    backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+  },
+} as const;
+
 function PanelHeading({ title }: { title: string }) {
   return (
     <Typography
@@ -68,7 +86,6 @@ function PanelHeading({ title }: { title: string }) {
 function ImageTextPanel({
   description,
   image,
-  panelBackgroundColor,
 }: Extract<FindingNemoPanelSectionItem, { type: "image-text" }> & {
   panelBackgroundColor?: string;
 }) {
@@ -76,10 +93,12 @@ function ImageTextPanel({
     <Box
       component="section"
       sx={{
-        ...panelShellSxWithBackground(panelBackgroundColor),
+        ...panelInfoCardShellSx,
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
+        flexWrap: "wrap",
         alignItems: "center",
+        justifyContent: "center",
         gap: { xs: 4, md: 8 },
       }}
     >
@@ -106,15 +125,15 @@ function ImageTextPanel({
           flex: 1,
           display: "flex",
           alignItems: "center",
-          minWidth: 0,
+          minWidth: { xs: "100%", md: 280 },
+          maxWidth: 540,
         }}
       >
         <Typography
           component="p"
-          sx={bodyTypeSx("sectionDescription", {
+          sx={bodyTypeSx("contentCardBody", {
             fontWeight: 400,
-            lineHeight: 1.5,
-            maxWidth: 540,
+            lineHeight: 1.6,
             m: 0,
           })}
         >
@@ -135,27 +154,13 @@ function PrinciplesImagePanel({
     <Box
       component="section"
       sx={{
-        width: "100%",
-        maxWidth: "100%",
-        boxSizing: "border-box",
-        borderRadius: `${IDENTIFY_AI_OPPORTUNITY_CARD.borderRadiusPx}px`,
-        bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
-        backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
-        border: `1px solid ${IDENTIFY_AI_OPPORTUNITY_CARD.border}`,
-        px: { xs: 2.5, md: 3, lg: 4 },
-        py: { xs: 3, md: 4 },
+        ...panelInfoCardShellSx,
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
         gap: { xs: 4, md: 8 },
-        ...interactiveCardHoverSx,
-        "&:hover": {
-          ...interactiveCardHoverSx["&:hover"],
-          bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
-          backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
-        },
       }}
     >
       <Stack

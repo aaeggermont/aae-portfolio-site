@@ -113,7 +113,7 @@ export const BAND_COLORS = {
   /** `02 - Define the AI-Assisted Solution` */
   defineAiSolution: "#FFFFFF",
   /** `04 — Design the Decision Support Experience` */
-  designDecisionSupportExperience: "#EEF3F9",
+  designDecisionSupportExperience: "#FFFFFF",
   /** Expected Impact + Reflections & Key Learnings */
   expectedImpactAndReflections: "#FFFFFF",
 } as const;
