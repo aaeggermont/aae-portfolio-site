@@ -151,7 +151,7 @@ export default function StageInfoCardsRow({
             <Typography
               component="h3"
               sx={[
-                titleTypeSx("contentCardTitle", {
+                titleTypeSx("kpiCardTitle", {
                   fontWeight: 700,
                   lineHeight: 1.2,
                   m: 0,

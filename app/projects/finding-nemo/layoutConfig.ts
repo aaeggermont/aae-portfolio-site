@@ -80,6 +80,12 @@ export const PANEL_BLOCK_PADDINGS = {
 /** Project hero band behind the absolute global nav (overlay model). */
 export const HEADER_BAND_COLOR = "#dde8f2" as const;
 
+/** Full-bleed hero band image (covers `HEADER_BAND_COLOR` while loading). */
+export const HEADER_BAND_IMAGE = {
+  objectPath: "projects/project_2/FindingNemoBannerImage.png",
+  alt: "Finding Nemo case study hero background",
+} as const;
+
 /**
  * Vertical clearance under the global top bar when `headerState.position` is
  * `"absolute"` (AR Story Teller overlay model).
@@ -114,8 +120,8 @@ export const BAND_COLORS = {
   defineAiSolution: "#FFFFFF",
   /** `04 — Design the Decision Support Experience` */
   designDecisionSupportExperience: "#FFFFFF",
-  /** Expected Impact + Reflections & Key Learnings */
-  expectedImpactAndReflections: "#FFFFFF",
+  /** Expected Impact + Reflections & Key Learnings — same as Stage 03 */
+  expectedImpactAndReflections: "#EEF2F6",
 } as const;
 
 /**

@@ -11,6 +11,7 @@ import RecognitionDialog, {
 
 import {
   HEADER_BAND_COLOR,
+  HEADER_BAND_IMAGE,
   PROJECT_HEADER_EXTRA_TOP_PADDING,
   PROJECT_HEADER_NAV_CLEARANCE,
 } from "@/app/projects/finding-nemo/layoutConfig";
@@ -135,12 +136,44 @@ function sceneStageInnerSx(): SxProps<Theme> {
   };
 }
 
-/** Fluid type — min at ~360px viewport, max at tablet/desktop; scales between breakpoints. */
+/** Responsive type — aligned above sectionTitle (28 / 32 / 36). */
 const HEADER_FONT_SIZE = {
-  title: "clamp(28px, calc(22px + 1.47vw), 34px)",
-  subtitle: "clamp(18px, calc(15.5px + 0.68vw), 20px)",
+  title: {
+    mobile: "32px",
+    tablet: "40px",
+    desktop: "44px",
+  },
+  subtitle: {
+    mobile: "18px",
+    tablet: "20px",
+    desktop: "22px",
+  },
   award: "clamp(16px, calc(13.5px + 0.68vw), 18px)",
 } as const;
+
+function headerTitleFontSizeSx() {
+  return {
+    fontSize: HEADER_FONT_SIZE.title.mobile,
+    [breakpointMediaQuery.tabletUp]: {
+      fontSize: HEADER_FONT_SIZE.title.tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: HEADER_FONT_SIZE.title.desktop,
+    },
+  } as const;
+}
+
+function headerSubtitleFontSizeSx() {
+  return {
+    fontSize: HEADER_FONT_SIZE.subtitle.mobile,
+    [breakpointMediaQuery.tabletUp]: {
+      fontSize: HEADER_FONT_SIZE.subtitle.tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: HEADER_FONT_SIZE.subtitle.desktop,
+    },
+  } as const;
+}
 
 export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
   const [recognitionOpen, setRecognitionOpen] = useState(false);
@@ -187,12 +220,35 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
         bgcolor: HEADER_BAND_COLOR,
       }}
     >
+      <Box
+        aria-hidden
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <ProjectImage
+          objectPath={HEADER_BAND_IMAGE.objectPath}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        />
+      </Box>
       <Stack
         direction="column"
         alignItems="center"
         justifyContent="space-between"
         spacing={{ xs: 5, lg: 8 }}
         sx={{
+          position: "relative",
+          zIndex: 1,
           maxWidth: 1260,
           minHeight: { xs: "auto", lg: 450 },
           mx: "auto",
@@ -236,10 +292,10 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
           <Typography
             component="h1"
             sx={{
-              color: "#022f5d",
-              fontSize: HEADER_FONT_SIZE.title,
+              color: "#FFFFFF",
+              ...headerTitleFontSizeSx(),
               lineHeight: 1.15,
-              fontWeight: 400,
+              fontWeight: 700,
               WebkitTextStroke: "1px #000000",
             }}
           >
@@ -251,10 +307,10 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                 key={line}
                 component="p"
                 sx={{
-                  color: "#02305d",
-                  fontSize: HEADER_FONT_SIZE.subtitle,
+                  color: "#FFFFFF",
+                  ...headerSubtitleFontSizeSx(),
                   lineHeight: 1.25,
-                  fontWeight: 500,
+                  fontWeight: 600,
                 }}
               >
                 {line}
@@ -421,6 +477,8 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                   display: "block",
                   width: "100%",
                   height: "auto",
+                  filter:
+                    "brightness(1.55) contrast(1.2) saturate(1.25) drop-shadow(0 0 6px rgba(120, 220, 255, 0.55))",
                 }}
               />
             </Box>

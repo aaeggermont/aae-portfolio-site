@@ -39,13 +39,18 @@ import {
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
   CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { FINDING_NEMO_HEADER_LOGO } from "@/app/projects/finding-nemo/headerTheme";
+import { FINDING_NEMO_HEADER_THEME } from "@/app/projects/finding-nemo/headerTheme";
+import { FINDING_NEMO_FOOTER_THEME } from "@/app/projects/finding-nemo/footerTheme";
 import type { FindingNemoProjectDocument } from "@/app/projects/finding-nemo/lib/finding-nemo.firestore";
 import { layoutState } from "@/app/(public)/layout-state";
 import {
   defaultHeaderState,
   headerState,
 } from "@/components/Header/HeaderState";
+import {
+  defaultFooterState,
+  footerState,
+} from "@/components/Footer/FooterState";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
@@ -132,22 +137,20 @@ export function FindingNemoPage({
 }: FindingNemoPageProps) {
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
+  const setFooterState = useSetAtom(footerState);
   const hasProject = project != null;
 
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
-    setHeaderState({
-      position: "absolute",
-      isDark: false,
-      logoPrimaryColor: FINDING_NEMO_HEADER_LOGO.primary,
-      logoAccentColor: FINDING_NEMO_HEADER_LOGO.accent,
-    });
+    setHeaderState({ ...FINDING_NEMO_HEADER_THEME });
+    setFooterState({ ...FINDING_NEMO_FOOTER_THEME });
 
     return () => {
       setLayoutState({ isFullWidth: false });
       setHeaderState({ ...defaultHeaderState });
+      setFooterState({ ...defaultFooterState });
     };
-  }, [setLayoutState, setHeaderState]);
+  }, [setLayoutState, setHeaderState, setFooterState]);
 
   return (
     <Box component="main">
@@ -566,79 +569,89 @@ export function FindingNemoPage({
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.expectedImpactAndReflections}>
             <SectionParagraph title={project.expectedImpact.title} />
-            <Stack sx={{ ...panelSectionStackSx, ...sectionTitleContentGapMtSx }}>
+            <Stack sx={sectionTitleContentGapMtSx}>
               <Box
                 component="section"
                 sx={{
                   ...PANEL_SHELL_SX,
-                  pt: 0,
                   bgcolor: PANEL_COLORS.default,
                 }}
               >
                 <SectionParagraph body={project.expectedImpact.paragraphs} />
               </Box>
-              <Stack spacing={{ xs: 4, md: 6 }}>
-                <SectionParagraph
-                  title={project.reflectionsAndKeyLearnings.title}
-                />
-                <Box
+            </Stack>
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
+            >
+              <SectionParagraph
+                title={project.reflectionsAndKeyLearnings.title}
+              />
+              <Box
+                sx={{
+                  px: LAYOUT_DIMENSIONS.mobile.margin,
+                  [breakpointMediaQuery.tabletUp]: {
+                    px: LAYOUT_DIMENSIONS.tablet.margin,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    px: LAYOUT_DIMENSIONS.desktop.margin,
+                  },
+                }}
+              >
+                <List
                   sx={{
-                    px: LAYOUT_DIMENSIONS.mobile.margin,
-                    [breakpointMediaQuery.tabletUp]: {
-                      px: LAYOUT_DIMENSIONS.tablet.margin,
-                    },
-                    [breakpointMediaQuery.desktopUp]: {
-                      px: LAYOUT_DIMENSIONS.desktop.margin,
-                    },
+                    width: "100%",
+                    my: 0,
+                    p: 0,
+                    listStyleType: "disc",
+                    listStylePosition: "outside",
+                    pl: { xs: 2.5, md: 3 },
                   }}
                 >
-                  <List
-                    sx={{
-                      width: "100%",
-                      my: 0,
-                      p: 0,
-                      listStyleType: "disc",
-                      listStylePosition: "outside",
-                      pl: { xs: 2.5, md: 3 },
-                    }}
-                  >
-                    {project.reflectionsAndKeyLearnings.items.map((item) => (
-                      <ListItem
-                        key={item.subtitle}
-                        disableGutters
-                        sx={{
-                          display: "list-item",
-                          py: { xs: 1.5, md: 2 },
-                          "&:first-of-type": { pt: 0 },
-                        }}
-                      >
-                        <Stack spacing={1} sx={{ width: "100%" }}>
-                          <Typography
-                            component="h3"
-                            sx={titleTypeSx("personaSectionTitle", {
-                              fontWeight: 700,
-                              lineHeight: 1.2,
-                              color: FINDING_NEMO_HEADLINE_COLOR,
-                            })}
-                          >
-                            {item.subtitle}
-                          </Typography>
-                          <Typography
-                            component="p"
-                            sx={bodyTypeSx("sectionDescription", {
-                              fontWeight: 400,
-                              lineHeight: 1.5,
-                              m: 0,
-                            })}
-                          >
-                            {item.description}
-                          </Typography>
-                        </Stack>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-              </Stack>
+                  {project.reflectionsAndKeyLearnings.items.map((item) => (
+                    <ListItem
+                      key={item.subtitle}
+                      disableGutters
+                      sx={{
+                        display: "list-item",
+                        py: { xs: 1.5, md: 2 },
+                        "&:first-of-type": { pt: 0 },
+                      }}
+                    >
+                      <Stack spacing={1} sx={{ width: "100%" }}>
+                        <Typography
+                          component="h3"
+                          sx={titleTypeSx("personaSectionTitle", {
+                            fontWeight: 700,
+                            lineHeight: 1.2,
+                            color: FINDING_NEMO_HEADLINE_COLOR,
+                          })}
+                        >
+                          {item.subtitle}
+                        </Typography>
+                        <Typography
+                          component="p"
+                          sx={bodyTypeSx("sectionDescription", {
+                            fontWeight: 400,
+                            lineHeight: 1.5,
+                            m: 0,
+                          })}
+                        >
+                          {item.description}
+                        </Typography>
+                      </Stack>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
             </Stack>
           </FullBleedBand>
         </>
