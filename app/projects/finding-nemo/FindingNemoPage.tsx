@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSetAtom } from "jotai";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -20,7 +20,10 @@ import ProblemDemoPanel from "@/app/projects/finding-nemo/components/ProbleDemoC
 import PanelSection from "@/app/projects/finding-nemo/components/PanelSection";
 import PersonasRow from "@/app/projects/finding-nemo/components/PersonasRow";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
+import ProjectMetaBar from "@/app/projects/finding-nemo/components/ProjectMetaBar";
+import RecognitionDialog from "@/app/projects/finding-nemo/components/RecognitionDialog";
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
+import SolutionOverviewSection from "@/app/projects/finding-nemo/components/SolutionOverviewSection";
 import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
 import { bodyTypeSx, FINDING_NEMO_HEADLINE_COLOR, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import {
@@ -35,7 +38,6 @@ import {
   SECTION_GAPS,
   SECTION_TITLE_CONTENT_GAP,
   sectionTitleContentGapMtSx,
-  SOLUTION_OVERVIEW_IMAGE_DISPLAY,
   SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
   CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
@@ -52,25 +54,7 @@ import {
   footerState,
 } from "@/components/Footer/FooterState";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
-import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
-
-const solutionOverviewImageSizes = [
-  `(max-width: 767px) ${SOLUTION_OVERVIEW_IMAGE_DISPLAY.mobile.width}px`,
-  `(max-width: 1023px) ${SOLUTION_OVERVIEW_IMAGE_DISPLAY.tablet.width}px`,
-  `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.desktop.width}px`,
-].join(", ");
-
-const solutionOverviewImageBoxSx = {
-  width: `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.mobile.width}px`,
-  maxWidth: "100%",
-  [breakpointMediaQuery.tabletUp]: {
-    width: `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.tablet.width}px`,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    width: `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.desktop.width}px`,
-  },
-} as const;
 
 const mobileExperienceMockupsRowSx = {
   width: "100%",
@@ -138,7 +122,16 @@ export function FindingNemoPage({
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
   const setFooterState = useSetAtom(footerState);
+  const [recognitionOpen, setRecognitionOpen] = useState(false);
   const hasProject = project != null;
+
+  const recognitionDialogTitle = useMemo(() => {
+    if (!project?.projectHeader) return "";
+    const headline = project.projectHeader.awardLines.filter(
+      (line) => !/view recognition/i.test(line),
+    );
+    return `🏆 ${headline.join(" ")}`;
+  }, [project?.projectHeader]);
 
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
@@ -160,10 +153,27 @@ export function FindingNemoPage({
             data={project.projectHeader}
             onReady={onProjectHeaderReady}
           />
+          <ProjectMetaBar
+            items={project.projectMetaBar ?? []}
+            onOpenRecognition={
+              project.projectHeader.recognition
+                ? () => setRecognitionOpen(true)
+                : undefined
+            }
+          />
+          {project.projectHeader.recognition ? (
+            <RecognitionDialog
+              open={recognitionOpen}
+              onClose={() => setRecognitionOpen(false)}
+              title={recognitionDialogTitle}
+              data={project.projectHeader.recognition}
+            />
+          ) : null}
           <Overview data={project.overview} />
           {project.problemDemoPanel ? (
             <ProblemDemoPanel data={project.problemDemoPanel} />
           ) : null}
+          <SolutionOverviewSection data={project.solutionOverview} />
           <MyContributions data={project.myContributions} />
           <DesigningHumanCenteredAiSection data={project.designingHumanCenteredAi} />
           <IdentifyAiOpportunitySection
@@ -209,66 +219,6 @@ export function FindingNemoPage({
                 titleVariant="subtitle"
               />
               <PersonasRow personas={project.personas.items} />
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.solutionOverview.subtitle}
-                body={project.solutionOverview.paragraphs}
-                titleVariant="subtitle"
-              />
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Stack
-                  alignItems="center"
-                  spacing={{ xs: 2, md: 2.5 }}
-                  sx={solutionOverviewImageBoxSx}
-                >
-                  <Box sx={{ width: "100%" }}>
-                    <ProjectImage
-                      objectPath={project.solutionOverview.image.objectPath}
-                      alt={project.solutionOverview.image.alt}
-                      width={project.solutionOverview.image.width}
-                      height={project.solutionOverview.image.height}
-                      sizes={solutionOverviewImageSizes}
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
-                  </Box>
-                  {project.solutionOverview.image.annotation ? (
-                    <Typography
-                      component="p"
-                      sx={bodyTypeSx("smallCaption", {
-                        fontWeight: 400,
-                        lineHeight: 1.5,
-                        textAlign: "center",
-                        m: 0,
-                        width: "100%",
-                      })}
-                    >
-                      {project.solutionOverview.image.annotation}
-                    </Typography>
-                  ) : null}
-                </Stack>
-              </Box>
             </Stack>
           </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.aiTechnologyMvpArchitecture}>

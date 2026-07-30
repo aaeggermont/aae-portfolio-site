@@ -185,7 +185,7 @@ export const PRIMARY_USERS_CARD = {
 
 /**
  * Four-stage framework cards (`Designing Human-Centered AI`).
- * Fixed widths match Stage 01 cards; wrap in a row on wider viewports.
+ * Desktop uses a 4-column grid so all cards share one row within the content band.
  */
 export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
   background: "#FFFFFF",
@@ -197,7 +197,8 @@ export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
   widthPx: {
     mobile: 360,
     tablet: 280,
-    desktop: 300,
+    /** Unused on desktop — cards fill equal grid columns. */
+    desktop: 257,
   },
 } as const;
 
@@ -315,12 +316,12 @@ export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 320 as const;
 
 /**
  * Solution overview hi-fi mockup display (402:874 intrinsic aspect ratio).
- * Desktop width scaled +30% from legacy 211px frame; tablet +30% from 190px; mobile ~75%.
+ * Kept compact beside the narrative so the figure remains proportional to the copy column.
  */
 export const SOLUTION_OVERVIEW_IMAGE_DISPLAY = {
-  mobile: { width: 158, height: 343 },
-  tablet: { width: 284, height: 618 },
-  desktop: { width: 315, height: 685 },
+  mobile: { width: 165, height: 359 },
+  tablet: { width: 209, height: 454 },
+  desktop: { width: 220, height: 478 },
 } as const;
 
 /** Mobile experience mockup display — phone mockup row (402:874 hi-fi assets). */

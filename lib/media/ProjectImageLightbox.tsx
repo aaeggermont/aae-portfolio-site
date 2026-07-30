@@ -2,7 +2,7 @@
 
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { SlideshowLightbox } from "lightbox.js-react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 import { useProjectAccess } from "@/lib/access/ProjectAccessContext";
 import {
@@ -14,6 +14,7 @@ import {
   PROJECT_IMAGE_LIGHTBOX_MODAL_BG_WHITE,
 } from "@/lib/media/lightboxModal";
 import { useSignedMediaUrl } from "@/lib/media/useSignedMediaUrl";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 export type ProjectImageLightboxProps = {
   objectPath: string;
@@ -25,6 +26,12 @@ export type ProjectImageLightboxProps = {
   style?: CSSProperties;
   /** Backdrop when the lightbox is open. */
   modalBackground?: string;
+  /** Optional contextual content rendered beside the expanded image. */
+  lightboxSidebar?: ReactNode;
+  /** Which side of the expanded image the sidebar sits on. */
+  lightboxSidebarPlacement?: "left" | "right";
+  /** Sidebar column width (hidden below the tablet breakpoint). */
+  lightboxSidebarWidthPx?: number;
 };
 
 /**
@@ -39,6 +46,9 @@ export default function ProjectImageLightbox({
   height,
   style,
   modalBackground = PROJECT_IMAGE_LIGHTBOX_MODAL_BG_WHITE,
+  lightboxSidebar,
+  lightboxSidebarPlacement = "right",
+  lightboxSidebarWidthPx = 360,
 }: ProjectImageLightboxProps) {
   const { projectKey, visibility } = useProjectAccess();
   const normalizedPath = stripLeadingSlash(objectPath);
@@ -76,6 +86,32 @@ export default function ProjectImageLightbox({
     );
   }
 
+  /**
+   * `lightbox.js` paints the modal background on the slide container only; a sidebar sibling
+   * would leave the page visible through its column, so the wrapper repeats the background.
+   */
+  const sidebar = lightboxSidebar ? (
+    <Box
+      sx={{
+        order: lightboxSidebarPlacement === "left" ? -1 : 1,
+        display: "none",
+        flexShrink: 0,
+        boxSizing: "border-box",
+        width: `min(${lightboxSidebarWidthPx}px, 38vw)`,
+        height: "100vh",
+        bgcolor: modalBg,
+        backgroundColor: modalBg,
+        overflowY: "auto",
+        alignItems: "center",
+        [breakpointMediaQuery.tabletUp]: {
+          display: "flex",
+        },
+      }}
+    >
+      {lightboxSidebar}
+    </Box>
+  ) : undefined;
+
   return (
     <SlideshowLightbox
       framework="next"
@@ -87,6 +123,7 @@ export default function ProjectImageLightbox({
       backgroundColor={modalBg}
       iconColor={lightboxIconColorForModalBackground(modalBg)}
       modalClose="clickOutside"
+      rightSidebarComponent={sidebar}
     >
       <img
         src={url}

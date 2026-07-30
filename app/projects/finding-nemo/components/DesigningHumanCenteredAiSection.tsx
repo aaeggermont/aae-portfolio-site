@@ -45,23 +45,23 @@ const sectionHeadlineSx = titleTypeSx("sectionTitle", {
 
 const frameworkCardsRowSx = {
   width: "100%",
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
+  display: "grid",
+  gridTemplateColumns: "1fr",
   alignItems: "stretch",
-  justifyContent: "center",
+  justifyItems: "center",
   gap: `${HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP.mobile}px`,
   [breakpointMediaQuery.tabletUp]: {
-    justifyContent: "flex-start",
+    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    justifyItems: "stretch",
     gap: `${HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP.tablet}px`,
   },
   [breakpointMediaQuery.desktopUp]: {
+    gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
     gap: `${HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP.desktop}px`,
   },
 } as const;
 
 const frameworkCardShellSx = {
-  flex: "0 1 auto",
   width: HUMAN_CENTERED_AI_FRAMEWORK_CARD.widthPx.mobile,
   maxWidth: "100%",
   boxSizing: "border-box",
@@ -75,10 +75,7 @@ const frameworkCardShellSx = {
   alignItems: "flex-start",
   gap: 1.5,
   [breakpointMediaQuery.tabletUp]: {
-    width: HUMAN_CENTERED_AI_FRAMEWORK_CARD.widthPx.tablet,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    width: HUMAN_CENTERED_AI_FRAMEWORK_CARD.widthPx.desktop,
+    width: "100%",
   },
 } as const;
 
