@@ -1,11 +1,16 @@
 import { Box, Container, Stack, Typography } from "@mui/material";
+import type { SxProps, Theme } from "@mui/material/styles";
 
 import {
   MY_CONTRIBUTIONS_BAND,
   PROJECT_CONTENT_CONTAINER_SX,
-  sectionTitleContentGapMbSx,
+  SECTION_TITLE_CONTENT_GAP,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import {
+  bodyTypeSx,
+  FINDING_NEMO_TITLE_FONT,
+  TYPOGRAPHY,
+} from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import type { FindingNemoDataProjectDocument } from "@/scripts/project-2.data";
 
@@ -13,20 +18,24 @@ type MyContributionsProps = {
   data: FindingNemoDataProjectDocument["myContributions"];
 };
 
-const sectionLabelSx = [
-  titleTypeSx("heroSubtitle", {
-    fontWeight: 500,
-    color: MY_CONTRIBUTIONS_BAND.titleColor,
-    lineHeight: 1.2,
-    textTransform: "uppercase",
-    letterSpacing: "0.04em",
-  }),
-  {
-    [breakpointMediaQuery.desktopUp]: {
-      fontSize: "22px",
-    },
+const sectionLabelSx: SxProps<Theme> = {
+  fontFamily: FINDING_NEMO_TITLE_FONT,
+  fontSize: TYPOGRAPHY.heroSubtitle.mobile,
+  fontWeight: 500,
+  color: MY_CONTRIBUTIONS_BAND.titleColor,
+  lineHeight: 1.2,
+  textTransform: "uppercase",
+  letterSpacing: "0.04em",
+  mb: SECTION_TITLE_CONTENT_GAP.mobile,
+  [breakpointMediaQuery.tabletUp]: {
+    fontSize: TYPOGRAPHY.heroSubtitle.tablet,
+    mb: SECTION_TITLE_CONTENT_GAP.tablet,
   },
-] as const;
+  [breakpointMediaQuery.desktopUp]: {
+    fontSize: "22px",
+    mb: SECTION_TITLE_CONTENT_GAP.desktop,
+  },
+};
 
 const tagsRowSx = {
   display: "flex",
@@ -46,21 +55,19 @@ const tagsRowSx = {
   },
 } as const;
 
-const tagChipSx = [
-  bodyTypeSx("bodyText", {
-    display: "inline-flex",
-    alignItems: "center",
-    px: { xs: 2, md: 2.5 },
-    py: { xs: 1, md: 1.25 },
-    borderRadius: "999px",
-    bgcolor: MY_CONTRIBUTIONS_BAND.tagBackground,
-    border: `1px solid ${MY_CONTRIBUTIONS_BAND.tagBorder}`,
-    color: MY_CONTRIBUTIONS_BAND.tagText,
-    fontWeight: 400,
-    lineHeight: 1.35,
-    whiteSpace: "nowrap",
-  }),
-] as const;
+const tagChipSx = bodyTypeSx("bodyText", {
+  display: "inline-flex",
+  alignItems: "center",
+  px: { xs: 2, md: 2.5 },
+  py: { xs: 1, md: 1.25 },
+  borderRadius: "999px",
+  bgcolor: MY_CONTRIBUTIONS_BAND.tagBackground,
+  border: `1px solid ${MY_CONTRIBUTIONS_BAND.tagBorder}`,
+  color: MY_CONTRIBUTIONS_BAND.tagText,
+  fontWeight: 400,
+  lineHeight: 1.35,
+  whiteSpace: "nowrap",
+});
 
 export default function MyContributions({ data }: MyContributionsProps) {
   return (
@@ -78,7 +85,7 @@ export default function MyContributions({ data }: MyContributionsProps) {
             id="my-contributions-heading"
             component="h2"
             align="left"
-            sx={[...sectionLabelSx, sectionTitleContentGapMbSx]}
+            sx={sectionLabelSx}
           >
             {data.title}
           </Typography>

@@ -1,4 +1,5 @@
-import type { SxProps, Theme } from "@mui/material/styles";
+import type { Theme } from "@mui/material/styles";
+import type { SystemStyleObject } from "@mui/system";
 
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
@@ -49,9 +50,9 @@ export type TypographyScaleKey = keyof typeof TYPOGRAPHY;
 
 export function titleTypeSx(
   scaleKey: TypographyScaleKey,
-  extra?: SxProps<Theme>,
-): SxProps<Theme> {
-  const responsive: SxProps<Theme> = {
+  extra?: SystemStyleObject<Theme>,
+): SystemStyleObject<Theme> {
+  const responsive: SystemStyleObject<Theme> = {
     fontFamily: FINDING_NEMO_TITLE_FONT,
     fontSize: TYPOGRAPHY[scaleKey].mobile,
     [breakpointMediaQuery.tabletUp]: {
@@ -69,9 +70,9 @@ export function titleTypeSx(
 
 export function bodyTypeSx(
   scaleKey: TypographyScaleKey,
-  extra?: SxProps<Theme>,
-): SxProps<Theme> {
-  const responsive: SxProps<Theme> = {
+  extra?: SystemStyleObject<Theme>,
+): SystemStyleObject<Theme> {
+  const responsive: SystemStyleObject<Theme> = {
     fontFamily: FINDING_NEMO_BODY_FONT,
     fontSize: TYPOGRAPHY[scaleKey].mobile,
     [breakpointMediaQuery.tabletUp]: {
