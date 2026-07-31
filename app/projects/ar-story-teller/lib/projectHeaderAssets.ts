@@ -4,7 +4,7 @@ const PROJECT_1_PREFIX = "projects/project_1";
 
 /** Castle + queue strip below the hero parallax (`PeopleInLineCrowd`). */
 export const PROJECT_HEADER_CROWD_OBJECT_PATH =
-  `${PROJECT_1_PREFIX}/CrowdsWaiting-Desktop.png`;
+  `${PROJECT_1_PREFIX}/ARMagicToursCrowsImage.png`;
 
 /** Ferris wheel silhouettes behind overview copy (`OverviewParagraphBlock`). */
 export const OVERVIEW_WAITING_PEOPLE_OBJECT_PATHS = {
