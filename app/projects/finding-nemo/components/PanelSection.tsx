@@ -2,9 +2,16 @@ import { Box, Stack, Typography } from "@mui/material";
 
 import {
   CORE_PRINCIPLES_IMAGE_DISPLAY,
+  IDENTIFY_AI_OPPORTUNITY_CARD,
   PANEL_SHELL_SX,
+  SECTION_TITLE_CONTENT_GAP,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+import {
+  bodyTypeSx,
+  FINDING_NEMO_HEADLINE_COLOR,
+  titleTypeSx,
+} from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import ProjectImage from "@/lib/media/ProjectImage";
 import KpiCardsRow from "@/app/projects/finding-nemo/components/KpiCardsRow";
@@ -43,6 +50,24 @@ const corePrinciplesImageBoxSx = {
   },
 } as const;
 
+const panelInfoCardShellSx = {
+  width: "100%",
+  maxWidth: "100%",
+  boxSizing: "border-box",
+  borderRadius: `${IDENTIFY_AI_OPPORTUNITY_CARD.borderRadiusPx}px`,
+  bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+  backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+  border: `1px solid ${IDENTIFY_AI_OPPORTUNITY_CARD.border}`,
+  px: { xs: 2.5, md: 3, lg: 4 },
+  py: { xs: 3, md: 4 },
+  ...interactiveCardHoverSx,
+  "&:hover": {
+    ...interactiveCardHoverSx["&:hover"],
+    bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+    backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+  },
+} as const;
+
 function PanelHeading({ title }: { title: string }) {
   return (
     <Typography
@@ -50,7 +75,7 @@ function PanelHeading({ title }: { title: string }) {
       sx={titleTypeSx("sectionSubtitle", {
         fontWeight: 700,
         lineHeight: 1.1,
-        color: "common.black",
+        color: FINDING_NEMO_HEADLINE_COLOR,
       })}
     >
       {title}
@@ -61,7 +86,6 @@ function PanelHeading({ title }: { title: string }) {
 function ImageTextPanel({
   description,
   image,
-  panelBackgroundColor,
 }: Extract<FindingNemoPanelSectionItem, { type: "image-text" }> & {
   panelBackgroundColor?: string;
 }) {
@@ -69,10 +93,12 @@ function ImageTextPanel({
     <Box
       component="section"
       sx={{
-        ...panelShellSxWithBackground(panelBackgroundColor),
+        ...panelInfoCardShellSx,
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
+        flexWrap: "wrap",
         alignItems: "center",
+        justifyContent: "center",
         gap: { xs: 4, md: 8 },
       }}
     >
@@ -99,16 +125,15 @@ function ImageTextPanel({
           flex: 1,
           display: "flex",
           alignItems: "center",
-          minWidth: 0,
+          minWidth: { xs: "100%", md: 280 },
+          maxWidth: 540,
         }}
       >
         <Typography
           component="p"
-          sx={bodyTypeSx("sectionDescription", {
-            color: "common.black",
+          sx={bodyTypeSx("contentCardBody", {
             fontWeight: 400,
-            lineHeight: 1.5,
-            maxWidth: 540,
+            lineHeight: 1.6,
             m: 0,
           })}
         >
@@ -122,7 +147,6 @@ function ImageTextPanel({
 function PrinciplesImagePanel({
   principles,
   image,
-  panelBackgroundColor,
 }: Extract<FindingNemoPanelSectionItem, { type: "principles-image" }> & {
   panelBackgroundColor?: string;
 }) {
@@ -130,7 +154,7 @@ function PrinciplesImagePanel({
     <Box
       component="section"
       sx={{
-        ...panelShellSxWithBackground(panelBackgroundColor),
+        ...panelInfoCardShellSx,
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         flexWrap: "wrap",
@@ -154,7 +178,8 @@ function PrinciplesImagePanel({
               sx={titleTypeSx("personaSectionTitle", {
                 fontWeight: 700,
                 lineHeight: 1.2,
-                color: "common.black",
+                m: 0,
+                color: FINDING_NEMO_HEADLINE_COLOR,
               })}
             >
               {principle.subtitle}
@@ -162,7 +187,6 @@ function PrinciplesImagePanel({
             <Typography
               component="p"
               sx={bodyTypeSx("contentCardBody", {
-                color: "common.black",
                 fontWeight: 400,
                 lineHeight: 1.6,
                 m: 0,
@@ -203,7 +227,6 @@ function TextPanel({
         <Typography
           component="p"
           sx={bodyTypeSx("sectionDescription", {
-            color: "common.black",
             fontWeight: 400,
             lineHeight: 1.5,
             m: 0,
@@ -218,7 +241,7 @@ function TextPanel({
               sx={titleTypeSx("personaSectionTitle", {
                 fontWeight: 700,
                 lineHeight: 1.2,
-                color: "common.black",
+                color: FINDING_NEMO_HEADLINE_COLOR,
               })}
             >
               {row.subtitle}
@@ -235,7 +258,17 @@ export default function PanelSection(props: PanelSectionProps) {
   const { panelBackgroundColor, title } = props;
 
   return (
-    <Stack spacing={{ xs: 3, md: 4 }}>
+    <Stack
+      sx={{
+        gap: SECTION_TITLE_CONTENT_GAP.mobile,
+        [breakpointMediaQuery.tabletUp]: {
+          gap: SECTION_TITLE_CONTENT_GAP.tablet,
+        },
+        [breakpointMediaQuery.desktopUp]: {
+          gap: SECTION_TITLE_CONTENT_GAP.desktop,
+        },
+      }}
+    >
       <PanelHeading title={title} />
       {props.type === "image-text" ? (
         <ImageTextPanel

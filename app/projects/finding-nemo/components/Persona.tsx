@@ -3,6 +3,7 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 
 import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+import { IDENTIFY_AI_OPPORTUNITY_CARD } from "@/app/projects/finding-nemo/layoutConfig";
 import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import ProjectImage from "@/lib/media/ProjectImage";
 import type { FindingNemoPersonaItem } from "@/scripts/project-2.data";
@@ -36,11 +37,12 @@ export default function Persona({
         display: fillHeight ? "flex" : "block",
         flexDirection: fillHeight ? "column" : undefined,
         mx: "auto",
-        px: 4,
-        pt: 4,
-        pb: 5,
-        borderRadius: "15px",
-        backgroundColor: "#fff",
+        px: { xs: 2.5, md: 3 },
+        py: { xs: 2.5, md: 3 },
+        borderRadius: `${IDENTIFY_AI_OPPORTUNITY_CARD.borderRadiusPx}px`,
+        bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+        backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+        border: `1px solid ${IDENTIFY_AI_OPPORTUNITY_CARD.border}`,
         overflow: "hidden",
         boxSizing: "border-box",
         ...(interactive
@@ -48,8 +50,8 @@ export default function Persona({
               ...interactiveCardHoverSx,
               "&:hover": {
                 ...interactiveCardHoverSx["&:hover"],
-                bgcolor: "#fff",
-                backgroundColor: "#fff",
+                bgcolor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
+                backgroundColor: IDENTIFY_AI_OPPORTUNITY_CARD.background,
               },
             }
           : {}),
@@ -89,12 +91,14 @@ export default function Persona({
           <Stack spacing={1} flex={1} minWidth={0}>
             <Typography
               component="h1"
-              sx={titleTypeSx("contentCardTitle", {
-                fontWeight: 700,
-                lineHeight: 1.1,
-                color: "common.black",
-                textAlign: { xs: "center", sm: "left" },
-              })}
+              sx={[
+                titleTypeSx("contentCardTitle", {
+                  fontWeight: 700,
+                  lineHeight: 1.1,
+                  textAlign: { xs: "center", sm: "left" },
+                }),
+                { color: IDENTIFY_AI_OPPORTUNITY_CARD.opportunityTitleColor },
+              ]}
             >
               {title}
             </Typography>
@@ -103,7 +107,6 @@ export default function Persona({
               sx={bodyTypeSx("personaRoleDescription", {
                 fontWeight: 400,
                 lineHeight: 1.25,
-                color: "#022f5d",
                 textAlign: { xs: "center", sm: "left" },
               })}
             >
@@ -130,7 +133,6 @@ export default function Persona({
                 sx={bodyTypeSx("contentCardBody", {
                   lineHeight: 1.6,
                   fontWeight: 400,
-                  color: "common.black",
                 })}
               >
                 {goal}
@@ -158,7 +160,6 @@ export default function Persona({
                   sx={bodyTypeSx("contentCardBody", {
                     lineHeight: 1.6,
                     fontWeight: 400,
-                    color: "common.black",
                   })}
                 >
                   {point}
@@ -175,19 +176,17 @@ export default function Persona({
               maxWidth: 486,
               px: 2.5,
               py: 2,
-              borderRadius: "15px",
-              backgroundColor: "#dee8f380",
-              borderLeft: "5px solid #009d1799",
+              borderRadius: `${IDENTIFY_AI_OPPORTUNITY_CARD.borderRadiusPx}px`,
+              backgroundColor: "#F5F8FB",
+              borderLeft: `5px solid ${IDENTIFY_AI_OPPORTUNITY_CARD.opportunityTitleColor}`,
             }}
           >
             <Typography
               component="blockquote"
-              sx={{
+              sx={bodyTypeSx("contentCardBody", {
                 m: 0,
-                fontSize: 16,
                 lineHeight: 1.35,
-                color: "#000",
-              }}
+              })}
             >
               &ldquo;{quote}&rdquo;
             </Typography>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSetAtom } from "jotai";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -8,98 +8,84 @@ import ListItem from "@mui/material/ListItem";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
-import {
-  CHALLENGES_CARD_HEIGHT_PX,
-  PRIMARY_USERS_CARD_HEIGHT_PX,
-  PRIMARY_USERS_CARD_WIDTH_PX,
-} from "@/app/projects/finding-nemo/components/ContentCard";
 import DesigningHumanCenteredAiSection from "@/app/projects/finding-nemo/components/DesigningHumanCenteredAiSection";
-import ContentCardsRow from "@/app/projects/finding-nemo/components/ContentCardsRow";
+import ComputerVisionPipelineCard from "@/app/projects/finding-nemo/components/ComputerVisionPipelineCard";
+import IdentifyAiOpportunitySection from "@/app/projects/finding-nemo/components/IdentifyAiOpportunitySection";
+import StageSectionHeader from "@/app/projects/finding-nemo/components/StageSectionHeader";
+import StageInfoCardsRow from "@/app/projects/finding-nemo/components/StageInfoCardsRow";
 import FullBleedBand from "@/app/projects/finding-nemo/components/FullBleedBand";
 import MobileExperienceMockup from "@/app/projects/finding-nemo/components/MobileExperienceMockup";
+import MetadataDrivenArchitectureCard from "@/app/projects/finding-nemo/components/MetadataDrivenArchitectureCard";
 import MyContributions from "@/app/projects/finding-nemo/components/MyContributions";
 import Overview from "@/app/projects/finding-nemo/components/Overview";
 import ProblemDemoPanel from "@/app/projects/finding-nemo/components/ProbleDemoCarousel";
 import PanelSection from "@/app/projects/finding-nemo/components/PanelSection";
 import PersonasRow from "@/app/projects/finding-nemo/components/PersonasRow";
 import ProjectHeader from "@/app/projects/finding-nemo/components/ProjectHeader";
+import ProjectMetaBar from "@/app/projects/finding-nemo/components/ProjectMetaBar";
+import RecognitionDialog from "@/app/projects/finding-nemo/components/RecognitionDialog";
 import SectionParagraph from "@/app/projects/finding-nemo/components/SectionParagraph";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import SolutionOverviewSection from "@/app/projects/finding-nemo/components/SolutionOverviewSection";
+import { interactiveCardHoverSx } from "@/app/projects/finding-nemo/components/interactiveCardStyles";
+import { bodyTypeSx, FINDING_NEMO_HEADLINE_COLOR, titleTypeSx } from "@/app/projects/finding-nemo/typography";
 import {
   BAND_COLORS,
+  IDENTIFY_AI_OPPORTUNITY_CARD,
   LAYOUT_DIMENSIONS,
   MOBILE_EXPERIENCE_MOCKUP_GAPS,
-  MY_CONTRIBUTIONS_CARD,
   PANEL_CONTENT_MAX_WIDTH_PX,
   PANEL_COLORS,
   PANEL_SECTION_GAPS,
   PANEL_SHELL_SX,
   SECTION_GAPS,
+  SECTION_TITLE_CONTENT_GAP,
   sectionTitleContentGapMtSx,
-  SOLUTION_OVERVIEW_IMAGE_DISPLAY,
-  SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY,
   CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { FINDING_NEMO_HEADER_LOGO } from "@/app/projects/finding-nemo/headerTheme";
+import { FINDING_NEMO_HEADER_THEME } from "@/app/projects/finding-nemo/headerTheme";
+import { FINDING_NEMO_FOOTER_THEME } from "@/app/projects/finding-nemo/footerTheme";
 import type { FindingNemoProjectDocument } from "@/app/projects/finding-nemo/lib/finding-nemo.firestore";
 import { layoutState } from "@/app/(public)/layout-state";
 import {
   defaultHeaderState,
   headerState,
 } from "@/components/Header/HeaderState";
+import {
+  defaultFooterState,
+  footerState,
+} from "@/components/Footer/FooterState";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
-import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
-
-const solutionOverviewImageSizes = [
-  `(max-width: 767px) ${SOLUTION_OVERVIEW_IMAGE_DISPLAY.mobile.width}px`,
-  `(max-width: 1023px) ${SOLUTION_OVERVIEW_IMAGE_DISPLAY.tablet.width}px`,
-  `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.desktop.width}px`,
-].join(", ");
-
-const solutionOverviewImageBoxSx = {
-  width: `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.mobile.width}px`,
-  maxWidth: "100%",
-  [breakpointMediaQuery.tabletUp]: {
-    width: `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.tablet.width}px`,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    width: `${SOLUTION_OVERVIEW_IMAGE_DISPLAY.desktop.width}px`,
-  },
-} as const;
 
 const mobileExperienceMockupsRowSx = {
   width: "100%",
   maxWidth: `${PANEL_CONTENT_MAX_WIDTH_PX}px`,
   mx: "auto",
-  display: "flex",
-  flexDirection: { xs: "column", md: "row" },
-  flexWrap: "wrap",
-  justifyContent: "center",
-  alignItems: { xs: "center", md: "flex-start" },
-  gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.mobile,
+  display: "grid",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+  alignItems: "start",
+  justifyItems: "center",
+  columnGap: "12px",
+  rowGap: MOBILE_EXPERIENCE_MOCKUP_GAPS.mobile,
   [breakpointMediaQuery.tabletUp]: {
     gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.tablet,
   },
   [breakpointMediaQuery.desktopUp]: {
+    gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
     gap: MOBILE_EXPERIENCE_MOCKUP_GAPS.desktop,
   },
 } as const;
 
-const SYSTEM_WORKFLOW_LIGHTBOX_ID = "finding-nemo-system-workflow";
 const ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID =
   "finding-nemo-architecture-technology";
 
-const systemWorkflowImageBoxSx = {
-  width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.mobile.width}px`,
-  maxWidth: "100%",
-  [breakpointMediaQuery.tabletUp]: {
-    width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.tablet.width}px`,
-  },
-  [breakpointMediaQuery.desktopUp]: {
-    width: `${SYSTEM_WORKFLOW_ILLUSTRATION_DISPLAY.desktop.width}px`,
-  },
+const ARCHITECTURAL_PRINCIPLE_CARD_WIDTH = {
+  mobile: 360,
+  tablet: 360,
+  desktop: 360,
 } as const;
+
+const ARCHITECTURAL_PRINCIPLE_WIDE_DESKTOP_WIDTH_PX = 257;
 
 const conceptualMvpArchitectureImageBoxSx = {
   width: `${CONCEPTUAL_MVP_ARCHITECTURE_ILLUSTRATION_DISPLAY.mobile.width}px`,
@@ -133,22 +119,29 @@ export function FindingNemoPage({
 }: FindingNemoPageProps) {
   const setLayoutState = useSetAtom(layoutState);
   const setHeaderState = useSetAtom(headerState);
+  const setFooterState = useSetAtom(footerState);
+  const [recognitionOpen, setRecognitionOpen] = useState(false);
   const hasProject = project != null;
+
+  const recognitionDialogTitle = useMemo(() => {
+    if (!project?.projectHeader) return "";
+    const headline = project.projectHeader.awardLines.filter(
+      (line) => !/view recognition/i.test(line),
+    );
+    return `🏆 ${headline.join(" ")}`;
+  }, [project?.projectHeader]);
 
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
-    setHeaderState({
-      position: "absolute",
-      isDark: false,
-      logoPrimaryColor: FINDING_NEMO_HEADER_LOGO.primary,
-      logoAccentColor: FINDING_NEMO_HEADER_LOGO.accent,
-    });
+    setHeaderState({ ...FINDING_NEMO_HEADER_THEME });
+    setFooterState({ ...FINDING_NEMO_FOOTER_THEME });
 
     return () => {
       setLayoutState({ isFullWidth: false });
       setHeaderState({ ...defaultHeaderState });
+      setFooterState({ ...defaultFooterState });
     };
-  }, [setLayoutState, setHeaderState]);
+  }, [setLayoutState, setHeaderState, setFooterState]);
 
   return (
     <Box component="main">
@@ -158,350 +151,52 @@ export function FindingNemoPage({
             data={project.projectHeader}
             onReady={onProjectHeaderReady}
           />
+          <ProjectMetaBar
+            items={project.projectMetaBar ?? []}
+            onOpenRecognition={
+              project.projectHeader.recognition
+                ? () => setRecognitionOpen(true)
+                : undefined
+            }
+          />
+          {project.projectHeader.recognition ? (
+            <RecognitionDialog
+              open={recognitionOpen}
+              onClose={() => setRecognitionOpen(false)}
+              title={recognitionDialogTitle}
+              data={project.projectHeader.recognition}
+            />
+          ) : null}
           <Overview data={project.overview} />
           {project.problemDemoPanel ? (
             <ProblemDemoPanel data={project.problemDemoPanel} />
           ) : null}
+          <SolutionOverviewSection data={project.solutionOverview} />
           <MyContributions data={project.myContributions} />
           <DesigningHumanCenteredAiSection data={project.designingHumanCenteredAi} />
-          <FullBleedBand backgroundColor={BAND_COLORS.identifyAiOpportunity}>
-            <SectionParagraph title={project.problemSpaceFraming.title} />
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={sectionTitleContentGapMtSx}
-            >
-              <SectionParagraph
-                title={project.challenges.title}
-                body={project.challenges.paragraphs}
-                titleVariant="subtitle"
-              />
-              <ContentCardsRow
-                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
-                cards={project.challenges.cards.map((card) => ({
-                  title: card.title,
-                  description: card.description,
-                  heightPx: CHALLENGES_CARD_HEIGHT_PX,
-                }))}
-              />
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.businessOpportunities.title}
-                body={project.businessOpportunities.paragraphs}
-                titleVariant="subtitle"
-              />
-              <ContentCardsRow
-                cardBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
-                cards={project.businessOpportunities.cards.map((card) => ({
-                  title: card.title,
-                  description: card.description,
-                }))}
-              />
-            </Stack>
-          </FullBleedBand>
+          <IdentifyAiOpportunitySection
+            framing={project.problemSpaceFraming}
+            challenges={project.challenges}
+            businessOpportunities={project.businessOpportunities}
+          />
           <FullBleedBand backgroundColor={BAND_COLORS.defineAiSolution}>
-            <Stack spacing={{ xs: 4, md: 6 }}>
-              <SectionParagraph title={project.solutionOverview.title} />
-              <SectionParagraph
-                title={project.solutionOverview.subtitle}
-                body={project.solutionOverview.paragraphs}
-                titleVariant="subtitle"
-              />
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Stack
-                  alignItems="center"
-                  spacing={{ xs: 2, md: 2.5 }}
-                  sx={solutionOverviewImageBoxSx}
-                >
-                  <Box sx={{ width: "100%" }}>
-                    <ProjectImage
-                      objectPath={project.solutionOverview.image.objectPath}
-                      alt={project.solutionOverview.image.alt}
-                      width={project.solutionOverview.image.width}
-                      height={project.solutionOverview.image.height}
-                      sizes={solutionOverviewImageSizes}
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        height: "auto",
-                      }}
-                    />
-                  </Box>
-                  {project.solutionOverview.image.annotation ? (
-                    <Typography
-                      component="p"
-                      sx={bodyTypeSx("smallCaption", {
-                        color: "common.black",
-                        fontWeight: 400,
-                        lineHeight: 1.5,
-                        textAlign: "center",
-                        m: 0,
-                        width: "100%",
-                      })}
-                    >
-                      {project.solutionOverview.image.annotation}
-                    </Typography>
-                  ) : null}
-                </Stack>
-              </Box>
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.primaryUsers.title}
-                body={project.primaryUsers.paragraphs}
-                titleVariant="subtitle"
-              />
-              <ContentCardsRow
-                cards={project.primaryUsers.cards.map((card) => ({
-                  title: card.title,
-                  description: card.description,
-                  widthPx: PRIMARY_USERS_CARD_WIDTH_PX,
-                  heightPx: PRIMARY_USERS_CARD_HEIGHT_PX,
-                }))}
-              />
-            </Stack>
-            <Stack
-              spacing={{ xs: 4, md: 6 }}
-              sx={{
-                mt: SECTION_GAPS.mobile,
-                [breakpointMediaQuery.tabletUp]: {
-                  mt: SECTION_GAPS.tablet,
-                },
-                [breakpointMediaQuery.desktopUp]: {
-                  mt: SECTION_GAPS.desktop,
-                },
-              }}
-            >
-              <SectionParagraph
-                title={project.personas.title}
-                body={project.personas.paragraphs}
-                titleVariant="subtitle"
-              />
-              <PersonasRow personas={project.personas.items} />
-            </Stack>
-          </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.neutralPanel}>
-            <Stack sx={panelSectionStackSx}>
-              <SectionParagraph title={project.systemWorkflowArchitecture.title} />
-              <SectionParagraph
-                title={project.systemWorkflowArchitecture.subtitle}
-                body={project.systemWorkflowArchitecture.paragraphs}
-                titleVariant="subtitle"
-              />
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Stack
-                  alignItems="center"
-                  spacing={{ xs: 2, md: 2.5 }}
-                  sx={systemWorkflowImageBoxSx}
-                >
-                  <ProjectImageLightbox
-                    objectPath={
-                      project.systemWorkflowArchitecture.illustration.objectPath
-                    }
-                    alt={project.systemWorkflowArchitecture.illustration.alt}
-                    lightboxId={SYSTEM_WORKFLOW_LIGHTBOX_ID}
-                    width={
-                      project.systemWorkflowArchitecture.illustration.width
-                    }
-                    height={
-                      project.systemWorkflowArchitecture.illustration.height
-                    }
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      height: "auto",
-                      maxWidth: "100%",
-                    }}
-                  />
-                  <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
-                    <Typography
-                      component="p"
-                      sx={bodyTypeSx("smallCaption", {
-                        color: "common.black",
-                        fontWeight: 400,
-                        lineHeight: 1.5,
-                        textAlign: "center",
-                        m: 0,
-                      })}
-                    >
-                      {project.systemWorkflowArchitecture.illustration.annotation}
-                    </Typography>
-                    {project.systemWorkflowArchitecture.illustration
-                      .annotationInstruction ? (
-                      <Typography
-                        component="p"
-                        sx={bodyTypeSx("smallCaption", {
-                          color: "common.black",
-                          fontWeight: 400,
-                          lineHeight: 1.5,
-                          textAlign: "center",
-                          m: 0,
-                          opacity: 0.75,
-                        })}
-                      >
-                        {
-                          project.systemWorkflowArchitecture.illustration
-                            .annotationInstruction
-                        }
-                      </Typography>
-                    ) : null}
-                  </Stack>
-                </Stack>
-              </Box>
-              <PanelSection
-                type="principles-image"
-                title={project.systemWorkflowArchitecture.coreMvpComponents.title}
-                principles={
-                  project.systemWorkflowArchitecture.coreMvpComponents.principles
-                }
-                image={project.systemWorkflowArchitecture.coreMvpComponents.image}
-                panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
-              />
-              <SectionParagraph
-                title={
-                  project.systemWorkflowArchitecture.conceptualMvpArchitecture.title
-                }
-                body={
-                  project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                    .paragraphs
-                }
-                titleVariant="subtitle"
-              />
-              <Box
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Stack
-                  alignItems="center"
-                  spacing={{ xs: 2, md: 2.5 }}
-                  sx={conceptualMvpArchitectureImageBoxSx}
-                >
-                  <ProjectImageLightbox
-                    objectPath={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.objectPath
-                    }
-                    alt={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.alt
-                    }
-                    lightboxId={ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID}
-                    width={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.width
-                    }
-                    height={
-                      project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                        .illustration.height
-                    }
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      height: "auto",
-                      maxWidth: "100%",
-                    }}
-                  />
-                  <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
-                    <Typography
-                      component="p"
-                      sx={bodyTypeSx("smallCaption", {
-                        color: "common.black",
-                        fontWeight: 400,
-                        lineHeight: 1.5,
-                        textAlign: "center",
-                        m: 0,
-                      })}
-                    >
-                      {
-                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                          .illustration.annotation
-                      }
-                    </Typography>
-                    {project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                      .illustration.annotationInstruction ? (
-                      <Typography
-                        component="p"
-                        sx={bodyTypeSx("smallCaption", {
-                          color: "common.black",
-                          fontWeight: 400,
-                          lineHeight: 1.5,
-                          textAlign: "center",
-                          m: 0,
-                          opacity: 0.75,
-                        })}
-                      >
-                        {
-                          project.systemWorkflowArchitecture
-                            .conceptualMvpArchitecture.illustration
-                            .annotationInstruction
-                        }
-                      </Typography>
-                    ) : null}
-                  </Stack>
-                </Stack>
-              </Box>
-              <SectionParagraph
-                body={
-                  project.systemWorkflowArchitecture.conceptualMvpArchitecture
-                    .paragraphsAfterIllustration
-                }
-              />
-              {project.systemWorkflowArchitecture.definingSuccessPanel ? (
-                <PanelSection
-                  {...project.systemWorkflowArchitecture.definingSuccessPanel}
-                  panelBackgroundColor={MY_CONTRIBUTIONS_CARD.background}
-                />
-              ) : null}
-            </Stack>
-          </FullBleedBand>
-          <FullBleedBand backgroundColor={BAND_COLORS.designDecisionSupportExperience}>
-            <SectionParagraph title={project.mobileExperienceConcepts.title} />
+            <StageSectionHeader
+              sectionLabel={project.solutionOverview.sectionLabel}
+              title={project.solutionOverview.title}
+            />
             {project.mobileExperienceConcepts.paragraphAfterSubtitle ? (
               <Stack sx={sectionTitleContentGapMtSx}>
                 <SectionParagraph
-                  body={project.mobileExperienceConcepts.paragraphAfterSubtitle}
+                  body={[
+                    project.mobileExperienceConcepts.paragraphAfterSubtitle,
+                    ...project.primaryUsers.paragraphs,
+                  ]}
                 />
               </Stack>
             ) : null}
             {project.mobileExperienceConcepts.conceptEvolutionPanel ? (
               <Stack
+                spacing={1}
                 sx={{
                   mt: SECTION_GAPS.mobile,
                   [breakpointMediaQuery.tabletUp]: {
@@ -512,14 +207,29 @@ export function FindingNemoPage({
                   },
                 }}
               >
+                {project.mobileExperienceConcepts.conceptEvolutionLabel ? (
+                  <Typography
+                    component="p"
+                    sx={titleTypeSx("smallCaption", {
+                      color: "#0B6E9F",
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      m: 0,
+                    })}
+                  >
+                    {project.mobileExperienceConcepts.conceptEvolutionLabel}
+                  </Typography>
+                ) : null}
                 <PanelSection
                   {...project.mobileExperienceConcepts.conceptEvolutionPanel}
-                  panelBackgroundColor={PANEL_COLORS.default}
                 />
               </Stack>
             ) : null}
             {project.mobileExperienceConcepts.corePrinciplesPanel ? (
               <Stack
+                spacing={1}
                 sx={{
                   mt: SECTION_GAPS.mobile,
                   [breakpointMediaQuery.tabletUp]: {
@@ -530,6 +240,21 @@ export function FindingNemoPage({
                   },
                 }}
               >
+                {project.mobileExperienceConcepts.corePrinciplesLabel ? (
+                  <Typography
+                    component="p"
+                    sx={titleTypeSx("smallCaption", {
+                      color: "#0B6E9F",
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      m: 0,
+                    })}
+                  >
+                    {project.mobileExperienceConcepts.corePrinciplesLabel}
+                  </Typography>
+                ) : null}
                 <PanelSection
                   {...project.mobileExperienceConcepts.corePrinciplesPanel}
                   panelBackgroundColor={PANEL_COLORS.default}
@@ -539,6 +264,40 @@ export function FindingNemoPage({
             <Stack
               spacing={{ xs: 4, md: 6 }}
               sx={{
+                mt: SECTION_TITLE_CONTENT_GAP.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_TITLE_CONTENT_GAP.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_TITLE_CONTENT_GAP.desktop,
+                },
+              }}
+            >
+              <Stack spacing={1}>
+                <Typography
+                  component="p"
+                  sx={titleTypeSx("smallCaption", {
+                    color: "#0B6E9F",
+                    fontWeight: 700,
+                    lineHeight: 1.2,
+                    letterSpacing: "0.18em",
+                    textTransform: "uppercase",
+                    m: 0,
+                  })}
+                >
+                  Who It Serves
+                </Typography>
+                <SectionParagraph
+                  title={project.personas.title}
+                  body={project.personas.paragraphs}
+                  titleVariant="subtitle"
+                />
+              </Stack>
+              <PersonasRow personas={project.personas.items} />
+            </Stack>
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
                 mt: SECTION_GAPS.mobile,
                 [breakpointMediaQuery.tabletUp]: {
                   mt: SECTION_GAPS.tablet,
@@ -548,11 +307,37 @@ export function FindingNemoPage({
                 },
               }}
             >
-              <SectionParagraph
-                title={project.mobileExperienceConcepts.subtitle}
-                body={project.mobileExperienceConcepts.paragraphs}
-                titleVariant="subtitle"
-              />
+              <Stack spacing={{ xs: 2, md: 2.5 }}>
+                <Stack spacing={1}>
+                  <Typography
+                    component="p"
+                    sx={titleTypeSx("smallCaption", {
+                      color: "#0B6E9F",
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      m: 0,
+                    })}
+                  >
+                    {project.mobileExperienceConcepts.subtitle}
+                  </Typography>
+                  <Typography
+                    component="h3"
+                    sx={titleTypeSx("sectionSubtitle", {
+                      color: FINDING_NEMO_HEADLINE_COLOR,
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      m: 0,
+                    })}
+                  >
+                    {project.mobileExperienceConcepts.experienceTitle}
+                  </Typography>
+                </Stack>
+                <SectionParagraph
+                  body={project.mobileExperienceConcepts.paragraphs}
+                />
+              </Stack>
               <Stack spacing={{ xs: 4, md: 6 }} sx={{ width: "100%" }}>
                 {project.mobileExperienceConcepts.mockups[0] ? (
                   <Box
@@ -580,83 +365,539 @@ export function FindingNemoPage({
               </Stack>
             </Stack>
           </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.aiTechnologyMvpArchitecture}>
+            <Stack sx={panelSectionStackSx}>
+              <Stack
+                sx={{
+                  gap: SECTION_TITLE_CONTENT_GAP.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    gap: SECTION_TITLE_CONTENT_GAP.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    gap: SECTION_TITLE_CONTENT_GAP.desktop,
+                  },
+                }}
+              >
+                <StageSectionHeader
+                  sectionLabel={project.systemWorkflowArchitecture.sectionLabel}
+                  title={project.systemWorkflowArchitecture.title}
+                />
+                <SectionParagraph
+                  body={project.systemWorkflowArchitecture.paragraphs}
+                />
+              </Stack>
+              <Stack spacing={1}>
+                {project.systemWorkflowArchitecture.coreMvpComponents.eyebrow ? (
+                  <Typography
+                    component="p"
+                    sx={titleTypeSx("smallCaption", {
+                      color: "#0B6E9F",
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      m: 0,
+                    })}
+                  >
+                    {
+                      project.systemWorkflowArchitecture.coreMvpComponents
+                        .eyebrow
+                    }
+                  </Typography>
+                ) : null}
+                <PanelSection
+                  type="principles-image"
+                  title={
+                    project.systemWorkflowArchitecture.coreMvpComponents.title
+                  }
+                  principles={
+                    project.systemWorkflowArchitecture.coreMvpComponents
+                      .principles
+                  }
+                  image={
+                    project.systemWorkflowArchitecture.coreMvpComponents.image
+                  }
+                />
+              </Stack>
+              <Stack spacing={1}>
+                {project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                  .eyebrow ? (
+                  <Typography
+                    component="p"
+                    sx={titleTypeSx("smallCaption", {
+                      color: "#0B6E9F",
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      letterSpacing: "0.18em",
+                      textTransform: "uppercase",
+                      m: 0,
+                    })}
+                  >
+                    {
+                      project.systemWorkflowArchitecture
+                        .conceptualMvpArchitecture.eyebrow
+                    }
+                  </Typography>
+                ) : null}
+                <SectionParagraph
+                  title={
+                    project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                      .title
+                  }
+                  body={
+                    project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                      .paragraphs
+                  }
+                  titleVariant="subtitle"
+                />
+              </Stack>
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Stack
+                  alignItems="center"
+                  spacing={{ xs: 2, md: 2.5 }}
+                  sx={conceptualMvpArchitectureImageBoxSx}
+                >
+                  <Box
+                    sx={{
+                      width: "100%",
+                      ...interactiveCardHoverSx,
+                      "&:hover": {
+                        ...interactiveCardHoverSx["&:hover"],
+                        bgcolor: "transparent",
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    <ProjectImageLightbox
+                      objectPath={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.objectPath
+                      }
+                      alt={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.alt
+                      }
+                      lightboxId={ARCHITECTURE_TECHNOLOGY_LIGHTBOX_ID}
+                      width={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.width
+                      }
+                      height={
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.height
+                      }
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        height: "auto",
+                        maxWidth: "100%",
+                      }}
+                    />
+                  </Box>
+                  <Stack alignItems="center" spacing="6px" sx={{ width: "100%" }}>
+                    <Typography
+                      component="p"
+                      sx={bodyTypeSx("smallCaption", {
+                        fontWeight: 400,
+                        lineHeight: 1.5,
+                        textAlign: "center",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                          .illustration.annotation
+                      }
+                    </Typography>
+                    {project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                      .illustration.annotationInstruction ? (
+                      <Typography
+                        component="p"
+                        sx={bodyTypeSx("smallCaption", {
+                          fontWeight: 400,
+                          lineHeight: 1.5,
+                          textAlign: "center",
+                          m: 0,
+                          opacity: 0.75,
+                        })}
+                      >
+                        {
+                          project.systemWorkflowArchitecture
+                            .conceptualMvpArchitecture.illustration
+                            .annotationInstruction
+                        }
+                      </Typography>
+                    ) : null}
+                  </Stack>
+                </Stack>
+              </Box>
+              <SectionParagraph
+                body={
+                  project.systemWorkflowArchitecture.conceptualMvpArchitecture
+                    .paragraphsAfterIllustration
+                }
+              />
+              {project.systemWorkflowArchitecture.definingSuccessPanel ? (
+                <Stack spacing={1}>
+                  {project.systemWorkflowArchitecture.definingSuccessEyebrow ? (
+                    <Typography
+                      component="p"
+                      sx={titleTypeSx("smallCaption", {
+                        color: "#0B6E9F",
+                        fontWeight: 700,
+                        lineHeight: 1.2,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.systemWorkflowArchitecture
+                          .definingSuccessEyebrow
+                      }
+                    </Typography>
+                  ) : null}
+                  <PanelSection
+                    {...project.systemWorkflowArchitecture.definingSuccessPanel}
+                    panelBackgroundColor="#FFFFFF"
+                  />
+                </Stack>
+              ) : null}
+            </Stack>
+          </FullBleedBand>
+          <FullBleedBand backgroundColor={BAND_COLORS.designDecisionSupportExperience}>
+            <StageSectionHeader
+              sectionLabel={project.mobileExperienceConcepts.sectionLabel}
+              title={project.mobileExperienceConcepts.title}
+              paragraphs={project.mobileExperienceConcepts.stageParagraphs}
+            />
+            <Stack sx={sectionTitleContentGapMtSx}>
+              <ComputerVisionPipelineCard
+                data={project.systemWorkflowArchitecture}
+              />
+            </Stack>
+            {project.mobileExperienceConcepts.architecturalPrinciples ? (
+              <Stack
+                spacing={{ xs: 4, md: 6 }}
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <Stack spacing={1}>
+                  {project.mobileExperienceConcepts.architecturalPrinciples
+                    .eyebrow ? (
+                    <Typography
+                      component="p"
+                      sx={titleTypeSx("smallCaption", {
+                        color: "#0B6E9F",
+                        fontWeight: 700,
+                        lineHeight: 1.2,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.mobileExperienceConcepts.architecturalPrinciples
+                          .eyebrow
+                      }
+                    </Typography>
+                  ) : null}
+                  <SectionParagraph
+                    title={
+                      project.mobileExperienceConcepts.architecturalPrinciples
+                        .title
+                    }
+                    body={
+                      project.mobileExperienceConcepts.architecturalPrinciples
+                        .intro
+                    }
+                    titleVariant="subtitle"
+                  />
+                </Stack>
+                <StageInfoCardsRow
+                  cards={project.mobileExperienceConcepts.architecturalPrinciples.principles.map(
+                    (principle) => ({
+                      title: principle.subtitle,
+                      description: principle.description,
+                    }),
+                  )}
+                  titleColor={
+                    IDENTIFY_AI_OPPORTUNITY_CARD.opportunityTitleColor
+                  }
+                  widthPx={ARCHITECTURAL_PRINCIPLE_CARD_WIDTH}
+                  centered
+                  titleMinLines={2}
+                  sx={{
+                    [breakpointMediaQuery.tabletUp]: {
+                      display: "grid",
+                      gridTemplateColumns: `repeat(2, minmax(0, ${ARCHITECTURAL_PRINCIPLE_CARD_WIDTH.tablet}px))`,
+                    },
+                    [breakpointMediaQuery.desktopUp]: {
+                      gridTemplateColumns: `repeat(2, ${ARCHITECTURAL_PRINCIPLE_CARD_WIDTH.desktop}px)`,
+                    },
+                    "@media (min-width: 1260px)": {
+                      gridTemplateColumns: `repeat(4, ${ARCHITECTURAL_PRINCIPLE_WIDE_DESKTOP_WIDTH_PX}px)`,
+                    },
+                  }}
+                />
+              </Stack>
+            ) : null}
+            {project.mobileExperienceConcepts.businessRuleEvaluation ? (
+              <Stack
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <Stack spacing={1}>
+                  {project.mobileExperienceConcepts.businessRuleEvaluation
+                    .eyebrow ? (
+                    <Typography
+                      component="p"
+                      sx={titleTypeSx("smallCaption", {
+                        color: "#0B6E9F",
+                        fontWeight: 700,
+                        lineHeight: 1.2,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.mobileExperienceConcepts.businessRuleEvaluation
+                          .eyebrow
+                      }
+                    </Typography>
+                  ) : null}
+                  <SectionParagraph
+                    title={
+                      project.mobileExperienceConcepts.businessRuleEvaluation
+                        .title
+                    }
+                    body={
+                      project.mobileExperienceConcepts.businessRuleEvaluation
+                        .paragraphs
+                    }
+                    titleVariant="subtitle"
+                  />
+                </Stack>
+              </Stack>
+            ) : null}
+            {project.mobileExperienceConcepts.metadataDrivenArchitecture ? (
+              <Stack
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <MetadataDrivenArchitectureCard
+                  data={
+                    project.mobileExperienceConcepts.metadataDrivenArchitecture
+                  }
+                />
+              </Stack>
+            ) : null}
+            {project.mobileExperienceConcepts.eventDrivenOperationalDashboard ? (
+              <Stack
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <Stack spacing={1}>
+                  {project.mobileExperienceConcepts
+                    .eventDrivenOperationalDashboard.eyebrow ? (
+                    <Typography
+                      component="p"
+                      sx={titleTypeSx("smallCaption", {
+                        color: "#0B6E9F",
+                        fontWeight: 700,
+                        lineHeight: 1.2,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.mobileExperienceConcepts
+                          .eventDrivenOperationalDashboard.eyebrow
+                      }
+                    </Typography>
+                  ) : null}
+                  <SectionParagraph
+                    title={
+                      project.mobileExperienceConcepts
+                        .eventDrivenOperationalDashboard.title
+                    }
+                    body={
+                      project.mobileExperienceConcepts
+                        .eventDrivenOperationalDashboard.paragraphs
+                    }
+                    titleVariant="subtitle"
+                  />
+                </Stack>
+              </Stack>
+            ) : null}
+            {project.mobileExperienceConcepts.extendingTheExperience ? (
+              <Stack
+                sx={{
+                  mt: SECTION_GAPS.mobile,
+                  [breakpointMediaQuery.tabletUp]: {
+                    mt: SECTION_GAPS.tablet,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    mt: SECTION_GAPS.desktop,
+                  },
+                }}
+              >
+                <Stack spacing={1}>
+                  {project.mobileExperienceConcepts.extendingTheExperience
+                    .eyebrow ? (
+                    <Typography
+                      component="p"
+                      sx={titleTypeSx("smallCaption", {
+                        color: "#0B6E9F",
+                        fontWeight: 700,
+                        lineHeight: 1.2,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        m: 0,
+                      })}
+                    >
+                      {
+                        project.mobileExperienceConcepts.extendingTheExperience
+                          .eyebrow
+                      }
+                    </Typography>
+                  ) : null}
+                  <SectionParagraph
+                    title={
+                      project.mobileExperienceConcepts.extendingTheExperience
+                        .title
+                    }
+                    body={
+                      project.mobileExperienceConcepts.extendingTheExperience
+                        .paragraphs
+                    }
+                    titleVariant="subtitle"
+                  />
+                </Stack>
+              </Stack>
+            ) : null}
+          </FullBleedBand>
           <FullBleedBand backgroundColor={BAND_COLORS.expectedImpactAndReflections}>
             <SectionParagraph title={project.expectedImpact.title} />
-            <Stack sx={{ ...panelSectionStackSx, ...sectionTitleContentGapMtSx }}>
+            <Stack sx={sectionTitleContentGapMtSx}>
               <Box
                 component="section"
                 sx={{
                   ...PANEL_SHELL_SX,
-                  pt: 0,
                   bgcolor: PANEL_COLORS.default,
                 }}
               >
                 <SectionParagraph body={project.expectedImpact.paragraphs} />
               </Box>
-              <Stack spacing={{ xs: 4, md: 6 }}>
-                <SectionParagraph
-                  title={project.reflectionsAndKeyLearnings.title}
-                />
-                <Box
+            </Stack>
+            <Stack
+              spacing={{ xs: 4, md: 6 }}
+              sx={{
+                mt: SECTION_GAPS.mobile,
+                [breakpointMediaQuery.tabletUp]: {
+                  mt: SECTION_GAPS.tablet,
+                },
+                [breakpointMediaQuery.desktopUp]: {
+                  mt: SECTION_GAPS.desktop,
+                },
+              }}
+            >
+              <SectionParagraph
+                title={project.reflectionsAndKeyLearnings.title}
+              />
+              <Box
+                sx={{
+                  px: LAYOUT_DIMENSIONS.mobile.margin,
+                  [breakpointMediaQuery.tabletUp]: {
+                    px: LAYOUT_DIMENSIONS.tablet.margin,
+                  },
+                  [breakpointMediaQuery.desktopUp]: {
+                    px: LAYOUT_DIMENSIONS.desktop.margin,
+                  },
+                }}
+              >
+                <List
                   sx={{
-                    px: LAYOUT_DIMENSIONS.mobile.margin,
-                    [breakpointMediaQuery.tabletUp]: {
-                      px: LAYOUT_DIMENSIONS.tablet.margin,
-                    },
-                    [breakpointMediaQuery.desktopUp]: {
-                      px: LAYOUT_DIMENSIONS.desktop.margin,
-                    },
+                    width: "100%",
+                    my: 0,
+                    p: 0,
+                    listStyleType: "disc",
+                    listStylePosition: "outside",
+                    pl: { xs: 2.5, md: 3 },
                   }}
                 >
-                  <List
-                    sx={{
-                      width: "100%",
-                      my: 0,
-                      p: 0,
-                      listStyleType: "disc",
-                      listStylePosition: "outside",
-                      pl: { xs: 2.5, md: 3 },
-                    }}
-                  >
-                    {project.reflectionsAndKeyLearnings.items.map((item) => (
-                      <ListItem
-                        key={item.subtitle}
-                        disableGutters
-                        sx={{
-                          display: "list-item",
-                          py: { xs: 1.5, md: 2 },
-                          color: "common.black",
-                          "&:first-of-type": { pt: 0 },
-                        }}
-                      >
-                        <Stack spacing={1} sx={{ width: "100%" }}>
-                          <Typography
-                            component="h3"
-                            sx={titleTypeSx("personaSectionTitle", {
-                              fontWeight: 700,
-                              lineHeight: 1.2,
-                              color: "common.black",
-                            })}
-                          >
-                            {item.subtitle}
-                          </Typography>
-                          <Typography
-                            component="p"
-                            sx={bodyTypeSx("sectionDescription", {
-                              color: "common.black",
-                              fontWeight: 400,
-                              lineHeight: 1.5,
-                              m: 0,
-                            })}
-                          >
-                            {item.description}
-                          </Typography>
-                        </Stack>
-                      </ListItem>
-                    ))}
-                  </List>
-                </Box>
-              </Stack>
+                  {project.reflectionsAndKeyLearnings.items.map((item) => (
+                    <ListItem
+                      key={item.subtitle}
+                      disableGutters
+                      sx={{
+                        display: "list-item",
+                        py: { xs: 1.5, md: 2 },
+                        "&:first-of-type": { pt: 0 },
+                      }}
+                    >
+                      <Stack spacing={1} sx={{ width: "100%" }}>
+                        <Typography
+                          component="h3"
+                          sx={titleTypeSx("personaSectionTitle", {
+                            fontWeight: 700,
+                            lineHeight: 1.2,
+                            color: FINDING_NEMO_HEADLINE_COLOR,
+                          })}
+                        >
+                          {item.subtitle}
+                        </Typography>
+                        <Typography
+                          component="p"
+                          sx={bodyTypeSx("sectionDescription", {
+                            fontWeight: 400,
+                            lineHeight: 1.5,
+                            m: 0,
+                          })}
+                        >
+                          {item.description}
+                        </Typography>
+                      </Stack>
+                    </ListItem>
+                  ))}
+                </List>
+              </Box>
             </Stack>
           </FullBleedBand>
         </>

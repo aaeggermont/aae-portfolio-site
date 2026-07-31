@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material";
 import {
   SECTION_TITLE_CONTENT_GAP,
 } from "@/app/projects/finding-nemo/layoutConfig";
-import { bodyTypeSx, titleTypeSx } from "@/app/projects/finding-nemo/typography";
+import { bodyTypeSx, titleTypeSx, FINDING_NEMO_HEADLINE_COLOR } from "@/app/projects/finding-nemo/typography";
 import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 export type SectionParagraphProps = {
@@ -26,7 +26,7 @@ const sectionTitleSx = titleTypeSx("sectionTitle", {
 });
 
 const subtitleSx = titleTypeSx("sectionSubtitle", {
-  color: "common.black",
+  color: FINDING_NEMO_HEADLINE_COLOR,
   fontWeight: 700,
   lineHeight: 1.1,
 });
@@ -73,7 +73,6 @@ export default function SectionParagraph({
               key={index}
               component="p"
               sx={bodyTypeSx("sectionDescription", {
-                color: "common.black",
                 fontWeight: 400,
                 lineHeight: 1.5,
                 m: 0,

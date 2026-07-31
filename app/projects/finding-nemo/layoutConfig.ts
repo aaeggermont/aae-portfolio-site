@@ -80,6 +80,12 @@ export const PANEL_BLOCK_PADDINGS = {
 /** Project hero band behind the absolute global nav (overlay model). */
 export const HEADER_BAND_COLOR = "#dde8f2" as const;
 
+/** Full-bleed hero band image (covers `HEADER_BAND_COLOR` while loading). */
+export const HEADER_BAND_IMAGE = {
+  objectPath: "projects/project_2/FindingNemoBannerImage.png",
+  alt: "Finding Nemo case study hero background",
+} as const;
+
 /**
  * Vertical clearance under the global top bar when `headerState.position` is
  * `"absolute"` (AR Story Teller overlay model).
@@ -107,13 +113,15 @@ export const BAND_COLORS = {
   /** White inset / neutral full-bleed bands */
   neutralPanel: "#FFFFFF",
   /** `01 - Identify the AI Opportunity` */
-  identifyAiOpportunity: "#FFFFFF",
+  identifyAiOpportunity: "#EEF2F6",
+  /** `03 - AI Technology & MVP Architecture` — same band as Stage 01 */
+  aiTechnologyMvpArchitecture: "#EEF2F6",
   /** `02 - Define the AI-Assisted Solution` */
-  defineAiSolution: "#EEF3F9",
+  defineAiSolution: "#FFFFFF",
   /** `04 — Design the Decision Support Experience` */
-  designDecisionSupportExperience: "#EEF3F9",
-  /** Expected Impact + Reflections & Key Learnings */
-  expectedImpactAndReflections: "#FFFFFF",
+  designDecisionSupportExperience: "#FFFFFF",
+  /** Expected Impact + Reflections & Key Learnings — same as Stage 03 */
+  expectedImpactAndReflections: "#EEF2F6",
 } as const;
 
 /**
@@ -122,12 +130,22 @@ export const BAND_COLORS = {
  */
 export const INTRO_SECTIONS_BACKGROUND = "#ffffff" as const;
 
-/** Inset card shell for the My Contributions block. */
+/** Inset card shell for the My Contributions block (legacy card surfaces). */
 export const MY_CONTRIBUTIONS_CARD = {
   background: "#F6FBFF",
   paddingPx: 64,
   maxWidthPx: 600,
   borderRadiusPx: 32,
+} as const;
+
+/** Full-bleed band + contribution tag chips for My Contributions. */
+export const MY_CONTRIBUTIONS_BAND = {
+  background: "#EEF2F6",
+  tagBackground: "#FFFFFF",
+  tagBorder: "#D5DCE3",
+  tagText: "#3F5266",
+  titleColor: "#0B6E9F",
+  tagGap: { mobile: 12, tablet: 14, desktop: 16 },
 } as const;
 
 /**
@@ -138,21 +156,57 @@ export const DEFINING_SUCCESS_KPI_CARD = {
   background: "#E6F1FF",
 } as const;
 
-/**
- * Four-stage framework cards (`Designing Human-Centered AI`).
- * 250×297px at all breakpoints so copy is not clipped on mobile.
- */
-export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
-  mobile: { width: 250, height: 297 },
-  tablet: { width: 250, height: 297 },
-  desktop: { width: 250, height: 297 },
+/** Stage 01 challenge + opportunity cards (`Identify the AI Opportunity`). */
+export const IDENTIFY_AI_OPPORTUNITY_CARD = {
+  background: "#FFFFFF",
+  border: "#D5DCE3",
+  challengeTitleColor: "#073B5E",
+  opportunityTitleColor: "#E89B0C",
+  bodyColor: "#3F5266",
+  borderRadiusPx: 16,
+  widthPx: {
+    mobile: 360,
+    tablet: 280,
+    desktop: 300,
+  },
+  gap: { mobile: 16, tablet: 20, desktop: 24 },
 } as const;
 
-/** Gaps between framework cards — mobile 16px; tablet 32px; desktop 16–32px (uses 32px). */
+/**
+ * Primary Users cards — match Persona card width (490px).
+ */
+export const PRIMARY_USERS_CARD = {
+  widthPx: {
+    mobile: 490,
+    tablet: 490,
+    desktop: 490,
+  },
+} as const;
+
+/**
+ * Four-stage framework cards (`Designing Human-Centered AI`).
+ * Desktop uses a 4-column grid so all cards share one row within the content band.
+ */
+export const HUMAN_CENTERED_AI_FRAMEWORK_CARD = {
+  background: "#FFFFFF",
+  border: "#D5DCE3",
+  numberColor: "#E89B0C",
+  titleColor: "#073B5E",
+  bodyColor: "#3F5266",
+  borderRadiusPx: 16,
+  widthPx: {
+    mobile: 360,
+    tablet: 280,
+    /** Unused on desktop — cards fill equal grid columns. */
+    desktop: 257,
+  },
+} as const;
+
+/** Gaps between framework cards — mobile 16px; tablet 20px; desktop 24px. */
 export const HUMAN_CENTERED_AI_FRAMEWORK_CARD_GAP = {
   mobile: 16,
-  tablet: 32,
-  desktop: 32,
+  tablet: 20,
+  desktop: 24,
 } as const;
 
 /** Inset panel shell backgrounds (white panels inside full-bleed bands). */
@@ -191,16 +245,15 @@ export const PROBLEM_DEMO_CAROUSEL_IMAGE_DISPLAY = {
 /** Inset panel background for the problem demo carousel section. */
 export const PROBLEM_DEMO_PANEL_BACKGROUND = MY_CONTRIBUTIONS_CARD.background;
 
-/** Problem demo panel — copy column width when side-by-side at desktop (1260px+). */
+/** Problem demo panel — min copy column width when side-by-side at desktop (1024px+). */
 export const PROBLEM_DEMO_PANEL_COPY_WIDTH = {
-  desktop: 330,
+  desktop: 360,
 } as const;
 
-/** Gap between copy and carousel — stacked (vertical) vs side-by-side (horizontal at 1260px+). */
+/** Gap between copy and carousel — stacked (vertical) vs side-by-side (horizontal at desktop). */
 export const PROBLEM_DEMO_PANEL_GAP = {
   stacked: 64,
-  /** Fits copy (306) + carousel (450) inside 920px panel with md horizontal padding. */
-  sideBySide: 36,
+  sideBySide: 48,
 } as const;
 
 /**
@@ -255,19 +308,20 @@ export const PROBLEM_DEMO_CAROUSEL_CAPTION_FONT_SIZE = {
  * Side-by-side copy + carousel only at this viewport width and above
  * (matches `LAYOUT_DIMENSIONS.desktop.maxWidth`).
  */
-export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1260 as const;
+/** @deprecated Prefer `breakpointMediaQuery.desktopUp` — kept for any remaining references. */
+export const PROBLEM_DEMO_PANEL_SIDE_BY_SIDE_MIN_WIDTH_PX = 1024 as const;
 
 /** Copy column minimum width when side-by-side at the desktop band. */
-export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 295 as const;
+export const PROBLEM_DEMO_PANEL_COPY_MIN_WIDTH_PX = 320 as const;
 
 /**
  * Solution overview hi-fi mockup display (402:874 intrinsic aspect ratio).
- * Desktop width scaled +30% from legacy 211px frame; tablet +30% from 190px; mobile ~75%.
+ * Kept compact beside the narrative so the figure remains proportional to the copy column.
  */
 export const SOLUTION_OVERVIEW_IMAGE_DISPLAY = {
-  mobile: { width: 158, height: 343 },
-  tablet: { width: 284, height: 618 },
-  desktop: { width: 315, height: 685 },
+  mobile: { width: 165, height: 359 },
+  tablet: { width: 209, height: 454 },
+  desktop: { width: 220, height: 478 },
 } as const;
 
 /** Mobile experience mockup display — phone mockup row (402:874 hi-fi assets). */

@@ -1,16 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material/styles";
 
-import RecognitionDialog, {
-  recognitionAwardButtonSx,
-  recognitionLinkSx,
-} from "@/app/projects/finding-nemo/components/RecognitionDialog";
-
 import {
   HEADER_BAND_COLOR,
+  HEADER_BAND_IMAGE,
   PROJECT_HEADER_EXTRA_TOP_PADDING,
   PROJECT_HEADER_NAV_CLEARANCE,
 } from "@/app/projects/finding-nemo/layoutConfig";
@@ -135,43 +131,50 @@ function sceneStageInnerSx(): SxProps<Theme> {
   };
 }
 
-/** Fluid type — min at ~360px viewport, max at tablet/desktop; scales between breakpoints. */
+/** Responsive type — aligned above sectionTitle (28 / 32 / 36). */
 const HEADER_FONT_SIZE = {
-  title: "clamp(28px, calc(22px + 1.47vw), 34px)",
-  subtitle: "clamp(18px, calc(15.5px + 0.68vw), 20px)",
-  award: "clamp(16px, calc(13.5px + 0.68vw), 18px)",
+  title: {
+    mobile: "32px",
+    tablet: "40px",
+    desktop: "44px",
+  },
+  subtitle: {
+    mobile: "18px",
+    tablet: "20px",
+    desktop: "22px",
+  },
 } as const;
 
-export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
-  const [recognitionOpen, setRecognitionOpen] = useState(false);
+function headerTitleFontSizeSx() {
+  return {
+    fontSize: HEADER_FONT_SIZE.title.mobile,
+    [breakpointMediaQuery.tabletUp]: {
+      fontSize: HEADER_FONT_SIZE.title.tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: HEADER_FONT_SIZE.title.desktop,
+    },
+  } as const;
+}
 
+function headerSubtitleFontSizeSx() {
+  return {
+    fontSize: HEADER_FONT_SIZE.subtitle.mobile,
+    [breakpointMediaQuery.tabletUp]: {
+      fontSize: HEADER_FONT_SIZE.subtitle.tablet,
+    },
+    [breakpointMediaQuery.desktopUp]: {
+      fontSize: HEADER_FONT_SIZE.subtitle.desktop,
+    },
+  } as const;
+}
+
+export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
   useEffect(() => {
     onReady?.();
   }, [onReady]);
 
-  const { boundingBoxesOverlay, recognition } = data;
-
-  const { awardHeadlineLines, viewRecognitionLine } = useMemo(() => {
-    const headline: string[] = [];
-    let viewLine: string | undefined;
-
-    for (const line of data.awardLines) {
-      if (/view recognition/i.test(line)) {
-        viewLine = line;
-      } else {
-        headline.push(line);
-      }
-    }
-
-    return {
-      awardHeadlineLines: headline,
-      viewRecognitionLine: viewLine,
-    };
-  }, [data.awardLines]);
-
-  const recognitionDialogTitle = `🏆 ${awardHeadlineLines.join(" ")}`;
-  const openRecognition = () => setRecognitionOpen(true);
-  const closeRecognition = () => setRecognitionOpen(false);
+  const { boundingBoxesOverlay } = data;
 
   return (
     <Box
@@ -187,12 +190,35 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
         bgcolor: HEADER_BAND_COLOR,
       }}
     >
+      <Box
+        aria-hidden
+        sx={{
+          position: "absolute",
+          inset: 0,
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
+        <ProjectImage
+          objectPath={HEADER_BAND_IMAGE.objectPath}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          style={{
+            objectFit: "cover",
+            objectPosition: "center",
+          }}
+        />
+      </Box>
       <Stack
         direction="column"
         alignItems="center"
         justifyContent="space-between"
         spacing={{ xs: 5, lg: 8 }}
         sx={{
+          position: "relative",
+          zIndex: 1,
           maxWidth: 1260,
           minHeight: { xs: "auto", lg: 450 },
           mx: "auto",
@@ -236,11 +262,10 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
           <Typography
             component="h1"
             sx={{
-              color: "#022f5d",
-              fontSize: HEADER_FONT_SIZE.title,
+              color: "#FFFFFF",
+              ...headerTitleFontSizeSx(),
               lineHeight: 1.15,
-              fontWeight: 400,
-              WebkitTextStroke: "1px #000000",
+              fontWeight: 700,
             }}
           >
             {data.title}
@@ -251,110 +276,15 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                 key={line}
                 component="p"
                 sx={{
-                  color: "#02305d",
-                  fontSize: HEADER_FONT_SIZE.subtitle,
+                  color: "#FFFFFF",
+                  ...headerSubtitleFontSizeSx(),
                   lineHeight: 1.25,
-                  fontWeight: 500,
+                  fontWeight: 600,
                 }}
               >
                 {line}
               </Typography>
             ))}
-          </Stack>
-          <Stack spacing={0.25} alignItems="center" sx={{ pt: 1 }}>
-            {recognition ? (
-              <>
-                <Box
-                  component="button"
-                  type="button"
-                  onClick={openRecognition}
-                  aria-label="View datathon recognition details"
-                  sx={{
-                    ...recognitionAwardButtonSx,
-                    display: "inline-flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 0.25,
-                  }}
-                >
-                  <Typography
-                    component="span"
-                    sx={{
-                      color: "inherit",
-                      fontSize: HEADER_FONT_SIZE.award,
-                      lineHeight: 1.2,
-                      fontWeight: 500,
-                    }}
-                  >
-                    <Box component="span" sx={{ fontWeight: 700, mr: 0.5 }}>
-                      🏆
-                    </Box>
-                    {awardHeadlineLines[0]}
-                  </Typography>
-                  {awardHeadlineLines.slice(1).map((line) => (
-                    <Typography
-                      key={line}
-                      component="span"
-                      sx={{
-                        color: "inherit",
-                        fontSize: HEADER_FONT_SIZE.award,
-                        lineHeight: 1.2,
-                        fontWeight: 500,
-                      }}
-                    >
-                      {line}
-                    </Typography>
-                  ))}
-                </Box>
-                {viewRecognitionLine ? (
-                  <Box
-                    component="button"
-                    type="button"
-                    onClick={openRecognition}
-                    aria-label="View recognition"
-                    sx={{
-                      ...recognitionLinkSx,
-                      fontSize: HEADER_FONT_SIZE.award,
-                      lineHeight: 1.2,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {viewRecognitionLine}
-                  </Box>
-                ) : null}
-              </>
-            ) : (
-              <>
-                <Typography
-                  component="p"
-                  sx={{
-                    color: "#02305d",
-                    fontSize: HEADER_FONT_SIZE.award,
-                    lineHeight: 1.2,
-                    fontWeight: 500,
-                  }}
-                >
-                  <Box component="span" sx={{ fontWeight: 700, mr: 0.5 }}>
-                    🏆
-                  </Box>
-                  {data.awardLines[0]}
-                </Typography>
-                {data.awardLines.slice(1).map((line) => (
-                  <Typography
-                    key={line}
-                    component="p"
-                    sx={{
-                      color: "#02305d",
-                      fontSize: HEADER_FONT_SIZE.award,
-                      lineHeight: 1.2,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {line}
-                  </Typography>
-                ))}
-              </>
-            )}
           </Stack>
         </Stack>
         <Box sx={sceneStageShellSx()}>
@@ -421,20 +351,14 @@ export default function ProjectHeader({ data, onReady }: ProjectHeaderProps) {
                   display: "block",
                   width: "100%",
                   height: "auto",
+                  filter:
+                    "brightness(1.55) contrast(1.2) saturate(1.25) drop-shadow(0 0 6px rgba(120, 220, 255, 0.55))",
                 }}
               />
             </Box>
           </Box>
         </Box>
       </Stack>
-      {recognition ? (
-        <RecognitionDialog
-          open={recognitionOpen}
-          onClose={closeRecognition}
-          title={recognitionDialogTitle}
-          data={recognition}
-        />
-      ) : null}
     </Box>
   );
 }
