@@ -15,9 +15,40 @@ import {
 } from 'react-scroll-parallax';
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
 
-/** Intrinsic dimensions of `CrowdsWaiting-Desktop.png` in Storage. */
+/** Intrinsic dimensions of `ARMagicToursCrowsImage.png` in Storage. */
 const CROWD_IMAGE_INTRINSIC_WIDTH = 1628;
 const CROWD_IMAGE_INTRINSIC_HEIGHT = 875;
+
+/** Tint applied only to `cloud-1.png` (desktop/tablet layer 1). */
+const CLOUD_1_OBJECT_PATH = PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer1;
+const CLOUD_1_TINT_COLOR = '#EBF0F8';
+const CLOUD_1_RECOLOR_FILTER_ID = 'ar-story-teller-cloud-1-recolor';
+
+/** SVG filter: replace RGB with `#EBF0F8`, keep the PNG’s alpha (no overlay on sibling layers). */
+function Cloud1RecolorFilter() {
+  return (
+    <svg
+      width={0}
+      height={0}
+      aria-hidden
+      style={{ position: 'absolute', overflow: 'hidden' }}
+    >
+      <defs>
+        <filter
+          id={CLOUD_1_RECOLOR_FILTER_ID}
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodColor={CLOUD_1_TINT_COLOR} result="flood" />
+          <feComposite in="flood" in2="SourceAlpha" operator="in" />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
 
 function useReportImageReady(
   containerRef: RefObject<HTMLDivElement | null>,
@@ -105,6 +136,8 @@ function ParallaxCloudLayer({
   const layerRef = useRef<HTMLDivElement>(null);
   useReportImageReady(layerRef, onLayerReady, objectPath);
 
+  const isCloud1 = objectPath === CLOUD_1_OBJECT_PATH;
+
   /* Inline top/height so extra lift always wins (CSS var-only overrides were flaky in some cases). */
   const shiftStyle: CSSProperties | undefined =
     layerLiftPx !== 0
@@ -126,6 +159,8 @@ function ParallaxCloudLayer({
     if (objectFit) style.objectFit = objectFit;
     if (objectPosition) style.objectPosition = objectPosition;
     if (initialTop) style.marginTop = initialTop;
+    /* SVG filter recolors only this image’s pixels (white → #EBF0F8); no overlay that can cover siblings. */
+    if (isCloud1) style.filter = `url(#${CLOUD_1_RECOLOR_FILTER_ID})`;
     return Object.keys(style).length > 0 ? style : undefined;
   })();
 
@@ -393,13 +428,19 @@ export function ProjectHeader({ onAllLayersReady }: ProjectHeaderProps) {
 
   const onLayerReady = useHeaderLayerLoadTracker(onAllLayersReady, viewportKey);
 
-  if (screenDevice.isMobile) {
-    return <ProjectHeaderMobile onLayerReady={onLayerReady} />;
-  }
+  const header = screenDevice.isMobile ? (
+    <ProjectHeaderMobile onLayerReady={onLayerReady} />
+  ) : screenDevice.isTablet ? (
+    <ProjectHeaderTablet onLayerReady={onLayerReady} />
+  ) : (
+    <ProjectHeaderDesktop onLayerReady={onLayerReady} />
+  );
 
-  if (screenDevice.isTablet) {
-    return <ProjectHeaderTablet onLayerReady={onLayerReady} />;
-  }
-
-  return <ProjectHeaderDesktop onLayerReady={onLayerReady} />;
+  return (
+    <>
+      {/* Filter defs for `cloud-1.png` recolor (desktop/tablet only; harmless if unused). */}
+      <Cloud1RecolorFilter />
+      {header}
+    </>
+  );
 }
