@@ -30,6 +30,8 @@ type StageInfoCardsRowProps = {
   widthPx?: StageInfoCardWidths;
   /** Keep cards centered at all breakpoints (matches Personas row). */
   centered?: boolean;
+  /** Reserve a consistent number of title lines across every card. */
+  titleMinLines?: number;
   sx?: SxProps<Theme>;
 };
 
@@ -85,6 +87,7 @@ export default function StageInfoCardsRow({
   titleColor = IDENTIFY_AI_OPPORTUNITY_CARD.opportunityTitleColor,
   widthPx = IDENTIFY_AI_OPPORTUNITY_CARD.widthPx,
   centered = false,
+  titleMinLines,
   sx,
 }: StageInfoCardsRowProps) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -156,7 +159,12 @@ export default function StageInfoCardsRow({
                   lineHeight: 1.2,
                   m: 0,
                 }),
-                { color: titleColor },
+                {
+                  color: titleColor,
+                  minHeight: titleMinLines
+                    ? `${titleMinLines * 1.2}em`
+                    : undefined,
+                },
               ]}
             >
               {card.title}
