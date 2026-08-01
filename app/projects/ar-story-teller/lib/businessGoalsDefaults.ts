@@ -1,23 +1,31 @@
-/** Default Business Goals rows — matches design spec when Firestore has no `items`. */
+/** Header copy for the Goals & Outcomes band. */
+export const DEFAULT_BUSINESS_GOALS_COPY = {
+  eyebrow: "Goals & Outcomes",
+  title: "Business goals, by design",
+  description:
+    "Each business goal was framed around the guest and operational outcomes the experience was designed to influence.",
+} as const;
+
+/** Default Business Goals cards — used when Firestore has no `items`. */
 export const DEFAULT_BUSINESS_GOAL_ITEMS = [
   {
-    title: "Extend Storytelling",
+    title: "Guest Engagement",
     description:
-      "Transform the surrounding environment into part of the attraction experience.",
+      "Increase dwell time and positive sentiment by turning wait time into interactive, on-brand play.",
   },
   {
-    title: "Increase Guest Engagement",
+    title: "Revenue Generation",
     description:
-      "Turn unavoidable wait times into moments of discovery, exploration, and play.",
+      "Create opportunities for exclusive in-app content and collectible experiences that complement the visit.",
   },
   {
-    title: "Build a Scalable Platform",
+    title: "Queue Optimization",
     description:
-      "Create a reusable AR framework adaptable to multiple attractions and use cases.",
+      "Distribute foot traffic more evenly across attractions through gamified exploration.",
   },
   {
-    title: "Support Sustainable Innovation",
+    title: "Data-Driven Insights",
     description:
-      "Deliver immersive experiences that balance operational efficiency with Disney's commitment to exceptional guest experiences.",
+      "Better understand guest movement patterns to inform operations and capacity planning.",
   },
 ] as const;
