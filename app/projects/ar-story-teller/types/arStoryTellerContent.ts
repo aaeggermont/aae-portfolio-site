@@ -18,14 +18,20 @@ export type SolutionBlock = OverviewBlock & {
 export type TeamMember = {
   name: string;
   role: string;
+  /** Optional short contribution line under the role. */
+  description?: string;
 };
 
 export type TeamData = {
   title: string;
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
+  /** Optional intro under the title. */
+  description?: string;
   members: TeamMember[];
 };
 
-/** Firestore `content.businessGoals` — two-column goal rows below overview. */
+/** Firestore `content.businessGoals` — goals band below overview. */
 export type BusinessGoalItem = {
   title: string;
   description: string;
@@ -33,7 +39,11 @@ export type BusinessGoalItem = {
 
 export type BusinessGoalsData = {
   title: string;
-  /** Two-column rows (title | description). Falls back to defaults when omitted. */
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
+  /** Optional intro under the title. */
+  description?: string;
+  /** Goal cards (title + description). Falls back to defaults when omitted. */
   items?: BusinessGoalItem[];
   /** @deprecated Legacy intro paragraph — no longer rendered. */
   intro?: string;
