@@ -10,7 +10,8 @@
     background-image: var(--overview-bg-image);
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: contain;
+    /* 20% smaller than full `contain` fit within the block. */
+    background-size: 60%;
 }
 
 .overview-paragraph-block {
@@ -19,8 +20,8 @@
 
 @media #{$desktop} {
     .overview-paragraph-block--desktop {
-        margin-top: 200px;
-        /* Room for the Ferris wheel + crowd silhouette at `contain` scale. */
+        margin-top: 5px;
+        /* Room for the Ferris wheel + crowd silhouette at 80% background scale. */
         min-height: clamp(480px, 52vw, 720px);
     }
 
