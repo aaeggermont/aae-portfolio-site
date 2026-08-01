@@ -1,89 +1,62 @@
-import { Box, Stack, Typography } from "@mui/material";
-import { SectionTitle } from "../SectionTitle";
-import { PANEL_BLOCK_PADDINGS } from "../../layoutConfig";
-import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
+import { Box, Typography } from "@mui/material";
+
 import type {
   BusinessGoalItem,
   BusinessGoalsData,
 } from "@/app/projects/ar-story-teller/types/arStoryTellerContent";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import {
   DEFAULT_BUSINESS_GOAL_ITEMS,
+  DEFAULT_BUSINESS_GOALS_COPY,
 } from "../../lib/businessGoalsDefaults";
-import { overviewNarrativeBlockSx } from "../../overviewNarrativeLayout";
-import { bodyTypeSx } from "../../typography";
-import styles from "../../ArStoryTeller.module.scss";
+import { bodyTypeSx, titleTypeSx } from "../../typography";
+import styles from "./BusinessGoals.module.scss";
 
-const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
-const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
+const DESKTOP_UP_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_UP_MQ = breakpointMediaQuery.tabletUp;
 
-const panelBodySx = bodyTypeSx("panelBody");
+const CARD_TITLE_COLOR = "#E8910F";
+const BAND_BG = "#F4F6FA";
 
 interface BusinessGoalsProps {
   data: BusinessGoalsData;
 }
 
-function goalRowKey(item: BusinessGoalItem) {
+function goalCardKey(item: BusinessGoalItem) {
   return item.title;
 }
 
-function GoalRowDesktop({ item }: { item: BusinessGoalItem }) {
+function GoalCard({ item }: { item: BusinessGoalItem }) {
   return (
-    <Stack
-      direction="row"
-      justifyContent="center"
-      alignItems="flex-start"
-      sx={{ width: "100%" }}
+    <Box
+      className={styles.card}
+      sx={{
+        bgcolor: "#ffffff",
+        borderRadius: { xs: 2, md: 3 },
+        p: { xs: 2.5, md: 3.5 },
+        height: "100%",
+        boxSizing: "border-box",
+      }}
     >
-      <Box sx={{ width: "40%", flexShrink: 0, pr: { xs: 1, md: 2 } }}>
-        <Typography
-          component="p"
-          sx={{
-            m: 0,
-            textAlign: "right",
-            ...panelBodySx,
-            fontWeight: 600,
-          }}
-        >
-          {item.title}
-        </Typography>
-      </Box>
-      <Box sx={{ width: "40%", flexShrink: 0, pl: { xs: 1, md: 2 } }}>
-        <Typography
-          component="p"
-          sx={{
-            m: 0,
-            textAlign: "left",
-            ...panelBodySx,
-          }}
-        >
-          {item.description}
-        </Typography>
-      </Box>
-    </Stack>
-  );
-}
-
-function GoalRowMobile({ item }: { item: BusinessGoalItem }) {
-  return (
-    <Box sx={{ width: "100%", textAlign: "center" }}>
       <Typography
-        component="p"
-        sx={{
+        component="h3"
+        sx={titleTypeSx("cardTitle", {
           m: 0,
-          ...panelBodySx,
-          fontWeight: 600,
-        }}
+          mb: 1.25,
+          color: CARD_TITLE_COLOR,
+          fontWeight: 700,
+          textAlign: "left",
+        })}
       >
         {item.title}
       </Typography>
       <Typography
         component="p"
-        sx={{
+        sx={bodyTypeSx("panelBody", {
           m: 0,
-          mt: 0.5,
-          ...panelBodySx,
-        }}
+          textAlign: "left",
+          color: "#3F5266",
+        })}
       >
         {item.description}
       </Typography>
@@ -92,64 +65,92 @@ function GoalRowMobile({ item }: { item: BusinessGoalItem }) {
 }
 
 const BusinessGoals = ({ data }: BusinessGoalsProps) => {
-  const { title, items } = data;
   const headingId = "business-goals-heading";
-  const goalItems =
-    items && items.length > 0 ? items : [...DEFAULT_BUSINESS_GOAL_ITEMS];
+  const eyebrow = data.eyebrow?.trim() || DEFAULT_BUSINESS_GOALS_COPY.eyebrow;
+  const rawTitle = data.title?.trim() || "";
+  const title =
+    !rawTitle || rawTitle === "Business Goals." || rawTitle === "Business Goals"
+      ? DEFAULT_BUSINESS_GOALS_COPY.title
+      : rawTitle;
+  const description =
+    data.description?.trim() || DEFAULT_BUSINESS_GOALS_COPY.description;
+  const rawItems = data.items ?? [];
+  const looksLegacy =
+    rawItems.length === 0 ||
+    rawItems.some((item) => item.title === "Extend Storytelling");
+  const goalItems = looksLegacy ? [...DEFAULT_BUSINESS_GOAL_ITEMS] : rawItems;
 
   return (
     <Box
       component="section"
       aria-labelledby={headingId}
-      className={styles['panel-subsection']}
-      sx={overviewNarrativeBlockSx}
+      className={styles.band}
+      sx={{ bgcolor: BAND_BG }}
     >
-      <SectionTitle id={headingId} title={title} />
-      <Box
-        sx={{
-          bgcolor: "#f4f5f6",
-          borderRadius: { xs: 4, md: "30px" },
-          overflow: "hidden",
-          px: PANEL_BLOCK_PADDINGS.x.mobile,
-          py: PANEL_BLOCK_PADDINGS.y.mobile,
-          [TABLET_STACKED_MQ]: {
-            px: PANEL_BLOCK_PADDINGS.x.tablet,
-            py: PANEL_BLOCK_PADDINGS.y.tablet,
-          },
-          [DESKTOP_BREAKPOINT_MQ]: {
-            px: PANEL_BLOCK_PADDINGS.x.desktop,
-            py: PANEL_BLOCK_PADDINGS.y.desktop,
-          },
-          width: "100%",
-        }}
-      >
-        <Stack
-          spacing={3}
-          alignItems="center"
+      <Box className={styles.inner}>
+        <Box
           sx={{
             display: "flex",
-            width: "100%",
-            [TABLET_UP_MQ]: { display: "none" },
+            flexDirection: "column",
+            alignItems: "flex-start",
+            gap: 1.5,
+            mb: { xs: 3, md: 4, lg: 5 },
+            maxWidth: { xs: "100%", md: "52rem" },
           }}
         >
-          {goalItems.map((item) => (
-            <GoalRowMobile key={goalRowKey(item)} item={item} />
-          ))}
-        </Stack>
+          <Typography
+            component="p"
+            sx={titleTypeSx("eyebrow", {
+              m: 0,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              color: "#1B3C90",
+              textAlign: "left",
+            })}
+          >
+            {eyebrow}
+          </Typography>
+          <Typography
+            id={headingId}
+            component="h2"
+            sx={titleTypeSx("sectionTitle", {
+              m: 0,
+              textAlign: "left",
+            })}
+          >
+            {title}
+          </Typography>
+          <Typography
+            component="p"
+            sx={bodyTypeSx("bodyText", {
+              m: 0,
+              textAlign: "left",
+              color: "#3F5266",
+            })}
+          >
+            {description}
+          </Typography>
+        </Box>
 
-        <Stack
-          spacing={2.5}
+        <Box
+          className={styles.grid}
           sx={{
-            display: "none",
+            display: "grid",
+            gridTemplateColumns: "1fr",
+            gap: { xs: 2, md: 2.5 },
             width: "100%",
-            mx: "auto",
-            [TABLET_UP_MQ]: { display: "flex" },
+            [TABLET_UP_MQ]: {
+              gridTemplateColumns: "1fr 1fr",
+            },
+            [DESKTOP_UP_MQ]: {
+              gap: 3,
+            },
           }}
         >
           {goalItems.map((item) => (
-            <GoalRowDesktop key={goalRowKey(item)} item={item} />
+            <GoalCard key={goalCardKey(item)} item={item} />
           ))}
-        </Stack>
+        </Box>
       </Box>
     </Box>
   );
