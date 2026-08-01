@@ -2,77 +2,182 @@
 
 /* Uses global `--panel-section-gap` from `layoutConfig` / `ArStoryTellerPage`. */
 
-/* Case study section banner.
-
-   Stays inside `.project-content` at all breakpoints so it inherits the same horizontal
-   gutters as the rest of the case study (`--layout-margin`: 80px on desktop). The image
-   is capped at usable content width (1100px — `PANEL_CONTENT_MAX_WIDTH_PX`).
-
-   `position: relative` makes the wrapper the containing block for the title overlay. */
+/*
+ * Full-bleed night-shot banner. Side rails are a single strip per edge
+ * (dark → light → dark). Solid `#111A27` behind the image so PNG transparency
+ * on the left/right does not read as a second bar.
+ */
 .case-study-banner {
-    position: relative;
-    width: 100%;
+    --case-study-rail-dark: #111a27;
+    --case-study-rail-width: clamp(2.5rem, 7vw, 6.5rem);
+
     box-sizing: border-box;
+    position: relative;
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    min-height: 320px;
+    background-color: var(--case-study-rail-dark);
 }
 
-/* Image fills the content column, capped at 1100px. Keep `sizes` on `<ProjectImage>` in sync. */
+@media screen and (min-width: $tablet-min) {
+    .case-study-banner {
+        aspect-ratio: 5 / 3;
+        min-height: 420px;
+    }
+}
+
+@media screen and (min-width: $desktop-min) {
+    .case-study-banner {
+        aspect-ratio: 2 / 1;
+        min-height: 500px;
+        max-height: 680px;
+    }
+}
+
 .case-study-banner__image {
-    display: block;
-    width: 100%;
-    max-width: var(--case-study-banner-max-width, 1100px);
-    height: auto;
+    object-fit: cover;
+    object-position: center 20%;
 }
 
-/* Title overlay — anchored to the image. Shares the image width cap; text is left-aligned
-   with a small horizontal inset so it doesn't sit flush against the image's left edge.
-
-   Hidden until React adds the `--loaded` modifier (after the image's `load` event fires),
-   then fades in. `pointer-events: none` so the overlay never blocks interactions on the
-   image. */
-.case-study-banner__title-overlay {
+/* One rail per viewport edge — covers transparent PNG gutters. */
+.case-study-banner__rail {
     position: absolute;
-    top: 12%;
+    top: 0;
+    bottom: 0;
+    z-index: 3;
+    width: var(--case-study-rail-width);
+    pointer-events: none;
+    background: linear-gradient(
+        to bottom,
+        var(--case-study-rail-dark) 0%,
+        #dfe6f0 42%,
+        #ffffff 50%,
+        #dfe6f0 58%,
+        var(--case-study-rail-dark) 100%
+    );
+}
+
+.case-study-banner__rail--left {
+    left: 0;
+}
+
+.case-study-banner__rail--right {
+    right: 0;
+}
+
+/* Bottom-up navy scrim for title legibility. */
+.case-study-banner__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        to top,
+        rgba(17, 26, 39, 0.94) 0%,
+        rgba(17, 26, 39, 0.72) 28%,
+        rgba(17, 26, 39, 0.2) 55%,
+        rgba(17, 26, 39, 0) 78%
+    );
+}
+
+.case-study-banner__content {
+    position: absolute;
+    z-index: 2;
     left: 0;
     right: 0;
-    width: 100%;
-    max-width: var(--case-study-banner-max-width, 1100px);
+    bottom: 0;
     box-sizing: border-box;
-    padding-left: clamp(1rem, 4vw, 2rem);
-    padding-right: clamp(1rem, 4vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: var(--layout-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: max(var(--layout-margin), var(--case-study-rail-width));
+    padding-right: max(var(--layout-margin), var(--case-study-rail-width));
+    padding-bottom: clamp(1.25rem, 4vw, 2.5rem);
     pointer-events: none;
-    text-align: left;
-    opacity: 0;
-    transition: opacity 1800ms ease-out;
 }
 
-.case-study-banner__title-overlay--loaded {
-    opacity: 1;
+.case-study-banner__eyebrow {
+    margin: 0;
+    font-family: typo.$ar-st-title-font;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #ffbb00;
 }
 
-/* Dedicated banner title styling; intentionally separate from the shared `BlockTitle`. */
 .case-study-banner__title {
     margin: 0;
     padding: 0;
+    max-width: 18ch;
     font-family: typo.$ar-st-title-font;
-    font-weight: 600;
-    color: typo.$ar-st-hero-title-color;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #ffffff;
+}
+
+.case-study-banner__badge {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 0.25rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background-color: #f3ebe0;
+    font-family: typo.$ar-st-title-font;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #111a27;
 }
 
 @media #{$mobile} {
     .case-study-banner__title {
-        font-size: 20px;
+        font-size: 26px;
+        max-width: 14ch;
     }
 }
 
 @media #{$tablet} {
+    .case-study-banner__eyebrow {
+        font-size: 14px;
+    }
+
     .case-study-banner__title {
-        font-size: 24px;
+        font-size: 34px;
+        max-width: 16ch;
+    }
+
+    .case-study-banner__badge {
+        font-size: 13px;
+        padding: 0.45rem 1rem;
     }
 }
 
 @media #{$desktop} {
+    .case-study-banner__eyebrow {
+        font-size: 15px;
+    }
+
     .case-study-banner__title {
-        font-size: 28px;
+        font-size: 44px;
+        max-width: 16ch;
+    }
+
+    .case-study-banner__badge {
+        font-size: 13px;
+        padding: 0.5rem 1.1rem;
+    }
+
+    .case-study-banner__content {
+        gap: 1rem;
     }
 }
