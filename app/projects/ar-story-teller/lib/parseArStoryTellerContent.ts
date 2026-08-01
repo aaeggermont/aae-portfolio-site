@@ -78,6 +78,14 @@ function parseBusinessGoalsData(
     title: requireString(value.title, `${path}.title`),
   };
 
+  if (value.eyebrow !== undefined) {
+    data.eyebrow = requireString(value.eyebrow, `${path}.eyebrow`);
+  }
+
+  if (value.description !== undefined) {
+    data.description = requireString(value.description, `${path}.description`);
+  }
+
   if (value.items !== undefined) {
     if (!Array.isArray(value.items)) {
       throw new Error(`Invalid ${path}.items: expected array`);
@@ -110,16 +118,33 @@ function parseTeamData(value: unknown, path: string): TeamData {
     if (!isRecord(member)) {
       throw new Error(`Invalid ${path}.members[${index}]: expected object`);
     }
-    return {
+    const parsed: TeamMember = {
       name: requireString(member.name, `${path}.members[${index}].name`),
       role: requireString(member.role, `${path}.members[${index}].role`),
     };
+    if (member.description !== undefined) {
+      parsed.description = requireString(
+        member.description,
+        `${path}.members[${index}].description`,
+      );
+    }
+    return parsed;
   });
 
-  return {
+  const data: TeamData = {
     title: requireString(value.title, `${path}.title`),
     members,
   };
+
+  if (value.eyebrow !== undefined) {
+    data.eyebrow = requireString(value.eyebrow, `${path}.eyebrow`);
+  }
+
+  if (value.description !== undefined) {
+    data.description = requireString(value.description, `${path}.description`);
+  }
+
+  return data;
 }
 
 function parseARAsNarrativeTool(value: unknown, path: string): ARAsNarrativeTool {
