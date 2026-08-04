@@ -234,16 +234,8 @@ function BannerTitles() {
           data-aos-delay="100"
           className="banner-text-subtitle"
         >
-          Exploring storytelling throught computer vision, machine learning and
-          Augmented Reality at Walt Disney World.
-        </p>
-        <p
-          data-aos="fade-up"
-          data-aos-delay="200"
-          className="banner-text-subtitle"
-        >
-          A graduate research project at University of Washington Human
-          Centered Design & Engineering.
+          Turning Walt Disney World theme park wait time into an interactive,
+          on-brand AR quest.
         </p>
       </div>
     </div>
@@ -288,7 +280,7 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
             speed={12}
             onLayerReady={onLayerReady}
             objectFit="contain"
-            objectPosition="center 15%"
+            objectPosition="center 22%"
           />
           <ParallaxCloudLayer
             objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer3}
