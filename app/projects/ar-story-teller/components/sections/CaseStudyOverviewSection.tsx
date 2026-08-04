@@ -102,7 +102,6 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
 
                 {notificationsAttrac ? (
                     <div className={styles['panel-subsection']}>
-                        <SectionSubTitle title={notificationsAttrac.title} />
                         <ContextualNotifications
                             title={notificationsAttrac.title}
                             paragraphs={notificationsAttrac.paragraphs}
