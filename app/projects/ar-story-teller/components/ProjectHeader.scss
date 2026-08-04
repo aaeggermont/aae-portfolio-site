@@ -136,7 +136,7 @@
 
     .storyteller-banner {
         /* Tweak vertical offset of hero copy; does not use `position: relative`. */
-        --banner-titles-overlay-top: -45%;
+        --banner-titles-overlay-top: -60%;
 
         .banner-titles {
             top: var(--banner-titles-overlay-top);
@@ -161,7 +161,7 @@
                 font-family: typo.$ar-st-title-font;
                 font-size: 24px;
                 color: typo.$ar-st-hero-subtitle-color;
-                font-weight: 550;
+                font-weight: 500;
                 max-width: 65%;
             }
         }
@@ -186,7 +186,7 @@
     }
 
     .storyteller-banner {
-        --banner-titles-overlay-top: -40%;
+        --banner-titles-overlay-top: -35%;
 
         .banner-titles {
             top: var(--banner-titles-overlay-top);
