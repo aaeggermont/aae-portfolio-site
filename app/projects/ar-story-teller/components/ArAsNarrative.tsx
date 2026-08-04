@@ -58,7 +58,7 @@ const ArAsNarrative = ({
     <Box
       component="section"
       sx={{
-        bgcolor: "#f4f5f6",
+        bgcolor: "#F5F6FA",
         borderRadius: { xs: 4, md: "30px" },
         overflow: "hidden",
         px: PANEL_BLOCK_PADDINGS.x.mobile,
