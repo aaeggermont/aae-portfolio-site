@@ -3,7 +3,6 @@ import ParagraphBlock from '../components/ParagraphBlock';
 import ParagraphImg from '../components/ParagraphImg';
 import styles from '../ArStoryTeller.module.scss';
 import dsSectionStyles from './DesignSystemSection.module.scss';
-import { SectionTitle } from '../components/SectionTitle';
 import { SectionSubTitle } from '../components/SectionSubTitle';
 import { PanelSubTitle } from '../components/PanelSubTitle';
 import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCarousel';
@@ -19,10 +18,17 @@ import { UsabilityFindingsInsights } from '../components/UsabilityFindingsInsigh
 import type { DesignSystemSectionData } from '../types/arStoryTellerContent';
 import type { StoryboardSlide } from '../types/designSystemTypes';
 import { resolveSoftwarePrototypesAccordionSections } from '../lib/softwarePrototypesAccordion';
+import { Box, Typography } from '@mui/material';
+import { titleTypeSx } from '../typography';
 
 interface DesignSystemSectionProps {
     data: DesignSystemSectionData;
 }
+
+const DESIGN_SYSTEM_EYEBROW = 'Methodology';
+const DESIGN_SYSTEM_TITLE = 'Human-Centered XR Design';
+const EYEBROW_COLOR = '#1B3C90';
+const TITLE_COLOR = '#111A27';
 
 export function DesignSystemSection({ data }: DesignSystemSectionProps) {
     const { designSystem } = data.caseStudy;
@@ -60,16 +66,46 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         },
     }));
 
+    const headingId = 'design-system-heading';
+
     return (
-        <section className={styles['project-container']}>
+        <section className={styles['project-container']} aria-labelledby={headingId}>
             <div className={styles['panel-section-stack']}>
                 <div className={styles['content-group']}>
-                    <SectionTitle title={designSystem.title} />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'flex-start',
+                            gap: 1.5,
+                        }}
+                    >
+                        <Typography
+                            component="p"
+                            sx={titleTypeSx('eyebrow', {
+                                m: 0,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.06em',
+                                color: EYEBROW_COLOR,
+                                textAlign: 'left',
+                            })}
+                        >
+                            {DESIGN_SYSTEM_EYEBROW}
+                        </Typography>
+                        <Typography
+                            id={headingId}
+                            component="h2"
+                            sx={titleTypeSx('sectionTitle', {
+                                m: 0,
+                                color: TITLE_COLOR,
+                                textAlign: 'left',
+                            })}
+                        >
+                            {DESIGN_SYSTEM_TITLE}
+                        </Typography>
+                    </Box>
                     <ParagraphBlock
                         paragraphs={designSystem.paragraphs}
-                        data-aos="fade-up"
-                        data-aos-duration="1000"
-                        data-aos-anchor-placement="top-center"
                     />
                 </div>
                 <ParagraphImg
@@ -77,9 +113,6 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     alt={designSystem.alt}
                     title={designSystem.imageTitle}
                     description={designSystem.imageDescription}
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                    data-aos-anchor-placement="top-center"
                 />
             </div>
 
