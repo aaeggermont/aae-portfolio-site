@@ -1,13 +1,17 @@
 /* Magic Experiences row layout — vertical rhythm via `.panel-section-stack` on the section.
    Horizontal mockup gaps are layout-specific and stay local below. */
 
+.magic-experiences__header {
+    width: 100%;
+}
+
 @media #{$desktop} {
     .magic-experiences__row {
         display: flex;
         flex-direction: row;
         align-items: flex-start;
         justify-content: center;
-        gap: 2rem;
+        gap: 1.25rem;
         width: 100%;
         margin-left: auto;
         margin-right: auto;
@@ -18,10 +22,19 @@
         flex: 1 1 0;
         padding-top: 0;
         margin: 0;
+        align-items: center;
+        text-align: center;
+
+        .title,
+        .description,
+        .tap-hint {
+            text-align: center;
+        }
     }
 
     .magic-experiences__row .ar-mobile-screen-container__image {
-        width: 60% !important;
+        width: 90% !important;
+        margin-inline: auto;
     }
 }
 
@@ -41,11 +54,23 @@
     .magic-experiences__row .ar-mobile-screen-container {
         width: 100%;
         margin: 0;
+        align-items: center;
         justify-content: flex-start;
+        text-align: center;
+
+        .title,
+        .description,
+        .tap-hint {
+            text-align: center;
+        }
     }
 
     .magic-experiences__row .ar-mobile-screen-container__image {
-        width: 60% !important;
+        /* Match desktop phone size: desktop is 90% of a 1/4 column ≈ 22.5% of the
+           row; a tablet 1/2 column needs ~45% width for the same absolute scale.
+           Bumped ~20% for a slightly larger tablet presence. */
+        width: 54% !important;
+        margin-inline: auto;
     }
 }
 
@@ -71,6 +96,19 @@
         flex: 0 0 100%;
         scroll-snap-align: center;
         margin: 0;
+        align-items: center;
+        text-align: center;
+
+        .title,
+        .description,
+        .tap-hint {
+            text-align: center;
+        }
+    }
+
+    .magic-experiences__row .ar-mobile-screen-container__image {
+        width: 48% !important;
+        margin-inline: auto;
     }
 
     .magic-experiences__nav {
