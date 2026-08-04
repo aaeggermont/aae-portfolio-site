@@ -190,12 +190,19 @@ function parseMagicExperience(value: unknown, path: string): MagicExperience {
   if (!isRecord(value)) {
     throw new Error(`Invalid ${path}: expected object`);
   }
-  return {
+  const experience: MagicExperience = {
     title: requireString(value.title, `${path}.title`),
     alt: requireString(value.alt, `${path}.alt`),
     description: requireString(value.description, `${path}.description`),
     images: parseStringArray(value.images, `${path}.images`),
   };
+  if (value.longDescription !== undefined) {
+    experience.longDescription = requireString(
+      value.longDescription,
+      `${path}.longDescription`,
+    );
+  }
+  return experience;
 }
 
 function parseMagicExperiences(value: unknown, path: string): MagicExperiences {
@@ -205,13 +212,17 @@ function parseMagicExperiences(value: unknown, path: string): MagicExperiences {
   if (!Array.isArray(value.experiences)) {
     throw new Error(`Invalid ${path}.experiences: expected array`);
   }
-  return {
+  const experiences: MagicExperiences = {
     title: requireString(value.title, `${path}.title`),
     paragraphs: parseStringArray(value.paragraphs, `${path}.paragraphs`),
     experiences: value.experiences.map((item, index) =>
       parseMagicExperience(item, `${path}.experiences[${index}]`),
     ),
   };
+  if (value.eyebrow !== undefined) {
+    experiences.eyebrow = requireString(value.eyebrow, `${path}.eyebrow`);
+  }
+  return experiences;
 }
 
 function parseProjectOverview(
