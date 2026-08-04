@@ -87,13 +87,18 @@ export type NotificationsAttrac = {
 export type MagicExperience = {
   title: string;
   alt: string;
+  /** Short card footer copy. */
   description: string;
+  /** Optional long copy for the lightbox sidebar; falls back to `description`. */
+  longDescription?: string;
   images: string[];
 };
 
 export type MagicExperiences = {
   title: string;
   paragraphs: string[];
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
   experiences: MagicExperience[];
 };
 
