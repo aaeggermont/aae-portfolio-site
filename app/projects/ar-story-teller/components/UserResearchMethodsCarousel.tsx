@@ -4,8 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Box, IconButton, Stack } from "@mui/material";
-import UserResearchMethodCard from "./UserResearchMethodCard";
+import UserResearchMethodCard, {
+  RESEARCH_METHOD_CARD_WIDTH_PX,
+} from "./UserResearchMethodCard";
 import type { ResearchMethodCardData } from "../types/researchMethodCard";
+import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 
 /** Matches `ContextualNotifications` — shared prev/next control styling. */
 const navigationButtons = [
@@ -29,7 +32,7 @@ export interface UserResearchMethodsCarouselProps {
 
 function readScrollStepPx(track: HTMLDivElement): number {
   const first = track.querySelector<HTMLElement>("[data-carousel-card]");
-  if (!first) return 400;
+  if (!first) return RESEARCH_METHOD_CARD_WIDTH_PX;
   const w = first.getBoundingClientRect().width;
   const styles = getComputedStyle(track);
   const raw = styles.columnGap || styles.gap || "0";
@@ -128,7 +131,7 @@ export function UserResearchMethodsCarousel({
             flexDirection: "row",
             flexWrap: "nowrap",
             alignItems: "stretch",
-            gap: { xs: 2, sm: 2, md: 3 },
+            gap: 2,
             overflowX: "auto",
             overflowY: "hidden",
             width: "100%",
@@ -144,6 +147,9 @@ export function UserResearchMethodsCarousel({
             pb: 0.5,
             paddingInline: "var(--guest-needs-content-gutter, var(--layout-margin))",
             scrollPaddingInline: "var(--guest-needs-content-gutter, var(--layout-margin))",
+            [breakpointMediaQuery.tabletUp]: {
+              gap: 3,
+            },
           }}
         >
           {methods.map((method, index) => (
@@ -152,14 +158,16 @@ export function UserResearchMethodsCarousel({
               data-carousel-card
               sx={{
                 flex: "0 0 auto",
-                width: {
-                  xs: "calc(100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)))",
-                  sm: "calc(100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)))",
-                  md: "calc((100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)) - 48px) / 3)",
-                },
+                // Mobile: one card spanning the content column.
+                width:
+                  "calc(100vw - 2 * var(--guest-needs-content-gutter, var(--layout-margin)))",
                 maxWidth: "100%",
                 scrollSnapAlign: "start",
                 display: "flex",
+                // Tablet + desktop share a fixed card footprint.
+                [breakpointMediaQuery.tabletUp]: {
+                  width: RESEARCH_METHOD_CARD_WIDTH_PX,
+                },
               }}
             >
               <UserResearchMethodCard method={method} />
