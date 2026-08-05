@@ -2,15 +2,8 @@
 
 /* Uses global `--panel-section-gap` from `layoutConfig` / `ArStoryTellerPage`. */
 
-/*
- * Full-bleed night-shot banner. Side rails are a single strip per edge
- * (dark → light → dark). Solid `#111A27` behind the image so PNG transparency
- * on the left/right does not read as a second bar.
- */
+/* Full-bleed night-shot banner — image runs edge to edge. */
 .case-study-banner {
-    --case-study-rail-dark: #111a27;
-    --case-study-rail-width: clamp(2.5rem, 7vw, 6.5rem);
-
     box-sizing: border-box;
     position: relative;
     width: 100vw;
@@ -19,7 +12,7 @@
     overflow: hidden;
     aspect-ratio: 4 / 5;
     min-height: 320px;
-    background-color: var(--case-study-rail-dark);
+    background-color: #111a27;
 }
 
 @media screen and (min-width: $tablet-min) {
@@ -40,32 +33,6 @@
 .case-study-banner__image {
     object-fit: cover;
     object-position: center 20%;
-}
-
-/* One rail per viewport edge — covers transparent PNG gutters. */
-.case-study-banner__rail {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 3;
-    width: var(--case-study-rail-width);
-    pointer-events: none;
-    background: linear-gradient(
-        to bottom,
-        var(--case-study-rail-dark) 0%,
-        #dfe6f0 42%,
-        #ffffff 50%,
-        #dfe6f0 58%,
-        var(--case-study-rail-dark) 100%
-    );
-}
-
-.case-study-banner__rail--left {
-    left: 0;
-}
-
-.case-study-banner__rail--right {
-    right: 0;
 }
 
 /* Bottom-up navy scrim for title legibility. */
@@ -98,8 +65,8 @@
     max-width: var(--layout-max-width);
     margin-left: auto;
     margin-right: auto;
-    padding-left: max(var(--layout-margin), var(--case-study-rail-width));
-    padding-right: max(var(--layout-margin), var(--case-study-rail-width));
+    padding-left: var(--layout-margin);
+    padding-right: var(--layout-margin);
     padding-bottom: clamp(1.25rem, 4vw, 2.5rem);
     pointer-events: none;
 }

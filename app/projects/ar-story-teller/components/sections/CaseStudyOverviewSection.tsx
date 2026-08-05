@@ -55,14 +55,6 @@ export function CaseStudyOverviewSection({ data }: CaseStudyOverviewSectionProps
                     priority
                 />
                 <div className="case-study-banner__scrim" aria-hidden />
-                <div
-                    className="case-study-banner__rail case-study-banner__rail--left"
-                    aria-hidden
-                />
-                <div
-                    className="case-study-banner__rail case-study-banner__rail--right"
-                    aria-hidden
-                />
                 <div className="case-study-banner__content">
                     <p className="case-study-banner__eyebrow">
                         {CASE_STUDY_BANNER_EYEBROW}
