@@ -45,10 +45,10 @@ export interface PrototypingPanelImage {
   annotationInstruction?: string;
 }
 
-/** Grey inset panel — matches `UserModeInteractions` content container (1100px cap). */
+/** White inset panel — lifts off the Prototype band (`#f4f6fa`). */
 const GREY_PANEL_SURFACE_SX = {
   width: "100%",
-  bgcolor: "#f5f5f7",
+  bgcolor: "#ffffff",
   borderRadius: { xs: 4, md: "40px" },
   px: { xs: 3, sm: 5, md: 7.5 },
   py: { xs: 4, sm: 5, md: 7.5 },

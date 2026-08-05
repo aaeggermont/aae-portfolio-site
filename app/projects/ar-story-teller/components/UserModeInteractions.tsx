@@ -83,7 +83,7 @@ export const UserModeInteractions = ({
       <Box
         sx={{
           width: "100%",
-          bgcolor: "#f5f5f7",
+          bgcolor: "#ffffff",
           borderRadius: { xs: 4, md: "40px" },
           px: { xs: 3, sm: 5, md: 7.5 },
           py: { xs: 4, sm: 5, md: 7.5 },
