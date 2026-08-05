@@ -29,12 +29,21 @@
     }
 }
 
+/* Matches Business Goals band (`BAND_BG` in BusinessGoals.tsx). */
+.methodologyBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #f4f6fa;
+}
+
+.methodologyBleedInner {
+    @extend %designSystemBleedInner;
+}
+
 .guestNeedsBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
-    /* White space between the Design System intro and the first full-bleed band. */
-    margin-top: var(--section-gap);
-    background-color: #f5f5f7;
+    background-color: #ffffff;
     --guest-needs-content-gutter: var(--layout-margin);
 }
 
@@ -61,7 +70,7 @@
 .envisionUseCaseBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
-    background-color: #f5f5f7;
+    background-color: #ffffff;
 }
 
 .envisionUseCaseBleedInner {
@@ -75,7 +84,7 @@
 .developingSpecsBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
-    background-color: #ffffff;
+    background-color: #f4f6fa;
 }
 
 .developingSpecsBleedInner {
@@ -85,7 +94,7 @@
 .prototypingBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
-    background-color: #ffffff;
+    background-color: #f4f6fa;
 }
 
 .prototypingBleedInner {
@@ -95,7 +104,7 @@
 .usabilityTestingBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
-    background-color: #f5f5f7;
+    background-color: #ffffff;
 }
 
 .usabilityTestingBleedInner {
@@ -105,10 +114,20 @@
 .conclusionsImpactBleed {
     @extend %designSystemFullBleedBand;
     @extend %designSystemFullBleedBandSpacing;
-    background-color: #ffffff;
+    background-color: #f4f6fa;
 }
 
 .conclusionsImpactBleedInner {
+    @extend %designSystemBleedInner;
+}
+
+.futureWorkBleed {
+    @extend %designSystemFullBleedBand;
+    @extend %designSystemFullBleedBandSpacing;
+    background-color: #ffffff;
+}
+
+.futureWorkBleedInner {
     @extend %designSystemBleedInner;
 }
 

@@ -15,9 +15,11 @@ import {
     type UsabilityTestingPanelBulletPoint,
 } from '../components/UsabilityTestingPanel';
 import { UsabilityFindingsInsights } from '../components/UsabilityFindingsInsights';
+import { GuestNeedsQuadrants } from '../components/GuestNeedsQuadrants';
 import type { DesignSystemSectionData } from '../types/arStoryTellerContent';
 import type { StoryboardSlide } from '../types/designSystemTypes';
 import { resolveSoftwarePrototypesAccordionSections } from '../lib/softwarePrototypesAccordion';
+import { HCD_XR_PROCESS_DESKTOP_OBJECT_PATH } from '../lib/criticalAssets';
 import { Box, Typography } from '@mui/material';
 import { titleTypeSx } from '../typography';
 
@@ -27,8 +29,56 @@ interface DesignSystemSectionProps {
 
 const DESIGN_SYSTEM_EYEBROW = 'Methodology';
 const DESIGN_SYSTEM_TITLE = 'Human-Centered XR Design';
+const RESEARCH_EYEBROW = 'Research';
+const DEFINE_EYEBROW = 'Define';
+const ENVISION_EYEBROW = 'Envision';
+const PROTOTYPE_EYEBROW = 'Prototype';
+const EVALUATE_EYEBROW = 'Evaluate';
+const HCD_XR_PROCESS_IMAGE_TITLE =
+    'Human-Centered XR Design Process\n(MIT Digital Media & Artificial Intelligence laboratories).';
 const EYEBROW_COLOR = '#1B3C90';
 const TITLE_COLOR = '#111A27';
+
+const sectionEyebrowSx = titleTypeSx('eyebrow', {
+    m: 0,
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    color: EYEBROW_COLOR,
+    textAlign: 'left',
+});
+
+const bandEyebrowSx = titleTypeSx('eyebrow', {
+    m: 0,
+    mb: 1.5,
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    color: EYEBROW_COLOR,
+    textAlign: 'left',
+});
+
+function BandSectionHeading({
+    eyebrow,
+    title,
+}: {
+    eyebrow: string;
+    title: string;
+}) {
+    return (
+        <Box>
+            <Typography component="p" sx={bandEyebrowSx}>
+                {eyebrow}
+            </Typography>
+            <SectionSubTitle title={title} />
+        </Box>
+    );
+}
+
+/** Same desktop process diagram for desktop / tablet / mobile (`ParagraphImg` indices 0–2). */
+const HCD_XR_PROCESS_IMAGES = [
+    HCD_XR_PROCESS_DESKTOP_OBJECT_PATH,
+    HCD_XR_PROCESS_DESKTOP_OBJECT_PATH,
+    HCD_XR_PROCESS_DESKTOP_OBJECT_PATH,
+] as const;
 
 export function DesignSystemSection({ data }: DesignSystemSectionProps) {
     const { designSystem } = data.caseStudy;
@@ -70,50 +120,46 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
 
     return (
         <section className={styles['project-container']} aria-labelledby={headingId}>
-            <div className={styles['panel-section-stack']}>
-                <div className={styles['content-group']}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            gap: 1.5,
-                        }}
-                    >
-                        <Typography
-                            component="p"
-                            sx={titleTypeSx('eyebrow', {
-                                m: 0,
-                                textTransform: 'uppercase',
-                                letterSpacing: '0.06em',
-                                color: EYEBROW_COLOR,
-                                textAlign: 'left',
-                            })}
+            {/* Methodology / Human-Centered XR Design — full-bleed band */}
+            <div
+                className={dsSectionStyles.methodologyBleed}
+                aria-label="Human-Centered XR Design"
+            >
+                <div className={dsSectionStyles.methodologyBleedInner}>
+                    <div className={styles['content-group']}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: 1.5,
+                            }}
                         >
-                            {DESIGN_SYSTEM_EYEBROW}
-                        </Typography>
-                        <Typography
-                            id={headingId}
-                            component="h2"
-                            sx={titleTypeSx('sectionTitle', {
-                                m: 0,
-                                color: TITLE_COLOR,
-                                textAlign: 'left',
-                            })}
-                        >
-                            {DESIGN_SYSTEM_TITLE}
-                        </Typography>
-                    </Box>
-                    <ParagraphBlock
-                        paragraphs={designSystem.paragraphs}
+                            <Typography component="p" sx={sectionEyebrowSx}>
+                                {DESIGN_SYSTEM_EYEBROW}
+                            </Typography>
+                            <Typography
+                                id={headingId}
+                                component="h2"
+                                sx={titleTypeSx('sectionTitle', {
+                                    m: 0,
+                                    color: TITLE_COLOR,
+                                    textAlign: 'left',
+                                })}
+                            >
+                                {DESIGN_SYSTEM_TITLE}
+                            </Typography>
+                        </Box>
+                        <ParagraphBlock
+                            paragraphs={designSystem.paragraphs}
+                        />
+                    </div>
+                    <ParagraphImg
+                        imagesSrc={[...HCD_XR_PROCESS_IMAGES]}
+                        alt={designSystem.alt}
+                        title={HCD_XR_PROCESS_IMAGE_TITLE}
                     />
                 </div>
-                <ParagraphImg
-                    imagesSrc={designSystem.images}
-                    alt={designSystem.alt}
-                    title={designSystem.imageTitle}
-                    description={designSystem.imageDescription}
-                />
             </div>
 
             {/* Understanding Guest Needs — full-bleed background band */}
@@ -123,7 +169,12 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.guestNeedsBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle title={userResearchJourney.title} />
+                        <Box>
+                            <Typography component="p" sx={bandEyebrowSx}>
+                                {RESEARCH_EYEBROW}
+                            </Typography>
+                            <SectionSubTitle title={userResearchJourney.title} />
+                        </Box>
                         <ParagraphBlock
                             paragraphs={userResearchJourney.paragraphs.slice(0, 1)}
                         />
@@ -136,11 +187,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     <ParagraphBlock
                         paragraphs={userResearchJourney.paragraphs.slice(1, 2)}
                     />
-                    <ParagraphImg
-                        imagesSrc={userResearchJourney.images}
-                        alt={designSystem.alt}
-                        widthPercent={80}
-                    />
+                    <GuestNeedsQuadrants />
                 </div>
             </div>
 
@@ -151,7 +198,10 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.developingSpecsBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle title={developingSpecs.title} />
+                        <BandSectionHeading
+                            eyebrow={DEFINE_EYEBROW}
+                            title={developingSpecs.title}
+                        />
                         <ParagraphBlock paragraphs={developingSpecs.paragraphs} />
                     </div>
                     {developingSpecs.featuresAndSpecifications
@@ -183,7 +233,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.envisionUseCaseBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle
+                        <BandSectionHeading
+                            eyebrow={ENVISION_EYEBROW}
                             title={envisionUseCase?.title ?? 'Envision the Use Case'}
                         />
                         {envisionUseCase?.paragraphs?.length ? (
@@ -211,7 +262,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.prototypingBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle
+                        <BandSectionHeading
+                            eyebrow={PROTOTYPE_EYEBROW}
                             title={
                                 prototyping?.title ??
                                 'Wireframe & Software Prototypes'
@@ -268,7 +320,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 >
                     <div className={dsSectionStyles.usabilityTestingBleedInner}>
                         <div className={styles['content-group']}>
-                            <SectionSubTitle
+                            <BandSectionHeading
+                                eyebrow={EVALUATE_EYEBROW}
                                 title={
                                     usabilityTesting.title ??
                                     'Usability Testing & Evaluation'
