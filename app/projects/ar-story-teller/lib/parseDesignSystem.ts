@@ -1,10 +1,14 @@
 import type {
+  AnnotatedScreenCallout,
+  AnnotatedScreenSection,
   BulletPointItem,
   DesignSystem,
   DesignSystemResearchMethod,
   DevelopingSpecs,
   EnvisionUseCase,
   FeatureSpecification,
+  FieldOfViewExperiment,
+  FieldOfViewZone,
   FindingsInsights,
   InteractionModeSpecs,
   Prototyping,
@@ -382,6 +386,91 @@ function parsePrototypingMethod(value: unknown, path: string): PrototypingMethod
   return method;
 }
 
+function parseFieldOfViewZone(value: unknown, path: string): FieldOfViewZone {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  const zone: FieldOfViewZone = {
+    label: requireString(value.label, `${path}.label`),
+    description: requireString(
+      value.description ?? value.desc,
+      `${path}.description`,
+    ),
+  };
+  if (value.primary === true) {
+    zone.primary = true;
+  }
+  return zone;
+}
+
+function parseFieldOfViewExperiment(
+  value: unknown,
+  path: string,
+): FieldOfViewExperiment {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  if (!Array.isArray(value.zones)) {
+    throw new Error(`Invalid ${path}.zones: expected array`);
+  }
+  return {
+    eyebrow: requireString(value.eyebrow, `${path}.eyebrow`),
+    title: requireString(value.title, `${path}.title`),
+    zones: value.zones.map((zone, index) =>
+      parseFieldOfViewZone(zone, `${path}.zones[${index}]`),
+    ),
+  };
+}
+
+function parseAnnotatedScreenCallout(
+  value: unknown,
+  path: string,
+): AnnotatedScreenCallout {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  return {
+    number: requireString(value.number, `${path}.number`),
+    title: requireString(value.title, `${path}.title`),
+    description: requireString(value.description, `${path}.description`),
+  };
+}
+
+function parseAnnotatedScreenSection(
+  value: unknown,
+  path: string,
+): AnnotatedScreenSection {
+  if (!isRecord(value)) {
+    throw new Error(`Invalid ${path}: expected object`);
+  }
+  if (!Array.isArray(value.images)) {
+    throw new Error(`Invalid ${path}.images: expected array`);
+  }
+  if (!Array.isArray(value.leftCallouts)) {
+    throw new Error(`Invalid ${path}.leftCallouts: expected array`);
+  }
+  if (!Array.isArray(value.rightCallouts)) {
+    throw new Error(`Invalid ${path}.rightCallouts: expected array`);
+  }
+  const section: AnnotatedScreenSection = {
+    title: requireString(value.title, `${path}.title`),
+    alt: requireString(value.alt, `${path}.alt`),
+    images: value.images.map((img, index) =>
+      parsePrototypingImage(img, `${path}.images[${index}]`),
+    ),
+    leftCallouts: value.leftCallouts.map((callout, index) =>
+      parseAnnotatedScreenCallout(callout, `${path}.leftCallouts[${index}]`),
+    ),
+    rightCallouts: value.rightCallouts.map((callout, index) =>
+      parseAnnotatedScreenCallout(callout, `${path}.rightCallouts[${index}]`),
+    ),
+  };
+  if (value.paragraphs !== undefined) {
+    section.paragraphs = parseStringArray(value.paragraphs, `${path}.paragraphs`);
+  }
+  return section;
+}
+
 function parsePrototyping(value: unknown, path: string): Prototyping {
   if (!isRecord(value)) {
     throw new Error(`Invalid ${path}: expected object`);
@@ -398,6 +487,36 @@ function parsePrototyping(value: unknown, path: string): Prototyping {
     }
     prototyping.methods = value.methods.map((method, index) =>
       parsePrototypingMethod(method, `${path}.methods[${index}]`),
+    );
+  }
+  if (value.fieldOfViewExperiment !== undefined) {
+    prototyping.fieldOfViewExperiment = parseFieldOfViewExperiment(
+      value.fieldOfViewExperiment,
+      `${path}.fieldOfViewExperiment`,
+    );
+  }
+  if (value.arSelfieExperience !== undefined) {
+    prototyping.arSelfieExperience = parseAnnotatedScreenSection(
+      value.arSelfieExperience,
+      `${path}.arSelfieExperience`,
+    );
+  }
+  if (value.arStoryDetailsExperience !== undefined) {
+    prototyping.arStoryDetailsExperience = parseAnnotatedScreenSection(
+      value.arStoryDetailsExperience,
+      `${path}.arStoryDetailsExperience`,
+    );
+  }
+  if (value.arCollectingArtifactsExperience !== undefined) {
+    prototyping.arCollectingArtifactsExperience = parseAnnotatedScreenSection(
+      value.arCollectingArtifactsExperience,
+      `${path}.arCollectingArtifactsExperience`,
+    );
+  }
+  if (value.arNearbyAttractionsExperience !== undefined) {
+    prototyping.arNearbyAttractionsExperience = parseAnnotatedScreenSection(
+      value.arNearbyAttractionsExperience,
+      `${path}.arNearbyAttractionsExperience`,
     );
   }
   return prototyping;
@@ -551,10 +670,9 @@ function parseDesignSystem(value: unknown, path = "caseStudy.designSystem"): Des
     paragraphs: parseStringArray(value.paragraphs, `${path}.paragraphs`),
     alt: requireString(value.alt, `${path}.alt`),
     imageTitle: requireString(value.imageTitle, `${path}.imageTitle`),
-    imageDescription: requireString(
-      value.imageDescription,
-      `${path}.imageDescription`,
-    ),
+    // Seed may store `""` when there is no caption under the process diagram.
+    imageDescription:
+      optionalString(value.imageDescription, `${path}.imageDescription`) ?? "",
     images: parseStringArray(value.images, `${path}.images`),
     description: requireString(value.description, `${path}.description`),
     userResearchJourney: parseUserResearchJourney(

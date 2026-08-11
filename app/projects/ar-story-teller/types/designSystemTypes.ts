@@ -110,6 +110,40 @@ export type PrototypingImage = {
   annotationInstruction?: string;
 };
 
+export type FieldOfViewZone = {
+  label: string;
+  description: string;
+  /** When true, zone uses primary (cream + sea) emphasis. */
+  primary?: boolean;
+};
+
+/** Field of View Experiment diagram under the AR Storytelling wireframe. */
+export type FieldOfViewExperiment = {
+  eyebrow: string;
+  title: string;
+  zones: FieldOfViewZone[];
+};
+
+/** Numbered annotation beside an annotated phone mockup. */
+export type AnnotatedScreenCallout = {
+  number: string;
+  title: string;
+  description: string;
+};
+
+/**
+ * High-fidelity screen section (e.g. AR Selfie Experience) — title, intro,
+ * phone asset with markers, and CMS-driven callout columns.
+ */
+export type AnnotatedScreenSection = {
+  title: string;
+  alt: string;
+  paragraphs?: string[];
+  images: PrototypingImage[];
+  leftCallouts: AnnotatedScreenCallout[];
+  rightCallouts: AnnotatedScreenCallout[];
+};
+
 export type PrototypingMethod = {
   title: string;
   alt: string;
@@ -123,6 +157,16 @@ export type Prototyping = {
   title: string;
   paragraphs?: string[];
   methods?: PrototypingMethod[];
+  /** Panel below the AR wireframe mockup. */
+  fieldOfViewExperiment?: FieldOfViewExperiment;
+  /** High-fidelity AR Selfie screen with annotations. */
+  arSelfieExperience?: AnnotatedScreenSection;
+  /** High-fidelity AR Story Details (About) screen with annotations. */
+  arStoryDetailsExperience?: AnnotatedScreenSection;
+  /** High-fidelity AR Collecting Artifacts (Share) screen with annotations. */
+  arCollectingArtifactsExperience?: AnnotatedScreenSection;
+  /** High-fidelity AR Nearby Attractions (Discover) screen with annotations. */
+  arNearbyAttractionsExperience?: AnnotatedScreenSection;
 };
 
 export type SoftwarePrototypes = {

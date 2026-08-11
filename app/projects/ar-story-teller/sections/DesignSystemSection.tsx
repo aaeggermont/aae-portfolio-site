@@ -10,6 +10,7 @@ import { InteractionDesignPrinciples } from '../components/InteractionDesignPrin
 import { UserModeInteractions } from '../components/UserModeInteractions';
 import { Storyboard } from '../components/Storyboard';
 import { PrototypingMethodPanel } from '../components/PrototypingMethodPanel';
+import { FieldOfViewExperiment } from '../components/FieldOfViewExperiment';
 import {
     UsabilityTestingPanel,
     type UsabilityTestingPanelBulletPoint,
@@ -95,7 +96,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         developingSpecs.interactionDesignModeSpecifications;
 
     const prototypingMethod0 = prototyping?.methods?.[0];
-    const prototypingMethod1 = prototyping?.methods?.[1];
+    // Wire-Flow — temporarily hidden
+    // const prototypingMethod1 = prototyping?.methods?.[1];
     const prototypingMethod2 = prototyping?.methods?.[2];
 
     const usabilityProcessBullets = (
@@ -266,7 +268,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             eyebrow={PROTOTYPE_EYEBROW}
                             title={
                                 prototyping?.title ??
-                                'Wireframe & Software Prototypes'
+                                'High-Fidelity Experience Screens & Software Prototypes'
                             }
                         />
                         {prototyping?.paragraphs?.length ? (
@@ -285,10 +287,156 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             </div>
                             <PrototypingMethodPanel
                                 primaryImage={prototypingMethod0.images?.[0]}
-                                secondaryImage={prototypingMethod0.images?.[1]}
                             />
                         </div>
                     ) : null}
+                    {prototyping?.fieldOfViewExperiment ? (
+                        <div className={styles['panel-subsection']}>
+                            <FieldOfViewExperiment
+                                data={prototyping.fieldOfViewExperiment}
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arSelfieExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={prototyping.arSelfieExperience.title}
+                                />
+                                {prototyping.arSelfieExperience.paragraphs
+                                    ?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping.arSelfieExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arSelfieExperience.images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping.arSelfieExperience
+                                        .leftCallouts,
+                                    right: prototyping.arSelfieExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Selfie Experience screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arStoryDetailsExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={
+                                        prototyping.arStoryDetailsExperience
+                                            .title
+                                    }
+                                />
+                                {prototyping.arStoryDetailsExperience
+                                    .paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping.arStoryDetailsExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arStoryDetailsExperience
+                                        .images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping.arStoryDetailsExperience
+                                        .leftCallouts,
+                                    right: prototyping.arStoryDetailsExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Story Details About screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arCollectingArtifactsExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={
+                                        prototyping
+                                            .arCollectingArtifactsExperience
+                                            .title
+                                    }
+                                />
+                                {prototyping.arCollectingArtifactsExperience
+                                    .paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping
+                                                .arCollectingArtifactsExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arCollectingArtifactsExperience
+                                        .images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping
+                                        .arCollectingArtifactsExperience
+                                        .leftCallouts,
+                                    right: prototyping
+                                        .arCollectingArtifactsExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Collecting Artifacts Share screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arNearbyAttractionsExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={
+                                        prototyping.arNearbyAttractionsExperience
+                                            .title
+                                    }
+                                />
+                                {prototyping.arNearbyAttractionsExperience
+                                    .paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping
+                                                .arNearbyAttractionsExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arNearbyAttractionsExperience
+                                        .images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping
+                                        .arNearbyAttractionsExperience
+                                        .leftCallouts,
+                                    right: prototyping
+                                        .arNearbyAttractionsExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Nearby Attractions Discover screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {/* Wire-Flow — temporarily hidden
                     {prototypingMethod1 ? (
                         <div className={styles['panel-subsection']}>
                             <PanelSubTitle title={prototypingMethod1.title} />
@@ -298,6 +446,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             />
                         </div>
                     ) : null}
+                    */}
                     {prototypingMethod2 ? (
                         <div className={styles['panel-subsection']}>
                             <PanelSubTitle title={prototypingMethod2.title} />
