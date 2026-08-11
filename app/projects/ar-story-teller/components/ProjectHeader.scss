@@ -152,17 +152,22 @@
             .banner-text-title {
                 margin-bottom: 1.5rem;
                 font-family: typo.$ar-st-title-font;
-                font-size: 40px;
+                font-size: 60px;
                 color: typo.$ar-st-hero-title-color;
-                font-weight: 600;
+                font-weight: 700;
+                line-height: 1.05;
+                letter-spacing: -0.02em;
+                max-width: 42rem;
             }
             p,
             .banner-text-subtitle {
-                font-family: typo.$ar-st-title-font;
+                font-family: typo.$ar-st-body-font;
                 font-size: 24px;
                 color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
-                max-width: 65%;
+                line-height: 1.625;
+                letter-spacing: normal;
+                max-width: 36rem;
             }
         }
 
@@ -201,18 +206,23 @@
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 32px;
+                font-size: 48px;
                 font-family: typo.$ar-st-title-font;
                 color: typo.$ar-st-hero-title-color;
-                font-weight: 600;
+                font-weight: 700;
+                line-height: 1.05;
+                letter-spacing: -0.02em;
+                max-width: 42rem;
             }
             p,
             .banner-text-subtitle {
-                font-size: 20px;
-                font-family: typo.$ar-st-title-font;
+                font-size: 22px;
+                font-family: typo.$ar-st-body-font;
                 color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
-                max-width: 65%;
+                line-height: 1.625;
+                letter-spacing: normal;
+                max-width: 36rem;
             }
         }
 
@@ -264,18 +274,23 @@
 
             .banner-text-title {
                 margin-bottom: 1.5rem;
-                font-size: 28px;
+                font-size: 36px;
                 font-family: typo.$ar-st-title-font;
                 color: typo.$ar-st-hero-title-color;
-                font-weight: 600;
+                font-weight: 700;
+                line-height: 1.05;
+                letter-spacing: -0.02em;
                 width: 100%;
+                max-width: 42rem;
             }
             p {
                 font-size: 20px;
-                font-family: typo.$ar-st-title-font;
+                font-family: typo.$ar-st-body-font;
                 color: typo.$ar-st-hero-subtitle-color;
                 font-weight: 500;
-                max-width: 100%;
+                line-height: 1.625;
+                letter-spacing: normal;
+                max-width: 36rem;
             }
         }
     }
