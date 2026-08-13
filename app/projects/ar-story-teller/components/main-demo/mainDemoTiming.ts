@@ -79,3 +79,22 @@ export const MAIN_DEMO_AR_VIDEO_TIMING = {
 
 /** ScrollTrigger start — plays the timeline once when the canvas enters view. */
 export const MAIN_DEMO_SCROLL_TRIGGER_START = 'top 85%';
+
+/**
+ * Finite demo length (ms) through AR video fade-in.
+ * Used for the Replay button — the timeline’s notification float uses
+ * infinite repeat so GSAP `duration()` / `onComplete` are not reliable.
+ */
+export const MAIN_DEMO_DURATION_MS = Math.round(
+  (
+    MAIN_DEMO_PHASE_TIMING.initialDelay +
+    MAIN_DEMO_NOTIFICATION_TIMING.fadeInDuration +
+    MAIN_DEMO_WINDOW_GLOW_TIMING.delayAfterNotification +
+    MAIN_DEMO_WINDOW_GLOW_TIMING.entranceDuration +
+    MAIN_DEMO_GIRL_GHOST_TIMING.delayAfterGlowVisible +
+    MAIN_DEMO_GIRL_GHOST_TIMING.fadeInDuration +
+    MAIN_DEMO_IPHONE_FRAME_TIMING.delayAfterGirlVisible +
+    MAIN_DEMO_IPHONE_FRAME_TIMING.revealDuration +
+    MAIN_DEMO_AR_VIDEO_TIMING.fadeInDuration
+  ) * 1000,
+);

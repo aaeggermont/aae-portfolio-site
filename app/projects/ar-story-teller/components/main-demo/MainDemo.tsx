@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 
 import ProjectImage from '@/lib/media/ProjectImage';
 
@@ -8,6 +9,7 @@ import { DemoVideo } from '../demo-video/DemoVideo';
 import styles from './MainDemo.module.scss';
 import { useMainDemoTimeline } from './useMainDemoTimeline';
 import { MAIN_DEMO_CANVAS } from '../../layoutConfig';
+import { MAIN_DEMO_DURATION_MS } from './mainDemoTiming';
 
 const MAIN_DEMO_BACKGROUND_OBJECT_PATH =
     'projects/project_2/demo/TowerofTerrorFullShotParkImage.png';
@@ -64,6 +66,29 @@ export function MainDemo() {
     const girlGhostRef = useRef<HTMLDivElement>(null);
     const iphoneDeviceRef = useRef<HTMLDivElement>(null);
     const iphoneVideoRef = useRef<HTMLDivElement>(null);
+    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [runId, setRunId] = useState(0);
+    /** Bumps when the cinematic sequence actually starts (scroll enter or replay). */
+    const [playCycle, setPlayCycle] = useState(0);
+
+    const startDemo = () => {
+        setRunId((n) => n + 1);
+        setIsPlaying(true);
+        setPlayCycle((n) => n + 1);
+    };
+
+    useEffect(() => {
+        if (!isPlaying) return;
+        timerRef.current = setTimeout(
+            () => setIsPlaying(false),
+            MAIN_DEMO_DURATION_MS,
+        );
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, [isPlaying, runId, playCycle]);
 
     useMainDemoTimeline({
         canvasRef,
@@ -72,6 +97,11 @@ export function MainDemo() {
         girlGhostRef,
         iphoneDeviceRef,
         iphoneVideoRef,
+        runId,
+        onStarted: () => {
+            setIsPlaying(true);
+            setPlayCycle((n) => n + 1);
+        },
     });
 
     return (
@@ -125,6 +155,7 @@ export function MainDemo() {
                 >
                     <div ref={iphoneVideoRef} className={styles.iphoneScreen}>
                         <DemoVideo
+                            key={runId}
                             className={styles.iphoneScreenVideoRoot}
                             videoClassName={styles.iphoneScreenVideo}
                         />
@@ -156,6 +187,21 @@ export function MainDemo() {
                     className={styles.notificationImage}
                 />
             </div>
+
+            <button
+                type="button"
+                onClick={startDemo}
+                aria-label="Replay AR demo"
+                className={`${styles.replayButton} ${
+                    isPlaying ? styles.replayButtonHidden : ''
+                }`}
+            >
+                <PlayArrowRoundedIcon
+                    className={styles.replayIcon}
+                    aria-hidden
+                />
+                <span className={styles.replayLabel}>Replay demo</span>
+            </button>
         </div>
     );
 }

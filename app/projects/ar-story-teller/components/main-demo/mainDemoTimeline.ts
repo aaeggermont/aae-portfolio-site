@@ -25,6 +25,8 @@ export type MainDemoTimelineElements = {
 
 export type BuildMainDemoTimelineOptions = {
     reducedMotion?: boolean;
+    /** Fires when the timeline begins playing (scroll enter or replay). */
+    onStarted?: () => void;
 };
 
 const LABELS = MAIN_DEMO_TIMELINE_LABELS;
@@ -206,18 +208,30 @@ export function buildMainDemoTimeline(
 export function playMainDemoTimelineOnScroll(
     elements: MainDemoTimelineElements,
     options: BuildMainDemoTimelineOptions = {},
-): () => void {
+): { cleanup: () => void; restart: () => void } {
+    const { onStarted } = options;
     const tl = buildMainDemoTimeline(elements, options);
+
+    const playFromStart = () => {
+        tl.restart(true, false);
+        onStarted?.();
+    };
 
     const trigger = ScrollTrigger.create({
         trigger: elements.canvas,
         start: MAIN_DEMO_SCROLL_TRIGGER_START,
         once: true,
-        onEnter: () => tl.play(),
+        onEnter: () => {
+            tl.play();
+            onStarted?.();
+        },
     });
 
-    return () => {
-        trigger.kill();
-        tl.kill();
+    return {
+        cleanup: () => {
+            trigger.kill();
+            tl.kill();
+        },
+        restart: playFromStart,
     };
 }

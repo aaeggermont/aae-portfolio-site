@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, type RefObject } from 'react';
+import { useLayoutEffect, useRef, type RefObject } from 'react';
 import gsap from 'gsap';
 
 import { playMainDemoTimelineOnScroll } from './mainDemoTimeline';
@@ -12,6 +12,10 @@ type MainDemoTimelineRefs = {
     girlGhostRef: RefObject<HTMLDivElement | null>;
     iphoneDeviceRef: RefObject<HTMLDivElement | null>;
     iphoneVideoRef: RefObject<HTMLDivElement | null>;
+    /** Bumps on Replay — restarts the cinematic timeline from the beginning. */
+    runId: number;
+    /** Called when the timeline begins (first scroll enter or replay restart). */
+    onStarted?: () => void;
 };
 
 export function useMainDemoTimeline({
@@ -21,7 +25,13 @@ export function useMainDemoTimeline({
     girlGhostRef,
     iphoneDeviceRef,
     iphoneVideoRef,
+    runId,
+    onStarted,
 }: MainDemoTimelineRefs): void {
+    const restartRef = useRef<(() => void) | null>(null);
+    const onStartedRef = useRef(onStarted);
+    onStartedRef.current = onStarted;
+
     useLayoutEffect(() => {
         const canvas = canvasRef.current;
         const notification = notificationRef.current;
@@ -47,7 +57,7 @@ export function useMainDemoTimeline({
         let scrollCleanup: (() => void) | undefined;
 
         const ctx = gsap.context(() => {
-            scrollCleanup = playMainDemoTimelineOnScroll(
+            const result = playMainDemoTimelineOnScroll(
                 {
                     canvas,
                     notification,
@@ -56,11 +66,17 @@ export function useMainDemoTimeline({
                     iphoneDevice,
                     iphoneVideo,
                 },
-                { reducedMotion },
+                {
+                    reducedMotion,
+                    onStarted: () => onStartedRef.current?.(),
+                },
             );
+            scrollCleanup = result.cleanup;
+            restartRef.current = result.restart;
         }, canvas);
 
         return () => {
+            restartRef.current = null;
             scrollCleanup?.();
             ctx.revert();
         };
@@ -72,4 +88,9 @@ export function useMainDemoTimeline({
         iphoneDeviceRef,
         iphoneVideoRef,
     ]);
+
+    useLayoutEffect(() => {
+        if (runId === 0) return;
+        restartRef.current?.();
+    }, [runId]);
 }
