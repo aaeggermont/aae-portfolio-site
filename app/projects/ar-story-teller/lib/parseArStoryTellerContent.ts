@@ -41,6 +41,9 @@ function parseSolutionBlock(value: unknown, path: string): SolutionBlock {
     ...parseOverviewBlock(value, path),
   };
 
+  if (value.eyebrow !== undefined) {
+    solution.eyebrow = requireString(value.eyebrow, `${path}.eyebrow`);
+  }
   if (value.description !== undefined) {
     solution.description = requireString(value.description, `${path}.description`);
   }

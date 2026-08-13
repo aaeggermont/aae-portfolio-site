@@ -10,6 +10,8 @@ export type OverviewBlock = {
 };
 
 export type SolutionBlock = OverviewBlock & {
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
   description?: string;
   alt?: string;
   images?: string[];
