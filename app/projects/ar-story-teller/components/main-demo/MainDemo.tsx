@@ -10,7 +10,10 @@ import { ArkitCoachingOverlay } from './ArkitCoachingOverlay';
 import styles from './MainDemo.module.scss';
 import { useMainDemoTimeline } from './useMainDemoTimeline';
 import { MAIN_DEMO_CANVAS } from '../../layoutConfig';
-import { MAIN_DEMO_AR_VIDEO_START_MS } from './mainDemoTiming';
+import {
+    MAIN_DEMO_COACHING_SWAY_END_MS,
+    MAIN_DEMO_IPHONE_VISIBLE_MS,
+} from './mainDemoTiming';
 
 const MAIN_DEMO_BACKGROUND_OBJECT_PATH =
     'projects/project_2/demo/TowerofTerrorFullShotParkImage.png';
@@ -72,13 +75,15 @@ export function MainDemo() {
     const [runId, setRunId] = useState(0);
     /** Bumps when the cinematic sequence actually starts (scroll enter or replay). */
     const [playCycle, setPlayCycle] = useState(0);
-    /** Phone sway runs while coaching overlay is visible (until AR video). */
-    const [coachingSwayActive, setCoachingSwayActive] = useState(true);
+    /**
+     * Phone sway starts when the iPhone is fully on screen, together with the
+     * coaching fade-in — so the overlay is already moving as it appears.
+     */
+    const [coachingSwayActive, setCoachingSwayActive] = useState(false);
 
     const startDemo = () => {
         setRunId((n) => n + 1);
-        setPlayCycle((n) => n + 1);
-        setCoachingSwayActive(true);
+        setCoachingSwayActive(false);
     };
 
     useMainDemoTimeline({
@@ -92,16 +97,27 @@ export function MainDemo() {
         runId,
         onStarted: () => {
             setPlayCycle((n) => n + 1);
-            setCoachingSwayActive(true);
+            setCoachingSwayActive(false);
         },
     });
 
     useEffect(() => {
+        // Wait for the first scroll/replay start so timers sync to the GSAP timeline.
+        if (playCycle === 0) return;
+
+        setCoachingSwayActive(false);
+        const startSwayTimer = setTimeout(() => {
+            setCoachingSwayActive(true);
+        }, MAIN_DEMO_IPHONE_VISIBLE_MS);
+        // Keep sway through the AR video crossfade (ends with the last loop).
         const stopSwayTimer = setTimeout(() => {
             setCoachingSwayActive(false);
-        }, MAIN_DEMO_AR_VIDEO_START_MS);
-        return () => clearTimeout(stopSwayTimer);
-    }, [runId, playCycle]);
+        }, MAIN_DEMO_COACHING_SWAY_END_MS);
+        return () => {
+            clearTimeout(startSwayTimer);
+            clearTimeout(stopSwayTimer);
+        };
+    }, [playCycle]);
 
     return (
         <div
@@ -158,6 +174,7 @@ export function MainDemo() {
                             className={styles.coachingOverlay}
                         >
                             <ArkitCoachingOverlay
+                                key={`coaching-${playCycle}-${coachingSwayActive ? 'sway' : 'still'}`}
                                 swayActive={coachingSwayActive}
                             />
                         </div>

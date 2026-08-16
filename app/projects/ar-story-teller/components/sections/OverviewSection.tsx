@@ -16,7 +16,7 @@ const PROJECT_OVERVIEW_COPY =
     'This project originated as an innovation initiative at Disney to explore how emerging technologies could transform the theme park environment itself into an interactive attraction. Recognizing the opportunity to investigate the challenge through a human-centered design lens, I partnered with my faculty advisor in the University of Washington\'s Human Centered Design & Engineering program to develop the concept as a graduate research project. This collaboration allowed me to combine Disney\'s real-world guest experience challenges with academic research methods to explore how augmented reality could create meaningful storytelling experiences during attraction wait times.';
 
 const SOLUTION_EYEBROW_DEFAULT = 'Solution';
-const SOLUTION_TITLE_DEFAULT = 'The queue becomes the story';
+const SOLUTION_TITLE_DEFAULT = 'The queue becomes part of the story';
 
 /** Eyebrow above the Project Overview headline (matches case-study mock). */
 const PROJECT_OVERVIEW_EYEBROW_SX = titleTypeSx('eyebrow', {

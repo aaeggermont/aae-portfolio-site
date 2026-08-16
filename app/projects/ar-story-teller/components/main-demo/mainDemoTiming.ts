@@ -6,6 +6,8 @@ export const MAIN_DEMO_TIMELINE_LABELS = {
     windowGlowVisible: 'windowGlowVisible',
     girlGhost: 'girlGhost',
     iphoneFrame: 'iphoneFrame',
+    /** iPhone fully settled — coaching sway window begins. */
+    iphoneFrameVisible: 'iphoneFrameVisible',
     arVideo: 'arVideo',
     cameraZoom: 'cameraZoom',
     deviceReveal: 'deviceReveal',
@@ -76,30 +78,40 @@ export const MAIN_DEMO_IPHONE_FRAME_TIMING = {
 } as const;
 
 /**
- * AR coaching phone silhouette sway — adjust `loops` to change how many
- * full side-to-side cycles play before the AR video starts.
+ * AR coaching phone silhouette sway — adjust `loops` / `durationSec` to change
+ * how long coaching plays. AR video crossfades in during the last loop.
  */
 export const MAIN_DEMO_COACHING_SWAY = {
     /** Length of one full sway cycle (seconds). Keep in sync with CSS. */
-    durationSec: 6,
-    /** Number of full sway loops before AR video fades in. */
-    loops: 2,
+    durationSec: 4,
+    /** Number of full sway loops while coaching is on screen. */
+    loops: 1,
 } as const;
 
-/** Total coaching hold after the iPhone is fully visible (sway loops × cycle length). */
+/** Total coaching sway after the iPhone is fully visible (sway loops × cycle length). */
 export const MAIN_DEMO_COACHING_HOLD_SEC =
     MAIN_DEMO_COACHING_SWAY.durationSec * MAIN_DEMO_COACHING_SWAY.loops;
 
-/** AR viewport video inside the iPhone screen — fades in after coaching sway completes. */
+/** AR viewport video inside the iPhone screen — crossfades with coaching. */
 export const MAIN_DEMO_AR_VIDEO_TIMING = {
     fadeInDuration: 1,
     fadeInEase: 'power2.out',
 } as const;
 
+/**
+ * Coaching hold before AR video / coaching exit crossfade begins.
+ * Timed so the exit fade runs through the end of the last sway loop.
+ * Entrance uses the same fade duration at the start of the first loop.
+ */
+export const MAIN_DEMO_COACHING_BEFORE_VIDEO_SEC = Math.max(
+    0,
+    MAIN_DEMO_COACHING_HOLD_SEC - MAIN_DEMO_AR_VIDEO_TIMING.fadeInDuration,
+);
+
 /** ScrollTrigger start — plays the timeline once when the canvas enters view. */
 export const MAIN_DEMO_SCROLL_TRIGGER_START = 'top 85%';
 
-const MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC =
+export const MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC =
     MAIN_DEMO_PHASE_TIMING.initialDelay +
     MAIN_DEMO_NOTIFICATION_TIMING.fadeInDuration +
     MAIN_DEMO_WINDOW_GLOW_TIMING.delayAfterNotification +
@@ -109,6 +121,11 @@ const MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC =
     MAIN_DEMO_IPHONE_FRAME_TIMING.delayAfterGirlVisible +
     MAIN_DEMO_IPHONE_FRAME_TIMING.revealDuration;
 
+/** When the iPhone is fully on screen — coaching fade-in + sway start here. */
+export const MAIN_DEMO_IPHONE_VISIBLE_MS = Math.round(
+    MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC * 1000,
+);
+
 /**
  * Finite demo length (ms) through AR video fade-in.
  * Used for the Replay button — the timeline’s notification float uses
@@ -117,13 +134,22 @@ const MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC =
 export const MAIN_DEMO_DURATION_MS = Math.round(
     (
         MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC +
-        MAIN_DEMO_COACHING_HOLD_SEC +
-        MAIN_DEMO_AR_VIDEO_TIMING.fadeInDuration
+        MAIN_DEMO_COACHING_HOLD_SEC
     ) * 1000,
 );
 
-/** When the AR video phase begins — coaching overlay fades out / sway stops. */
+/** When AR video / coaching crossfade begins (during the last sway loop). */
 export const MAIN_DEMO_AR_VIDEO_START_MS = Math.round(
-    (MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC + MAIN_DEMO_COACHING_HOLD_SEC) *
-        1000,
+    (
+        MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC +
+        MAIN_DEMO_COACHING_BEFORE_VIDEO_SEC
+    ) * 1000,
+);
+
+/** When CSS sway iterations finish — safe to drop the sway class after this. */
+export const MAIN_DEMO_COACHING_SWAY_END_MS = Math.round(
+    (
+        MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC +
+        MAIN_DEMO_COACHING_HOLD_SEC
+    ) * 1000,
 );

@@ -3,7 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import {
     MAIN_DEMO_AR_VIDEO_TIMING,
-    MAIN_DEMO_COACHING_HOLD_SEC,
+    MAIN_DEMO_COACHING_BEFORE_VIDEO_SEC,
     MAIN_DEMO_GIRL_GHOST_TIMING,
     MAIN_DEMO_IPHONE_FRAME_TIMING,
     MAIN_DEMO_NOTIFICATION_TIMING,
@@ -41,8 +41,8 @@ const LABELS = MAIN_DEMO_TIMELINE_LABELS;
  * 2. Notification fades in
  * 3. Window glow fades in and stays visible
  * 4. Girl ghost fades in
- * 5. iPhone frame reveals (coaching overlay + phone sway visible on screen)
- * 6. Coaching overlay fades out; AR video fades into the device screen
+ * 5. iPhone frame reveals (screen empty until coaching starts)
+ * 6. Coaching fades in while swaying; later crossfades out as AR video fades in
  * 7. Camera zoom (placeholder — syncs to `cameraZoom` label)
  */
 export function buildMainDemoTimeline(
@@ -114,7 +114,7 @@ export function buildMainDemoTimeline(
         y: iphoneInitialYOffset,
         transformOrigin: 'center center',
     });
-    gsap.set(coachingOverlay, { opacity: 1 });
+    gsap.set(coachingOverlay, { opacity: 0 });
     gsap.set(iphoneVideo, { opacity: 0 });
 
     const tl = gsap.timeline({ paused: true });
@@ -124,11 +124,6 @@ export function buildMainDemoTimeline(
     }
 
     const glowStart = `${LABELS.notificationVisible}+=${delayAfterNotification}`;
-    const glowFullyVisible = `${LABELS.windowGlow}+=${glowEntranceDuration}`;
-    const girlGhostStart = `${glowFullyVisible}+=${delayAfterGlowVisible}`;
-    const iphoneFrameStart = `${LABELS.girlGhost}+=${girlFadeInDuration + delayAfterGirlVisible}`;
-    const iphoneFrameFullyVisible = `${LABELS.iphoneFrame}+=${iphoneRevealDuration}`;
-    const arVideoStart = `${iphoneFrameFullyVisible}+=${MAIN_DEMO_COACHING_HOLD_SEC}`;
     const cameraZoomStart = `${LABELS.notificationVisible}+=${delayAfterNotification + windowGlowDuration}`;
 
     tl.to({}, { duration: initialDelay })
@@ -153,8 +148,14 @@ export function buildMainDemoTimeline(
             },
             LABELS.windowGlow,
         )
-        .addLabel(LABELS.windowGlowVisible, glowFullyVisible)
-        .addLabel(LABELS.girlGhost, girlGhostStart)
+        .addLabel(
+            LABELS.windowGlowVisible,
+            `${LABELS.windowGlow}+=${glowEntranceDuration}`,
+        )
+        .addLabel(
+            LABELS.girlGhost,
+            `${LABELS.windowGlowVisible}+=${delayAfterGlowVisible}`,
+        )
         .to(
             girlGhost,
             {
@@ -165,8 +166,11 @@ export function buildMainDemoTimeline(
             },
             LABELS.girlGhost,
         )
-        .addLabel(LABELS.iphoneFrame, iphoneFrameStart)
-        .addLabel(LABELS.deviceReveal, iphoneFrameStart)
+        .addLabel(
+            LABELS.iphoneFrame,
+            `${LABELS.girlGhost}+=${girlFadeInDuration + delayAfterGirlVisible}`,
+        )
+        .addLabel(LABELS.deviceReveal, LABELS.iphoneFrame)
         .to(
             iphoneDevice,
             {
@@ -189,7 +193,23 @@ export function buildMainDemoTimeline(
             },
             LABELS.deviceReveal,
         )
-        .addLabel(LABELS.arVideo, arVideoStart)
+        .addLabel(
+            LABELS.iphoneFrameVisible,
+            `${LABELS.iphoneFrame}+=${iphoneRevealDuration}`,
+        )
+        .to(
+            coachingOverlay,
+            {
+                opacity: 1,
+                duration: arVideoFadeInDuration,
+                ease: arVideoFadeInEase,
+            },
+            LABELS.iphoneFrameVisible,
+        )
+        .addLabel(
+            LABELS.arVideo,
+            `${LABELS.iphoneFrameVisible}+=${MAIN_DEMO_COACHING_BEFORE_VIDEO_SEC}`,
+        )
         .to(
             coachingOverlay,
             {
