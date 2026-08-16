@@ -52,10 +52,11 @@ export function OverviewSection({ data }: OverviewSectionProps) {
         <section
             className={`${styles['project-container']} ${styles['panel-section-stack']} overviewSection`}
         >
-            <div
+            <Box
                 data-aos="fade-up"
                 data-aos-duration="1000"
                 data-aos-once="true"
+                sx={overviewNarrativeBlockSx}
             >
                 <OverviewParagraphBlock
                     title1={designChallenge.title}
@@ -63,7 +64,7 @@ export function OverviewSection({ data }: OverviewSectionProps) {
                     title2={theProblem.title}
                     paragraph2={theProblem.paragraphs}
                 />
-            </div>
+            </Box>
 
             <Box className={styles['content-group']} sx={overviewNarrativeBlockSx}>
                 <Box

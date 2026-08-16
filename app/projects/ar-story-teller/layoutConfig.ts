@@ -140,14 +140,12 @@ export const getUsableLayoutWidth = (
 export const PANEL_CONTENT_MAX_WIDTH_PX = getUsableLayoutWidth('desktop');
 
 /**
- * Centered overview narrative block (Project Overview copy + Solution demo).
- * Desktop 910px ≈ 82.7% of usable desktop width (`PANEL_CONTENT_MAX_WIDTH_PX`);
- * tablet scales by the same ratio on usable tablet width (944px → 781px).
- * Mobile uses full container width (16px side margins) — ~328px at 360px viewport.
+ * Overview narrative blocks (Design Challenge, Cost of Waiting, Solution, Project Overview).
+ * Matches shared panel content width so these sections align with the rest of the page.
  */
 export const OVERVIEW_PROJECT_OVERVIEW_MAX_WIDTH_PX = {
-    tablet: Math.round((getUsableLayoutWidth('tablet') * 910) / PANEL_CONTENT_MAX_WIDTH_PX),
-    desktop: 910,
+    tablet: getUsableLayoutWidth('tablet'),
+    desktop: PANEL_CONTENT_MAX_WIDTH_PX,
 } as const;
 
 /**
