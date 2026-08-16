@@ -197,6 +197,25 @@
         var(--iphone-screen-inset-left);
     overflow: hidden;
     border-radius: var(--iphone-screen-radius);
+    background: transparent;
+}
+
+.coachingOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8% 6% 10%;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.iphoneScreenVideoLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     opacity: 0;
     will-change: opacity;
 }
@@ -236,13 +255,19 @@
     filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.32));
 }
 
-/* Upper-left sky placement — inset from edges, clear of tower architecture. */
-.notification {
+/* Centered hero banner slot — GSAP animates the inner `.notification` only. */
+.notificationSlot {
     position: absolute;
     z-index: 3;
     top: 8%;
-    left: 6%;
-    width: min(42%, 280px);
+    left: 50%;
+    width: min(46%, 400px);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.notification {
+    width: 100%;
     opacity: 0;
     pointer-events: none;
     --notification-blur: 0px;
@@ -254,16 +279,15 @@
 }
 
 @media (min-width: 768px) {
-    .notification {
+    .notificationSlot {
         top: 10%;
-        left: 7%;
-        width: min(32%, 300px);
+        width: min(42%, 400px);
     }
 }
 
 @media (min-width: 1024px) {
-    .notification {
-        width: min(28%, 320px);
+    .notificationSlot {
+        width: min(42%, 400px);
     }
 }
 
@@ -353,7 +377,7 @@
         will-change: auto;
     }
 
-    .iphoneScreen {
+    .iphoneScreenVideoLayer {
         will-change: auto;
     }
 

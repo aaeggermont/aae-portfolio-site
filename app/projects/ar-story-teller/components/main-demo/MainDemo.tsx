@@ -6,10 +6,11 @@ import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
 import ProjectImage from '@/lib/media/ProjectImage';
 
 import { DemoVideo } from '../demo-video/DemoVideo';
+import { ArkitCoachingOverlay } from './ArkitCoachingOverlay';
 import styles from './MainDemo.module.scss';
 import { useMainDemoTimeline } from './useMainDemoTimeline';
 import { MAIN_DEMO_CANVAS } from '../../layoutConfig';
-import { MAIN_DEMO_DURATION_MS } from './mainDemoTiming';
+import { MAIN_DEMO_AR_VIDEO_START_MS } from './mainDemoTiming';
 
 const MAIN_DEMO_BACKGROUND_OBJECT_PATH =
     'projects/project_2/demo/TowerofTerrorFullShotParkImage.png';
@@ -46,9 +47,9 @@ const mainDemoImageSizes = [
 ].join(', ');
 
 const mainDemoNotificationSizes = [
-    'min(42vw, 280px)',
-    '(min-width: 768px) min(32vw, 300px)',
-    '(min-width: 1024px) min(28vw, 320px)',
+    'min(46vw, 360px)',
+    '(min-width: 768px) min(42vw, 400px)',
+    '(min-width: 1024px) min(42vw, 400px)',
 ].join(', ');
 
 const mainDemoGirlGhostSizes = '1750px';
@@ -66,29 +67,19 @@ export function MainDemo() {
     const girlGhostRef = useRef<HTMLDivElement>(null);
     const iphoneDeviceRef = useRef<HTMLDivElement>(null);
     const iphoneVideoRef = useRef<HTMLDivElement>(null);
-    const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const coachingOverlayRef = useRef<HTMLDivElement>(null);
 
-    const [isPlaying, setIsPlaying] = useState(true);
     const [runId, setRunId] = useState(0);
     /** Bumps when the cinematic sequence actually starts (scroll enter or replay). */
     const [playCycle, setPlayCycle] = useState(0);
+    /** Phone sway runs while coaching overlay is visible (until AR video). */
+    const [coachingSwayActive, setCoachingSwayActive] = useState(true);
 
     const startDemo = () => {
         setRunId((n) => n + 1);
-        setIsPlaying(true);
         setPlayCycle((n) => n + 1);
+        setCoachingSwayActive(true);
     };
-
-    useEffect(() => {
-        if (!isPlaying) return;
-        timerRef.current = setTimeout(
-            () => setIsPlaying(false),
-            MAIN_DEMO_DURATION_MS,
-        );
-        return () => {
-            if (timerRef.current) clearTimeout(timerRef.current);
-        };
-    }, [isPlaying, runId, playCycle]);
 
     useMainDemoTimeline({
         canvasRef,
@@ -97,12 +88,20 @@ export function MainDemo() {
         girlGhostRef,
         iphoneDeviceRef,
         iphoneVideoRef,
+        coachingOverlayRef,
         runId,
         onStarted: () => {
-            setIsPlaying(true);
             setPlayCycle((n) => n + 1);
+            setCoachingSwayActive(true);
         },
     });
+
+    useEffect(() => {
+        const stopSwayTimer = setTimeout(() => {
+            setCoachingSwayActive(false);
+        }, MAIN_DEMO_AR_VIDEO_START_MS);
+        return () => clearTimeout(stopSwayTimer);
+    }, [runId, playCycle]);
 
     return (
         <div
@@ -153,12 +152,25 @@ export function MainDemo() {
                     className={styles.iphoneDevice}
                     aria-hidden="true"
                 >
-                    <div ref={iphoneVideoRef} className={styles.iphoneScreen}>
-                        <DemoVideo
-                            key={runId}
-                            className={styles.iphoneScreenVideoRoot}
-                            videoClassName={styles.iphoneScreenVideo}
-                        />
+                    <div className={styles.iphoneScreen}>
+                        <div
+                            ref={coachingOverlayRef}
+                            className={styles.coachingOverlay}
+                        >
+                            <ArkitCoachingOverlay
+                                swayActive={coachingSwayActive}
+                            />
+                        </div>
+                        <div
+                            ref={iphoneVideoRef}
+                            className={styles.iphoneScreenVideoLayer}
+                        >
+                            <DemoVideo
+                                key={runId}
+                                className={styles.iphoneScreenVideoRoot}
+                                videoClassName={styles.iphoneScreenVideo}
+                            />
+                        </div>
                     </div>
                     <div className={styles.iphoneFrameImageWrap}>
                         <ProjectImage
@@ -173,28 +185,28 @@ export function MainDemo() {
                 </div>
             </div>
 
-            <div
-                ref={notificationRef}
-                className={styles.notification}
-                aria-hidden="true"
-            >
-                <ProjectImage
-                    objectPath={MAIN_DEMO_NOTIFICATION_OBJECT_PATH}
-                    alt=""
-                    width={MAIN_DEMO_NOTIFICATION_INTRINSIC_WIDTH}
-                    height={MAIN_DEMO_NOTIFICATION_INTRINSIC_HEIGHT}
-                    sizes={mainDemoNotificationSizes}
-                    className={styles.notificationImage}
-                />
+            <div className={styles.notificationSlot}>
+                <div
+                    ref={notificationRef}
+                    className={styles.notification}
+                    aria-hidden="true"
+                >
+                    <ProjectImage
+                        objectPath={MAIN_DEMO_NOTIFICATION_OBJECT_PATH}
+                        alt=""
+                        width={MAIN_DEMO_NOTIFICATION_INTRINSIC_WIDTH}
+                        height={MAIN_DEMO_NOTIFICATION_INTRINSIC_HEIGHT}
+                        sizes={mainDemoNotificationSizes}
+                        className={styles.notificationImage}
+                    />
+                </div>
             </div>
 
             <button
                 type="button"
                 onClick={startDemo}
                 aria-label="Replay AR demo"
-                className={`${styles.replayButton} ${
-                    isPlaying ? styles.replayButtonHidden : ''
-                }`}
+                className={styles.replayButton}
             >
                 <PlayArrowRoundedIcon
                     className={styles.replayIcon}

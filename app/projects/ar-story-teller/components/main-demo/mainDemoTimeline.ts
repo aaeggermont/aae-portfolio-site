@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import {
     MAIN_DEMO_AR_VIDEO_TIMING,
+    MAIN_DEMO_COACHING_HOLD_SEC,
     MAIN_DEMO_GIRL_GHOST_TIMING,
     MAIN_DEMO_IPHONE_FRAME_TIMING,
     MAIN_DEMO_NOTIFICATION_TIMING,
@@ -21,6 +22,7 @@ export type MainDemoTimelineElements = {
     girlGhost: HTMLElement;
     iphoneDevice: HTMLElement;
     iphoneVideo: HTMLElement;
+    coachingOverlay: HTMLElement;
 };
 
 export type BuildMainDemoTimelineOptions = {
@@ -39,8 +41,8 @@ const LABELS = MAIN_DEMO_TIMELINE_LABELS;
  * 2. Notification fades in
  * 3. Window glow fades in and stays visible
  * 4. Girl ghost fades in
- * 5. iPhone frame reveals
- * 6. AR video fades into the device screen
+ * 5. iPhone frame reveals (coaching overlay + phone sway visible on screen)
+ * 6. Coaching overlay fades out; AR video fades into the device screen
  * 7. Camera zoom (placeholder — syncs to `cameraZoom` label)
  */
 export function buildMainDemoTimeline(
@@ -53,17 +55,19 @@ export function buildMainDemoTimeline(
         girlGhost,
         iphoneDevice,
         iphoneVideo,
+        coachingOverlay,
     } = elements;
     const { reducedMotion = false } = options;
     const {
         fadeInDuration,
         fadeOutDuration,
+        fadeOutYOffset,
+        fadeOutEase,
         fadeInEase,
         fadeInYOffset,
+        fadeInInitialScale,
+        restingScale,
         initialBlurPx,
-        floatDistancePx,
-        floatCycleDuration,
-        floatEase,
     } = MAIN_DEMO_NOTIFICATION_TIMING;
     const { initialDelay, windowGlowDuration } = MAIN_DEMO_PHASE_TIMING;
     const {
@@ -94,6 +98,8 @@ export function buildMainDemoTimeline(
     gsap.set(notification, {
         opacity: 0,
         y: fadeInYOffset,
+        scale: fadeInInitialScale,
+        transformOrigin: 'center top',
         '--notification-blur': `${initialBlurPx}px`,
     });
     gsap.set(windowGlow, {
@@ -108,6 +114,7 @@ export function buildMainDemoTimeline(
         y: iphoneInitialYOffset,
         transformOrigin: 'center center',
     });
+    gsap.set(coachingOverlay, { opacity: 1 });
     gsap.set(iphoneVideo, { opacity: 0 });
 
     const tl = gsap.timeline({ paused: true });
@@ -121,6 +128,7 @@ export function buildMainDemoTimeline(
     const girlGhostStart = `${glowFullyVisible}+=${delayAfterGlowVisible}`;
     const iphoneFrameStart = `${LABELS.girlGhost}+=${girlFadeInDuration + delayAfterGirlVisible}`;
     const iphoneFrameFullyVisible = `${LABELS.iphoneFrame}+=${iphoneRevealDuration}`;
+    const arVideoStart = `${iphoneFrameFullyVisible}+=${MAIN_DEMO_COACHING_HOLD_SEC}`;
     const cameraZoomStart = `${LABELS.notificationVisible}+=${delayAfterNotification + windowGlowDuration}`;
 
     tl.to({}, { duration: initialDelay })
@@ -128,22 +136,12 @@ export function buildMainDemoTimeline(
         .to(notification, {
             opacity: 1,
             y: 0,
+            scale: restingScale,
             '--notification-blur': '0px',
             duration: fadeInDuration,
             ease: fadeInEase,
         })
         .addLabel(LABELS.notificationVisible)
-        .to(
-            notification,
-            {
-                y: -floatDistancePx,
-                duration: floatCycleDuration / 2,
-                ease: floatEase,
-                yoyo: true,
-                repeat: -1,
-            },
-            LABELS.notificationVisible,
-        )
         .addLabel(LABELS.windowGlow, glowStart)
         .to(
             windowGlow,
@@ -184,13 +182,23 @@ export function buildMainDemoTimeline(
             notification,
             {
                 opacity: 0,
+                y: fadeOutYOffset,
                 duration: fadeOutDuration,
-                ease: 'power2.inOut',
+                ease: fadeOutEase,
                 overwrite: 'auto',
             },
             LABELS.deviceReveal,
         )
-        .addLabel(LABELS.arVideo, iphoneFrameFullyVisible)
+        .addLabel(LABELS.arVideo, arVideoStart)
+        .to(
+            coachingOverlay,
+            {
+                opacity: 0,
+                duration: arVideoFadeInDuration,
+                ease: arVideoFadeInEase,
+            },
+            LABELS.arVideo,
+        )
         .to(
             iphoneVideo,
             {

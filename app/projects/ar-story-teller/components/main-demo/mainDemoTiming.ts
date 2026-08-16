@@ -25,20 +25,24 @@ export const MAIN_DEMO_PHASE_TIMING = {
 } as const;
 
 export const MAIN_DEMO_NOTIFICATION_TIMING = {
-    /** Notification-style reveal — deliberate, no scale. */
-    fadeInDuration: 0.5,
-    fadeOutDuration: 1,
+    /** iPhone-banner entrance — slide + soft overshoot settle. */
+    fadeInDuration: 0.75,
+    /** Banner dismiss — slide up + fade (swipe-to-clear feel). */
+    fadeOutDuration: 0.45,
+    fadeOutYOffset: -56,
+    fadeOutEase: 'power2.in',
     /** Minimum fully-visible beat before fade-out at device reveal (5–6s target). */
     minVisibleDuration: 5.5,
-    fadeInEase: 'power2.out',
-    /** Starts above rest — drifts down into place like a mobile notification. */
-    fadeInYOffset: -24,
-    /** Entrance defocus — resolves to sharp at rest. */
+    /** Soft spring landing (overshoot then settle). */
+    fadeInEase: 'back.out(1.4)',
+    /** Starts further above rest — drops into place like a system banner. */
+    fadeInYOffset: -100,
+    /** Under-scale on entrance — expands to resting hero size as it lands. */
+    fadeInInitialScale: 0.9,
+    /** Resting size while visible — larger than 1 so the banner reads clearly. */
+    restingScale: 1.12,
+    /** Entrance defocus — resolves to sharp with the settle. */
     initialBlurPx: 8,
-    /** Gentle post-reveal suspension — vertical only, almost imperceptible. */
-    floatDistancePx: 3,
-    floatCycleDuration: 3.5,
-    floatEase: 'sine.inOut',
 } as const;
 
 /** First (left) window-pair glow — anchored to `windowGlow` timeline label. */
@@ -71,7 +75,22 @@ export const MAIN_DEMO_IPHONE_FRAME_TIMING = {
     initialYOffset: 30,
 } as const;
 
-/** AR viewport video inside the iPhone screen — fades in after the frame reveal. */
+/**
+ * AR coaching phone silhouette sway — adjust `loops` to change how many
+ * full side-to-side cycles play before the AR video starts.
+ */
+export const MAIN_DEMO_COACHING_SWAY = {
+    /** Length of one full sway cycle (seconds). Keep in sync with CSS. */
+    durationSec: 6,
+    /** Number of full sway loops before AR video fades in. */
+    loops: 2,
+} as const;
+
+/** Total coaching hold after the iPhone is fully visible (sway loops × cycle length). */
+export const MAIN_DEMO_COACHING_HOLD_SEC =
+    MAIN_DEMO_COACHING_SWAY.durationSec * MAIN_DEMO_COACHING_SWAY.loops;
+
+/** AR viewport video inside the iPhone screen — fades in after coaching sway completes. */
 export const MAIN_DEMO_AR_VIDEO_TIMING = {
     fadeInDuration: 1,
     fadeInEase: 'power2.out',
@@ -80,13 +99,7 @@ export const MAIN_DEMO_AR_VIDEO_TIMING = {
 /** ScrollTrigger start — plays the timeline once when the canvas enters view. */
 export const MAIN_DEMO_SCROLL_TRIGGER_START = 'top 85%';
 
-/**
- * Finite demo length (ms) through AR video fade-in.
- * Used for the Replay button — the timeline’s notification float uses
- * infinite repeat so GSAP `duration()` / `onComplete` are not reliable.
- */
-export const MAIN_DEMO_DURATION_MS = Math.round(
-  (
+const MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC =
     MAIN_DEMO_PHASE_TIMING.initialDelay +
     MAIN_DEMO_NOTIFICATION_TIMING.fadeInDuration +
     MAIN_DEMO_WINDOW_GLOW_TIMING.delayAfterNotification +
@@ -94,7 +107,23 @@ export const MAIN_DEMO_DURATION_MS = Math.round(
     MAIN_DEMO_GIRL_GHOST_TIMING.delayAfterGlowVisible +
     MAIN_DEMO_GIRL_GHOST_TIMING.fadeInDuration +
     MAIN_DEMO_IPHONE_FRAME_TIMING.delayAfterGirlVisible +
-    MAIN_DEMO_IPHONE_FRAME_TIMING.revealDuration +
-    MAIN_DEMO_AR_VIDEO_TIMING.fadeInDuration
-  ) * 1000,
+    MAIN_DEMO_IPHONE_FRAME_TIMING.revealDuration;
+
+/**
+ * Finite demo length (ms) through AR video fade-in.
+ * Used for the Replay button — the timeline’s notification float uses
+ * infinite repeat so GSAP `duration()` / `onComplete` are not reliable.
+ */
+export const MAIN_DEMO_DURATION_MS = Math.round(
+    (
+        MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC +
+        MAIN_DEMO_COACHING_HOLD_SEC +
+        MAIN_DEMO_AR_VIDEO_TIMING.fadeInDuration
+    ) * 1000,
+);
+
+/** When the AR video phase begins — coaching overlay fades out / sway stops. */
+export const MAIN_DEMO_AR_VIDEO_START_MS = Math.round(
+    (MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC + MAIN_DEMO_COACHING_HOLD_SEC) *
+        1000,
 );

@@ -12,6 +12,7 @@ type MainDemoTimelineRefs = {
     girlGhostRef: RefObject<HTMLDivElement | null>;
     iphoneDeviceRef: RefObject<HTMLDivElement | null>;
     iphoneVideoRef: RefObject<HTMLDivElement | null>;
+    coachingOverlayRef: RefObject<HTMLDivElement | null>;
     /** Bumps on Replay — restarts the cinematic timeline from the beginning. */
     runId: number;
     /** Called when the timeline begins (first scroll enter or replay restart). */
@@ -25,6 +26,7 @@ export function useMainDemoTimeline({
     girlGhostRef,
     iphoneDeviceRef,
     iphoneVideoRef,
+    coachingOverlayRef,
     runId,
     onStarted,
 }: MainDemoTimelineRefs): void {
@@ -39,13 +41,15 @@ export function useMainDemoTimeline({
         const girlGhost = girlGhostRef.current;
         const iphoneDevice = iphoneDeviceRef.current;
         const iphoneVideo = iphoneVideoRef.current;
+        const coachingOverlay = coachingOverlayRef.current;
         if (
             !canvas ||
             !notification ||
             !windowGlow ||
             !girlGhost ||
             !iphoneDevice ||
-            !iphoneVideo
+            !iphoneVideo ||
+            !coachingOverlay
         ) {
             return;
         }
@@ -65,6 +69,7 @@ export function useMainDemoTimeline({
                     girlGhost,
                     iphoneDevice,
                     iphoneVideo,
+                    coachingOverlay,
                 },
                 {
                     reducedMotion,
@@ -87,6 +92,7 @@ export function useMainDemoTimeline({
         girlGhostRef,
         iphoneDeviceRef,
         iphoneVideoRef,
+        coachingOverlayRef,
     ]);
 
     useLayoutEffect(() => {
