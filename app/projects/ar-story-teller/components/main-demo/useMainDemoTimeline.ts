@@ -17,6 +17,8 @@ type MainDemoTimelineRefs = {
     runId: number;
     /** Called when the timeline begins (first scroll enter or replay restart). */
     onStarted?: () => void;
+    /** When false, wait for `runId` / restart instead of scroll enter. */
+    autoPlayOnScroll?: boolean;
 };
 
 export function useMainDemoTimeline({
@@ -29,6 +31,7 @@ export function useMainDemoTimeline({
     coachingOverlayRef,
     runId,
     onStarted,
+    autoPlayOnScroll = true,
 }: MainDemoTimelineRefs): void {
     const restartRef = useRef<(() => void) | null>(null);
     const onStartedRef = useRef(onStarted);
@@ -73,6 +76,7 @@ export function useMainDemoTimeline({
                 },
                 {
                     reducedMotion,
+                    autoPlayOnScroll,
                     onStarted: () => onStartedRef.current?.(),
                 },
             );
@@ -93,6 +97,7 @@ export function useMainDemoTimeline({
         iphoneDeviceRef,
         iphoneVideoRef,
         coachingOverlayRef,
+        autoPlayOnScroll,
     ]);
 
     useLayoutEffect(() => {

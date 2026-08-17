@@ -63,7 +63,25 @@ const mainDemoIphoneFrameSizes = [
     '(min-width: 1024px) min(20vw, 220px)',
 ].join(', ');
 
-export function MainDemo() {
+export type MainDemoProps = {
+    /**
+     * When true (default), play once when the canvas scrolls into view.
+     * Set false when a parent chapter drives playback via `playRequestId`.
+     */
+    autoPlayOnScroll?: boolean;
+    /** Bump from a parent to start or restart the cinematic (chapter demoEnter). */
+    playRequestId?: number;
+    /** When false, hide the built-in Replay control (parent owns replay). */
+    showReplay?: boolean;
+    className?: string;
+};
+
+export function MainDemo({
+    autoPlayOnScroll = true,
+    playRequestId = 0,
+    showReplay = true,
+    className = '',
+}: MainDemoProps = {}) {
     const canvasRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);
     const windowGlowRef = useRef<HTMLDivElement>(null);
@@ -86,6 +104,12 @@ export function MainDemo() {
         setCoachingSwayActive(false);
     };
 
+    useEffect(() => {
+        if (playRequestId <= 0) return;
+        setRunId(playRequestId);
+        setCoachingSwayActive(false);
+    }, [playRequestId]);
+
     useMainDemoTimeline({
         canvasRef,
         notificationRef,
@@ -95,6 +119,7 @@ export function MainDemo() {
         iphoneVideoRef,
         coachingOverlayRef,
         runId,
+        autoPlayOnScroll,
         onStarted: () => {
             setPlayCycle((n) => n + 1);
             setCoachingSwayActive(false);
@@ -122,7 +147,7 @@ export function MainDemo() {
     return (
         <div
             ref={canvasRef}
-            className={styles.canvas}
+            className={[styles.canvas, className].filter(Boolean).join(' ')}
             aria-label="AR Magic Tours cinematic demo — Hollywood Tower Hotel"
         >
             <ProjectImage
@@ -219,18 +244,20 @@ export function MainDemo() {
                 </div>
             </div>
 
-            <button
-                type="button"
-                onClick={startDemo}
-                aria-label="Replay AR demo"
-                className={styles.replayButton}
-            >
-                <PlayArrowRoundedIcon
-                    className={styles.replayIcon}
-                    aria-hidden
-                />
-                <span className={styles.replayLabel}>Replay demo</span>
-            </button>
+            {showReplay ? (
+                <button
+                    type="button"
+                    onClick={startDemo}
+                    aria-label="Replay AR demo"
+                    className={styles.replayButton}
+                >
+                    <PlayArrowRoundedIcon
+                        className={styles.replayIcon}
+                        aria-hidden
+                    />
+                    <span className={styles.replayLabel}>Replay demo</span>
+                </button>
+            ) : null}
         </div>
     );
 }

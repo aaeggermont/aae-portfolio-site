@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import OverviewParagraphBlock from '../OverviewParagraphBlock';
 import ParagraphText from '../ParagraphText';
 import styles from '../../ArStoryTeller.module.scss';
-import { MainDemo } from '../main-demo/MainDemo';
+import { MomentsChapter } from '../moments/MomentsChapter';
 import { overviewNarrativeBlockSx } from '../../overviewNarrativeLayout';
 import { titleTypeSx } from '../../typography';
 
@@ -31,8 +31,6 @@ const PROJECT_OVERVIEW_TITLE_SX = titleTypeSx('sectionTitle', {
     textAlign: 'left',
     m: 0,
 });
-
-const SOLUTION_HEADING_GAP = 1.5;
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -67,25 +65,10 @@ export function OverviewSection({ data }: OverviewSectionProps) {
             </Box>
 
             <Box className={styles['content-group']} sx={overviewNarrativeBlockSx}>
-                <Box
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'flex-start',
-                        gap: SOLUTION_HEADING_GAP,
-                        mb: { xs: 3, md: 4, lg: 5 },
-                    }}
-                >
-                    <Typography component="p" sx={PROJECT_OVERVIEW_EYEBROW_SX}>
-                        {solutionEyebrow}
-                    </Typography>
-                    <Typography component="h2" sx={PROJECT_OVERVIEW_TITLE_SX}>
-                        {solutionTitle}
-                    </Typography>
-                </Box>
-                <MainDemo />
+                <MomentsChapter
+                    solutionEyebrow={solutionEyebrow}
+                    solutionTitle={solutionTitle}
+                />
             </Box>
 
             <Box
