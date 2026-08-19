@@ -30,6 +30,8 @@ export type MomentsJourneyElements = {
     storyIntro: HTMLElement;
     nearbyMockup: HTMLElement;
     mainDemo: HTMLElement;
+    selfieIntro: HTMLElement;
+    selfieMockup: HTMLElement;
 };
 
 export type BuildMomentsJourneyOptions = {
@@ -50,6 +52,8 @@ export function buildMomentsJourneyTimeline(
         storyIntro,
         nearbyMockup,
         mainDemo,
+        selfieIntro,
+        selfieMockup,
     } = elements;
     const { reducedMotion = false, onMainDemoPlay } = options;
     const t = MOMENTS_JOURNEY_TIMING;
@@ -57,8 +61,16 @@ export function buildMomentsJourneyTimeline(
     const atmosphere = getMainDemoAtmosphereElements(mainDemo);
     const storyOverlay = getMainDemoStoryOverlay(mainDemo);
 
-    gsap.set([nearbyMockup, mainDemo], { opacity: 0, y: 0, scale: 1 });
+    gsap.set([nearbyMockup, mainDemo, selfieMockup], {
+        opacity: 0,
+        y: 0,
+        scale: 1,
+    });
     gsap.set(nearbyMockup, {
+        y: t.mockupYOffset,
+        transformOrigin: 'center center',
+    });
+    gsap.set(selfieMockup, {
         y: t.mockupYOffset,
         transformOrigin: 'center center',
     });
@@ -72,6 +84,7 @@ export function buildMomentsJourneyTimeline(
     prepareSolutionOpener(solutionOpener, t);
     prepareStorybookIntro(nearbyIntro, t);
     prepareStorybookIntro(storyIntro, t);
+    prepareStorybookIntro(selfieIntro, t);
 
     const tl = gsap.timeline({ paused: true });
 
@@ -85,6 +98,8 @@ export function buildMomentsJourneyTimeline(
                 nearbyIntro.querySelector('[data-moment-desc]'),
                 ...storyIntro.querySelectorAll('[data-moment-word]'),
                 storyIntro.querySelector('[data-moment-desc]'),
+                ...selfieIntro.querySelectorAll('[data-moment-word]'),
+                selfieIntro.querySelector('[data-moment-desc]'),
             ].filter(Boolean),
             { opacity: 1, y: 0, filter: 'blur(0px)' },
         );
@@ -196,6 +211,36 @@ export function buildMomentsJourneyTimeline(
             ease: t.mainDemoFadeOutEase,
         });
 
+    // ── Selfie intro → mockup zoom (same language as Nearby) ──────────────────
+    tl.addLabel(LABELS.selfieIntroEnter);
+    addStorybookIntroEnter(tl, selfieIntro, t);
+    tl.to({}, { duration: t.selfieIntroHoldSec }).addLabel(
+        LABELS.selfieIntroExit,
+    );
+    addStorybookIntroExit(tl, selfieIntro, t);
+
+    tl.addLabel(LABELS.selfieMockupEnter)
+        .to(selfieMockup, {
+            opacity: 1,
+            y: 0,
+            duration: t.mockupFadeInDuration,
+            ease: t.mockupFadeEase,
+        })
+        .to({}, { duration: t.nearbyMockupHoldSec })
+        .addLabel(LABELS.selfieMockupZoom)
+        .to(selfieMockup, {
+            scale: t.nearbyMockupZoomScale,
+            duration: t.nearbyMockupZoomDuration,
+            ease: t.nearbyMockupZoomEase,
+        })
+        .to({}, { duration: t.nearbyMockupZoomHoldSec })
+        .addLabel(LABELS.selfieMockupExit)
+        .to(selfieMockup, {
+            opacity: 0,
+            duration: t.mockupFadeOutDuration,
+            ease: t.mockupFadeEase,
+        });
+
     return tl;
 }
 
@@ -203,8 +248,15 @@ export function playMomentsJourneyOnScroll(
     elements: MomentsJourneyElements,
     options: BuildMomentsJourneyOptions = {},
 ): { cleanup: () => void; restart: () => void } {
-    const { solutionOpener, nearbyIntro, storyIntro, nearbyMockup, mainDemo } =
-        elements;
+    const {
+        solutionOpener,
+        nearbyIntro,
+        storyIntro,
+        nearbyMockup,
+        mainDemo,
+        selfieIntro,
+        selfieMockup,
+    } = elements;
     const t = MOMENTS_JOURNEY_TIMING;
     const tl = buildMomentsJourneyTimeline(elements, options);
 
@@ -212,7 +264,14 @@ export function playMomentsJourneyOnScroll(
         prepareSolutionOpener(solutionOpener, t);
         prepareStorybookIntro(nearbyIntro, t);
         prepareStorybookIntro(storyIntro, t);
+        prepareStorybookIntro(selfieIntro, t);
         gsap.set(nearbyMockup, {
+            opacity: 0,
+            y: t.mockupYOffset,
+            scale: 1,
+            transformOrigin: 'center center',
+        });
+        gsap.set(selfieMockup, {
             opacity: 0,
             y: t.mockupYOffset,
             scale: 1,

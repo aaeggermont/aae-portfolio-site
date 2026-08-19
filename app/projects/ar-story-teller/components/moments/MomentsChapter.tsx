@@ -13,6 +13,7 @@ import { useMomentsJourneyTimeline } from './useMomentsJourneyTimeline';
 
 const nearbyMoment = AR_MOMENTS.find((m) => m.id === 'nearby');
 const storyMoment = AR_MOMENTS.find((m) => m.id === 'storyDetails');
+const selfieMoment = AR_MOMENTS.find((m) => m.id === 'selfie');
 
 type MomentsChapterProps = {
     solutionEyebrow: string;
@@ -21,7 +22,7 @@ type MomentsChapterProps = {
 
 /**
  * Single-stage Solution journey:
- * opener → Nearby title → mockup → Story title → MainDemo.
+ * opener → Nearby → Story Details / MainDemo → Selfie.
  */
 export function MomentsChapter({
     solutionEyebrow,
@@ -33,6 +34,8 @@ export function MomentsChapter({
     const storyIntroRef = useRef<HTMLDivElement>(null);
     const nearbyMockupRef = useRef<HTMLDivElement>(null);
     const mainDemoRef = useRef<HTMLDivElement>(null);
+    const selfieIntroRef = useRef<HTMLDivElement>(null);
+    const selfieMockupRef = useRef<HTMLDivElement>(null);
 
     const [journeyRunId, setJourneyRunId] = useState(0);
     const [mainDemoPlayRequestId, setMainDemoPlayRequestId] = useState(0);
@@ -52,11 +55,13 @@ export function MomentsChapter({
         storyIntroRef,
         nearbyMockupRef,
         mainDemoRef,
+        selfieIntroRef,
+        selfieMockupRef,
         runId: journeyRunId,
         onMainDemoPlay: handleMainDemoPlay,
     });
 
-    if (!nearbyMoment?.mockup || !storyMoment) {
+    if (!nearbyMoment?.mockup || !storyMoment || !selfieMoment?.mockup) {
         return null;
     }
 
@@ -99,6 +104,22 @@ export function MomentsChapter({
                     playRequestId={mainDemoPlayRequestId}
                     showReplay={false}
                     storyCaption={STORY_DETAILS_CAPTURE_COPY}
+                />
+            </div>
+
+            <div ref={selfieIntroRef} className={styles.layer}>
+                <MomentIntro
+                    title={selfieMoment.title}
+                    description={selfieMoment.description}
+                />
+            </div>
+
+            <div ref={selfieMockupRef} className={styles.layer}>
+                <MomentMockup
+                    objectPath={selfieMoment.mockup.objectPath}
+                    alt={selfieMoment.mockup.alt}
+                    intrinsicWidth={selfieMoment.mockup.intrinsicWidth}
+                    intrinsicHeight={selfieMoment.mockup.intrinsicHeight}
                 />
             </div>
 

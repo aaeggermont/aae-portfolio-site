@@ -14,6 +14,11 @@ export const MOMENTS_JOURNEY_LABELS = {
     mainDemoStoryEnter: 'mainDemoStoryEnter',
     mainDemoZoom: 'mainDemoZoom',
     mainDemoExit: 'mainDemoExit',
+    selfieIntroEnter: 'selfieIntroEnter',
+    selfieIntroExit: 'selfieIntroExit',
+    selfieMockupEnter: 'selfieMockupEnter',
+    selfieMockupZoom: 'selfieMockupZoom',
+    selfieMockupExit: 'selfieMockupExit',
 } as const;
 
 /**
@@ -97,6 +102,8 @@ export const MOMENTS_JOURNEY_TIMING = {
     mainDemoZoomHoldSec: 5,
     mainDemoFadeOutDuration: 0.85,
     mainDemoFadeOutEase: 'power2.inOut',
+    /** Readable beat after Selfie intro (same language as Nearby). */
+    selfieIntroHoldSec: 1.35,
 } as const;
 
 export const MOMENTS_JOURNEY_SCROLL_TRIGGER_START = 'top 75%';

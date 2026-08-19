@@ -1,6 +1,6 @@
 /**
  * AR journey moments for the Solution chapter (single-stage timeline).
- * V1 plays Nearby + Story Details; Selfie / Artifacts stay defined for V2.
+ * V1 plays Nearby, Story Details, and Selfie; Artifacts stays for V2.
  */
 
 export type MomentDemoKind =
@@ -61,7 +61,7 @@ export const AR_MOMENTS: MomentDefinition[] = [
     },
     {
         id: 'selfie',
-        enabled: false,
+        enabled: true,
         title: 'Taking a Selfie',
         description: 'Capture photos with integrated digital elements.',
         demo: 'selfieMockup',

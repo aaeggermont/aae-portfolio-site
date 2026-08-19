@@ -12,6 +12,8 @@ type MomentsJourneyTimelineRefs = {
     storyIntroRef: RefObject<HTMLElement | null>;
     nearbyMockupRef: RefObject<HTMLElement | null>;
     mainDemoRef: RefObject<HTMLElement | null>;
+    selfieIntroRef: RefObject<HTMLElement | null>;
+    selfieMockupRef: RefObject<HTMLElement | null>;
     /** Bumps on Replay — restarts the full journey from the beginning. */
     runId: number;
     onMainDemoPlay?: () => void;
@@ -24,6 +26,8 @@ export function useMomentsJourneyTimeline({
     storyIntroRef,
     nearbyMockupRef,
     mainDemoRef,
+    selfieIntroRef,
+    selfieMockupRef,
     runId,
     onMainDemoPlay,
 }: MomentsJourneyTimelineRefs): void {
@@ -38,13 +42,17 @@ export function useMomentsJourneyTimeline({
         const storyIntro = storyIntroRef.current;
         const nearbyMockup = nearbyMockupRef.current;
         const mainDemo = mainDemoRef.current;
+        const selfieIntro = selfieIntroRef.current;
+        const selfieMockup = selfieMockupRef.current;
         if (
             !stage ||
             !solutionOpener ||
             !nearbyIntro ||
             !storyIntro ||
             !nearbyMockup ||
-            !mainDemo
+            !mainDemo ||
+            !selfieIntro ||
+            !selfieMockup
         ) {
             return;
         }
@@ -64,6 +72,8 @@ export function useMomentsJourneyTimeline({
                     storyIntro,
                     nearbyMockup,
                     mainDemo,
+                    selfieIntro,
+                    selfieMockup,
                 },
                 {
                     reducedMotion,
@@ -86,6 +96,8 @@ export function useMomentsJourneyTimeline({
         storyIntroRef,
         nearbyMockupRef,
         mainDemoRef,
+        selfieIntroRef,
+        selfieMockupRef,
     ]);
 
     useLayoutEffect(() => {
