@@ -89,3 +89,7 @@ export const AR_MOMENTS: MomentDefinition[] = [
 ];
 
 export const AR_MOMENTS_ACTIVE = AR_MOMENTS.filter((m) => m.enabled);
+
+/** Caption overlaid on the frozen AR phone before the Story Details zoom. */
+export const STORY_DETAILS_CAPTURE_COPY =
+    'Sally Shine was a celebrated child star visiting the Hollywood Tower Hotel on Halloween night, 1939. After entering the elevator with four other guests, a mysterious lightning strike caused them to vanish without a trace.';

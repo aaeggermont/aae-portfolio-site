@@ -7,7 +7,7 @@ import { MainDemo } from '../main-demo/MainDemo';
 import { MomentIntro } from './MomentIntro';
 import { MomentMockup } from './MomentMockup';
 import { SolutionOpener } from './SolutionOpener';
-import { AR_MOMENTS } from './momentsContent';
+import { AR_MOMENTS, STORY_DETAILS_CAPTURE_COPY } from './momentsContent';
 import styles from './MomentsChapter.module.scss';
 import { useMomentsJourneyTimeline } from './useMomentsJourneyTimeline';
 
@@ -98,6 +98,7 @@ export function MomentsChapter({
                     autoPlayOnScroll={false}
                     playRequestId={mainDemoPlayRequestId}
                     showReplay={false}
+                    storyCaption={STORY_DETAILS_CAPTURE_COPY}
                 />
             </div>
 

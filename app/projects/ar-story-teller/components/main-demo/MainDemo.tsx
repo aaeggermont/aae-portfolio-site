@@ -74,6 +74,8 @@ export type MainDemoProps = {
     /** When false, hide the built-in Replay control (parent owns replay). */
     showReplay?: boolean;
     className?: string;
+    /** Optional caption overlaid on the frozen AR screen (Story Details finale). */
+    storyCaption?: string;
 };
 
 export function MainDemo({
@@ -81,6 +83,7 @@ export function MainDemo({
     playRequestId = 0,
     showReplay = true,
     className = '',
+    storyCaption,
 }: MainDemoProps = {}) {
     const canvasRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);
@@ -150,19 +153,28 @@ export function MainDemo({
             className={[styles.canvas, className].filter(Boolean).join(' ')}
             aria-label="AR Magic Tours cinematic demo — Hollywood Tower Hotel"
         >
-            <ProjectImage
-                objectPath={MAIN_DEMO_BACKGROUND_OBJECT_PATH}
-                alt="Hollywood Tower Hotel viewed from Hollywood Boulevard"
-                width={MAIN_DEMO_BACKGROUND_INTRINSIC_WIDTH}
-                height={MAIN_DEMO_BACKGROUND_INTRINSIC_HEIGHT}
-                sizes={mainDemoImageSizes}
-                className={styles.backgroundImage}
-                priority
+            <div data-main-demo-bg className={styles.backgroundWrap}>
+                <ProjectImage
+                    objectPath={MAIN_DEMO_BACKGROUND_OBJECT_PATH}
+                    alt="Hollywood Tower Hotel viewed from Hollywood Boulevard"
+                    width={MAIN_DEMO_BACKGROUND_INTRINSIC_WIDTH}
+                    height={MAIN_DEMO_BACKGROUND_INTRINSIC_HEIGHT}
+                    sizes={mainDemoImageSizes}
+                    className={styles.backgroundImage}
+                    priority
+                />
+            </div>
+
+            <div
+                className={styles.atmosphereWash}
+                data-main-demo-wash
+                aria-hidden="true"
             />
 
             <div
                 ref={windowGlowRef}
                 className={styles.windowGlowWrap}
+                data-main-demo-glow
                 aria-hidden="true"
             >
                 <div className={styles.windowGlow} />
@@ -171,6 +183,7 @@ export function MainDemo({
             <div
                 ref={girlGhostRef}
                 className={styles.girlGhostWrap}
+                data-main-demo-ghost
                 aria-hidden="true"
             >
                 <div className={styles.girlGhostClip}>
@@ -187,16 +200,16 @@ export function MainDemo({
                 </div>
             </div>
 
-            <div className={styles.iphoneDeviceWrap}>
+            <div className={styles.iphoneDeviceWrap} data-main-demo-iphone>
                 <div
                     ref={iphoneDeviceRef}
                     className={styles.iphoneDevice}
-                    aria-hidden="true"
                 >
                     <div className={styles.iphoneScreen}>
                         <div
                             ref={coachingOverlayRef}
                             className={styles.coachingOverlay}
+                            aria-hidden="true"
                         >
                             <ArkitCoachingOverlay
                                 key={`coaching-${playCycle}-${coachingSwayActive ? 'sway' : 'still'}`}
@@ -206,6 +219,7 @@ export function MainDemo({
                         <div
                             ref={iphoneVideoRef}
                             className={styles.iphoneScreenVideoLayer}
+                            aria-hidden="true"
                         >
                             <DemoVideo
                                 key={runId}
@@ -213,6 +227,16 @@ export function MainDemo({
                                 videoClassName={styles.iphoneScreenVideo}
                             />
                         </div>
+                        {storyCaption ? (
+                            <div
+                                className={styles.storyOverlay}
+                                data-main-demo-story
+                            >
+                                <p className={styles.storyOverlayText}>
+                                    {storyCaption}
+                                </p>
+                            </div>
+                        ) : null}
                     </div>
                     <div className={styles.iphoneFrameImageWrap}>
                         <ProjectImage

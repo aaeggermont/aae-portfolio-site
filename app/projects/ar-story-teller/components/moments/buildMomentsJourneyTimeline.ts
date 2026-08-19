@@ -3,6 +3,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import { MAIN_DEMO_DURATION_MS } from '../main-demo/mainDemoTiming';
 import {
+    freezeMainDemoVideo,
+    getMainDemoAtmosphereElements,
+    getMainDemoStoryOverlay,
+} from './mainDemoFinale';
+import {
     MOMENTS_JOURNEY_LABELS,
     MOMENTS_JOURNEY_SCROLL_TRIGGER_START,
     MOMENTS_JOURNEY_TIMING,
@@ -49,13 +54,21 @@ export function buildMomentsJourneyTimeline(
     const { reducedMotion = false, onMainDemoPlay } = options;
     const t = MOMENTS_JOURNEY_TIMING;
     const mainDemoDurationSec = MAIN_DEMO_DURATION_MS / 1000;
+    const atmosphere = getMainDemoAtmosphereElements(mainDemo);
+    const storyOverlay = getMainDemoStoryOverlay(mainDemo);
 
-    gsap.set([nearbyMockup, mainDemo], { opacity: 0, y: 0 });
+    gsap.set([nearbyMockup, mainDemo], { opacity: 0, y: 0, scale: 1 });
     gsap.set(nearbyMockup, {
         y: t.mockupYOffset,
-        scale: 1,
         transformOrigin: 'center center',
     });
+    gsap.set(mainDemo, { transformOrigin: 'center center' });
+    if (atmosphere.length) {
+        gsap.set(atmosphere, { opacity: 1 });
+    }
+    if (storyOverlay) {
+        gsap.set(storyOverlay, { opacity: 0 });
+    }
     prepareSolutionOpener(solutionOpener, t);
     prepareStorybookIntro(nearbyIntro, t);
     prepareStorybookIntro(storyIntro, t);
@@ -63,7 +76,7 @@ export function buildMomentsJourneyTimeline(
     const tl = gsap.timeline({ paused: true });
 
     if (reducedMotion) {
-        gsap.set(mainDemo, { opacity: 1, y: 0 });
+        gsap.set(mainDemo, { opacity: 1, y: 0, scale: 1 });
         gsap.set(
             [
                 solutionOpener.querySelector('[data-moment-eyebrow]'),
@@ -135,14 +148,47 @@ export function buildMomentsJourneyTimeline(
         {
             opacity: 1,
             y: 0,
+            scale: 1,
             duration: t.storyCrossfadeDuration,
             ease: t.storyCrossfadeEase,
         },
         LABELS.storyCrossfade,
     );
 
+    // ── MainDemo plays → freeze last frame → fade park → zoom phone ───────────
     tl.addLabel(LABELS.mainDemoActive)
         .to({}, { duration: mainDemoDurationSec + t.mainDemoHoldAfterSec })
+        .addLabel(LABELS.mainDemoFreeze)
+        .add(() => {
+            freezeMainDemoVideo(mainDemo);
+        })
+        .addLabel(LABELS.mainDemoStoryEnter);
+
+    if (storyOverlay) {
+        tl.to(storyOverlay, {
+            opacity: 1,
+            duration: t.mainDemoStoryFadeInDuration,
+            ease: t.mainDemoStoryFadeInEase,
+        }).to({}, { duration: t.mainDemoStoryHoldSec });
+    }
+
+    if (atmosphere.length) {
+        tl.to(atmosphere, {
+            opacity: 0,
+            duration: t.mainDemoBgFadeDuration,
+            ease: t.mainDemoBgFadeEase,
+        });
+    } else {
+        tl.to({}, { duration: t.mainDemoBgFadeDuration });
+    }
+
+    tl.addLabel(LABELS.mainDemoZoom)
+        .to(mainDemo, {
+            scale: t.mainDemoZoomScale,
+            duration: t.mainDemoZoomDuration,
+            ease: t.mainDemoZoomEase,
+        })
+        .to({}, { duration: t.mainDemoZoomHoldSec })
         .addLabel(LABELS.mainDemoExit)
         .to(mainDemo, {
             opacity: 0,
@@ -172,7 +218,20 @@ export function playMomentsJourneyOnScroll(
             scale: 1,
             transformOrigin: 'center center',
         });
-        gsap.set(mainDemo, { opacity: 0, y: 0 });
+        gsap.set(mainDemo, {
+            opacity: 0,
+            y: 0,
+            scale: 1,
+            transformOrigin: 'center center',
+        });
+        const atmosphere = getMainDemoAtmosphereElements(mainDemo);
+        if (atmosphere.length) {
+            gsap.set(atmosphere, { opacity: 1 });
+        }
+        const storyOverlay = getMainDemoStoryOverlay(mainDemo);
+        if (storyOverlay) {
+            gsap.set(storyOverlay, { opacity: 0 });
+        }
     };
 
     const playFromStart = () => {

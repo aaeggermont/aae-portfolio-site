@@ -10,6 +10,9 @@ export const MOMENTS_JOURNEY_LABELS = {
     storyIntroEnter: 'storyIntroEnter',
     storyCrossfade: 'storyCrossfade',
     mainDemoActive: 'mainDemoActive',
+    mainDemoFreeze: 'mainDemoFreeze',
+    mainDemoStoryEnter: 'mainDemoStoryEnter',
+    mainDemoZoom: 'mainDemoZoom',
     mainDemoExit: 'mainDemoExit',
 } as const;
 
@@ -76,8 +79,22 @@ export const MOMENTS_JOURNEY_TIMING = {
     /** Text out + MainDemo in overlap. */
     storyCrossfadeDuration: 0.9,
     storyCrossfadeEase: 'power2.inOut',
-    /** Extra watch time after MainDemo’s internal sequence completes. */
-    mainDemoHoldAfterSec: 5,
+    /**
+     * Watch the looping AR video after MainDemo’s intro finishes,
+     * before freezing the last frame and zooming the phone.
+     */
+    mainDemoHoldAfterSec: 3.5,
+    mainDemoStoryFadeInDuration: 0.7,
+    mainDemoStoryFadeInEase: 'power2.out',
+    /** Brief beat after the caption lands, before park fade + zoom. */
+    mainDemoStoryHoldSec: 0.55,
+    mainDemoBgFadeDuration: 0.9,
+    mainDemoBgFadeEase: 'power2.inOut',
+    mainDemoZoomDuration: 1.25,
+    mainDemoZoomScale: 1.48,
+    mainDemoZoomEase: 'power2.inOut',
+    /** Reading time on the zoomed, frozen phone with story caption. */
+    mainDemoZoomHoldSec: 5,
     mainDemoFadeOutDuration: 0.85,
     mainDemoFadeOutEase: 'power2.inOut',
 } as const;
