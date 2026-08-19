@@ -19,6 +19,11 @@ export const MOMENTS_JOURNEY_LABELS = {
     selfieMockupEnter: 'selfieMockupEnter',
     selfieMockupZoom: 'selfieMockupZoom',
     selfieMockupExit: 'selfieMockupExit',
+    artifactsIntroEnter: 'artifactsIntroEnter',
+    artifactsIntroExit: 'artifactsIntroExit',
+    artifactsMockupEnter: 'artifactsMockupEnter',
+    artifactsMockupZoom: 'artifactsMockupZoom',
+    artifactsMockupExit: 'artifactsMockupExit',
 } as const;
 
 /**
@@ -75,7 +80,7 @@ export const MOMENTS_JOURNEY_TIMING = {
     /** Time the Nearby phone stays at rest before zoom. */
     nearbyMockupHoldSec: 2,
     nearbyMockupZoomDuration: 1.25,
-    nearbyMockupZoomScale: 1.48,
+    nearbyMockupZoomScale: 1.25,
     nearbyMockupZoomEase: 'power2.inOut',
     /** Extra beat at the zoomed-in phone before fade-out. */
     nearbyMockupZoomHoldSec: 2.2,
@@ -96,7 +101,7 @@ export const MOMENTS_JOURNEY_TIMING = {
     mainDemoBgFadeDuration: 0.9,
     mainDemoBgFadeEase: 'power2.inOut',
     mainDemoZoomDuration: 1.25,
-    mainDemoZoomScale: 1.48,
+    mainDemoZoomScale: 1.25,
     mainDemoZoomEase: 'power2.inOut',
     /** Reading time on the zoomed, frozen phone with story caption. */
     mainDemoZoomHoldSec: 5,
@@ -104,6 +109,8 @@ export const MOMENTS_JOURNEY_TIMING = {
     mainDemoFadeOutEase: 'power2.inOut',
     /** Readable beat after Selfie intro (same language as Nearby). */
     selfieIntroHoldSec: 1.35,
+    /** Readable beat after Collecting Artifacts intro (same language as Nearby). */
+    artifactsIntroHoldSec: 1.35,
 } as const;
 
 export const MOMENTS_JOURNEY_SCROLL_TRIGGER_START = 'top 75%';

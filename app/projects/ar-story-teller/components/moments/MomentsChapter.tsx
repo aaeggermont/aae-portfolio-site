@@ -14,6 +14,7 @@ import { useMomentsJourneyTimeline } from './useMomentsJourneyTimeline';
 const nearbyMoment = AR_MOMENTS.find((m) => m.id === 'nearby');
 const storyMoment = AR_MOMENTS.find((m) => m.id === 'storyDetails');
 const selfieMoment = AR_MOMENTS.find((m) => m.id === 'selfie');
+const artifactsMoment = AR_MOMENTS.find((m) => m.id === 'artifacts');
 
 type MomentsChapterProps = {
     solutionEyebrow: string;
@@ -22,7 +23,7 @@ type MomentsChapterProps = {
 
 /**
  * Single-stage Solution journey:
- * opener → Nearby → Story Details / MainDemo → Selfie.
+ * opener → Nearby → Story Details / MainDemo → Selfie → Artifacts.
  */
 export function MomentsChapter({
     solutionEyebrow,
@@ -36,6 +37,8 @@ export function MomentsChapter({
     const mainDemoRef = useRef<HTMLDivElement>(null);
     const selfieIntroRef = useRef<HTMLDivElement>(null);
     const selfieMockupRef = useRef<HTMLDivElement>(null);
+    const artifactsIntroRef = useRef<HTMLDivElement>(null);
+    const artifactsMockupRef = useRef<HTMLDivElement>(null);
 
     const [journeyRunId, setJourneyRunId] = useState(0);
     const [mainDemoPlayRequestId, setMainDemoPlayRequestId] = useState(0);
@@ -57,11 +60,18 @@ export function MomentsChapter({
         mainDemoRef,
         selfieIntroRef,
         selfieMockupRef,
+        artifactsIntroRef,
+        artifactsMockupRef,
         runId: journeyRunId,
         onMainDemoPlay: handleMainDemoPlay,
     });
 
-    if (!nearbyMoment?.mockup || !storyMoment || !selfieMoment?.mockup) {
+    if (
+        !nearbyMoment?.mockup ||
+        !storyMoment ||
+        !selfieMoment?.mockup ||
+        !artifactsMoment?.mockup
+    ) {
         return null;
     }
 
@@ -120,6 +130,22 @@ export function MomentsChapter({
                     alt={selfieMoment.mockup.alt}
                     intrinsicWidth={selfieMoment.mockup.intrinsicWidth}
                     intrinsicHeight={selfieMoment.mockup.intrinsicHeight}
+                />
+            </div>
+
+            <div ref={artifactsIntroRef} className={styles.layer}>
+                <MomentIntro
+                    title={artifactsMoment.title}
+                    description={artifactsMoment.description}
+                />
+            </div>
+
+            <div ref={artifactsMockupRef} className={styles.layer}>
+                <MomentMockup
+                    objectPath={artifactsMoment.mockup.objectPath}
+                    alt={artifactsMoment.mockup.alt}
+                    intrinsicWidth={artifactsMoment.mockup.intrinsicWidth}
+                    intrinsicHeight={artifactsMoment.mockup.intrinsicHeight}
                 />
             </div>
 

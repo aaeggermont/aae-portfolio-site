@@ -1,6 +1,6 @@
 /**
  * AR journey moments for the Solution chapter (single-stage timeline).
- * V1 plays Nearby, Story Details, and Selfie; Artifacts stays for V2.
+ * All four AR moments play in one film.
  */
 
 export type MomentDemoKind =
@@ -74,7 +74,7 @@ export const AR_MOMENTS: MomentDefinition[] = [
     },
     {
         id: 'artifacts',
-        enabled: false,
+        enabled: true,
         title: 'Collecting Artifacts',
         description:
             "Collect digital artifacts tied to the attraction's narrative.",

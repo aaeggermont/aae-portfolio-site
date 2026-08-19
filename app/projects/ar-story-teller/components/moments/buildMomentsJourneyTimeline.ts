@@ -32,6 +32,8 @@ export type MomentsJourneyElements = {
     mainDemo: HTMLElement;
     selfieIntro: HTMLElement;
     selfieMockup: HTMLElement;
+    artifactsIntro: HTMLElement;
+    artifactsMockup: HTMLElement;
 };
 
 export type BuildMomentsJourneyOptions = {
@@ -54,6 +56,8 @@ export function buildMomentsJourneyTimeline(
         mainDemo,
         selfieIntro,
         selfieMockup,
+        artifactsIntro,
+        artifactsMockup,
     } = elements;
     const { reducedMotion = false, onMainDemoPlay } = options;
     const t = MOMENTS_JOURNEY_TIMING;
@@ -61,7 +65,7 @@ export function buildMomentsJourneyTimeline(
     const atmosphere = getMainDemoAtmosphereElements(mainDemo);
     const storyOverlay = getMainDemoStoryOverlay(mainDemo);
 
-    gsap.set([nearbyMockup, mainDemo, selfieMockup], {
+    gsap.set([nearbyMockup, mainDemo, selfieMockup, artifactsMockup], {
         opacity: 0,
         y: 0,
         scale: 1,
@@ -71,6 +75,10 @@ export function buildMomentsJourneyTimeline(
         transformOrigin: 'center center',
     });
     gsap.set(selfieMockup, {
+        y: t.mockupYOffset,
+        transformOrigin: 'center center',
+    });
+    gsap.set(artifactsMockup, {
         y: t.mockupYOffset,
         transformOrigin: 'center center',
     });
@@ -85,6 +93,7 @@ export function buildMomentsJourneyTimeline(
     prepareStorybookIntro(nearbyIntro, t);
     prepareStorybookIntro(storyIntro, t);
     prepareStorybookIntro(selfieIntro, t);
+    prepareStorybookIntro(artifactsIntro, t);
 
     const tl = gsap.timeline({ paused: true });
 
@@ -100,6 +109,8 @@ export function buildMomentsJourneyTimeline(
                 storyIntro.querySelector('[data-moment-desc]'),
                 ...selfieIntro.querySelectorAll('[data-moment-word]'),
                 selfieIntro.querySelector('[data-moment-desc]'),
+                ...artifactsIntro.querySelectorAll('[data-moment-word]'),
+                artifactsIntro.querySelector('[data-moment-desc]'),
             ].filter(Boolean),
             { opacity: 1, y: 0, filter: 'blur(0px)' },
         );
@@ -241,6 +252,36 @@ export function buildMomentsJourneyTimeline(
             ease: t.mockupFadeEase,
         });
 
+    // ── Artifacts intro → mockup zoom (same language as Nearby / Selfie) ──────
+    tl.addLabel(LABELS.artifactsIntroEnter);
+    addStorybookIntroEnter(tl, artifactsIntro, t);
+    tl.to({}, { duration: t.artifactsIntroHoldSec }).addLabel(
+        LABELS.artifactsIntroExit,
+    );
+    addStorybookIntroExit(tl, artifactsIntro, t);
+
+    tl.addLabel(LABELS.artifactsMockupEnter)
+        .to(artifactsMockup, {
+            opacity: 1,
+            y: 0,
+            duration: t.mockupFadeInDuration,
+            ease: t.mockupFadeEase,
+        })
+        .to({}, { duration: t.nearbyMockupHoldSec })
+        .addLabel(LABELS.artifactsMockupZoom)
+        .to(artifactsMockup, {
+            scale: t.nearbyMockupZoomScale,
+            duration: t.nearbyMockupZoomDuration,
+            ease: t.nearbyMockupZoomEase,
+        })
+        .to({}, { duration: t.nearbyMockupZoomHoldSec })
+        .addLabel(LABELS.artifactsMockupExit)
+        .to(artifactsMockup, {
+            opacity: 0,
+            duration: t.mockupFadeOutDuration,
+            ease: t.mockupFadeEase,
+        });
+
     return tl;
 }
 
@@ -256,6 +297,8 @@ export function playMomentsJourneyOnScroll(
         mainDemo,
         selfieIntro,
         selfieMockup,
+        artifactsIntro,
+        artifactsMockup,
     } = elements;
     const t = MOMENTS_JOURNEY_TIMING;
     const tl = buildMomentsJourneyTimeline(elements, options);
@@ -265,6 +308,7 @@ export function playMomentsJourneyOnScroll(
         prepareStorybookIntro(nearbyIntro, t);
         prepareStorybookIntro(storyIntro, t);
         prepareStorybookIntro(selfieIntro, t);
+        prepareStorybookIntro(artifactsIntro, t);
         gsap.set(nearbyMockup, {
             opacity: 0,
             y: t.mockupYOffset,
@@ -272,6 +316,12 @@ export function playMomentsJourneyOnScroll(
             transformOrigin: 'center center',
         });
         gsap.set(selfieMockup, {
+            opacity: 0,
+            y: t.mockupYOffset,
+            scale: 1,
+            transformOrigin: 'center center',
+        });
+        gsap.set(artifactsMockup, {
             opacity: 0,
             y: t.mockupYOffset,
             scale: 1,
