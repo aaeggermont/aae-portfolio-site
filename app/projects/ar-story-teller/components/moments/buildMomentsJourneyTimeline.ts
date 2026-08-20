@@ -4,8 +4,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { MAIN_DEMO_DURATION_MS } from '../main-demo/mainDemoTiming';
 import {
     freezeMainDemoVideo,
+    getMainDemoArVideo,
     getMainDemoAtmosphereElements,
+    getMainDemoStoryGlow,
     getMainDemoStoryOverlay,
+    getMainDemoStoryText,
     unfreezeMainDemoVideo,
 } from './mainDemoFinale';
 import {
@@ -67,6 +70,9 @@ export function buildMomentsJourneyTimeline(
     const mainDemoDurationSec = MAIN_DEMO_DURATION_MS / 1000;
     const atmosphere = getMainDemoAtmosphereElements(mainDemo);
     const storyOverlay = getMainDemoStoryOverlay(mainDemo);
+    const storyGlow = getMainDemoStoryGlow(mainDemo);
+    const storyText = getMainDemoStoryText(mainDemo);
+    const arVideo = getMainDemoArVideo(mainDemo);
 
     gsap.set([nearbyMockup, mainDemo, selfieMockup, artifactsMockup], {
         opacity: 0,
@@ -91,6 +97,17 @@ export function buildMomentsJourneyTimeline(
     }
     if (storyOverlay) {
         gsap.set(storyOverlay, { opacity: 0 });
+    }
+    if (storyGlow) {
+        gsap.set(storyGlow, { opacity: 0 });
+    }
+    if (storyText) {
+        gsap.set(storyText, {
+            '--story-text-glow': t.mainDemoStoryTextGlowRest,
+        });
+    }
+    if (arVideo) {
+        gsap.set(arVideo, { filter: t.mainDemoStoryVideoFilterRest });
     }
     prepareSolutionOpener(solutionOpener, t);
     prepareStorybookIntro(nearbyIntro, t);
@@ -146,7 +163,7 @@ export function buildMomentsJourneyTimeline(
             duration: t.mockupFadeInDuration,
             ease: t.mockupFadeEase,
         })
-        .to({}, { duration: t.nearbyMockupHoldSec })
+        .to({}, { duration: t.nearbyMockupHoldSec }, '<')
         .addLabel(LABELS.nearbyMockupZoom)
         .to(nearbyMockup, {
             scale: t.nearbyMockupZoomScale,
@@ -198,10 +215,42 @@ export function buildMomentsJourneyTimeline(
             opacity: 1,
             duration: t.mainDemoStoryFadeInDuration,
             ease: t.mainDemoStoryFadeInEase,
-        }).to({}, { duration: t.mainDemoStoryHoldSec });
-    }
-
-    if (atmosphere.length) {
+        });
+        if (storyGlow) {
+            tl.to(
+                storyGlow,
+                {
+                    opacity: t.mainDemoStoryGlowRestOpacity,
+                    duration: t.mainDemoStoryFadeInDuration,
+                    ease: t.mainDemoStoryFadeInEase,
+                },
+                '<',
+            );
+        }
+        if (arVideo) {
+            tl.to(
+                arVideo,
+                {
+                    filter: t.mainDemoStoryVideoFilter,
+                    duration: t.mainDemoStoryFadeInDuration,
+                    ease: t.mainDemoStoryVideoFilterEase,
+                },
+                '<',
+            );
+        }
+        tl.to({}, { duration: t.mainDemoStoryHoldSec });
+        if (atmosphere.length) {
+            tl.to(
+                atmosphere,
+                {
+                    opacity: 0,
+                    duration: t.mainDemoBgFadeDuration,
+                    ease: t.mainDemoBgFadeEase,
+                },
+                `<+=${Math.max(0, t.mainDemoStoryHoldSec - t.mainDemoBgFadeDuration)}`,
+            );
+        }
+    } else if (atmosphere.length) {
         tl.to(atmosphere, {
             opacity: 0,
             duration: t.mainDemoBgFadeDuration,
@@ -240,7 +289,7 @@ export function buildMomentsJourneyTimeline(
             duration: t.mockupFadeInDuration,
             ease: t.mockupFadeEase,
         })
-        .to({}, { duration: t.nearbyMockupHoldSec })
+        .to({}, { duration: t.nearbyMockupHoldSec }, '<')
         .addLabel(LABELS.selfieMockupZoom)
         .to(selfieMockup, {
             scale: t.nearbyMockupZoomScale,
@@ -270,7 +319,7 @@ export function buildMomentsJourneyTimeline(
             duration: t.mockupFadeInDuration,
             ease: t.mockupFadeEase,
         })
-        .to({}, { duration: t.nearbyMockupHoldSec })
+        .to({}, { duration: t.nearbyMockupHoldSec }, '<')
         .addLabel(LABELS.artifactsMockupZoom)
         .to(artifactsMockup, {
             scale: t.nearbyMockupZoomScale,
@@ -344,13 +393,82 @@ export function playMomentsJourneyOnScroll(
         if (storyOverlay) {
             gsap.set(storyOverlay, { opacity: 0 });
         }
+        const storyGlow = getMainDemoStoryGlow(mainDemo);
+        if (storyGlow) {
+            gsap.set(storyGlow, { opacity: 0 });
+        }
+        const storyText = getMainDemoStoryText(mainDemo);
+        if (storyText) {
+            storyText.style.setProperty(
+                '--story-text-glow',
+                String(t.mainDemoStoryTextGlowRest),
+            );
+        }
+        const arVideo = getMainDemoArVideo(mainDemo);
+        if (arVideo) {
+            gsap.set(arVideo, { filter: t.mainDemoStoryVideoFilterRest });
+        }
         unfreezeMainDemoVideo(mainDemo);
     };
 
     let loopCall: gsap.core.Tween | undefined;
+    let livingGlow: gsap.core.Timeline | undefined;
+
+    const stopLivingGlow = () => {
+        livingGlow?.kill();
+        livingGlow = undefined;
+        const storyGlow = getMainDemoStoryGlow(mainDemo);
+        if (storyGlow) {
+            gsap.set(storyGlow, { opacity: 0 });
+        }
+        const storyText = getMainDemoStoryText(mainDemo);
+        if (storyText) {
+            storyText.style.setProperty(
+                '--story-text-glow',
+                String(t.mainDemoStoryTextGlowRest),
+            );
+        }
+    };
+
+    const startLivingGlow = () => {
+        livingGlow?.kill();
+        livingGlow = undefined;
+        const storyGlow = getMainDemoStoryGlow(mainDemo);
+        const storyText = getMainDemoStoryText(mainDemo);
+        if (!storyGlow && !storyText) return;
+
+        const glowState = {
+            overlay: t.mainDemoStoryGlowRestOpacity,
+            caption: t.mainDemoStoryTextGlowRest,
+        };
+        livingGlow = gsap.timeline({
+            repeat: -1,
+            yoyo: true,
+            defaults: {
+                duration: t.mainDemoStoryGlowPulseSec,
+                ease: t.mainDemoStoryGlowPulseEase,
+            },
+        });
+        livingGlow.to(glowState, {
+            overlay: t.mainDemoStoryGlowPeakOpacity,
+            caption: t.mainDemoStoryTextGlowPeak,
+            onUpdate: () => {
+                if (storyGlow) {
+                    gsap.set(storyGlow, { opacity: glowState.overlay });
+                }
+                if (storyText) {
+                    storyText.style.setProperty(
+                        '--story-text-glow',
+                        String(glowState.caption),
+                    );
+                }
+            },
+        });
+    };
 
     const playFromStart = () => {
         loopCall?.kill();
+        stopLivingGlow();
         resetLayers();
         tl.restart(true, false);
     };
@@ -360,12 +478,19 @@ export function playMomentsJourneyOnScroll(
             playFromStart();
             return;
         }
+        livingGlow?.resume();
         tl.play();
     };
 
     if (!options.reducedMotion) {
+        tl.add(
+            startLivingGlow,
+            `${LABELS.mainDemoStoryEnter}+=${t.mainDemoStoryFadeInDuration}`,
+        );
+        tl.add(stopLivingGlow, LABELS.mainDemoExit);
         tl.eventCallback('onComplete', () => {
             loopCall?.kill();
+            stopLivingGlow();
             loopCall = gsap.delayedCall(
                 MOMENTS_JOURNEY_LOOP_GAP_SEC,
                 playFromStart,
@@ -375,6 +500,7 @@ export function playMomentsJourneyOnScroll(
 
     const pausePlayback = () => {
         loopCall?.kill();
+        livingGlow?.pause();
         tl.pause();
     };
 
@@ -391,6 +517,7 @@ export function playMomentsJourneyOnScroll(
     return {
         cleanup: () => {
             loopCall?.kill();
+            stopLivingGlow();
             trigger.kill();
             tl.kill();
         },

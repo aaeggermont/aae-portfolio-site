@@ -227,14 +227,24 @@ export function MainDemo({
                             />
                         </div>
                         {storyCaption ? (
-                            <div
-                                className={styles.storyOverlay}
-                                data-main-demo-story
-                            >
-                                <p className={styles.storyOverlayText}>
-                                    {storyCaption}
-                                </p>
-                            </div>
+                            <>
+                                <div
+                                    className={styles.storyGlow}
+                                    data-main-demo-story-glow
+                                    aria-hidden="true"
+                                />
+                                <div
+                                    className={styles.storyOverlay}
+                                    data-main-demo-story
+                                >
+                                    <p
+                                        className={styles.storyOverlayText}
+                                        data-main-demo-story-text
+                                    >
+                                        {storyCaption}
+                                    </p>
+                                </div>
+                            </>
                         ) : null}
                     </div>
                     <div className={styles.iphoneFrameImageWrap}>

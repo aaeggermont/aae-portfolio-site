@@ -19,7 +19,7 @@ export const MAIN_DEMO_TIMELINE_LABELS = {
  */
 export const MAIN_DEMO_PHASE_TIMING = {
     /** Static beat after scroll — user reads section copy and observes the tower image. */
-    initialDelay: 3,
+    initialDelay: 1,
     /** Window glow (placeholder until glow layer is implemented). */
     windowGlowDuration: 2.5,
     /** Camera zoom toward illuminated windows (placeholder until zoom layer ships). */
@@ -34,7 +34,7 @@ export const MAIN_DEMO_NOTIFICATION_TIMING = {
     fadeOutYOffset: -56,
     fadeOutEase: 'power2.in',
     /** Minimum fully-visible beat before fade-out at device reveal (5–6s target). */
-    minVisibleDuration: 5.5,
+    minVisibleDuration: 2.5,
     /** Soft spring landing (overshoot then settle). */
     fadeInEase: 'back.out(1.4)',
     /** Starts further above rest — drops into place like a system banner. */
@@ -70,7 +70,7 @@ export const MAIN_DEMO_IPHONE_FRAME_TIMING = {
      * Hold after notification is fully visible before the device appears.
      * Matches the prior glow + ghost pacing (0.3 + 1.2 + 1 + 1 + 0.5 = 4s).
      */
-    delayAfterNotificationVisible: 4,
+    delayAfterNotificationVisible: 2,
     revealDuration: 1.35,
     revealEase: 'power2.out',
     initialScale: 0.92,

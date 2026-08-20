@@ -44,3 +44,18 @@ export function getMainDemoStoryOverlay(root: HTMLElement): HTMLElement | null {
     const el = root.querySelector('[data-main-demo-story]');
     return el instanceof HTMLElement ? el : null;
 }
+
+export function getMainDemoArVideo(root: HTMLElement): HTMLVideoElement | null {
+    const video = root.querySelector('video');
+    return video instanceof HTMLVideoElement ? video : null;
+}
+
+export function getMainDemoStoryGlow(root: HTMLElement): HTMLElement | null {
+    const el = root.querySelector('[data-main-demo-story-glow]');
+    return el instanceof HTMLElement ? el : null;
+}
+
+export function getMainDemoStoryText(root: HTMLElement): HTMLElement | null {
+    const el = root.querySelector('[data-main-demo-story-text]');
+    return el instanceof HTMLElement ? el : null;
+}

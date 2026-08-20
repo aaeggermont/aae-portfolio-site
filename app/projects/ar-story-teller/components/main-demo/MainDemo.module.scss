@@ -43,6 +43,12 @@
     --iphone-screen-inset-right: 0.4%;
     --iphone-screen-inset-bottom: 0.3%;
     --iphone-screen-radius: 13%;
+
+    /* Tight halo around Sally in the frozen AR frame. */
+    --story-glow-x: 55%;
+    --story-glow-y: 28%;
+    --story-glow-width: 18.2%;
+    --story-glow-height: 15.4%;
 }
 
 @media (min-width: 768px) {
@@ -203,6 +209,22 @@
     container-type: size;
 }
 
+.storyGlow {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: screen;
+    background: radial-gradient(
+        ellipse var(--story-glow-width) var(--story-glow-height)
+            at var(--story-glow-x) var(--story-glow-y),
+        rgba(255, 224, 150, 0.9) 0%,
+        rgba(255, 186, 90, 0.42) 42%,
+        rgba(255, 150, 50, 0) 100%
+    );
+}
+
 .storyOverlay {
     position: absolute;
     inset: 0;
@@ -210,26 +232,31 @@
     display: flex;
     align-items: flex-end;
     box-sizing: border-box;
-    padding: 14% 10% 30%;
+    padding: 14% 10% 28%;
     pointer-events: none;
     opacity: 0;
+    /* Keep Sally + glow open at the top; darken only under the caption. */
     background: linear-gradient(
         180deg,
-        rgba(3, 19, 60, 0.08) 0%,
-        rgba(3, 19, 60, 0.55) 42%,
-        rgba(3, 19, 60, 0.88) 100%
+        rgba(3, 19, 60, 0) 0%,
+        rgba(3, 19, 60, 0.04) 36%,
+        rgba(3, 19, 60, 0.28) 58%,
+        rgba(3, 19, 60, 0.62) 100%
     );
 }
 
 .storyOverlayText {
     margin: 0;
-    color: #ffffff;
+    color: #fff8ec;
     font-family: var(--font-source-sans-3), 'Source Sans 3', system-ui, sans-serif;
-    font-weight: 600;
-    font-size: clamp(7.5px, 6.2cqw, 13px);
-    line-height: 1.38;
-    letter-spacing: 0.01em;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+    font-weight: 700;
+    font-size: clamp(8px, 6.6cqw, 14px);
+    line-height: 1.4;
+    letter-spacing: 0.015em;
+    --story-text-glow: 0.42;
+    text-shadow:
+        0 0 12px rgba(255, 214, 140, var(--story-text-glow)),
+        0 1px 10px rgba(0, 0, 0, 0.7);
 }
 
 .coachingOverlay {
@@ -268,6 +295,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    will-change: filter;
 }
 
 .iphoneFrameImageWrap {

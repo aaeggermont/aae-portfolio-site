@@ -77,13 +77,13 @@ export const MOMENTS_JOURNEY_TIMING = {
     mockupFadeOutDuration: 0.65,
     mockupFadeEase: 'power2.out',
     mockupYOffset: 20,
-    /** Time the Nearby phone stays at rest before zoom. */
-    nearbyMockupHoldSec: 2,
+    /** Time the Nearby / Selfie / Artifacts phones stay at rest before zoom. */
+    nearbyMockupHoldSec: 1,
     nearbyMockupZoomDuration: 1.25,
     nearbyMockupZoomScale: 1.25,
     nearbyMockupZoomEase: 'power2.inOut',
     /** Extra beat at the zoomed-in phone before fade-out. */
-    nearbyMockupZoomHoldSec: 2.2,
+    nearbyMockupZoomHoldSec: 1,
     /** Readable beat after Story Details intro before crossfade. */
     storyIntroHoldSec: 1.2,
     /** Text out + MainDemo in overlap. */
@@ -96,11 +96,24 @@ export const MOMENTS_JOURNEY_TIMING = {
     mainDemoHoldAfterSec: 3.5,
     mainDemoStoryFadeInDuration: 0.7,
     mainDemoStoryFadeInEase: 'power2.out',
+    /** Boost the frozen AR frame so Sally + glow stay vivid under the caption. */
+    mainDemoStoryVideoFilterRest: 'brightness(1) contrast(1) saturate(1)',
+    mainDemoStoryVideoFilter:
+        'brightness(1.28) contrast(1.16) saturate(1.45)',
+    mainDemoStoryVideoFilterEase: 'power2.out',
+    /** Living glow while the Sally Shine caption is on screen. */
+    mainDemoStoryGlowRestOpacity: 0.34,
+    mainDemoStoryGlowPeakOpacity: 0.62,
+    /** One half of a breath (rest → peak); yoyo makes the full pulse. */
+    mainDemoStoryGlowPulseSec: 1.35,
+    mainDemoStoryGlowPulseEase: 'sine.inOut',
+    mainDemoStoryTextGlowRest: 0.42,
+    mainDemoStoryTextGlowPeak: 0.95,
     /** Brief beat after the caption lands, before park fade + zoom. */
-    mainDemoStoryHoldSec: 0.55,
+    mainDemoStoryHoldSec: 1,
     mainDemoBgFadeDuration: 0.9,
     mainDemoBgFadeEase: 'power2.inOut',
-    mainDemoZoomDuration: 1.25,
+    mainDemoZoomDuration: 1.0,
     mainDemoZoomScale: 1.25,
     mainDemoZoomEase: 'power2.inOut',
     /** Reading time on the zoomed, frozen phone with story caption. */
