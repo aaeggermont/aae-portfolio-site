@@ -302,14 +302,14 @@ function ProjectHeaderDesktop({ onLayerReady }: HeaderVariantProps) {
           <ParallaxCloudLayer
             objectPath={PROJECT_HEADER_DESKTOP_CLOUD_OBJECT_PATHS.layer1}
             alt="Clouds Layer 1"
-            speed={-3}
+            speed={5}
             onLayerReady={onLayerReady}
             objectFit="contain"
             objectPosition="center 18%"
           />
         </ParallaxBanner>
       </div>
-      <PeopleInLineCrowd initialTop="-35%" speed={12} onLayerReady={onLayerReady} />
+      <PeopleInLineCrowd initialTop="-38%" speed={12} onLayerReady={onLayerReady} />
     </div>
   );
 }
