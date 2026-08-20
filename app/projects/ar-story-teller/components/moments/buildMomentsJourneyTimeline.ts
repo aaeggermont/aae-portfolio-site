@@ -6,9 +6,12 @@ import {
     freezeMainDemoVideo,
     getMainDemoAtmosphereElements,
     getMainDemoStoryOverlay,
+    unfreezeMainDemoVideo,
 } from './mainDemoFinale';
 import {
     MOMENTS_JOURNEY_LABELS,
+    MOMENTS_JOURNEY_LOOP_GAP_SEC,
+    MOMENTS_JOURNEY_SCROLL_TRIGGER_END,
     MOMENTS_JOURNEY_SCROLL_TRIGGER_START,
     MOMENTS_JOURNEY_TIMING,
 } from './momentsTiming';
@@ -341,24 +344,53 @@ export function playMomentsJourneyOnScroll(
         if (storyOverlay) {
             gsap.set(storyOverlay, { opacity: 0 });
         }
+        unfreezeMainDemoVideo(mainDemo);
     };
 
+    let loopCall: gsap.core.Tween | undefined;
+
     const playFromStart = () => {
+        loopCall?.kill();
         resetLayers();
         tl.restart(true, false);
+    };
+
+    const resumePlayback = () => {
+        if (tl.progress() === 1 && !tl.isActive()) {
+            playFromStart();
+            return;
+        }
+        tl.play();
+    };
+
+    if (!options.reducedMotion) {
+        tl.eventCallback('onComplete', () => {
+            loopCall?.kill();
+            loopCall = gsap.delayedCall(
+                MOMENTS_JOURNEY_LOOP_GAP_SEC,
+                playFromStart,
+            );
+        });
+    }
+
+    const pausePlayback = () => {
+        loopCall?.kill();
+        tl.pause();
     };
 
     const trigger = ScrollTrigger.create({
         trigger: elements.stage,
         start: MOMENTS_JOURNEY_SCROLL_TRIGGER_START,
-        once: true,
-        onEnter: () => {
-            tl.play();
-        },
+        end: MOMENTS_JOURNEY_SCROLL_TRIGGER_END,
+        onEnter: resumePlayback,
+        onEnterBack: resumePlayback,
+        onLeave: pausePlayback,
+        onLeaveBack: pausePlayback,
     });
 
     return {
         cleanup: () => {
+            loopCall?.kill();
             trigger.kill();
             tl.kill();
         },

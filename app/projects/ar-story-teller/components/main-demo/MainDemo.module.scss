@@ -14,13 +14,12 @@
     --demo-bg-sepia: 0.18;
     --demo-bg-hue-rotate: 8deg;
 
-    /* Window glow placement — adjust to align over the first window pair. */
+    /* Alignment markers only — window glow + girl ghost (commented out in MainDemo.tsx).
     --window-glow-top: 21.5%;
     --window-glow-left: 49.5%;
     --window-glow-width: clamp(80px, 10.9%, 120px);
     --window-glow-height: clamp(29px, 7.1%, 44px);
 
-    /* Girl ghost — figure box size + crop focal point on the 3000×3000 artboard. */
     --girl-ghost-top: 25%;
     --girl-ghost-left: 55.5%;
     --girl-ghost-figure-width: 24.3px;
@@ -32,6 +31,7 @@
     );
     --girl-ghost-figure-height: calc(var(--girl-ghost-figure-width) * 282 / 207);
     --girl-ghost-opacity: 0.5;
+    */
 
     /* iPhone device — centered in the canvas (aligned with Replay demo). */
     --iphone-frame-left: 50%;
@@ -94,6 +94,7 @@
     mix-blend-mode: soft-light;
 }
 
+/* Alignment markers only — window glow + girl ghost (commented out in MainDemo.tsx).
 .windowGlowWrap {
     position: absolute;
     z-index: 2;
@@ -106,8 +107,6 @@
     transform: scale(0.9);
     transform-origin: center center;
     will-change: transform, opacity;
-
-    /* TEMP — sharp bounds for alignment; remove when glow is positioned. */
     outline: 2px solid rgba(0, 0, 0, 0.85);
     outline-offset: 1px;
     border-radius: 50%;
@@ -138,8 +137,6 @@
     transform: translate(-50%, -50%);
     opacity: 0;
     will-change: transform, opacity;
-
-    /* TEMP — alignment bounds; remove when positioning is final. */
     outline: 1px dashed rgba(255, 60, 60, 0.85);
     outline-offset: 2px;
 }
@@ -161,7 +158,6 @@
         calc(-1 * var(--girl-ghost-content-center-y))
     );
 
-    /* GatedImage MUI Box */
     > div {
         width: 100%;
     }
@@ -173,6 +169,7 @@
     height: auto;
     max-width: none;
 }
+*/
 
 .iphoneDeviceWrap {
     position: absolute;
@@ -389,18 +386,6 @@
 
 @media (prefers-reduced-motion: reduce) {
     .notification {
-        will-change: auto;
-    }
-
-    .windowGlow {
-        will-change: auto;
-    }
-
-    .windowGlowWrap {
-        will-change: auto;
-    }
-
-    .girlGhostWrap {
         will-change: auto;
     }
 

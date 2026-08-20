@@ -8,8 +8,6 @@ import { playMainDemoTimelineOnScroll } from './mainDemoTimeline';
 type MainDemoTimelineRefs = {
     canvasRef: RefObject<HTMLDivElement | null>;
     notificationRef: RefObject<HTMLDivElement | null>;
-    windowGlowRef: RefObject<HTMLDivElement | null>;
-    girlGhostRef: RefObject<HTMLDivElement | null>;
     iphoneDeviceRef: RefObject<HTMLDivElement | null>;
     iphoneVideoRef: RefObject<HTMLDivElement | null>;
     coachingOverlayRef: RefObject<HTMLDivElement | null>;
@@ -24,8 +22,6 @@ type MainDemoTimelineRefs = {
 export function useMainDemoTimeline({
     canvasRef,
     notificationRef,
-    windowGlowRef,
-    girlGhostRef,
     iphoneDeviceRef,
     iphoneVideoRef,
     coachingOverlayRef,
@@ -40,16 +36,12 @@ export function useMainDemoTimeline({
     useLayoutEffect(() => {
         const canvas = canvasRef.current;
         const notification = notificationRef.current;
-        const windowGlow = windowGlowRef.current;
-        const girlGhost = girlGhostRef.current;
         const iphoneDevice = iphoneDeviceRef.current;
         const iphoneVideo = iphoneVideoRef.current;
         const coachingOverlay = coachingOverlayRef.current;
         if (
             !canvas ||
             !notification ||
-            !windowGlow ||
-            !girlGhost ||
             !iphoneDevice ||
             !iphoneVideo ||
             !coachingOverlay
@@ -68,8 +60,6 @@ export function useMainDemoTimeline({
                 {
                     canvas,
                     notification,
-                    windowGlow,
-                    girlGhost,
                     iphoneDevice,
                     iphoneVideo,
                     coachingOverlay,
@@ -92,8 +82,6 @@ export function useMainDemoTimeline({
     }, [
         canvasRef,
         notificationRef,
-        windowGlowRef,
-        girlGhostRef,
         iphoneDeviceRef,
         iphoneVideoRef,
         coachingOverlayRef,

@@ -47,30 +47,30 @@ export const MAIN_DEMO_NOTIFICATION_TIMING = {
     initialBlurPx: 8,
 } as const;
 
-/** First (left) window-pair glow — anchored to `windowGlow` timeline label. */
-export const MAIN_DEMO_WINDOW_GLOW_TIMING = {
-    /** Beat after notification is fully visible before glow begins. */
-    delayAfterNotification: 0.3,
-    entranceDuration: 1.2,
-    entranceEase: 'power2.out',
-    initialScale: 0.9,
-} as const;
+/** First (left) window-pair glow — alignment marker only (commented out in MainDemo). */
+// export const MAIN_DEMO_WINDOW_GLOW_TIMING = {
+//     delayAfterNotification: 0.3,
+//     entranceDuration: 1.2,
+//     entranceEase: 'power2.out',
+//     initialScale: 0.9,
+// } as const;
 
-/** Girl ghost in the illuminated window — appears after glow is fully visible. */
-export const MAIN_DEMO_GIRL_GHOST_TIMING = {
-    /** Hold after window glow entrance completes before the ghost appears. */
-    delayAfterGlowVisible: 1,
-    fadeInDuration: 1,
-    fadeInEase: 'power2.out',
-    /** Resting opacity once visible (matches `--girl-ghost-opacity` in SCSS). */
-    visibleOpacity: 0.5,
-    fadeInYOffset: 6,
-} as const;
+/** Girl ghost in the illuminated window — alignment marker only (commented out in MainDemo). */
+// export const MAIN_DEMO_GIRL_GHOST_TIMING = {
+//     delayAfterGlowVisible: 1,
+//     fadeInDuration: 1,
+//     fadeInEase: 'power2.out',
+//     visibleOpacity: 0.5,
+//     fadeInYOffset: 6,
+// } as const;
 
-/** iPhone frame portal — appears after the ghost girl reveal. */
+/** iPhone frame portal — appears after the notification beat. */
 export const MAIN_DEMO_IPHONE_FRAME_TIMING = {
-    /** Beat after ghost fade-in completes before the device appears. */
-    delayAfterGirlVisible: 0.5,
+    /**
+     * Hold after notification is fully visible before the device appears.
+     * Matches the prior glow + ghost pacing (0.3 + 1.2 + 1 + 1 + 0.5 = 4s).
+     */
+    delayAfterNotificationVisible: 4,
     revealDuration: 1.35,
     revealEase: 'power2.out',
     initialScale: 0.92,
@@ -114,11 +114,7 @@ export const MAIN_DEMO_SCROLL_TRIGGER_START = 'top 85%';
 export const MAIN_DEMO_SEQUENCE_TO_IPHONE_VISIBLE_SEC =
     MAIN_DEMO_PHASE_TIMING.initialDelay +
     MAIN_DEMO_NOTIFICATION_TIMING.fadeInDuration +
-    MAIN_DEMO_WINDOW_GLOW_TIMING.delayAfterNotification +
-    MAIN_DEMO_WINDOW_GLOW_TIMING.entranceDuration +
-    MAIN_DEMO_GIRL_GHOST_TIMING.delayAfterGlowVisible +
-    MAIN_DEMO_GIRL_GHOST_TIMING.fadeInDuration +
-    MAIN_DEMO_IPHONE_FRAME_TIMING.delayAfterGirlVisible +
+    MAIN_DEMO_IPHONE_FRAME_TIMING.delayAfterNotificationVisible +
     MAIN_DEMO_IPHONE_FRAME_TIMING.revealDuration;
 
 /** When the iPhone is fully on screen — coaching fade-in + sway start here. */

@@ -4,13 +4,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import {
     MAIN_DEMO_AR_VIDEO_TIMING,
     MAIN_DEMO_COACHING_BEFORE_VIDEO_SEC,
-    MAIN_DEMO_GIRL_GHOST_TIMING,
     MAIN_DEMO_IPHONE_FRAME_TIMING,
     MAIN_DEMO_NOTIFICATION_TIMING,
     MAIN_DEMO_PHASE_TIMING,
     MAIN_DEMO_SCROLL_TRIGGER_START,
     MAIN_DEMO_TIMELINE_LABELS,
-    MAIN_DEMO_WINDOW_GLOW_TIMING,
 } from './mainDemoTiming';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -18,8 +16,6 @@ gsap.registerPlugin(ScrollTrigger);
 export type MainDemoTimelineElements = {
     canvas: HTMLElement;
     notification: HTMLElement;
-    windowGlow: HTMLElement;
-    girlGhost: HTMLElement;
     iphoneDevice: HTMLElement;
     iphoneVideo: HTMLElement;
     coachingOverlay: HTMLElement;
@@ -44,24 +40,16 @@ const LABELS = MAIN_DEMO_TIMELINE_LABELS;
  * Sequence:
  * 1. Component visible → static pause
  * 2. Notification fades in
- * 3. Window glow fades in and stays visible
- * 4. Girl ghost fades in
- * 5. iPhone frame reveals (screen empty until coaching starts)
- * 6. Coaching fades in while swaying; later crossfades out as AR video fades in
- * 7. Camera zoom (placeholder — syncs to `cameraZoom` label)
+ * 3. iPhone frame reveals (screen empty until coaching starts)
+ * 4. Coaching fades in while swaying; later crossfades out as AR video fades in
+ * 5. Camera zoom (placeholder — syncs to `cameraZoom` label)
  */
 export function buildMainDemoTimeline(
     elements: MainDemoTimelineElements,
     options: BuildMainDemoTimelineOptions = {},
 ): gsap.core.Timeline {
-    const {
-        notification,
-        windowGlow,
-        girlGhost,
-        iphoneDevice,
-        iphoneVideo,
-        coachingOverlay,
-    } = elements;
+    const { notification, iphoneDevice, iphoneVideo, coachingOverlay } =
+        elements;
     const { reducedMotion = false } = options;
     const {
         fadeInDuration,
@@ -76,20 +64,7 @@ export function buildMainDemoTimeline(
     } = MAIN_DEMO_NOTIFICATION_TIMING;
     const { initialDelay, windowGlowDuration } = MAIN_DEMO_PHASE_TIMING;
     const {
-        delayAfterNotification,
-        entranceDuration: glowEntranceDuration,
-        entranceEase: glowEntranceEase,
-        initialScale: glowInitialScale,
-    } = MAIN_DEMO_WINDOW_GLOW_TIMING;
-    const {
-        delayAfterGlowVisible,
-        fadeInDuration: girlFadeInDuration,
-        fadeInEase: girlFadeInEase,
-        visibleOpacity: girlVisibleOpacity,
-        fadeInYOffset: girlFadeInYOffset,
-    } = MAIN_DEMO_GIRL_GHOST_TIMING;
-    const {
-        delayAfterGirlVisible,
+        delayAfterNotificationVisible,
         revealDuration: iphoneRevealDuration,
         revealEase: iphoneRevealEase,
         initialScale: iphoneInitialScale,
@@ -107,12 +82,6 @@ export function buildMainDemoTimeline(
         transformOrigin: 'center top',
         '--notification-blur': `${initialBlurPx}px`,
     });
-    gsap.set(windowGlow, {
-        opacity: 0,
-        scale: glowInitialScale,
-        transformOrigin: 'center center',
-    });
-    gsap.set(girlGhost, { opacity: 0, y: girlFadeInYOffset });
     gsap.set(iphoneDevice, {
         opacity: 0,
         scale: iphoneInitialScale,
@@ -128,8 +97,7 @@ export function buildMainDemoTimeline(
         return tl;
     }
 
-    const glowStart = `${LABELS.notificationVisible}+=${delayAfterNotification}`;
-    const cameraZoomStart = `${LABELS.notificationVisible}+=${delayAfterNotification + windowGlowDuration}`;
+    const cameraZoomStart = `${LABELS.notificationVisible}+=${windowGlowDuration}`;
 
     tl.to({}, { duration: initialDelay })
         .addLabel(LABELS.notificationEnter)
@@ -142,38 +110,16 @@ export function buildMainDemoTimeline(
             ease: fadeInEase,
         })
         .addLabel(LABELS.notificationVisible)
+        /* Alignment markers (window glow + girl ghost) — layout refs only; see MainDemo.tsx.
         .addLabel(LABELS.windowGlow, glowStart)
-        .to(
-            windowGlow,
-            {
-                opacity: 1,
-                scale: 1,
-                duration: glowEntranceDuration,
-                ease: glowEntranceEase,
-            },
-            LABELS.windowGlow,
-        )
-        .addLabel(
-            LABELS.windowGlowVisible,
-            `${LABELS.windowGlow}+=${glowEntranceDuration}`,
-        )
-        .addLabel(
-            LABELS.girlGhost,
-            `${LABELS.windowGlowVisible}+=${delayAfterGlowVisible}`,
-        )
-        .to(
-            girlGhost,
-            {
-                opacity: girlVisibleOpacity,
-                y: 0,
-                duration: girlFadeInDuration,
-                ease: girlFadeInEase,
-            },
-            LABELS.girlGhost,
-        )
+        .to(windowGlow, { opacity: 1, scale: 1, duration: glowEntranceDuration, ease: glowEntranceEase }, LABELS.windowGlow)
+        .addLabel(LABELS.windowGlowVisible, `${LABELS.windowGlow}+=${glowEntranceDuration}`)
+        .addLabel(LABELS.girlGhost, `${LABELS.windowGlowVisible}+=${delayAfterGlowVisible}`)
+        .to(girlGhost, { opacity: girlVisibleOpacity, y: 0, duration: girlFadeInDuration, ease: girlFadeInEase }, LABELS.girlGhost)
+        */
         .addLabel(
             LABELS.iphoneFrame,
-            `${LABELS.girlGhost}+=${girlFadeInDuration + delayAfterGirlVisible}`,
+            `${LABELS.notificationVisible}+=${delayAfterNotificationVisible}`,
         )
         .addLabel(LABELS.deviceReveal, LABELS.iphoneFrame)
         .to(

@@ -82,13 +82,12 @@
 
 .replayButton {
     position: absolute;
+    right: 0;
     bottom: 1.5rem;
-    left: 50%;
     z-index: 20;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transform: translateX(-50%);
     margin: 0;
     padding: 0.625rem 1.25rem;
     border-radius: 9999px;

@@ -113,4 +113,11 @@ export const MOMENTS_JOURNEY_TIMING = {
     artifactsIntroHoldSec: 1.35,
 } as const;
 
-export const MOMENTS_JOURNEY_SCROLL_TRIGGER_START = 'top 75%';
+/** Play when the stage center meets the viewport center. */
+export const MOMENTS_JOURNEY_SCROLL_TRIGGER_START = 'center center';
+
+/** Pause looping when the stage fully leaves the viewport. */
+export const MOMENTS_JOURNEY_SCROLL_TRIGGER_END = 'bottom top';
+
+/** Breath between the last beat and the next loop of the film. */
+export const MOMENTS_JOURNEY_LOOP_GAP_SEC = 1.2;

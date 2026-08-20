@@ -21,8 +21,9 @@ const MAIN_DEMO_BACKGROUND_OBJECT_PATH =
 const MAIN_DEMO_NOTIFICATION_OBJECT_PATH =
     'projects/project_2/demo/ARMagicToursNotification.png';
 
-const MAIN_DEMO_GIRL_GHOST_OBJECT_PATH =
-    'projects/project_2/demo/GirlGhost.png';
+// Alignment reference only — window glow + girl ghost markers (see commented JSX below).
+// const MAIN_DEMO_GIRL_GHOST_OBJECT_PATH =
+//     'projects/project_2/demo/GirlGhost.png';
 
 const MAIN_DEMO_IPHONE_FRAME_OBJECT_PATH =
     'projects/project_2/demo/IPhoneFrame.png';
@@ -35,9 +36,9 @@ const MAIN_DEMO_BACKGROUND_INTRINSIC_HEIGHT = 655;
 const MAIN_DEMO_NOTIFICATION_INTRINSIC_WIDTH = 360;
 const MAIN_DEMO_NOTIFICATION_INTRINSIC_HEIGHT = 120;
 
-/** Girl ghost — 3000×3000 artboard; visible figure is ~7% of canvas (see crop vars in SCSS). */
-const MAIN_DEMO_GIRL_GHOST_INTRINSIC_WIDTH = 3000;
-const MAIN_DEMO_GIRL_GHOST_INTRINSIC_HEIGHT = 3000;
+// /** Girl ghost — 3000×3000 artboard; visible figure is ~7% of canvas (see crop vars in SCSS). */
+// const MAIN_DEMO_GIRL_GHOST_INTRINSIC_WIDTH = 3000;
+// const MAIN_DEMO_GIRL_GHOST_INTRINSIC_HEIGHT = 3000;
 
 /** iPhone frame — transparent screen area preserved for future AR content. */
 const MAIN_DEMO_IPHONE_FRAME_INTRINSIC_WIDTH = 785;
@@ -55,7 +56,7 @@ const mainDemoNotificationSizes = [
     '(min-width: 1024px) min(42vw, 400px)',
 ].join(', ');
 
-const mainDemoGirlGhostSizes = '1750px';
+// const mainDemoGirlGhostSizes = '1750px';
 
 const mainDemoIphoneFrameSizes = [
     'min(28vw, 160px)',
@@ -87,8 +88,6 @@ export function MainDemo({
 }: MainDemoProps = {}) {
     const canvasRef = useRef<HTMLDivElement>(null);
     const notificationRef = useRef<HTMLDivElement>(null);
-    const windowGlowRef = useRef<HTMLDivElement>(null);
-    const girlGhostRef = useRef<HTMLDivElement>(null);
     const iphoneDeviceRef = useRef<HTMLDivElement>(null);
     const iphoneVideoRef = useRef<HTMLDivElement>(null);
     const coachingOverlayRef = useRef<HTMLDivElement>(null);
@@ -116,8 +115,6 @@ export function MainDemo({
     useMainDemoTimeline({
         canvasRef,
         notificationRef,
-        windowGlowRef,
-        girlGhostRef,
         iphoneDeviceRef,
         iphoneVideoRef,
         coachingOverlayRef,
@@ -171,6 +168,7 @@ export function MainDemo({
                 aria-hidden="true"
             />
 
+            {/* Alignment markers only — circular window glow + girl ghost reference.
             <div
                 ref={windowGlowRef}
                 className={styles.windowGlowWrap}
@@ -199,6 +197,7 @@ export function MainDemo({
                     </div>
                 </div>
             </div>
+            */}
 
             <div className={styles.iphoneDeviceWrap} data-main-demo-iphone>
                 <div
