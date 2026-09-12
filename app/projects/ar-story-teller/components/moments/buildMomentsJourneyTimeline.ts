@@ -16,6 +16,11 @@ import {
     MOMENTS_JOURNEY_LOOP_GAP_SEC,
     MOMENTS_JOURNEY_SCROLL_TRIGGER_END,
     MOMENTS_JOURNEY_SCROLL_TRIGGER_START,
+    MOMENTS_JOURNEY_SNAP_DURATION_SEC,
+    MOMENTS_JOURNEY_SNAP_EASE,
+    MOMENTS_JOURNEY_SNAP_END,
+    MOMENTS_JOURNEY_SNAP_START,
+    MOMENTS_JOURNEY_SNAP_THRESHOLD_PX,
     MOMENTS_JOURNEY_TIMING,
 } from './momentsTiming';
 import {
@@ -501,6 +506,8 @@ export function playMomentsJourneyOnScroll(
     const pausePlayback = () => {
         loopCall?.kill();
         livingGlow?.pause();
+        snapTween?.kill();
+        isSnapping = false;
         tl.pause();
     };
 
@@ -514,10 +521,70 @@ export function playMomentsJourneyOnScroll(
         onLeaveBack: pausePlayback,
     });
 
+    let snapTween: gsap.core.Tween | undefined;
+    let isSnapping = false;
+
+    const snapStageToViewportCenter = () => {
+        if (isSnapping) return;
+        const rect = elements.stage.getBoundingClientRect();
+        const delta = rect.top + rect.height / 2 - window.innerHeight / 2;
+        if (Math.abs(delta) <= MOMENTS_JOURNEY_SNAP_THRESHOLD_PX) return;
+
+        isSnapping = true;
+        const proxy = { y: window.scrollY };
+        snapTween?.kill();
+        snapTween = gsap.to(proxy, {
+            y: window.scrollY + delta,
+            duration: MOMENTS_JOURNEY_SNAP_DURATION_SEC,
+            ease: MOMENTS_JOURNEY_SNAP_EASE,
+            overwrite: true,
+            onUpdate: () => {
+                window.scrollTo(0, proxy.y);
+            },
+            onComplete: () => {
+                isSnapping = false;
+                ScrollTrigger.refresh();
+                resumePlayback();
+            },
+            onInterrupt: () => {
+                isSnapping = false;
+            },
+        });
+    };
+
+    const interruptSnap = () => {
+        if (!isSnapping) return;
+        snapTween?.kill();
+        isSnapping = false;
+    };
+
+    const snapTrigger = options.reducedMotion
+        ? undefined
+        : ScrollTrigger.create({
+              trigger: elements.stage,
+              start: MOMENTS_JOURNEY_SNAP_START,
+              end: MOMENTS_JOURNEY_SNAP_END,
+              onEnter: snapStageToViewportCenter,
+              onEnterBack: snapStageToViewportCenter,
+          });
+
+    if (snapTrigger) {
+        window.addEventListener('wheel', interruptSnap, { passive: true });
+        window.addEventListener('touchmove', interruptSnap, { passive: true });
+        window.addEventListener('keydown', interruptSnap);
+    }
+
     return {
         cleanup: () => {
             loopCall?.kill();
+            snapTween?.kill();
+            if (snapTrigger) {
+                window.removeEventListener('wheel', interruptSnap);
+                window.removeEventListener('touchmove', interruptSnap);
+                window.removeEventListener('keydown', interruptSnap);
+            }
             stopLivingGlow();
+            snapTrigger?.kill();
             trigger.kill();
             tl.kill();
         },
