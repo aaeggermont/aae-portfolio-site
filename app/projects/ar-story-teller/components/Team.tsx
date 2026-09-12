@@ -8,7 +8,6 @@ import { breakpointMediaQuery } from "@/lib/responsive/breakpoints";
 import { DEFAULT_TEAM_COPY } from "../lib/teamDefaults";
 import { bodyTypeSx, titleTypeSx } from "../typography";
 
-const TABLET_UP_MQ = breakpointMediaQuery.tabletUp;
 const DESKTOP_UP_MQ = breakpointMediaQuery.desktopUp;
 
 const ROLE_COLOR = "#E8910F";
@@ -38,7 +37,7 @@ function MemberCard({ member }: { member: TeamMember }) {
         bgcolor: "#ffffff",
         border: `1px solid ${CARD_BORDER}`,
         borderRadius: { xs: 2, md: 3 },
-        p: { xs: 2.5, md: 3 },
+        p: { xs: 1.75, md: 3 },
         height: "100%",
         boxSizing: "border-box",
         display: "flex",
@@ -179,12 +178,9 @@ const Team = ({ data }: TeamProps) => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "1fr",
-          gap: { xs: 2, md: 2.5 },
+          gridTemplateColumns: "1fr 1fr",
+          gap: { xs: 1.5, md: 2.5 },
           width: "100%",
-          [TABLET_UP_MQ]: {
-            gridTemplateColumns: "1fr 1fr",
-          },
           [DESKTOP_UP_MQ]: {
             gridTemplateColumns: "repeat(4, 1fr)",
             gap: 3,
