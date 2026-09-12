@@ -10,6 +10,8 @@ export type OverviewBlock = {
 };
 
 export type SolutionBlock = OverviewBlock & {
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
   description?: string;
   alt?: string;
   images?: string[];
@@ -18,14 +20,20 @@ export type SolutionBlock = OverviewBlock & {
 export type TeamMember = {
   name: string;
   role: string;
+  /** Optional short contribution line under the role. */
+  description?: string;
 };
 
 export type TeamData = {
   title: string;
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
+  /** Optional intro under the title. */
+  description?: string;
   members: TeamMember[];
 };
 
-/** Firestore `content.businessGoals` — two-column goal rows below overview. */
+/** Firestore `content.businessGoals` — goals band below overview. */
 export type BusinessGoalItem = {
   title: string;
   description: string;
@@ -33,7 +41,11 @@ export type BusinessGoalItem = {
 
 export type BusinessGoalsData = {
   title: string;
-  /** Two-column rows (title | description). Falls back to defaults when omitted. */
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
+  /** Optional intro under the title. */
+  description?: string;
+  /** Goal cards (title + description). Falls back to defaults when omitted. */
   items?: BusinessGoalItem[];
   /** @deprecated Legacy intro paragraph — no longer rendered. */
   intro?: string;
@@ -77,13 +89,18 @@ export type NotificationsAttrac = {
 export type MagicExperience = {
   title: string;
   alt: string;
+  /** Short card footer copy. */
   description: string;
+  /** Optional long copy for the lightbox sidebar; falls back to `description`. */
+  longDescription?: string;
   images: string[];
 };
 
 export type MagicExperiences = {
   title: string;
   paragraphs: string[];
+  /** Optional eyebrow above the section title. */
+  eyebrow?: string;
   experiences: MagicExperience[];
 };
 

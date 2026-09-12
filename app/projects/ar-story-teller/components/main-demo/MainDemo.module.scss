@@ -14,13 +14,12 @@
     --demo-bg-sepia: 0.18;
     --demo-bg-hue-rotate: 8deg;
 
-    /* Window glow placement — adjust to align over the first window pair. */
+    /* Alignment markers only — window glow + girl ghost (commented out in MainDemo.tsx).
     --window-glow-top: 21.5%;
     --window-glow-left: 49.5%;
     --window-glow-width: clamp(80px, 10.9%, 120px);
     --window-glow-height: clamp(29px, 7.1%, 44px);
 
-    /* Girl ghost — figure box size + crop focal point on the 3000×3000 artboard. */
     --girl-ghost-top: 25%;
     --girl-ghost-left: 55.5%;
     --girl-ghost-figure-width: 24.3px;
@@ -32,9 +31,10 @@
     );
     --girl-ghost-figure-height: calc(var(--girl-ghost-figure-width) * 282 / 207);
     --girl-ghost-opacity: 0.5;
+    */
 
-    /* iPhone device — centered vertically in canvas via `.iphoneDeviceWrap`. */
-    --iphone-frame-left: 40%;
+    /* iPhone device — centered in the canvas (aligned with Replay demo). */
+    --iphone-frame-left: 50%;
     --iphone-frame-width: clamp(138px, 21%, 230px);
 
     /* Screen clip inset within the frame PNG (785×1617 asset). */
@@ -43,12 +43,17 @@
     --iphone-screen-inset-right: 0.4%;
     --iphone-screen-inset-bottom: 0.3%;
     --iphone-screen-radius: 13%;
+
+    /* Tight halo around Sally in the frozen AR frame. */
+    --story-glow-x: 55%;
+    --story-glow-y: 28%;
+    --story-glow-width: 18.2%;
+    --story-glow-height: 15.4%;
 }
 
 @media (min-width: 768px) {
     .canvas {
         --iphone-frame-width: clamp(161px, 23%, 242px);
-        --iphone-frame-left: 42%;
     }
 }
 
@@ -58,10 +63,16 @@
     }
 }
 
-.backgroundImage {
+.backgroundWrap {
     position: absolute;
     inset: 0;
     z-index: 0;
+    pointer-events: none;
+}
+
+.backgroundImage {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
@@ -75,9 +86,8 @@
         hue-rotate(var(--demo-bg-hue-rotate));
 }
 
-/* Warm sky-to-ground wash — complements the filter stack above. */
-.canvas::after {
-    content: '';
+/* Warm sky-to-ground wash — complements the filter stack on the background. */
+.atmosphereWash {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -90,6 +100,7 @@
     mix-blend-mode: soft-light;
 }
 
+/* Alignment markers only — window glow + girl ghost (commented out in MainDemo.tsx).
 .windowGlowWrap {
     position: absolute;
     z-index: 2;
@@ -102,8 +113,6 @@
     transform: scale(0.9);
     transform-origin: center center;
     will-change: transform, opacity;
-
-    /* TEMP — sharp bounds for alignment; remove when glow is positioned. */
     outline: 2px solid rgba(0, 0, 0, 0.85);
     outline-offset: 1px;
     border-radius: 50%;
@@ -134,8 +143,6 @@
     transform: translate(-50%, -50%);
     opacity: 0;
     will-change: transform, opacity;
-
-    /* TEMP — alignment bounds; remove when positioning is final. */
     outline: 1px dashed rgba(255, 60, 60, 0.85);
     outline-offset: 2px;
 }
@@ -157,7 +164,6 @@
         calc(-1 * var(--girl-ghost-content-center-y))
     );
 
-    /* GatedImage MUI Box */
     > div {
         width: 100%;
     }
@@ -169,6 +175,7 @@
     height: auto;
     max-width: none;
 }
+*/
 
 .iphoneDeviceWrap {
     position: absolute;
@@ -176,7 +183,7 @@
     top: 50%;
     left: var(--iphone-frame-left);
     width: var(--iphone-frame-width);
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
     pointer-events: none;
 }
 
@@ -198,6 +205,76 @@
         var(--iphone-screen-inset-left);
     overflow: hidden;
     border-radius: var(--iphone-screen-radius);
+    background: transparent;
+    container-type: size;
+}
+
+.storyGlow {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0;
+    mix-blend-mode: screen;
+    background: radial-gradient(
+        ellipse var(--story-glow-width) var(--story-glow-height)
+            at var(--story-glow-x) var(--story-glow-y),
+        rgba(255, 224, 150, 0.9) 0%,
+        rgba(255, 186, 90, 0.42) 42%,
+        rgba(255, 150, 50, 0) 100%
+    );
+}
+
+.storyOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box;
+    padding: 14% 10% 28%;
+    pointer-events: none;
+    opacity: 0;
+    /* Keep Sally + glow open at the top; darken only under the caption. */
+    background: linear-gradient(
+        180deg,
+        rgba(3, 19, 60, 0) 0%,
+        rgba(3, 19, 60, 0.04) 36%,
+        rgba(3, 19, 60, 0.28) 58%,
+        rgba(3, 19, 60, 0.62) 100%
+    );
+}
+
+.storyOverlayText {
+    margin: 0;
+    color: #fff8ec;
+    font-family: var(--font-source-sans-3), 'Source Sans 3', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: clamp(8px, 6.6cqw, 14px);
+    line-height: 1.4;
+    letter-spacing: 0.015em;
+    --story-text-glow: 0.42;
+    text-shadow:
+        0 0 12px rgba(255, 214, 140, var(--story-text-glow)),
+        0 1px 10px rgba(0, 0, 0, 0.7);
+}
+
+.coachingOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8% 6% 10%;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+.iphoneScreenVideoLayer {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
     opacity: 0;
     will-change: opacity;
 }
@@ -218,6 +295,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
+    will-change: filter;
 }
 
 .iphoneFrameImageWrap {
@@ -237,13 +315,19 @@
     filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.32));
 }
 
-/* Upper-left sky placement — inset from edges, clear of tower architecture. */
-.notification {
+/* Centered hero banner slot — GSAP animates the inner `.notification` only. */
+.notificationSlot {
     position: absolute;
     z-index: 3;
     top: 8%;
-    left: 6%;
-    width: min(42%, 280px);
+    left: 50%;
+    width: min(46%, 400px);
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.notification {
+    width: 100%;
     opacity: 0;
     pointer-events: none;
     --notification-blur: 0px;
@@ -255,16 +339,15 @@
 }
 
 @media (min-width: 768px) {
-    .notification {
+    .notificationSlot {
         top: 10%;
-        left: 7%;
-        width: min(32%, 300px);
+        width: min(42%, 400px);
     }
 }
 
 @media (min-width: 1024px) {
-    .notification {
-        width: min(28%, 320px);
+    .notificationSlot {
+        width: min(42%, 400px);
     }
 }
 
@@ -274,20 +357,63 @@
     height: auto;
 }
 
+.replayButton {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 0.625rem 1.25rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #ffffff;
+    cursor: pointer;
+    opacity: 1;
+    pointer-events: auto;
+    transition:
+        opacity 0.5s ease,
+        background-color 0.5s ease,
+        border-color 0.5s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.25);
+    }
+
+    &:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.85);
+        outline-offset: 3px;
+    }
+}
+
+.replayButtonHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.replayIcon {
+    width: 1rem !important;
+    height: 1rem !important;
+    font-size: 1rem !important;
+    color: #ffffff;
+}
+
+.replayLabel {
+    font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .notification {
-        will-change: auto;
-    }
-
-    .windowGlow {
-        will-change: auto;
-    }
-
-    .windowGlowWrap {
-        will-change: auto;
-    }
-
-    .girlGhostWrap {
         will-change: auto;
     }
 
@@ -299,7 +425,11 @@
         will-change: auto;
     }
 
-    .iphoneScreen {
+    .iphoneScreenVideoLayer {
         will-change: auto;
+    }
+
+    .replayButton {
+        transition: none;
     }
 }

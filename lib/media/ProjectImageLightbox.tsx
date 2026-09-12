@@ -23,6 +23,7 @@ export type ProjectImageLightboxProps = {
   lightboxId: string;
   width: number;
   height: number;
+  className?: string;
   style?: CSSProperties;
   /** Backdrop when the lightbox is open. */
   modalBackground?: string;
@@ -44,6 +45,7 @@ export default function ProjectImageLightbox({
   lightboxId,
   width,
   height,
+  className,
   style,
   modalBackground = PROJECT_IMAGE_LIGHTBOX_MODAL_BG_WHITE,
   lightboxSidebar,
@@ -131,6 +133,7 @@ export default function ProjectImageLightbox({
         data-lightboxjs={lightboxId}
         width={width}
         height={height}
+        className={className}
         style={{
           display: "block",
           width: style?.width ?? "100%",

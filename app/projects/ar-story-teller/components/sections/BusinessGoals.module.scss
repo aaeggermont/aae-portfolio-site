@@ -1,0 +1,30 @@
+/* Full-bleed Goals & Outcomes band under `.project-content`. */
+
+.band {
+  box-sizing: border-box;
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  overflow-x: hidden;
+  padding-top: var(--full-bleed-band-padding-y);
+  padding-bottom: var(--full-bleed-band-padding-y);
+}
+
+.inner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--layout-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--layout-margin);
+  padding-right: var(--layout-margin);
+}
+
+.grid {
+  width: 100%;
+}
+
+.card {
+  border: 1px solid rgba(3, 19, 60, 0.06);
+}

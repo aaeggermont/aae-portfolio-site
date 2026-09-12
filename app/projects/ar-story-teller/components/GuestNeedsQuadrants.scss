@@ -1,0 +1,136 @@
+@use '../typography' as typo;
+
+$quadrant-accent: #136384;
+$quadrant-body: #444444;
+$quadrant-surface: #faf8f5;
+$quadrant-divider: #e0e0e0;
+
+.guest-needs-quadrants {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
+.guest-needs-quadrants__panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  width: 80%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background: $quadrant-surface;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.guest-needs-quadrants__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 40px 44px;
+  box-sizing: border-box;
+  min-width: 0;
+
+  &:nth-child(1),
+  &:nth-child(2) {
+    border-bottom: 1px solid $quadrant-divider;
+  }
+
+  &:nth-child(odd) {
+    border-right: 1px solid $quadrant-divider;
+  }
+}
+
+.guest-needs-quadrants__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.guest-needs-quadrants__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: $quadrant-accent;
+  margin-top: 1px;
+
+  svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+  }
+}
+
+.guest-needs-quadrants__title {
+  margin: 0;
+  @include typo.ar-st-title-type(700);
+  color: $quadrant-accent;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.guest-needs-quadrants__body {
+  margin: 0;
+  @include typo.ar-st-body-type;
+  color: $quadrant-body;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+@media #{$tablet} {
+  .guest-needs-quadrants__panel {
+    width: 90%;
+  }
+
+  .guest-needs-quadrants__cell {
+    padding: 36px 32px;
+  }
+
+  .guest-needs-quadrants__title {
+    font-size: 14px;
+  }
+
+  .guest-needs-quadrants__body {
+    font-size: 15px;
+  }
+}
+
+@media #{$mobile} {
+  .guest-needs-quadrants__panel {
+    width: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    border-radius: 20px;
+  }
+
+  .guest-needs-quadrants__cell {
+    padding: 28px 24px;
+    gap: 14px;
+
+    &:nth-child(odd) {
+      border-right: none;
+    }
+
+    &:nth-child(1),
+    &:nth-child(2),
+    &:nth-child(3) {
+      border-bottom: 1px solid $quadrant-divider;
+    }
+
+    &:nth-child(4) {
+      border-bottom: none;
+    }
+  }
+
+  .guest-needs-quadrants__title {
+    font-size: 14px;
+  }
+
+  .guest-needs-quadrants__body {
+    font-size: 15px;
+  }
+}

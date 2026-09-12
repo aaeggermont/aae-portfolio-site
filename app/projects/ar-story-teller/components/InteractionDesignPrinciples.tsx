@@ -126,7 +126,7 @@ export const InteractionDesignPrinciples = ({
       <Box
         component="section"
         sx={{
-          bgcolor: "#f5f5f7",
+          bgcolor: "#ffffff",
           borderRadius: "40px",
           p: { xs: 3, sm: 5, md: "60px" },
           width: "100%",

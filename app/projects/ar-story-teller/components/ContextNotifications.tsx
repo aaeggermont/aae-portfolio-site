@@ -7,7 +7,7 @@ import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 import ProjectImage from "@/lib/media/ProjectImage";
 import { getUsableLayoutWidth, getPanelInnerWidthPx, PANEL_BLOCK_PADDINGS, LAYOUT_DIMENSIONS, cssLengthToPx } from "../layoutConfig";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
-import { bodyTypeSx } from "../typography";
+import { bodyTypeSx, titleTypeSx } from "../typography";
 
 /* The card caps at the project's desktop usable width (`1260 − 2 × 80 = 1100px`) and
    centers in any viewport wider than that. Inside `.project-content` the parent already
@@ -35,6 +35,11 @@ const NOTIFICATION_CAROUSEL_INTERVAL_MS = 3500;
 
 const DESKTOP_BREAKPOINT_MQ = breakpointMediaQuery.desktopUp;
 const TABLET_STACKED_MQ = breakpointMediaQuery.tabletOnly;
+
+const EYEBROW_LABEL = "Feature";
+const EYEBROW_COLOR = "#3A7A86";
+const TITLE_COLOR = "#111A27";
+const BODY_COLOR = "#3F5266";
 
 const NOTIFICATION_IMAGE_SIZES = [
   `(max-width: ${breakpointPx.mobileMax}px) calc(100vw - ${
@@ -80,6 +85,7 @@ export const ContextualNotifications = ({
     useState(false);
   const currentImage = images[currentImageIndex];
   const canNavigateCarousel = images.length > 1;
+  const headingId = "contextual-notifications-heading";
 
   useEffect(() => {
     if (currentImageIndex < images.length) return;
@@ -113,6 +119,7 @@ export const ContextualNotifications = ({
   return (
     <Box
       component="section"
+      aria-labelledby={headingId}
       sx={{
         width: "100%",
         maxWidth: CONTEXT_NOTIFICATIONS_MAX_WIDTH,
@@ -145,7 +152,7 @@ export const ContextualNotifications = ({
           }}
         >
           <Stack
-            spacing={{ xs: 3, md: 4 }}
+            spacing={{ xs: 2, md: 2.5 }}
             sx={{
               flex: 1,
               width: "100%",
@@ -156,11 +163,38 @@ export const ContextualNotifications = ({
               },
             }}
           >
+            <Typography
+              component="p"
+              sx={titleTypeSx("eyebrow", {
+                m: 0,
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                color: EYEBROW_COLOR,
+                textAlign: "left",
+              })}
+            >
+              {EYEBROW_LABEL}
+            </Typography>
+            <Typography
+              id={headingId}
+              component="h2"
+              sx={titleTypeSx("sectionSubTitle", {
+                m: 0,
+                color: TITLE_COLOR,
+                textAlign: "left",
+              })}
+            >
+              {title}
+            </Typography>
             {paragraphs.map((paragraph, idx) => (
               <Typography
                 key={idx}
                 component="p"
-                sx={{ m: 0, ...bodyTypeSx("panelBody") }}
+                sx={bodyTypeSx("panelBody", {
+                  m: 0,
+                  color: BODY_COLOR,
+                  textAlign: "left",
+                })}
               >
                 {paragraph}
               </Typography>

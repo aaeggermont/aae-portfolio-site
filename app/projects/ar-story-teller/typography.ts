@@ -24,9 +24,9 @@ export const AR_STORY_TELLER_HERO_SUBTITLE_COLOR = "#ffbb00";
  */
 export const TYPOGRAPHY = {
   /** Project banner main title. */
-  heroTitle: { mobile: "28px", tablet: "32px", desktop: "40px" },
+  heroTitle: { mobile: "36px", tablet: "48px", desktop: "60px" },
   /** Project banner subtitle lines. */
-  heroSubtitle: { mobile: "20px", tablet: "20px", desktop: "24px" },
+  heroSubtitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
   /** Top-level section headings (`SectionTitle`). */
   sectionTitle: { mobile: "28px", tablet: "34px", desktop: "40px" },
   /** Subsections under a section (`SectionSubTitle`, e.g. “Developing Specifications”). */
@@ -75,8 +75,8 @@ export type BodyTypographyScaleKey = Extract<
 >;
 
 const TITLE_FONT_WEIGHT: Record<TitleTypographyScaleKey, number> = {
-  heroTitle: 600,
-  heroSubtitle: 550,
+  heroTitle: 700,
+  heroSubtitle: 500,
   sectionTitle: 700,
   sectionSubTitle: 700,
   panelHeading: 700,

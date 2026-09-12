@@ -1,0 +1,124 @@
+.root {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.layout {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.column {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phone {
+  box-sizing: border-box;
+}
+
+.callout {
+  list-style: none;
+  position: relative;
+}
+
+.calloutHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.25;
+  color: #03133c;
+}
+
+.description {
+  margin: 6px 0 0;
+  font-family: var(--font-source-sans-3), "Source Sans 3", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #5a6b7d;
+}
+
+/* Tablet+: left column sits against the phone; keep badge left of text like the mockup. */
+@media (min-width: #{$tablet-min}) {
+  .column--left {
+    text-align: left;
+
+    .description {
+      padding-left: 26px;
+    }
+  }
+
+  .column--right {
+    text-align: left;
+
+    .description {
+      padding-left: 26px;
+    }
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .description {
+    font-size: 12px;
+  }
+
+  .badge {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+  }
+}
+
+@media (min-width: #{$desktop-min}) {
+  .title {
+    font-size: 15px;
+  }
+
+  .description {
+    font-size: 13px;
+  }
+}
+
+@media #{$mobile} {
+  .column--right {
+    order: 3;
+  }
+
+  .phone {
+    order: 1;
+  }
+
+  .column--left {
+    order: 2;
+  }
+
+  .description {
+    padding-left: 26px;
+  }
+}

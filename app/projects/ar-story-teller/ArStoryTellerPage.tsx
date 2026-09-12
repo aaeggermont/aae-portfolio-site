@@ -7,6 +7,7 @@ import { TeamSection } from './components/sections/TeamSection';
 import { CaseStudyOverviewSection } from './components/sections/CaseStudyOverviewSection';
 import { DesignSystemSection } from './sections/DesignSystemSection';
 import ConclusionsAndImpactSection from './components/sections/ConclusionsAndImpactSection';
+import FutureWorkSection from './components/sections/FutureWorkSection';
 import { useSetAtom } from "jotai";
 import { useEffect, type CSSProperties } from "react";
 import { layoutState } from "@/app/(public)/layout-state";
@@ -123,6 +124,7 @@ export function ArStoryTellerPage({
           <CaseStudyOverviewSection data={{ caseStudy: projectData.caseStudy }} />
           <DesignSystemSection data={{ caseStudy: projectData.caseStudy }} />
           <ConclusionsAndImpactSection data={{ caseStudy: projectData.caseStudy }} />
+          <FutureWorkSection />
         </div>
       ) : null}
     </div>

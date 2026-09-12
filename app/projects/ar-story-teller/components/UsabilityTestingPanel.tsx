@@ -21,7 +21,8 @@ const bulletTextSx = bodyTypeSx("smallBody", {
 
 const PANEL_SURFACE_SX = {
   width: "100%",
-  bgcolor: "#ffffff",
+  bgcolor: "#F5F6FA",
+  border: "1px solid rgba(3, 19, 60, 0.08)",
   borderRadius: { xs: 4, md: "40px" },
   px: { xs: 3, sm: 5, md: 7.5 },
   py: { xs: 4, sm: 5, md: 7.5 },

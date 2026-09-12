@@ -3,7 +3,6 @@ import ParagraphBlock from '../components/ParagraphBlock';
 import ParagraphImg from '../components/ParagraphImg';
 import styles from '../ArStoryTeller.module.scss';
 import dsSectionStyles from './DesignSystemSection.module.scss';
-import { SectionTitle } from '../components/SectionTitle';
 import { SectionSubTitle } from '../components/SectionSubTitle';
 import { PanelSubTitle } from '../components/PanelSubTitle';
 import { UserResearchMethodsCarousel } from '../components/UserResearchMethodsCarousel';
@@ -11,18 +10,76 @@ import { InteractionDesignPrinciples } from '../components/InteractionDesignPrin
 import { UserModeInteractions } from '../components/UserModeInteractions';
 import { Storyboard } from '../components/Storyboard';
 import { PrototypingMethodPanel } from '../components/PrototypingMethodPanel';
+import { FieldOfViewExperiment } from '../components/FieldOfViewExperiment';
 import {
     UsabilityTestingPanel,
     type UsabilityTestingPanelBulletPoint,
 } from '../components/UsabilityTestingPanel';
 import { UsabilityFindingsInsights } from '../components/UsabilityFindingsInsights';
+import { GuestNeedsQuadrants } from '../components/GuestNeedsQuadrants';
 import type { DesignSystemSectionData } from '../types/arStoryTellerContent';
 import type { StoryboardSlide } from '../types/designSystemTypes';
 import { resolveSoftwarePrototypesAccordionSections } from '../lib/softwarePrototypesAccordion';
+import { HCD_XR_PROCESS_DESKTOP_OBJECT_PATH } from '../lib/criticalAssets';
+import { Box, Typography } from '@mui/material';
+import { titleTypeSx } from '../typography';
 
 interface DesignSystemSectionProps {
     data: DesignSystemSectionData;
 }
+
+const DESIGN_SYSTEM_EYEBROW = 'Methodology';
+const DESIGN_SYSTEM_TITLE = 'Human-Centered XR Design';
+const RESEARCH_EYEBROW = 'Research';
+const DEFINE_EYEBROW = 'Define';
+const ENVISION_EYEBROW = 'Envision';
+const PROTOTYPE_EYEBROW = 'Prototype';
+const EVALUATE_EYEBROW = 'Evaluate';
+const HCD_XR_PROCESS_IMAGE_TITLE =
+    'Human-Centered XR Design Process\n(MIT Digital Media & Artificial Intelligence laboratories).';
+const EYEBROW_COLOR = '#1B3C90';
+const TITLE_COLOR = '#111A27';
+
+const sectionEyebrowSx = titleTypeSx('eyebrow', {
+    m: 0,
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    color: EYEBROW_COLOR,
+    textAlign: 'left',
+});
+
+const bandEyebrowSx = titleTypeSx('eyebrow', {
+    m: 0,
+    mb: 1.5,
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    color: EYEBROW_COLOR,
+    textAlign: 'left',
+});
+
+function BandSectionHeading({
+    eyebrow,
+    title,
+}: {
+    eyebrow: string;
+    title: string;
+}) {
+    return (
+        <Box>
+            <Typography component="p" sx={bandEyebrowSx}>
+                {eyebrow}
+            </Typography>
+            <SectionSubTitle title={title} />
+        </Box>
+    );
+}
+
+/** Same desktop process diagram for desktop / tablet / mobile (`ParagraphImg` indices 0–2). */
+const HCD_XR_PROCESS_IMAGES = [
+    HCD_XR_PROCESS_DESKTOP_OBJECT_PATH,
+    HCD_XR_PROCESS_DESKTOP_OBJECT_PATH,
+    HCD_XR_PROCESS_DESKTOP_OBJECT_PATH,
+] as const;
 
 export function DesignSystemSection({ data }: DesignSystemSectionProps) {
     const { designSystem } = data.caseStudy;
@@ -39,7 +96,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         developingSpecs.interactionDesignModeSpecifications;
 
     const prototypingMethod0 = prototyping?.methods?.[0];
-    const prototypingMethod1 = prototyping?.methods?.[1];
+    // Wire-Flow — temporarily hidden
+    // const prototypingMethod1 = prototyping?.methods?.[1];
     const prototypingMethod2 = prototyping?.methods?.[2];
 
     const usabilityProcessBullets = (
@@ -60,27 +118,50 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
         },
     }));
 
+    const headingId = 'design-system-heading';
+
     return (
-        <section className={styles['project-container']}>
-            <div className={styles['panel-section-stack']}>
-                <div className={styles['content-group']}>
-                    <SectionTitle title={designSystem.title} />
-                    <ParagraphBlock
-                        paragraphs={designSystem.paragraphs}
-                        data-aos="fade-up"
-                        data-aos-duration="1000"
-                        data-aos-anchor-placement="top-center"
+        <section className={styles['project-container']} aria-labelledby={headingId}>
+            {/* Methodology / Human-Centered XR Design — full-bleed band */}
+            <div
+                className={dsSectionStyles.methodologyBleed}
+                aria-label="Human-Centered XR Design"
+            >
+                <div className={dsSectionStyles.methodologyBleedInner}>
+                    <div className={styles['content-group']}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'flex-start',
+                                gap: 1.5,
+                            }}
+                        >
+                            <Typography component="p" sx={sectionEyebrowSx}>
+                                {DESIGN_SYSTEM_EYEBROW}
+                            </Typography>
+                            <Typography
+                                id={headingId}
+                                component="h2"
+                                sx={titleTypeSx('sectionTitle', {
+                                    m: 0,
+                                    color: TITLE_COLOR,
+                                    textAlign: 'left',
+                                })}
+                            >
+                                {DESIGN_SYSTEM_TITLE}
+                            </Typography>
+                        </Box>
+                        <ParagraphBlock
+                            paragraphs={designSystem.paragraphs}
+                        />
+                    </div>
+                    <ParagraphImg
+                        imagesSrc={[...HCD_XR_PROCESS_IMAGES]}
+                        alt={designSystem.alt}
+                        title={HCD_XR_PROCESS_IMAGE_TITLE}
                     />
                 </div>
-                <ParagraphImg
-                    imagesSrc={designSystem.images}
-                    alt={designSystem.alt}
-                    title={designSystem.imageTitle}
-                    description={designSystem.imageDescription}
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                    data-aos-anchor-placement="top-center"
-                />
             </div>
 
             {/* Understanding Guest Needs — full-bleed background band */}
@@ -90,7 +171,12 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.guestNeedsBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle title={userResearchJourney.title} />
+                        <Box>
+                            <Typography component="p" sx={bandEyebrowSx}>
+                                {RESEARCH_EYEBROW}
+                            </Typography>
+                            <SectionSubTitle title={userResearchJourney.title} />
+                        </Box>
                         <ParagraphBlock
                             paragraphs={userResearchJourney.paragraphs.slice(0, 1)}
                         />
@@ -103,11 +189,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                     <ParagraphBlock
                         paragraphs={userResearchJourney.paragraphs.slice(1, 2)}
                     />
-                    <ParagraphImg
-                        imagesSrc={userResearchJourney.images}
-                        alt={designSystem.alt}
-                        widthPercent={80}
-                    />
+                    <GuestNeedsQuadrants />
                 </div>
             </div>
 
@@ -118,7 +200,10 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.developingSpecsBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle title={developingSpecs.title} />
+                        <BandSectionHeading
+                            eyebrow={DEFINE_EYEBROW}
+                            title={developingSpecs.title}
+                        />
                         <ParagraphBlock paragraphs={developingSpecs.paragraphs} />
                     </div>
                     {developingSpecs.featuresAndSpecifications
@@ -150,7 +235,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.envisionUseCaseBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle
+                        <BandSectionHeading
+                            eyebrow={ENVISION_EYEBROW}
                             title={envisionUseCase?.title ?? 'Envision the Use Case'}
                         />
                         {envisionUseCase?.paragraphs?.length ? (
@@ -178,10 +264,11 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
             >
                 <div className={dsSectionStyles.prototypingBleedInner}>
                     <div className={styles['content-group']}>
-                        <SectionSubTitle
+                        <BandSectionHeading
+                            eyebrow={PROTOTYPE_EYEBROW}
                             title={
                                 prototyping?.title ??
-                                'Wireframe & Software Prototypes'
+                                'High-Fidelity Experience Screens & Software Prototypes'
                             }
                         />
                         {prototyping?.paragraphs?.length ? (
@@ -200,10 +287,156 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             </div>
                             <PrototypingMethodPanel
                                 primaryImage={prototypingMethod0.images?.[0]}
-                                secondaryImage={prototypingMethod0.images?.[1]}
                             />
                         </div>
                     ) : null}
+                    {prototyping?.fieldOfViewExperiment ? (
+                        <div className={styles['panel-subsection']}>
+                            <FieldOfViewExperiment
+                                data={prototyping.fieldOfViewExperiment}
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arSelfieExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={prototyping.arSelfieExperience.title}
+                                />
+                                {prototyping.arSelfieExperience.paragraphs
+                                    ?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping.arSelfieExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arSelfieExperience.images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping.arSelfieExperience
+                                        .leftCallouts,
+                                    right: prototyping.arSelfieExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Selfie Experience screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arStoryDetailsExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={
+                                        prototyping.arStoryDetailsExperience
+                                            .title
+                                    }
+                                />
+                                {prototyping.arStoryDetailsExperience
+                                    .paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping.arStoryDetailsExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arStoryDetailsExperience
+                                        .images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping.arStoryDetailsExperience
+                                        .leftCallouts,
+                                    right: prototyping.arStoryDetailsExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Story Details About screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arCollectingArtifactsExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={
+                                        prototyping
+                                            .arCollectingArtifactsExperience
+                                            .title
+                                    }
+                                />
+                                {prototyping.arCollectingArtifactsExperience
+                                    .paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping
+                                                .arCollectingArtifactsExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arCollectingArtifactsExperience
+                                        .images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping
+                                        .arCollectingArtifactsExperience
+                                        .leftCallouts,
+                                    right: prototyping
+                                        .arCollectingArtifactsExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Collecting Artifacts Share screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {prototyping?.arNearbyAttractionsExperience ? (
+                        <div className={styles['panel-subsection']}>
+                            <div className={styles['content-group']}>
+                                <PanelSubTitle
+                                    title={
+                                        prototyping.arNearbyAttractionsExperience
+                                            .title
+                                    }
+                                />
+                                {prototyping.arNearbyAttractionsExperience
+                                    .paragraphs?.length ? (
+                                    <ParagraphBlock
+                                        paragraphs={
+                                            prototyping
+                                                .arNearbyAttractionsExperience
+                                                .paragraphs
+                                        }
+                                    />
+                                ) : null}
+                            </div>
+                            <PrototypingMethodPanel
+                                primaryImage={
+                                    prototyping.arNearbyAttractionsExperience
+                                        .images?.[0]
+                                }
+                                annotatedCallouts={{
+                                    left: prototyping
+                                        .arNearbyAttractionsExperience
+                                        .leftCallouts,
+                                    right: prototyping
+                                        .arNearbyAttractionsExperience
+                                        .rightCallouts,
+                                }}
+                                annotatedAriaLabel="AR Nearby Attractions Discover screen with annotations"
+                            />
+                        </div>
+                    ) : null}
+                    {/* Wire-Flow — temporarily hidden
                     {prototypingMethod1 ? (
                         <div className={styles['panel-subsection']}>
                             <PanelSubTitle title={prototypingMethod1.title} />
@@ -213,6 +446,7 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                             />
                         </div>
                     ) : null}
+                    */}
                     {prototypingMethod2 ? (
                         <div className={styles['panel-subsection']}>
                             <PanelSubTitle title={prototypingMethod2.title} />
@@ -235,7 +469,8 @@ export function DesignSystemSection({ data }: DesignSystemSectionProps) {
                 >
                     <div className={dsSectionStyles.usabilityTestingBleedInner}>
                         <div className={styles['content-group']}>
-                            <SectionSubTitle
+                            <BandSectionHeading
+                                eyebrow={EVALUATE_EYEBROW}
                                 title={
                                     usabilityTesting.title ??
                                     'Usability Testing & Evaluation'

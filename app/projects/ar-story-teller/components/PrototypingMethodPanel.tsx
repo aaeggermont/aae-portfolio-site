@@ -7,6 +7,11 @@ import ProjectImage from "@/lib/media/ProjectImage";
 import ProjectImageLightbox from "@/lib/media/ProjectImageLightbox";
 import { PrototypingImageCarousel } from "./PrototypingImageCarousel";
 import { PanelAccordionList, type PanelAccordionItem } from "./PanelAccordionList";
+import { ArExperienceWireframeSpec } from "./ArExperienceWireframeSpec";
+import {
+  AnnotatedPhoneSpec,
+  type AnnotatedPhoneCallout,
+} from "./AnnotatedPhoneSpec";
 import { breakpointMediaQuery, breakpointPx } from "@/lib/responsive/breakpoints";
 import {
   cssLengthToPx,
@@ -16,9 +21,16 @@ import {
 } from "../layoutConfig";
 import { bodyTypeSx } from "../typography";
 
-/** Mobile wireframe asset — intrinsic ratio for layout reserve. */
-const WIREFRAME_IMAGE_INTRINSIC_WIDTH = 390;
-const WIREFRAME_IMAGE_INTRINSIC_HEIGHT = 844;
+/** Annotated AR Experience Spec mockup — phone with numbered markers; callouts in code. */
+const SPEC_MOCKUP_PATH_MARKER = "ARExperienceSpecMockup";
+/** Annotated AR Selfie screen — phone with numbered markers; callouts from CMS. */
+const SELFIE_MOCKUP_PATH_MARKER = "ARTakingSelfieMockupSpecs";
+/** Annotated AR Story Details screen — phone with numbered markers; callouts from CMS. */
+const STORY_DETAILS_MOCKUP_PATH_MARKER = "ARDiscoveringStoryDetailsSpecsMockup";
+/** Annotated AR Collecting Artifacts screen — phone with numbered markers; callouts from CMS. */
+const COLLECTING_ARTIFACTS_MOCKUP_PATH_MARKER = "ARCollectingArtifactsSpecsMockup";
+/** Annotated AR Nearby Attractions screen — phone with numbered markers; callouts from CMS. */
+const NEARBY_ATTRACTIONS_MOCKUP_PATH_MARKER = "ARNearbyAttractionsMockupSpecs";
 
 /** Display scale for panel images (10% smaller than full panel width). */
 const PANEL_IMAGE_DISPLAY_SCALE = 0.9;
@@ -45,10 +57,10 @@ export interface PrototypingPanelImage {
   annotationInstruction?: string;
 }
 
-/** Grey inset panel — matches `UserModeInteractions` content container (1100px cap). */
+/** White inset panel — lifts off the Prototype band (`#f4f6fa`). */
 const GREY_PANEL_SURFACE_SX = {
   width: "100%",
-  bgcolor: "#f5f5f7",
+  bgcolor: "#ffffff",
   borderRadius: { xs: 4, md: "40px" },
   px: { xs: 3, sm: 5, md: 7.5 },
   py: { xs: 4, sm: 5, md: 7.5 },
@@ -273,6 +285,13 @@ export interface PrototypingMethodPanelProps {
   primaryImage?: PrototypingPanelImage;
   /** Second image, stacked below the primary (e.g. spatial interaction model). */
   secondaryImage?: PrototypingPanelImage;
+  /** CMS-driven callouts for annotated phone mockups (e.g. AR Selfie). */
+  annotatedCallouts?: {
+    left: AnnotatedPhoneCallout[];
+    right: AnnotatedPhoneCallout[];
+  };
+  /** Accessible label for the annotated phone layout. */
+  annotatedAriaLabel?: string;
 }
 
 export function PrototypingMethodPanel({
@@ -283,6 +302,8 @@ export function PrototypingMethodPanel({
   carouselImages,
   primaryImage,
   secondaryImage,
+  annotatedCallouts,
+  annotatedAriaLabel,
 }: PrototypingMethodPanelProps) {
   const hasCopyImageSplit = Boolean(
     paragraphs?.length ||
@@ -291,6 +312,17 @@ export function PrototypingMethodPanel({
       carouselImages?.length,
   );
   const hasStackedImages = Boolean(primaryImage || secondaryImage);
+  const primaryPath = primaryImage?.objectPath ?? "";
+  const primaryIsWireframeSpec = primaryPath.includes(SPEC_MOCKUP_PATH_MARKER);
+  const primaryIsCmsAnnotatedSpec =
+    primaryPath.includes(SELFIE_MOCKUP_PATH_MARKER) ||
+    primaryPath.includes(STORY_DETAILS_MOCKUP_PATH_MARKER) ||
+    primaryPath.includes(COLLECTING_ARTIFACTS_MOCKUP_PATH_MARKER) ||
+    primaryPath.includes(NEARBY_ATTRACTIONS_MOCKUP_PATH_MARKER);
+  const primaryIsAnnotatedSpec =
+    primaryIsWireframeSpec ||
+    primaryIsCmsAnnotatedSpec ||
+    Boolean(annotatedCallouts);
 
   return (
     <Stack
@@ -319,11 +351,31 @@ export function PrototypingMethodPanel({
             }}
           >
             {primaryImage ? (
-              <PanelImageFigure
-                image={primaryImage}
-                intrinsicWidth={WIREFRAME_IMAGE_INTRINSIC_WIDTH}
-                intrinsicHeight={WIREFRAME_IMAGE_INTRINSIC_HEIGHT}
-              />
+              primaryIsAnnotatedSpec ? (
+                annotatedCallouts || primaryIsCmsAnnotatedSpec ? (
+                  <AnnotatedPhoneSpec
+                    objectPath={primaryImage.objectPath}
+                    alt={primaryImage.alt}
+                    leftCallouts={annotatedCallouts?.left ?? []}
+                    rightCallouts={annotatedCallouts?.right ?? []}
+                    ariaLabel={
+                      annotatedAriaLabel ??
+                      "Annotated phone mockup with callouts"
+                    }
+                  />
+                ) : (
+                  <ArExperienceWireframeSpec
+                    objectPath={primaryImage.objectPath}
+                    alt={primaryImage.alt}
+                  />
+                )
+              ) : (
+                <PanelImageFigure
+                  image={primaryImage}
+                  intrinsicWidth={SPATIAL_IMAGE_INTRINSIC_WIDTH}
+                  intrinsicHeight={SPATIAL_IMAGE_INTRINSIC_HEIGHT}
+                />
+              )
             ) : null}
             {secondaryImage ? (
               <PanelImageFigure
