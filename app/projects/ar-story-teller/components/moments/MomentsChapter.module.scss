@@ -1,3 +1,18 @@
+.stageShell {
+    width: 100%;
+    max-width: 100%;
+}
+
+/*
+ * Mobile phones in the journey are taller than the 16:9 stage, then scale to 1.25.
+ * Vertical padding keeps that overflow inside this shell instead of the sections above/below.
+ */
+@media (max-width: 767px) {
+    .stageShell {
+        padding-block: clamp(4.5rem, 30vw, 9rem);
+    }
+}
+
 .stage {
     position: relative;
     z-index: 2;
