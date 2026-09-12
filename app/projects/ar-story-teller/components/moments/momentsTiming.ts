@@ -132,5 +132,16 @@ export const MOMENTS_JOURNEY_SCROLL_TRIGGER_START = 'center center';
 /** Pause looping when the stage fully leaves the viewport. */
 export const MOMENTS_JOURNEY_SCROLL_TRIGGER_END = 'bottom top';
 
+/**
+ * Auto-center the demo as it approaches mid-viewport (from below / from above).
+ * Stage center crossing these lines triggers a smooth scroll to viewport center.
+ */
+export const MOMENTS_JOURNEY_SNAP_START = 'center 72%';
+export const MOMENTS_JOURNEY_SNAP_END = 'center 28%';
+export const MOMENTS_JOURNEY_SNAP_DURATION_SEC = 0.7;
+export const MOMENTS_JOURNEY_SNAP_EASE = 'power2.inOut';
+/** Skip the snap if already this close to centered (px). */
+export const MOMENTS_JOURNEY_SNAP_THRESHOLD_PX = 10;
+
 /** Breath between the last beat and the next loop of the film. */
 export const MOMENTS_JOURNEY_LOOP_GAP_SEC = 1.2;
