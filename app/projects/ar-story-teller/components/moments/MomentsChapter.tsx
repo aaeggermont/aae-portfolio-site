@@ -76,7 +76,8 @@ export function MomentsChapter({
     }
 
     return (
-        <div ref={stageRef} className={styles.stage}>
+        <div className={styles.stageShell}>
+            <div ref={stageRef} className={styles.stage}>
             <div ref={solutionOpenerRef} className={styles.layer}>
                 <SolutionOpener
                     eyebrow={solutionEyebrow}
@@ -161,6 +162,7 @@ export function MomentsChapter({
                 />
                 <span className={styles.replayLabel}>Replay demo</span>
             </button>
+            </div>
         </div>
     );
 }
