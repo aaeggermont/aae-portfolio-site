@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import Typewriter from 'typewriter-effect'
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import styles from './aboutme_intro.module.scss'
@@ -49,8 +50,8 @@ export function AboutMeIntro() {
               >{ paragraph }</p>
             )}
           </div>
-          <a
-            href="#about-me-more"
+          <Link
+            href="/aboutme/biography"
             className={styles.aboutmeIntroBiographyLink}
           >
             <span>Read full biography</span>
@@ -58,7 +59,7 @@ export function AboutMeIntro() {
               aria-hidden
               className={styles.aboutmeIntroBiographyIcon}
             />
-          </a>
+          </Link>
         </div>
         <AboutMeDesktopTabletImg />
       </div>

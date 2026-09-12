@@ -1,0 +1,48 @@
+@use '../home/home-layout' as home;
+
+.biographyPage {
+  @include home.home-page-gutter;
+  width: 100%;
+  box-sizing: border-box;
+
+  &Content {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    // Match About Me page section rhythm / header clearance.
+    gap: 3rem;
+    margin-top: 2.5rem;
+    padding-bottom: 3rem;
+
+    @media screen and (min-width: $tablet-min) {
+      gap: 5rem;
+      margin-top: 3.5rem;
+      padding-bottom: 4rem;
+    }
+
+    @media screen and (min-width: $desktop-min) {
+      gap: 8rem;
+      margin-top: 4.5rem;
+      padding-bottom: 5rem;
+    }
+  }
+}
+
+/* Intro + chapters read as one composition in the mockup. */
+.biographyJourney {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+  width: 100%;
+
+  @media screen and (min-width: $tablet-min) {
+    gap: 2.75rem;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    gap: 3.25rem;
+  }
+}
