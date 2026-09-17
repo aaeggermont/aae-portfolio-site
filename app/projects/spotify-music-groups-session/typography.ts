@@ -14,16 +14,19 @@ export const SPOTIFY_MUSIC_GROUPS_SESSION_BODY_FONT =
 /**
  * Spotify Music Groups Session responsive type scale (px).
  * Breakpoints match `styles/variables.scss` / `lib/responsive/breakpoints.ts`.
- * Sizes can be tuned as sections are designed.
  */
 export const TYPOGRAPHY = {
-  heroTitle: { mobile: "36px", tablet: "44px", desktop: "52px" },
-  heroSubtitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
-  sectionTitle: { mobile: "28px", tablet: "32px", desktop: "36px" },
+  heroEyebrow: { mobile: "12px", tablet: "12px", desktop: "13px" },
+  heroTitle: { mobile: "36px", tablet: "48px", desktop: "56px" },
+  heroDescription: { mobile: "17px", tablet: "19px", desktop: "20px" },
+  heroMetaLabel: { mobile: "11px", tablet: "11px", desktop: "12px" },
+  heroMetaValue: { mobile: "14px", tablet: "15px", desktop: "16px" },
+  sectionEyebrow: { mobile: "12px", tablet: "12px", desktop: "13px" },
+  sectionTitle: { mobile: "28px", tablet: "34px", desktop: "40px" },
+  sectionByline: { mobile: "15px", tablet: "16px", desktop: "16px" },
   sectionSubtitle: { mobile: "22px", tablet: "24px", desktop: "26px" },
-  sectionDescription: { mobile: "18px", tablet: "20px", desktop: "22px" },
-  cardTitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
-  bodyText: { mobile: "17px", tablet: "18px", desktop: "18px" },
+  bodyText: { mobile: "16px", tablet: "17px", desktop: "18px" },
+  calloutQuote: { mobile: "18px", tablet: "20px", desktop: "22px" },
   smallCaption: { mobile: "15px", tablet: "15px", desktop: "16px" },
 } as const;
 

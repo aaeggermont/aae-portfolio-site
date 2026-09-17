@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useSetAtom } from "jotai";
 import Box from "@mui/material/Box";
 
+import ProjectHeader from "@/app/projects/spotify-music-groups-session/components/ProjectHeader";
+import TheQuestionSection from "@/app/projects/spotify-music-groups-session/components/TheQuestionSection";
 import { SPOTIFY_MUSIC_GROUPS_SESSION_HEADER_THEME } from "@/app/projects/spotify-music-groups-session/headerTheme";
 import { SPOTIFY_MUSIC_GROUPS_SESSION_FOOTER_THEME } from "@/app/projects/spotify-music-groups-session/footerTheme";
 import type { SpotifyMusicGroupsSessionProjectDocument } from "@/app/projects/spotify-music-groups-session/lib/spotify-music-groups-session.firestore";
@@ -22,11 +24,8 @@ type SpotifyMusicGroupsSessionPageProps = {
   onProjectHeaderReady?: () => void;
 };
 
-/**
- * Empty case-study shell for Analyzing Spotify Music Group Sessions.
- * Content sections will be added incrementally.
- */
 export function SpotifyMusicGroupsSessionPage({
+  project,
   onProjectHeaderReady,
 }: SpotifyMusicGroupsSessionPageProps) {
   const setLayoutState = useSetAtom(layoutState);
@@ -46,8 +45,22 @@ export function SpotifyMusicGroupsSessionPage({
   }, [setLayoutState, setHeaderState, setFooterState]);
 
   useEffect(() => {
-    onProjectHeaderReady?.();
-  }, [onProjectHeaderReady]);
+    if (!project?.projectHeader) {
+      onProjectHeaderReady?.();
+    }
+  }, [project, onProjectHeaderReady]);
 
-  return <Box component="main" sx={{ minHeight: "60vh" }} />;
+  return (
+    <Box component="main">
+      {project?.projectHeader ? (
+        <ProjectHeader
+          data={project.projectHeader}
+          onReady={onProjectHeaderReady}
+        />
+      ) : null}
+      {project?.theQuestion ? (
+        <TheQuestionSection data={project.theQuestion} />
+      ) : null}
+    </Box>
+  );
 }
