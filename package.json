@@ -9,6 +9,7 @@
     "lint": "eslint",
     "seed:project-1": "tsx scripts/seed-project-1.ts",
     "seed:project-2": "tsx scripts/seed-project-2.ts",
+    "seed:project-8": "tsx scripts/seed-project-8.ts",
     "seed:automatic-seater": "tsx scripts/seed-automatic-seater-assignments.ts",
     "create:access-code": "tsx scripts/create-project-access-code.ts",
     "seed:main-page": "tsx scripts/seed-main-page.ts",
