@@ -9,6 +9,7 @@ import TheQuestionSection from "@/app/projects/spotify-music-groups-session/comp
 import ProductContextSection from "@/app/projects/spotify-music-groups-session/components/ProductContextSection";
 import TheoreticalFrameworkSection from "@/app/projects/spotify-music-groups-session/components/TheoreticalFrameworkSection";
 import FeatureUnderStudySection from "@/app/projects/spotify-music-groups-session/components/FeatureUnderStudySection";
+import ActivityHierarchySection from "@/app/projects/spotify-music-groups-session/components/ActivityHierarchySection";
 import { SPOTIFY_MUSIC_GROUPS_SESSION_HEADER_THEME } from "@/app/projects/spotify-music-groups-session/headerTheme";
 import { SPOTIFY_MUSIC_GROUPS_SESSION_FOOTER_THEME } from "@/app/projects/spotify-music-groups-session/footerTheme";
 import type { SpotifyMusicGroupsSessionProjectDocument } from "@/app/projects/spotify-music-groups-session/lib/spotify-music-groups-session.firestore";
@@ -72,6 +73,9 @@ export function SpotifyMusicGroupsSessionPage({
       ) : null}
       {project?.featureUnderStudy ? (
         <FeatureUnderStudySection data={project.featureUnderStudy} />
+      ) : null}
+      {project?.activityHierarchy ? (
+        <ActivityHierarchySection data={project.activityHierarchy} />
       ) : null}
     </Box>
   );
