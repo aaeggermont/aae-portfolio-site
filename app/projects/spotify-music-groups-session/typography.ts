@@ -25,8 +25,12 @@ export const TYPOGRAPHY = {
   sectionTitle: { mobile: "28px", tablet: "34px", desktop: "40px" },
   sectionByline: { mobile: "15px", tablet: "16px", desktop: "16px" },
   sectionSubtitle: { mobile: "22px", tablet: "24px", desktop: "26px" },
+  cardTitle: { mobile: "20px", tablet: "22px", desktop: "24px" },
   bodyText: { mobile: "16px", tablet: "17px", desktop: "18px" },
+  cardBody: { mobile: "15px", tablet: "15px", desktop: "16px" },
   calloutQuote: { mobile: "18px", tablet: "20px", desktop: "22px" },
+  pillLabel: { mobile: "12px", tablet: "12px", desktop: "13px" },
+  linkText: { mobile: "14px", tablet: "15px", desktop: "15px" },
   smallCaption: { mobile: "15px", tablet: "15px", desktop: "16px" },
 } as const;
 

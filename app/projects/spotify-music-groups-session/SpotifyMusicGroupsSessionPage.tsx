@@ -6,6 +6,9 @@ import Box from "@mui/material/Box";
 
 import ProjectHeader from "@/app/projects/spotify-music-groups-session/components/ProjectHeader";
 import TheQuestionSection from "@/app/projects/spotify-music-groups-session/components/TheQuestionSection";
+import ProductContextSection from "@/app/projects/spotify-music-groups-session/components/ProductContextSection";
+import TheoreticalFrameworkSection from "@/app/projects/spotify-music-groups-session/components/TheoreticalFrameworkSection";
+import FeatureUnderStudySection from "@/app/projects/spotify-music-groups-session/components/FeatureUnderStudySection";
 import { SPOTIFY_MUSIC_GROUPS_SESSION_HEADER_THEME } from "@/app/projects/spotify-music-groups-session/headerTheme";
 import { SPOTIFY_MUSIC_GROUPS_SESSION_FOOTER_THEME } from "@/app/projects/spotify-music-groups-session/footerTheme";
 import type { SpotifyMusicGroupsSessionProjectDocument } from "@/app/projects/spotify-music-groups-session/lib/spotify-music-groups-session.firestore";
@@ -60,6 +63,15 @@ export function SpotifyMusicGroupsSessionPage({
       ) : null}
       {project?.theQuestion ? (
         <TheQuestionSection data={project.theQuestion} />
+      ) : null}
+      {project?.productContext ? (
+        <ProductContextSection data={project.productContext} />
+      ) : null}
+      {project?.theoreticalFramework ? (
+        <TheoreticalFrameworkSection data={project.theoreticalFramework} />
+      ) : null}
+      {project?.featureUnderStudy ? (
+        <FeatureUnderStudySection data={project.featureUnderStudy} />
       ) : null}
     </Box>
   );

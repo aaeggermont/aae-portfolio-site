@@ -43,6 +43,7 @@
     "jest-environment-jsdom": "^30.2.0",
     "jotai": "^2.18.0",
     "lightbox.js-react": "^1.7.0",
+    "lucide-react": "^0.511.0",
     "next": "16.0.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

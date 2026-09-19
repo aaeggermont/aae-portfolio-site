@@ -60,11 +60,17 @@ export const HERO_CONTENT_CONTAINER_SX = CONTENT_CONTAINER_SX;
 /** Body section surfaces + text (post-hero). */
 export const SECTION_COLORS = {
   surface: "#FFFFFF",
+  /** Full-bleed alternating band (cream). */
+  band: "hsl(40 33% 97%)",
   card: "hsl(40 33% 97%)",
   label: "#5B8DB8",
   heading: "hsl(205 45% 18%)",
   body: "hsl(210 18% 32%)",
   accent: HERO_COLORS.accent,
+  /** Soft panel fill inside theory cards */
+  highlight: "hsl(210 28% 94%)",
+  cardBorder: "hsl(210 16% 88%)",
+  cardSurface: "#FFFFFF",
 } as const;
 
 /** Vertical rhythm between top-level page sections. */
