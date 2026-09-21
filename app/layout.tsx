@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { AppProviders } from "./providers";
 import "../styles/globals.scss";
 import { PAGE_CANVAS } from "@/lib/theme/pageCanvas";
-import { IBM_Plex_Sans, Inter, Maven_Pro, Poppins, Montserrat, Figtree } from "next/font/google";
+import { IBM_Plex_Sans, Inter, Maven_Pro, Poppins, Montserrat, Figtree, Sora } from "next/font/google";
 import localFont from "next/font/local";
 import Header from '@/components/Header';
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
@@ -36,11 +36,19 @@ const ibmPlexSans = IBM_Plex_Sans({
   display: "swap",
 });
 
-/* Inter — Automatic Seater operational persona cards. */
+/* Inter — Automatic Seater operational persona cards; Spotify Music Groups Session body. */
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+/* Sora — Spotify Music Groups Session headings. */
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sora",
   display: "swap",
 });
 
@@ -116,7 +124,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable} ${ibmPlexSans.variable} ${inter.variable} ${mavenPro.variable}`}
+      className={`${poppins.variable} ${montserrat.variable} ${figtree.variable} ${satoshi.variable} ${sourceSans3.variable} ${ibmPlexSans.variable} ${inter.variable} ${sora.variable} ${mavenPro.variable}`}
       style={{ ["--page-canvas" as string]: PAGE_CANVAS }}
     >
       <Aos/>
