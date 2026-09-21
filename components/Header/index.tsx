@@ -43,9 +43,8 @@ export default function Header({
   };
 
   const resumeHref = "/resume/AntonioEggermontResume-2024.pdf";
-  const stickyHeaderPaths = ["/", "/aboutme"];
   const useStickyHomeHeader =
-    stickyHeaderPaths.includes(pathname) &&
+    (pathname === "/" || pathname.startsWith("/aboutme")) &&
     position === defaultHeaderState.position;
 
   const isOverlayPosition =

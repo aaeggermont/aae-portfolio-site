@@ -16,6 +16,7 @@
     "seed:main-banner": "tsx scripts/seed-main-page.ts",
     "seed:capability-map": "tsx scripts/seed-capability-map.ts",
     "seed:about-intro": "tsx scripts/seed-about-intro.ts",
+    "seed:biography-chapters": "tsx scripts/seed-biography-chapters.ts",
     "seed:experience-training": "tsx scripts/seed-experience-training.ts"
   },
   "dependencies": {

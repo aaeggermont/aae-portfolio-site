@@ -1,0 +1,69 @@
+.biographyIntro {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.biographyIntroContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+
+  @media #{$xs}, #{$sm} {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.biographyIntroInfo {
+  width: 60%;
+  min-width: 0;
+
+  @media #{$xs}, #{$sm} {
+    width: 100%;
+  }
+}
+
+.biographyIntroTitle {
+  // Same typography as About Me intro title ("Hello, I'm Antonio").
+  font-family: var(--font-montserrat);
+  font-size: clamp(1.8rem, 4vw, 2.2rem);
+  font-weight: bold;
+  color: $font-color-bold;
+  margin: 0 0 0.55rem;
+  line-height: 1.2;
+
+  @media #{$xs}, #{$sm} {
+    text-align: center;
+  }
+}
+
+.biographyIntroSubtitle {
+  font-family: var(--font-montserrat);
+  font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+  font-weight: 600;
+  color: $font-color-bold;
+  margin: 0 0 1.5rem;
+  line-height: 1.35;
+
+  @media #{$xs}, #{$sm} {
+    text-align: center;
+  }
+}
+
+.biographyIntroBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+
+  p {
+    // Match About Me intro paragraphs (`aboutmeIntroDesc p`).
+    margin: 0;
+    @include fluid-type(16px, 20px, 24px);
+    font-weight: 500;
+    line-height: 1.55;
+    color: $font-color-bold;
+  }
+}
