@@ -9,6 +9,8 @@ type ResponsiveContextValue = {
   isDesktopOrLaptop: boolean;
   isTablet: boolean;
   isMobile: boolean;
+  /** True from tablet breakpoint up (no upper bound). */
+  isTabletUp: boolean;
   isPortrait: boolean;
   isRetina: boolean;
 };
@@ -39,6 +41,10 @@ export function ResponsiveQueryProvider({ children }: { children: React.ReactNod
     query: `(min-width: ${breakpointPx.tabletMin}px) and (max-width: ${breakpointPx.tabletMax}px)`,
   });
 
+  const mqTabletUp = useMediaQuery({
+    query: `(min-width: ${breakpointPx.tabletMin}px)`,
+  });
+
   const mqMobile = useMediaQuery({
     query: `(min-width: ${breakpointPx.mobileMin}px) and (max-width: ${breakpointPx.mobileMax}px)`,
   });
@@ -54,6 +60,7 @@ export function ResponsiveQueryProvider({ children }: { children: React.ReactNod
         isDesktopOrLaptop: false,
         isTablet: false,
         isMobile: false,
+        isTabletUp: false,
         isPortrait: false,
         isRetina: false,
       };
@@ -63,10 +70,11 @@ export function ResponsiveQueryProvider({ children }: { children: React.ReactNod
       isDesktopOrLaptop: mqDesktopOrLaptop,
       isTablet: mqTablet,
       isMobile: mqMobile,
+      isTabletUp: mqTabletUp,
       isPortrait: mqPortrait,
       isRetina: mqRetina,
     };
-  }, [mounted, mqDesktopOrLaptop, mqTablet, mqMobile, mqPortrait, mqRetina]);
+  }, [mounted, mqDesktopOrLaptop, mqTablet, mqMobile, mqTabletUp, mqPortrait, mqRetina]);
 
   return <ResponsiveContext.Provider value={screenDevice}>{children}</ResponsiveContext.Provider>;
 }

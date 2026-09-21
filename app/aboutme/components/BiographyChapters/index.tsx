@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -29,12 +29,28 @@ const CHAPTER_ICONS: Record<BiographyChapterIcon, SvgIconComponent> = {
   mail: MailOutlineIcon,
 };
 
+/** Clears sticky header when a chapter is scrolled into place. */
+const CHAPTER_SCROLL_OFFSET_PX = 104;
+
+const COLLAPSE_TIMEOUT = { enter: 280, exit: 180 } as const;
+
+function scrollChapterToPageTop(element: HTMLElement) {
+  const top =
+    window.scrollY +
+    element.getBoundingClientRect().top -
+    CHAPTER_SCROLL_OFFSET_PX;
+  // Instant scroll — smooth scrolling fights layout changes while accordions animate.
+  window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+}
+
 export function BiographyChapters() {
   const baseId = useId();
   const [data, setData] = useState<BiographyChaptersData>(
     biographyChaptersFallback,
   );
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const expandedIdRef = useRef<string | null>(null);
+  expandedIdRef.current = expandedId;
 
   useEffect(() => {
     return subscribeBiographyChaptersData(setData);
@@ -42,8 +58,23 @@ export function BiographyChapters() {
 
   const chapters = data.chapters;
 
-  const selectChapter = (id: string) => {
+  const openChapter = (id: string) => {
     setExpandedId((current) => (current === id ? null : id));
+  };
+
+  const handleChapterEntered = (id: string) => {
+    const settleMs = COLLAPSE_TIMEOUT.exit + 32;
+
+    const attemptScroll = () => {
+      if (expandedIdRef.current !== id) return;
+      const element = document.getElementById(`${baseId}-${id}`);
+      if (!element) return;
+      scrollChapterToPageTop(element);
+    };
+
+    // First pass after sibling collapse; second pass after layout padding/height settles.
+    window.setTimeout(attemptScroll, settleMs);
+    window.setTimeout(attemptScroll, settleMs + 120);
   };
 
   return (
@@ -66,12 +97,7 @@ export function BiographyChapters() {
                     }`}
                     aria-current={isActive ? 'true' : undefined}
                     aria-controls={`${baseId}-${chapter.id}-panel`}
-                    onClick={() => {
-                      selectChapter(chapter.id);
-                      document
-                        .getElementById(`${baseId}-${chapter.id}`)
-                        ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }}
+                    onClick={() => openChapter(chapter.id)}
                   >
                     {chapter.tocLabel}
                   </button>
@@ -102,7 +128,7 @@ export function BiographyChapters() {
                   className={styles.biographyChaptersTrigger}
                   aria-expanded={isExpanded}
                   aria-controls={panelId}
-                  onClick={() => selectChapter(chapter.id)}
+                  onClick={() => openChapter(chapter.id)}
                 >
                   <span className={styles.biographyChaptersIcon} aria-hidden>
                     <Icon />
@@ -127,7 +153,12 @@ export function BiographyChapters() {
                   />
                 </button>
 
-                <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                <Collapse
+                  in={isExpanded}
+                  timeout={COLLAPSE_TIMEOUT}
+                  unmountOnExit
+                  onEntered={() => handleChapterEntered(chapter.id)}
+                >
                   <div
                     id={panelId}
                     role="region"

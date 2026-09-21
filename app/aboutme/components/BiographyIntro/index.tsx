@@ -6,6 +6,8 @@ import {
   biographyIntroFallback,
   type BiographyIntroData,
 } from '../../data/biography-intro-data';
+import { AboutMeDesktopTabletImg } from '../AboutMeIntro/AboutMeIntroDesktopTabletImg';
+import { AboutMeMobileImg } from '../AboutMeIntro/AboutMeIntroMobileImg';
 
 type BiographyIntroProps = {
   data?: BiographyIntroData;
@@ -29,16 +31,20 @@ export function BiographyIntro({
 }: BiographyIntroProps) {
   return (
     <section className={styles.biographyIntro} aria-labelledby="biography-intro-title">
-      <div className={styles.biographyIntroInner}>
-        <h1 id="biography-intro-title" className={styles.biographyIntroTitle}>
-          <TitleTypewriter title={data.title} />
-        </h1>
-        <p className={styles.biographyIntroSubtitle}>{data.subtitle}</p>
-        <div className={styles.biographyIntroBody}>
-          {data.paragraphs.map((paragraph, index) => (
-            <p key={`biography-intro-p-${index}`}>{paragraph}</p>
-          ))}
+      <div className={styles.biographyIntroContainer}>
+        <div className={styles.biographyIntroInfo}>
+          <h1 id="biography-intro-title" className={styles.biographyIntroTitle}>
+            <TitleTypewriter title={data.title} />
+          </h1>
+          <AboutMeMobileImg />
+          <p className={styles.biographyIntroSubtitle}>{data.subtitle}</p>
+          <div className={styles.biographyIntroBody}>
+            {data.paragraphs.map((paragraph, index) => (
+              <p key={`biography-intro-p-${index}`}>{paragraph}</p>
+            ))}
+          </div>
         </div>
+        <AboutMeDesktopTabletImg />
       </div>
     </section>
   );

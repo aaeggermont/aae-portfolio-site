@@ -8,7 +8,7 @@ export function AboutMeDesktopTabletImg() {
 
   return <>
     {
-      (screen.isDesktopOrLaptop || screen.isTablet) && (
+      screen.isTabletUp && (
         <div className={styles.aboutmeIntroImg}>
           <div className={styles.aboutmeIntroBannerPhoto}>
             <Image

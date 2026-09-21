@@ -3,9 +3,27 @@
   box-sizing: border-box;
 }
 
-.biographyIntroInner {
+.biographyIntroContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
   width: 100%;
-  max-width: 42rem;
+
+  @media #{$xs}, #{$sm} {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.biographyIntroInfo {
+  width: 60%;
+  min-width: 0;
+
+  @media #{$xs}, #{$sm} {
+    width: 100%;
+  }
 }
 
 .biographyIntroTitle {
@@ -16,6 +34,10 @@
   color: $font-color-bold;
   margin: 0 0 0.55rem;
   line-height: 1.2;
+
+  @media #{$xs}, #{$sm} {
+    text-align: center;
+  }
 }
 
 .biographyIntroSubtitle {
@@ -25,6 +47,10 @@
   color: $font-color-bold;
   margin: 0 0 1.5rem;
   line-height: 1.35;
+
+  @media #{$xs}, #{$sm} {
+    text-align: center;
+  }
 }
 
 .biographyIntroBody {
