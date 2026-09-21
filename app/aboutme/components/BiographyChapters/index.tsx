@@ -34,13 +34,58 @@ const CHAPTER_SCROLL_OFFSET_PX = 104;
 
 const COLLAPSE_TIMEOUT = { enter: 280, exit: 180 } as const;
 
+/** Gentler than native `behavior: 'smooth'` — ~700ms ease-out. */
+const CHAPTER_SCROLL_DURATION_MS = 700;
+
+let activeChapterScrollFrame: number | null = null;
+
+function easeOutCubic(t: number): number {
+  return 1 - (1 - t) ** 3;
+}
+
 function scrollChapterToPageTop(element: HTMLElement) {
-  const top =
+  const reducedMotion = window.matchMedia(
+    '(prefers-reduced-motion: reduce)',
+  ).matches;
+  const targetTop = Math.max(
+    0,
     window.scrollY +
-    element.getBoundingClientRect().top -
-    CHAPTER_SCROLL_OFFSET_PX;
-  // Instant scroll — smooth scrolling fights layout changes while accordions animate.
-  window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+      element.getBoundingClientRect().top -
+      CHAPTER_SCROLL_OFFSET_PX,
+  );
+  const startTop = window.scrollY;
+  const distance = targetTop - startTop;
+
+  if (Math.abs(distance) < 2) return;
+
+  if (reducedMotion) {
+    window.scrollTo({ top: targetTop, behavior: 'auto' });
+    return;
+  }
+
+  if (activeChapterScrollFrame !== null) {
+    window.cancelAnimationFrame(activeChapterScrollFrame);
+    activeChapterScrollFrame = null;
+  }
+
+  const startTime = performance.now();
+
+  const step = (now: number) => {
+    const elapsed = now - startTime;
+    const progress = Math.min(1, elapsed / CHAPTER_SCROLL_DURATION_MS);
+    window.scrollTo({
+      top: startTop + distance * easeOutCubic(progress),
+      behavior: 'auto',
+    });
+
+    if (progress < 1) {
+      activeChapterScrollFrame = window.requestAnimationFrame(step);
+    } else {
+      activeChapterScrollFrame = null;
+    }
+  };
+
+  activeChapterScrollFrame = window.requestAnimationFrame(step);
 }
 
 export function BiographyChapters() {
@@ -56,6 +101,15 @@ export function BiographyChapters() {
     return subscribeBiographyChaptersData(setData);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      if (activeChapterScrollFrame !== null) {
+        window.cancelAnimationFrame(activeChapterScrollFrame);
+        activeChapterScrollFrame = null;
+      }
+    };
+  }, []);
+
   const chapters = data.chapters;
 
   const openChapter = (id: string) => {
@@ -63,18 +117,14 @@ export function BiographyChapters() {
   };
 
   const handleChapterEntered = (id: string) => {
-    const settleMs = COLLAPSE_TIMEOUT.exit + 32;
+    // Wait for sibling collapse + height padding to settle, then ease to the card.
+    const settleMs = COLLAPSE_TIMEOUT.exit + 80;
 
-    const attemptScroll = () => {
+    window.setTimeout(() => {
       if (expandedIdRef.current !== id) return;
       const element = document.getElementById(`${baseId}-${id}`);
-      if (!element) return;
-      scrollChapterToPageTop(element);
-    };
-
-    // First pass after sibling collapse; second pass after layout padding/height settles.
-    window.setTimeout(attemptScroll, settleMs);
-    window.setTimeout(attemptScroll, settleMs + 120);
+      if (element) scrollChapterToPageTop(element);
+    }, settleMs);
   };
 
   return (
