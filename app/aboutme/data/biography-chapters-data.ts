@@ -76,7 +76,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 16,
+  version: 19,
   chapters: [
     {
       id: "harvard",
@@ -242,6 +242,28 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             alt: "Time-lapse of the Garrick film set with green screen and crew",
             captions: [],
           },
+        },
+        {
+          type: "section",
+          heading: "From Set to Screen · Building the World of Garrick",
+          paragraphs: [
+            "A central goal of Garrick was to develop photorealistic virtual environments and explore their integration with live-action footage. The project also explored production and post-production workflows for pre-visualization and the automation of rendering processes.",
+            "Much of Garrick was filmed on partial sets surrounded by green screen, with the larger environment created digitally in post-production. The process required the live-action photography and virtual environments to be planned as parts of the same image, allowing physical performances and sets to become part of a much larger fictional world.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter02/GarrckSampleShot.png",
+            alt: "Garrick finished frame — live-action performer at a desk in a digitally created library environment",
+            captions: [],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "Garrick became a bridge between the technical and creative sides of my work. Directing and producing the film gave me the opportunity to lead a collaborative production while exploring how digital technologies could support a larger creative vision and bring a fictional world to the screen.",
+          ],
         },
       ],
     },
