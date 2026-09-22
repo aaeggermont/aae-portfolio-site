@@ -121,7 +121,13 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
       : [];
     const paragraphs = paragraphsRaw.map(asString).filter(Boolean);
     if (!figure || paragraphs.length === 0) return null;
-    return { type: "mediaText", figure, paragraphs };
+    const heading = asString(record.heading);
+    return {
+      type: "mediaText",
+      figure,
+      paragraphs,
+      ...(heading ? { heading } : {}),
+    };
   }
 
   return null;
