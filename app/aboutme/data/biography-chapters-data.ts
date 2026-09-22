@@ -76,7 +76,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 14,
+  version: 16,
   chapters: [
     {
       id: "harvard",
@@ -226,6 +226,22 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             "The story of Garrick had been with me since childhood. Growing up in Mexico, my grandfather, a Belgian immigrant, told me the tale of a late-18th-century British street actor with an extraordinary ability to make people laugh, while privately struggling with depression and searching for meaning in his own life.",
             "I was captivated by the character long before I fully understood the meaning of the story. As a child, I retold it to anyone who would listen, and even composed music in my head for a film adaptation. Years later, Garrick gave me the opportunity to return to that childhood memory and transform it into something tangible on screen.",
           ],
+        },
+        {
+          type: "section",
+          heading: "Behind the Story · On Set",
+          paragraphs: [
+            "Garrick was produced with a full film crew and combined traditional set production with green screen photography and digital modeling. This time-lapse captures the production-in-progress, from preparing the set and equipment to filming the live-action performances that would later become part of the film's digital environments.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter02/GarrickTimeLapseImage.png",
+            alt: "Time-lapse of the Garrick film set with green screen and crew",
+            captions: [],
+          },
         },
       ],
     },
