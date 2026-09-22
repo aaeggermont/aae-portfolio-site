@@ -76,7 +76,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 19,
+  version: 21,
   chapters: [
     {
       id: "harvard",
@@ -263,6 +263,23 @@ export const biographyChaptersFallback: BiographyChaptersData = {
           type: "copy",
           paragraphs: [
             "Garrick became a bridge between the technical and creative sides of my work. Directing and producing the film gave me the opportunity to lead a collaborative production while exploring how digital technologies could support a larger creative vision and bring a fictional world to the screen.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "With Gratitude · Jan Roberts-Breslin",
+          paragraphs: [
+            "As Graduate Program Director, Jan Roberts-Breslin was an important source of support throughout my time at Emerson. She encouraged my exploration of filmmaking and visual effects and helped make many of the resources needed to produce Garrick available to me.",
+            "Her support gave me the opportunity to pursue an ambitious capstone project that brought together filmmaking, technology, and visual effects at a scale I could not have accomplished on my own.",
+            "I'm also deeply grateful to the cast and crew whose talent and collaboration helped bring Garrick to life.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Where the Two Worlds Met",
+          paragraphs: [
+            "Garrick became the point where the technical and creative sides of my work truly came together. Directing and producing the film gave me the opportunity to lead a collaborative production while exploring how digital technologies could support a larger artistic vision.",
+            "By the end of the project, I had begun to see a direction that brought those interests together: visual effects and creative technology within the entertainment industry.",
           ],
         },
       ],
