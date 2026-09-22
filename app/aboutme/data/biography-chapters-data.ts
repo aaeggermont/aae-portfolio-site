@@ -52,6 +52,8 @@ export type BiographyChapterBlock =
   | {
       type: "mediaText";
       figure: BiographyChapterFigure;
+      /** Optional orange heading above the right-column copy */
+      heading?: string;
       paragraphs: string[];
     };
 
@@ -74,7 +76,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 11,
+  version: 14,
   chapters: [
     {
       id: "harvard",
@@ -193,14 +195,36 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     {
       id: "emerson",
       tocLabel: "Chapter 2 — Emerson: Storytelling",
-      eyebrow: "Chapter 2",
-      title: "Emerson: Storytelling Media Arts + Visual Storytelling",
+      eyebrow: "02 · Emerson College",
+      title: "Storytelling · Media Arts + Visual Effects",
       icon: "school",
       blocks: [
         {
           type: "copy",
           paragraphs: [
-            "Placeholder: storytelling, media arts, and visual narrative craft developed at Emerson College.",
+            "My work at Harvard had taken me beyond software engineering and into audiovisual production. Building the webcasting facility meant working not only with software, networks, and interfaces, but with video, audio, production equipment, and the workflows behind digital media.",
+            "That experience strengthened an interest I already had in multimedia and visual effects. I became increasingly curious about the creative side of the technologies I was working with—how images, sound, editing, and visual effects could be used not simply to deliver information, but to create experiences and tell stories.",
+            "That curiosity led me to Emerson College, where I pursued a Master of Arts in Media Arts and began exploring filmmaking and visual storytelling more deeply.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Garrick · From Technology to Storytelling",
+          paragraphs: [
+            "For my final master’s capstone at Emerson, I directed and produced Garrick, an original short fictional narrative that brought together live-action performance captured in high-definition video with CGI and classical animation. Working with a full production crew, the project allowed me to explore filmmaking while continuing to build on the technical interests that had brought me to Media Arts.",
+          ],
+        },
+        {
+          type: "mediaText",
+          figure: {
+            imageObjectPath: "site/biography/chapter02/GarrickFilmPoster.png",
+            alt: "Garrick film poster — a film by Ricardo Curbelo Villalobos",
+            captions: [],
+          },
+          heading: "The Story Behind Garrick",
+          paragraphs: [
+            "The story of Garrick had been with me since childhood. Growing up in Mexico, my grandfather, a Belgian immigrant, told me the tale of a late-18th-century British street actor with an extraordinary ability to make people laugh, while privately struggling with depression and searching for meaning in his own life.",
+            "I was captivated by the character long before I fully understood the meaning of the story. As a child, I retold it to anyone who would listen, and even composed music in my head for a film adaptation. Years later, Garrick gave me the opportunity to return to that childhood memory and transform it into something tangible on screen.",
           ],
         },
       ],
