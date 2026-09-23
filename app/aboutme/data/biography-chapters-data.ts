@@ -23,6 +23,14 @@ export type BiographyChapterCaptionColumn = {
   lines: string[];
 };
 
+/** One green-screen / composite pair for the compare carousel. */
+export type BiographyChapterComparePair = {
+  fromImageObjectPath: string;
+  toImageObjectPath: string;
+  fromAlt?: string;
+  toAlt?: string;
+};
+
 export type BiographyChapterFigure = {
   /** Firebase Storage object path under the public `site/` prefix. */
   imageObjectPath: string;
@@ -32,6 +40,18 @@ export type BiographyChapterFigure = {
   captionTitle?: string[];
   /** Optional centered credit line under captionTitle */
   captionCredit?: string;
+  /**
+   * Optional compare carousel: each pair holds on green screen, wipes
+   * right→left to the composite, then unlocks a scrubber. Prev/next + dots
+   * move between pairs.
+   */
+  compareCarousel?: {
+    pairs: BiographyChapterComparePair[];
+    /** Milliseconds to hold the first image before the wipe. Default 3000. */
+    holdMs?: number;
+    /** Auto wipe duration in milliseconds. Default 1400. */
+    durationMs?: number;
+  };
 };
 
 /** Ordered body content inside an expanded chapter. */
@@ -76,7 +96,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 21,
+  version: 28,
   chapters: [
     {
       id: "harvard",
@@ -254,9 +274,105 @@ export const biographyChaptersFallback: BiographyChaptersData = {
         {
           type: "figure",
           figure: {
-            imageObjectPath: "site/biography/chapter02/GarrckSampleShot.png",
-            alt: "Garrick finished frame — live-action performer at a desk in a digitally created library environment",
+            imageObjectPath: "site/biography/chapter02/GarrickShot-01.png",
+            alt: "Garrick finished frames — live-action performance composited into digitally created environments",
             captions: [],
+            compareCarousel: {
+              holdMs: 3000,
+              durationMs: 1400,
+              pairs: [
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-01.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-01.png",
+                  fromAlt:
+                    "Garrick shot 01 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 01 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-02.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-02.png",
+                  fromAlt:
+                    "Garrick shot 02 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 02 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-03.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-03.png",
+                  fromAlt:
+                    "Garrick shot 03 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 03 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-04.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-04.png",
+                  fromAlt:
+                    "Garrick shot 04 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 04 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-05.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-05.png",
+                  fromAlt:
+                    "Garrick shot 05 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 05 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-06.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-06.png",
+                  fromAlt:
+                    "Garrick shot 06 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 06 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-07.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-07.png",
+                  fromAlt:
+                    "Garrick shot 07 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 07 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-08.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-08.png",
+                  fromAlt:
+                    "Garrick shot 08 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 08 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-09.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-09.png",
+                  fromAlt:
+                    "Garrick shot 09 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 09 finished composite with virtual environment",
+                },
+              ],
+            },
           },
         },
         {

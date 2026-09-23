@@ -71,12 +71,49 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
   const captionTitle = captionTitleRaw.map(asString).filter(Boolean);
   const captionCredit = asString(record.captionCredit);
 
+  let compareCarousel: BiographyChapterFigure["compareCarousel"] | undefined;
+  const carouselRaw = record.compareCarousel;
+  if (carouselRaw && typeof carouselRaw === "object") {
+    const carouselRecord = carouselRaw as Record<string, unknown>;
+    const pairsRaw = Array.isArray(carouselRecord.pairs)
+      ? carouselRecord.pairs
+      : [];
+    const pairs = pairsRaw
+      .map((pairRaw) => {
+        if (!pairRaw || typeof pairRaw !== "object") return null;
+        const pair = pairRaw as Record<string, unknown>;
+        const fromImageObjectPath = asString(pair.fromImageObjectPath);
+        const toImageObjectPath = asString(pair.toImageObjectPath);
+        if (!fromImageObjectPath || !toImageObjectPath) return null;
+        const fromAlt = asString(pair.fromAlt);
+        const toAlt = asString(pair.toAlt);
+        return {
+          fromImageObjectPath,
+          toImageObjectPath,
+          ...(fromAlt ? { fromAlt } : {}),
+          ...(toAlt ? { toAlt } : {}),
+        };
+      })
+      .filter(
+        (pair): pair is NonNullable<typeof pair> => pair !== null,
+      );
+
+    if (pairs.length > 0) {
+      compareCarousel = {
+        pairs,
+        holdMs: asNumber(carouselRecord.holdMs, 3000),
+        durationMs: asNumber(carouselRecord.durationMs, 1400),
+      };
+    }
+  }
+
   return {
     imageObjectPath,
     alt,
     captions,
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
+    ...(compareCarousel ? { compareCarousel } : {}),
   };
 }
 
