@@ -26,6 +26,21 @@
   }
 }
 
+.biographyIntroEyebrow {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-poppins);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #f59f0a;
+
+  @media #{$xs}, #{$sm} {
+    text-align: center;
+  }
+}
+
 .biographyIntroTitle {
   // Same typography as About Me intro title ("Hello, I'm Antonio").
   font-family: var(--font-montserrat);

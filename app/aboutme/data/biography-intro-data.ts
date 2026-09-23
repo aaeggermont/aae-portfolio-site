@@ -1,10 +1,12 @@
 export type BiographyIntroData = {
+  eyebrow: string;
   title: string;
   subtitle: string;
   paragraphs: string[];
 };
 
 export const biographyIntroFallback: BiographyIntroData = {
+  eyebrow: 'Biography',
   title: 'My Journey',
   subtitle: 'Where design, engineering, and technology came together',
   paragraphs: [
