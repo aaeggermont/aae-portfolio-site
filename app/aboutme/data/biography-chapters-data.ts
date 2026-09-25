@@ -52,6 +52,19 @@ export type BiographyChapterFigure = {
     /** Auto wipe duration in milliseconds. Default 1400. */
     durationMs?: number;
   };
+  /**
+   * Optional Vimeo playback: keep `imageObjectPath` as the poster and start
+   * the embed only after the user presses play.
+   */
+  vimeo?: {
+    videoId: string;
+    /** Accessible label for the play control / iframe. */
+    title?: string;
+    /** Default true. */
+    muted?: boolean;
+    /** Default false. */
+    loop?: boolean;
+  };
 };
 
 /** Ordered body content inside an expanded chapter. */
@@ -96,7 +109,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 28,
+  version: 29,
   chapters: [
     {
       id: "harvard",
@@ -261,6 +274,12 @@ export const biographyChaptersFallback: BiographyChaptersData = {
               "site/biography/chapter02/GarrickTimeLapseImage.png",
             alt: "Time-lapse of the Garrick film set with green screen and crew",
             captions: [],
+            vimeo: {
+              videoId: "1229728518",
+              title: "Play Garrick on-set time-lapse",
+              muted: true,
+              loop: false,
+            },
           },
         },
         {

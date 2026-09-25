@@ -107,6 +107,26 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     }
   }
 
+  let vimeo: BiographyChapterFigure["vimeo"] | undefined;
+  const vimeoRaw = record.vimeo;
+  if (vimeoRaw && typeof vimeoRaw === "object") {
+    const vimeoRecord = vimeoRaw as Record<string, unknown>;
+    const videoId = asString(vimeoRecord.videoId);
+    if (videoId) {
+      const title = asString(vimeoRecord.title);
+      const muted =
+        typeof vimeoRecord.muted === "boolean" ? vimeoRecord.muted : true;
+      const loop =
+        typeof vimeoRecord.loop === "boolean" ? vimeoRecord.loop : false;
+      vimeo = {
+        videoId,
+        ...(title ? { title } : {}),
+        muted,
+        loop,
+      };
+    }
+  }
+
   return {
     imageObjectPath,
     alt,
@@ -114,6 +134,7 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
+    ...(vimeo ? { vimeo } : {}),
   };
 }
 

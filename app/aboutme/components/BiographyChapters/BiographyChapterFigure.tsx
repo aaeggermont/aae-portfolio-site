@@ -9,6 +9,7 @@ import {
 import { buildPublicStorageUrl } from '@/lib/firebase/publicStorageUrl';
 import type { BiographyChapterFigure } from '../../data/biography-chapters-data';
 import { BiographyChapterCompareMedia } from './BiographyChapterCompareMedia';
+import { BiographyChapterVimeoPoster } from './BiographyChapterVimeoPoster';
 import styles from './biographyChapters.module.scss';
 
 type BiographyChapterFigureProps = {
@@ -24,6 +25,7 @@ export function BiographyChapterFigureBlock({
   const src = buildPublicStorageUrl(figure.imageObjectPath);
   const carousel = figure.compareCarousel;
   const pairs = carousel?.pairs ?? [];
+  const hasVimeo = Boolean(figure.vimeo?.videoId);
 
   const modalBg = PROJECT_IMAGE_LIGHTBOX_MODAL_BG_WHITE;
   const hasColumnCaptions = figure.captions.length > 0;
@@ -39,6 +41,8 @@ export function BiographyChapterFigureBlock({
           holdMs={carousel.holdMs ?? 3000}
           durationMs={carousel.durationMs ?? 1400}
         />
+      ) : hasVimeo ? (
+        <BiographyChapterVimeoPoster figure={figure} />
       ) : (
         <div className={styles.biographyChaptersFigureMedia}>
           <SlideshowLightbox
