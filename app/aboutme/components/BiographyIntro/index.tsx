@@ -6,8 +6,7 @@ import {
   biographyIntroFallback,
   type BiographyIntroData,
 } from '../../data/biography-intro-data';
-import { AboutMeDesktopTabletImg } from '../AboutMeIntro/AboutMeIntroDesktopTabletImg';
-import { AboutMeMobileImg } from '../AboutMeIntro/AboutMeIntroMobileImg';
+import { BiographyIntroHeroImg } from './BiographyIntroHeroImg';
 
 type BiographyIntroProps = {
   data?: BiographyIntroData;
@@ -37,7 +36,7 @@ export function BiographyIntro({
           <h1 id="biography-intro-title" className={styles.biographyIntroTitle}>
             <TitleTypewriter title={data.title} />
           </h1>
-          <AboutMeMobileImg />
+          <BiographyIntroHeroImg variant="mobile" />
           <p className={styles.biographyIntroSubtitle}>{data.subtitle}</p>
           <div className={styles.biographyIntroBody}>
             {data.paragraphs.map((paragraph, index) => (
@@ -45,7 +44,7 @@ export function BiographyIntro({
             ))}
           </div>
         </div>
-        <AboutMeDesktopTabletImg />
+        <BiographyIntroHeroImg variant="desktop" />
       </div>
     </section>
   );

@@ -8,12 +8,13 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 4.5rem;
   width: 100%;
 
   @media #{$xs}, #{$sm} {
     flex-direction: column;
     align-items: stretch;
+    gap: 1.75rem;
   }
 }
 
@@ -24,6 +25,39 @@
   @media #{$xs}, #{$sm} {
     width: 100%;
   }
+}
+
+.biographyIntroImg {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  @media #{$tablet} {
+    width: 40%;
+  }
+
+  @media #{$xs}, #{$sm} {
+    align-items: center;
+    width: 100%;
+    margin: 0.75rem 0 1rem;
+  }
+}
+
+.biographyIntroBannerPhoto {
+  position: relative;
+  width: clamp(449px, 37.4vw, 524px);
+  aspect-ratio: 1 / 1;
+  z-index: 2;
+
+  @media screen and #{$tablet} {
+    width: clamp(262px, 56.2vw, 449px);
+  }
+}
+
+.biographyIntroProfilePhoto {
+  object-fit: contain;
+  border-radius: 18px;
 }
 
 .biographyIntroEyebrow {
@@ -60,7 +94,7 @@
   font-size: clamp(1.05rem, 2.4vw, 1.25rem);
   font-weight: 600;
   color: $font-color-bold;
-  margin: 0 0 1.5rem;
+  margin: 0 0 2.5rem;
   line-height: 1.35;
 
   @media #{$xs}, #{$sm} {
