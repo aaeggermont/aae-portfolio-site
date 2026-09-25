@@ -44,20 +44,63 @@
   }
 }
 
-.biographyIntroBannerPhoto {
+.biographyIntroHeroMedia {
   position: relative;
   width: clamp(449px, 37.4vw, 524px);
-  aspect-ratio: 1 / 1;
-  z-index: 2;
 
   @media screen and #{$tablet} {
     width: clamp(262px, 56.2vw, 449px);
   }
 }
 
+.biographyIntroHeroHalo {
+  position: absolute;
+  // Keep the pre-blur box larger than the frame so its edges don't read as a
+  // second panel parallel to the image.
+  inset: -18px;
+  z-index: 0;
+  border-radius: 36px;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 159, 10, 0.4),
+    rgba(245, 159, 10, 0.1),
+    rgba(6, 76, 95, 0.1)
+  );
+  opacity: 0.7;
+  filter: blur(48px);
+  pointer-events: none;
+  animation: biographyIntroHeroHaloPulse 4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.65;
+  }
+}
+
+@keyframes biographyIntroHeroHaloPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.biographyIntroBannerPhoto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  z-index: 1;
+}
+
 .biographyIntroProfilePhoto {
   object-fit: contain;
   border-radius: 18px;
+  // Follows the artwork alpha so we don't get an empty square "second panel"
+  // from a box-shadow on the full frame.
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.12))
+    drop-shadow(0 8px 10px rgba(0, 0, 0, 0.08));
 }
 
 .biographyIntroEyebrow {

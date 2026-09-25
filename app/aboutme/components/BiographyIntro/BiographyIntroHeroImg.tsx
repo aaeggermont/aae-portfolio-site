@@ -23,20 +23,23 @@ export function BiographyIntroHeroImg({ variant }: BiographyIntroHeroImgProps) {
 
   return (
     <div className={styles.biographyIntroImg}>
-      <div className={styles.biographyIntroBannerPhoto}>
-        <Image
-          src={src}
-          alt="Illustration for My Journey biography"
-          fill
-          priority
-          sizes={
-            variant === 'mobile'
-              ? '(max-width: 767px) 80vw, 280px'
-              : '(min-width: 768px) 40vw, 524px'
-          }
-          className={styles.biographyIntroProfilePhoto}
-          unoptimized
-        />
+      <div className={styles.biographyIntroHeroMedia}>
+        <div className={styles.biographyIntroHeroHalo} aria-hidden />
+        <div className={styles.biographyIntroBannerPhoto}>
+          <Image
+            src={src}
+            alt="Illustration for My Journey biography"
+            fill
+            priority
+            sizes={
+              variant === 'mobile'
+                ? '(max-width: 767px) 80vw, 280px'
+                : '(min-width: 768px) 40vw, 524px'
+            }
+            className={styles.biographyIntroProfilePhoto}
+            unoptimized
+          />
+        </div>
       </div>
     </div>
   );
