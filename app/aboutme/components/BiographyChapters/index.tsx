@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -29,13 +29,20 @@ const CHAPTER_ICONS: Record<BiographyChapterIcon, SvgIconComponent> = {
   mail: MailOutlineIcon,
 };
 
-/** Clears sticky header when a chapter is scrolled into place. */
-const CHAPTER_SCROLL_OFFSET_PX = 104;
+/** Fallback if the sticky header isn't measurable yet. */
+const CHAPTER_SCROLL_OFFSET_FALLBACK_PX = 104;
+
+/** Small air between the sticky header and the active chapter card. */
+const CHAPTER_SCROLL_GAP_PX = 8;
 
 const COLLAPSE_TIMEOUT = { enter: 280, exit: 180 } as const;
 
-/** Gentler than native `behavior: 'smooth'` — ~700ms ease-out. */
+/** Gentler than native `behavior: 'smooth'` — ease-out scroll for first open. */
 const CHAPTER_SCROLL_DURATION_MS = 700;
+
+/** Keep the destination card pinned while a previous chapter collapses. */
+const CHAPTER_SWITCH_PIN_MS =
+  COLLAPSE_TIMEOUT.exit + COLLAPSE_TIMEOUT.enter + 80;
 
 let activeChapterScrollFrame: number | null = null;
 
@@ -43,30 +50,68 @@ function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3;
 }
 
+function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * Offset from the viewport top so the active chapter sits just under the
+ * sticky site header — not so low that the previous card peeks through.
+ */
+function getChapterScrollOffsetPx(): number {
+  const header = document.querySelector('header');
+  if (header) {
+    const bottom = header.getBoundingClientRect().bottom;
+    if (Number.isFinite(bottom) && bottom > 0) {
+      return Math.ceil(bottom) + CHAPTER_SCROLL_GAP_PX;
+    }
+  }
+  return CHAPTER_SCROLL_OFFSET_FALLBACK_PX;
+}
+
+function cancelActiveChapterScroll() {
+  if (activeChapterScrollFrame !== null) {
+    window.cancelAnimationFrame(activeChapterScrollFrame);
+    activeChapterScrollFrame = null;
+  }
+}
+
+/** Instantly place a chapter card under the sticky header. */
+function snapChapterUnderHeader(element: HTMLElement) {
+  const offset = getChapterScrollOffsetPx();
+  let delta = element.getBoundingClientRect().top - offset;
+
+  // If the previous card still peeks below the header, scroll until it's gone.
+  const previous = element.previousElementSibling;
+  if (previous instanceof HTMLElement) {
+    const peek = previous.getBoundingClientRect().bottom - offset;
+    if (peek > 0) {
+      delta += peek;
+    }
+  }
+
+  if (Math.abs(delta) >= 1) {
+    window.scrollBy({ top: delta, left: 0, behavior: 'auto' });
+  }
+}
+
 function scrollChapterToPageTop(element: HTMLElement) {
-  const reducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)',
-  ).matches;
+  const offset = getChapterScrollOffsetPx();
   const targetTop = Math.max(
     0,
-    window.scrollY +
-      element.getBoundingClientRect().top -
-      CHAPTER_SCROLL_OFFSET_PX,
+    window.scrollY + element.getBoundingClientRect().top - offset,
   );
   const startTop = window.scrollY;
   const distance = targetTop - startTop;
 
   if (Math.abs(distance) < 2) return;
 
-  if (reducedMotion) {
+  if (prefersReducedMotion()) {
     window.scrollTo({ top: targetTop, behavior: 'auto' });
     return;
   }
 
-  if (activeChapterScrollFrame !== null) {
-    window.cancelAnimationFrame(activeChapterScrollFrame);
-    activeChapterScrollFrame = null;
-  }
+  cancelActiveChapterScroll();
 
   const startTime = performance.now();
 
@@ -88,6 +133,42 @@ function scrollChapterToPageTop(element: HTMLElement) {
   activeChapterScrollFrame = window.requestAnimationFrame(step);
 }
 
+/** Hold `element` under the sticky header while accordion heights change. */
+function pinChapterUnderHeader(
+  element: HTMLElement,
+  durationMs: number,
+): () => void {
+  let frame: number | null = null;
+  let stopped = false;
+
+  const tick = () => {
+    if (stopped) return;
+    snapChapterUnderHeader(element);
+    frame = window.requestAnimationFrame(tick);
+  };
+
+  if (prefersReducedMotion()) {
+    snapChapterUnderHeader(element);
+    return () => {
+      stopped = true;
+    };
+  }
+
+  frame = window.requestAnimationFrame(tick);
+  const timer = window.setTimeout(() => {
+    stopped = true;
+    if (frame !== null) window.cancelAnimationFrame(frame);
+    frame = null;
+    snapChapterUnderHeader(element);
+  }, durationMs);
+
+  return () => {
+    stopped = true;
+    window.clearTimeout(timer);
+    if (frame !== null) window.cancelAnimationFrame(frame);
+  };
+}
+
 export function BiographyChapters() {
   const baseId = useId();
   const [data, setData] = useState<BiographyChaptersData>(
@@ -96,6 +177,9 @@ export function BiographyChapters() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const expandedIdRef = useRef<string | null>(null);
   expandedIdRef.current = expandedId;
+  /** Previous chapter id when switching; null when opening from a closed state. */
+  const switchFromIdRef = useRef<string | null>(null);
+  const stopPinRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     return subscribeBiographyChaptersData(setData);
@@ -103,21 +187,65 @@ export function BiographyChapters() {
 
   useEffect(() => {
     return () => {
-      if (activeChapterScrollFrame !== null) {
-        window.cancelAnimationFrame(activeChapterScrollFrame);
-        activeChapterScrollFrame = null;
-      }
+      cancelActiveChapterScroll();
+      stopPinRef.current?.();
+      stopPinRef.current = null;
     };
   }, []);
+
+  // Keep the destination card under the header while the previous panel
+  // collapses above the viewport (so you never watch that collapse on screen).
+  useLayoutEffect(() => {
+    if (!expandedId || switchFromIdRef.current === null) return;
+
+    const element = document.getElementById(`${baseId}-${expandedId}`);
+    if (!element) return;
+
+    snapChapterUnderHeader(element);
+    stopPinRef.current?.();
+    stopPinRef.current = pinChapterUnderHeader(element, CHAPTER_SWITCH_PIN_MS);
+
+    return () => {
+      stopPinRef.current?.();
+      stopPinRef.current = null;
+    };
+  }, [expandedId, baseId]);
 
   const chapters = data.chapters;
 
   const openChapter = (id: string) => {
-    setExpandedId((current) => (current === id ? null : id));
+    const current = expandedIdRef.current;
+
+    if (current === id) {
+      switchFromIdRef.current = null;
+      stopPinRef.current?.();
+      stopPinRef.current = null;
+      setExpandedId(null);
+      return;
+    }
+
+    // Switching chapters: jump to the destination *before* collapsing the
+    // previous panel, so Harvard (etc.) collapses off-screen above the fold.
+    if (current !== null) {
+      cancelActiveChapterScroll();
+      const element = document.getElementById(`${baseId}-${id}`);
+      if (element) snapChapterUnderHeader(element);
+      switchFromIdRef.current = current;
+    } else {
+      switchFromIdRef.current = null;
+    }
+
+    setExpandedId(id);
   };
 
   const handleChapterEntered = (id: string) => {
-    // Wait for sibling collapse + height padding to settle, then ease to the card.
+    // Chapter-to-chapter switches are handled by snap + pin above.
+    if (switchFromIdRef.current !== null) {
+      switchFromIdRef.current = null;
+      return;
+    }
+
+    // First open from a closed accordion: ease the card under the header.
     const settleMs = COLLAPSE_TIMEOUT.exit + 80;
 
     window.setTimeout(() => {

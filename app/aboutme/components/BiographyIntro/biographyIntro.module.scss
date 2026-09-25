@@ -8,12 +8,13 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 4.5rem;
   width: 100%;
 
   @media #{$xs}, #{$sm} {
     flex-direction: column;
     align-items: stretch;
+    gap: 1.75rem;
   }
 }
 
@@ -24,6 +25,88 @@
   @media #{$xs}, #{$sm} {
     width: 100%;
   }
+}
+
+.biographyIntroImg {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  @media #{$tablet} {
+    width: 40%;
+  }
+
+  @media #{$xs}, #{$sm} {
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0 1rem;
+  }
+}
+
+.biographyIntroHeroMedia {
+  position: relative;
+  // Mobile first — ~25% smaller than the prior ~359px phone size.
+  width: clamp(180px, 58vw, 269px);
+  max-width: 100%;
+
+  @media screen and (min-width: $tablet-min) and (max-width: $tablet-max) {
+    width: clamp(210px, 45vw, 359px);
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    width: clamp(359px, 29.9vw, 419px);
+  }
+}
+
+.biographyIntroHeroHalo {
+  position: absolute;
+  // Keep the pre-blur box larger than the frame so its edges don't read as a
+  // second panel parallel to the image.
+  inset: -18px;
+  z-index: 0;
+  border-radius: 36px;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 159, 10, 0.4),
+    rgba(245, 159, 10, 0.1),
+    rgba(6, 76, 95, 0.1)
+  );
+  opacity: 0.7;
+  filter: blur(48px);
+  pointer-events: none;
+  animation: biographyIntroHeroHaloPulse 4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    opacity: 0.65;
+  }
+}
+
+@keyframes biographyIntroHeroHaloPulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.biographyIntroBannerPhoto {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  z-index: 1;
+}
+
+.biographyIntroProfilePhoto {
+  object-fit: contain;
+  border-radius: 18px;
+  // Follows the artwork alpha so we don't get an empty square "second panel"
+  // from a box-shadow on the full frame.
+  filter: drop-shadow(0 20px 25px rgba(0, 0, 0, 0.12))
+    drop-shadow(0 8px 10px rgba(0, 0, 0, 0.08));
 }
 
 .biographyIntroEyebrow {
@@ -60,7 +143,7 @@
   font-size: clamp(1.05rem, 2.4vw, 1.25rem);
   font-weight: 600;
   color: $font-color-bold;
-  margin: 0 0 1.5rem;
+  margin: 0 0 2.5rem;
   line-height: 1.35;
 
   @media #{$xs}, #{$sm} {
