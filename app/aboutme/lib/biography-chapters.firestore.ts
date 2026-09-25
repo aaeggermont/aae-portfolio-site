@@ -70,6 +70,63 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     : [];
   const captionTitle = captionTitleRaw.map(asString).filter(Boolean);
   const captionCredit = asString(record.captionCredit);
+  const annotation = asString(record.annotation);
+
+  let compareCarousel: BiographyChapterFigure["compareCarousel"] | undefined;
+  const carouselRaw = record.compareCarousel;
+  if (carouselRaw && typeof carouselRaw === "object") {
+    const carouselRecord = carouselRaw as Record<string, unknown>;
+    const pairsRaw = Array.isArray(carouselRecord.pairs)
+      ? carouselRecord.pairs
+      : [];
+    const pairs = pairsRaw
+      .map((pairRaw) => {
+        if (!pairRaw || typeof pairRaw !== "object") return null;
+        const pair = pairRaw as Record<string, unknown>;
+        const fromImageObjectPath = asString(pair.fromImageObjectPath);
+        const toImageObjectPath = asString(pair.toImageObjectPath);
+        if (!fromImageObjectPath || !toImageObjectPath) return null;
+        const fromAlt = asString(pair.fromAlt);
+        const toAlt = asString(pair.toAlt);
+        return {
+          fromImageObjectPath,
+          toImageObjectPath,
+          ...(fromAlt ? { fromAlt } : {}),
+          ...(toAlt ? { toAlt } : {}),
+        };
+      })
+      .filter(
+        (pair): pair is NonNullable<typeof pair> => pair !== null,
+      );
+
+    if (pairs.length > 0) {
+      compareCarousel = {
+        pairs,
+        holdMs: asNumber(carouselRecord.holdMs, 3000),
+        durationMs: asNumber(carouselRecord.durationMs, 1400),
+      };
+    }
+  }
+
+  let vimeo: BiographyChapterFigure["vimeo"] | undefined;
+  const vimeoRaw = record.vimeo;
+  if (vimeoRaw && typeof vimeoRaw === "object") {
+    const vimeoRecord = vimeoRaw as Record<string, unknown>;
+    const videoId = asString(vimeoRecord.videoId);
+    if (videoId) {
+      const title = asString(vimeoRecord.title);
+      const muted =
+        typeof vimeoRecord.muted === "boolean" ? vimeoRecord.muted : true;
+      const loop =
+        typeof vimeoRecord.loop === "boolean" ? vimeoRecord.loop : false;
+      vimeo = {
+        videoId,
+        ...(title ? { title } : {}),
+        muted,
+        loop,
+      };
+    }
+  }
 
   return {
     imageObjectPath,
@@ -77,6 +134,9 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     captions,
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
+    ...(annotation ? { annotation } : {}),
+    ...(compareCarousel ? { compareCarousel } : {}),
+    ...(vimeo ? { vimeo } : {}),
   };
 }
 
@@ -121,7 +181,13 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
       : [];
     const paragraphs = paragraphsRaw.map(asString).filter(Boolean);
     if (!figure || paragraphs.length === 0) return null;
-    return { type: "mediaText", figure, paragraphs };
+    const heading = asString(record.heading);
+    return {
+      type: "mediaText",
+      figure,
+      paragraphs,
+      ...(heading ? { heading } : {}),
+    };
   }
 
   return null;

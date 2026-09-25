@@ -252,6 +252,15 @@ export function BiographyChapters() {
                               lightboxId={`${chapter.id}-mediaText-${blockIndex}`}
                             />
                             <div className={styles.biographyChaptersMediaTextCopy}>
+                              {block.heading ? (
+                                <h3
+                                  className={
+                                    styles.biographyChaptersMediaTextHeading
+                                  }
+                                >
+                                  {block.heading}
+                                </h3>
+                              ) : null}
                               {block.paragraphs.map((paragraph, index) => (
                                 <p
                                   key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}

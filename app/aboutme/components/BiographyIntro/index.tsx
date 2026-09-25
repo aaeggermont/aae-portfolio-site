@@ -33,6 +33,7 @@ export function BiographyIntro({
     <section className={styles.biographyIntro} aria-labelledby="biography-intro-title">
       <div className={styles.biographyIntroContainer}>
         <div className={styles.biographyIntroInfo}>
+          <p className={styles.biographyIntroEyebrow}>{data.eyebrow}</p>
           <h1 id="biography-intro-title" className={styles.biographyIntroTitle}>
             <TitleTypewriter title={data.title} />
           </h1>

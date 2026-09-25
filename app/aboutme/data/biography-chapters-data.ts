@@ -23,6 +23,14 @@ export type BiographyChapterCaptionColumn = {
   lines: string[];
 };
 
+/** One green-screen / composite pair for the compare carousel. */
+export type BiographyChapterComparePair = {
+  fromImageObjectPath: string;
+  toImageObjectPath: string;
+  fromAlt?: string;
+  toAlt?: string;
+};
+
 export type BiographyChapterFigure = {
   /** Firebase Storage object path under the public `site/` prefix. */
   imageObjectPath: string;
@@ -32,6 +40,36 @@ export type BiographyChapterFigure = {
   captionTitle?: string[];
   /** Optional centered credit line under captionTitle */
   captionCredit?: string;
+  /**
+   * Optional left-aligned annotation under the image
+   * (12px / line-height 1.625).
+   */
+  annotation?: string;
+  /**
+   * Optional compare carousel: each pair holds on green screen, wipes
+   * right→left to the composite, then unlocks a scrubber. Prev/next + dots
+   * move between pairs.
+   */
+  compareCarousel?: {
+    pairs: BiographyChapterComparePair[];
+    /** Milliseconds to hold the first image before the wipe. Default 3000. */
+    holdMs?: number;
+    /** Auto wipe duration in milliseconds. Default 1400. */
+    durationMs?: number;
+  };
+  /**
+   * Optional Vimeo playback: keep `imageObjectPath` as the poster and start
+   * the embed only after the user presses play.
+   */
+  vimeo?: {
+    videoId: string;
+    /** Accessible label for the play control / iframe. */
+    title?: string;
+    /** Default true. */
+    muted?: boolean;
+    /** Default false. */
+    loop?: boolean;
+  };
 };
 
 /** Ordered body content inside an expanded chapter. */
@@ -52,6 +90,8 @@ export type BiographyChapterBlock =
   | {
       type: "mediaText";
       figure: BiographyChapterFigure;
+      /** Optional orange heading above the right-column copy */
+      heading?: string;
       paragraphs: string[];
     };
 
@@ -74,7 +114,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 11,
+  version: 32,
   chapters: [
     {
       id: "harvard",
@@ -193,14 +233,199 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     {
       id: "emerson",
       tocLabel: "Chapter 2 — Emerson: Storytelling",
-      eyebrow: "Chapter 2",
-      title: "Emerson: Storytelling Media Arts + Visual Storytelling",
+      eyebrow: "02 · Emerson College",
+      title: "Storytelling · Media Arts + Visual Effects",
       icon: "school",
       blocks: [
         {
           type: "copy",
           paragraphs: [
-            "Placeholder: storytelling, media arts, and visual narrative craft developed at Emerson College.",
+            "My work at Harvard had taken me beyond software engineering and into audiovisual production. Building the webcasting facility meant working not only with software, networks, and interfaces, but with video, audio, production equipment, and the workflows behind digital media.",
+            "That experience strengthened an interest I already had in multimedia and visual effects. I became increasingly curious about the creative side of the technologies I was working with—how images, sound, editing, and visual effects could be used not simply to deliver information, but to create experiences and tell stories.",
+            "That curiosity led me to Emerson College, where I pursued a Master of Arts in Media Arts and began exploring filmmaking and visual storytelling more deeply.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Garrick · From Technology to Storytelling",
+          paragraphs: [
+            "For my final master’s capstone at Emerson, I directed and produced Garrick, an original short fictional narrative that brought together live-action performance captured in high-definition video with CGI and classical animation. Working with a full production crew, the project allowed me to explore filmmaking while continuing to build on the technical interests that had brought me to Media Arts.",
+          ],
+        },
+        {
+          type: "mediaText",
+          figure: {
+            imageObjectPath: "site/biography/chapter02/GarrickFilmPoster.png",
+            alt: "Poster for Garrick, a short film by Antonio Aranda Eggermont",
+            captions: [],
+            annotation:
+              "Poster for Garrick, a short film by Antonio Aranda Eggermont.",
+          },
+          heading: "The Story Behind Garrick",
+          paragraphs: [
+            "The story of Garrick had been with me since childhood. Growing up in Mexico, my grandfather, a Belgian immigrant, told me the tale of a late-18th-century British street actor with an extraordinary ability to make people laugh, while privately struggling with depression and searching for meaning in his own life.",
+            "I was captivated by the character long before I fully understood the meaning of the story. As a child, I retold it to anyone who would listen, and even composed music in my head for a film adaptation. Years later, Garrick gave me the opportunity to return to that childhood memory and transform it into something tangible on screen.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Behind the Story · On Set",
+          paragraphs: [
+            "Garrick was produced with a full film crew and combined traditional set production with green screen photography and digital modeling. This time-lapse captures the production-in-progress, from preparing the set and equipment to filming the live-action performances that would later become part of the film's digital environments.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter02/GarrickTimeLapseImage.png",
+            alt: "Time-lapse of the Garrick film set with green screen and crew",
+            captions: [],
+            annotation:
+              "Behind the scenes on the Garrick set — a green-screen stage with period set dressing, captured during a production time-lapse.",
+            vimeo: {
+              videoId: "1229728518",
+              title: "Play Garrick on-set time-lapse",
+              muted: true,
+              loop: false,
+            },
+          },
+        },
+        {
+          type: "section",
+          heading: "From Set to Screen · Building the World of Garrick",
+          paragraphs: [
+            "A central goal of Garrick was to develop photorealistic virtual environments and explore their integration with live-action footage. The project also explored production and post-production workflows for pre-visualization and the automation of rendering processes.",
+            "Much of Garrick was filmed on partial sets surrounded by green screen, with the larger environment created digitally in post-production. The process required the live-action photography and virtual environments to be planned as parts of the same image, allowing physical performances and sets to become part of a much larger fictional world.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter02/GarrickShot-01.png",
+            alt: "Garrick finished frames — live-action performance composited into digitally created environments",
+            captions: [],
+            annotation:
+              "From set to screen — the finished scene from Garrick, combining live-action foreground with a computer-generated environment.",
+            compareCarousel: {
+              holdMs: 3000,
+              durationMs: 1400,
+              pairs: [
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-01.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-01.png",
+                  fromAlt:
+                    "Garrick shot 01 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 01 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-02.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-02.png",
+                  fromAlt:
+                    "Garrick shot 02 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 02 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-03.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-03.png",
+                  fromAlt:
+                    "Garrick shot 03 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 03 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-04.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-04.png",
+                  fromAlt:
+                    "Garrick shot 04 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 04 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-05.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-05.png",
+                  fromAlt:
+                    "Garrick shot 05 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 05 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-06.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-06.png",
+                  fromAlt:
+                    "Garrick shot 06 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 06 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-07.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-07.png",
+                  fromAlt:
+                    "Garrick shot 07 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 07 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-08.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-08.png",
+                  fromAlt:
+                    "Garrick shot 08 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 08 finished composite with virtual environment",
+                },
+                {
+                  fromImageObjectPath:
+                    "site/biography/chapter02/GarrickShotGS-09.png",
+                  toImageObjectPath:
+                    "site/biography/chapter02/GarrickShot-09.png",
+                  fromAlt:
+                    "Garrick shot 09 on-set green screen plate before compositing",
+                  toAlt:
+                    "Garrick shot 09 finished composite with virtual environment",
+                },
+              ],
+            },
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "Garrick became a bridge between the technical and creative sides of my work. Directing and producing the film gave me the opportunity to lead a collaborative production while exploring how digital technologies could support a larger creative vision and bring a fictional world to the screen.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "With Gratitude · Jan Roberts-Breslin",
+          paragraphs: [
+            "As Graduate Program Director, Jan Roberts-Breslin was an important source of support throughout my time at Emerson. She encouraged my exploration of filmmaking and visual effects and helped make many of the resources needed to produce Garrick available to me.",
+            "Her support gave me the opportunity to pursue an ambitious capstone project that brought together filmmaking, technology, and visual effects at a scale I could not have accomplished on my own.",
+            "I'm also deeply grateful to the cast and crew whose talent and collaboration helped bring Garrick to life.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Where the Two Worlds Met",
+          paragraphs: [
+            "Garrick became the point where the technical and creative sides of my work truly came together. Directing and producing the film gave me the opportunity to lead a collaborative production while exploring how digital technologies could support a larger artistic vision.",
+            "By the end of the project, I had begun to see a direction that brought those interests together: visual effects and creative technology within the entertainment industry.",
           ],
         },
       ],

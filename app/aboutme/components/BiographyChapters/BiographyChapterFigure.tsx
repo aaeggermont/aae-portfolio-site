@@ -8,6 +8,8 @@ import {
 } from '@/lib/media/lightboxModal';
 import { buildPublicStorageUrl } from '@/lib/firebase/publicStorageUrl';
 import type { BiographyChapterFigure } from '../../data/biography-chapters-data';
+import { BiographyChapterCompareMedia } from './BiographyChapterCompareMedia';
+import { BiographyChapterVimeoPoster } from './BiographyChapterVimeoPoster';
 import styles from './biographyChapters.module.scss';
 
 type BiographyChapterFigureProps = {
@@ -21,36 +23,51 @@ export function BiographyChapterFigureBlock({
   lightboxId,
 }: BiographyChapterFigureProps) {
   const src = buildPublicStorageUrl(figure.imageObjectPath);
+  const carousel = figure.compareCarousel;
+  const pairs = carousel?.pairs ?? [];
+  const hasVimeo = Boolean(figure.vimeo?.videoId);
+
   const modalBg = PROJECT_IMAGE_LIGHTBOX_MODAL_BG_WHITE;
   const hasColumnCaptions = figure.captions.length > 0;
   const hasPublicationCaption = Boolean(
     figure.captionTitle?.length || figure.captionCredit,
   );
+  const hasAnnotation = Boolean(figure.annotation);
 
   return (
     <figure className={styles.biographyChaptersFigure}>
-      <div className={styles.biographyChaptersFigureMedia}>
-        <SlideshowLightbox
-          framework="next"
-          images={[{ src, alt: figure.alt }]}
-          lightboxIdentifier={lightboxId}
-          showThumbnails={false}
-          showSlideshowIcon={false}
-          showNavigationDots={false}
-          backgroundColor={modalBg}
-          iconColor={lightboxIconColorForModalBackground(modalBg)}
-          modalClose="clickOutside"
-        >
-          <img
-            src={src}
-            alt={figure.alt}
-            data-lightboxjs={lightboxId}
-            width={1600}
-            height={900}
-            className={styles.biographyChaptersFigureImage}
-          />
-        </SlideshowLightbox>
-      </div>
+      {pairs.length > 0 && carousel ? (
+        <BiographyChapterCompareMedia
+          pairs={pairs}
+          holdMs={carousel.holdMs ?? 3000}
+          durationMs={carousel.durationMs ?? 1400}
+        />
+      ) : hasVimeo ? (
+        <BiographyChapterVimeoPoster figure={figure} />
+      ) : (
+        <div className={styles.biographyChaptersFigureMedia}>
+          <SlideshowLightbox
+            framework="next"
+            images={[{ src, alt: figure.alt }]}
+            lightboxIdentifier={lightboxId}
+            showThumbnails={false}
+            showSlideshowIcon={false}
+            showNavigationDots={false}
+            backgroundColor={modalBg}
+            iconColor={lightboxIconColorForModalBackground(modalBg)}
+            modalClose="clickOutside"
+          >
+            <img
+              src={src}
+              alt={figure.alt}
+              data-lightboxjs={lightboxId}
+              width={1600}
+              height={900}
+              className={styles.biographyChaptersFigureImage}
+            />
+          </SlideshowLightbox>
+        </div>
+      )}
       {hasPublicationCaption ? (
         <figcaption className={styles.biographyChaptersFigurePublicationCaption}>
           {figure.captionTitle?.map((line, index) => (
@@ -66,6 +83,11 @@ export function BiographyChapterFigureBlock({
               {figure.captionCredit}
             </span>
           ) : null}
+        </figcaption>
+      ) : null}
+      {hasAnnotation ? (
+        <figcaption className={styles.biographyChaptersFigureAnnotation}>
+          {figure.annotation}
         </figcaption>
       ) : null}
       {hasColumnCaptions ? (
