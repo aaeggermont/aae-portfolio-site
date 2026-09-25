@@ -33,8 +33,8 @@ export function BiographyIntroHeroImg({ variant }: BiographyIntroHeroImgProps) {
             priority
             sizes={
               variant === 'mobile'
-                ? '(max-width: 767px) 80vw, 280px'
-                : '(min-width: 768px) 40vw, 524px'
+                ? '(max-width: 767px) 58vw, 269px'
+                : '(min-width: 768px) 40vw, 419px'
             }
             className={styles.biographyIntroProfilePhoto}
             unoptimized

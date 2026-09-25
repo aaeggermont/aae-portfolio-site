@@ -40,16 +40,22 @@
   @media #{$xs}, #{$sm} {
     align-items: center;
     width: 100%;
-    margin: 0.75rem 0 1rem;
+    margin: 2rem 0 1rem;
   }
 }
 
 .biographyIntroHeroMedia {
   position: relative;
-  width: clamp(449px, 37.4vw, 524px);
+  // Mobile first — ~25% smaller than the prior ~359px phone size.
+  width: clamp(180px, 58vw, 269px);
+  max-width: 100%;
 
-  @media screen and #{$tablet} {
-    width: clamp(262px, 56.2vw, 449px);
+  @media screen and (min-width: $tablet-min) and (max-width: $tablet-max) {
+    width: clamp(210px, 45vw, 359px);
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    width: clamp(359px, 29.9vw, 419px);
   }
 }
 
