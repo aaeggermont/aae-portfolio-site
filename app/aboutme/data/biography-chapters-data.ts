@@ -41,6 +41,11 @@ export type BiographyChapterFigure = {
   /** Optional centered credit line under captionTitle */
   captionCredit?: string;
   /**
+   * Optional left-aligned annotation under the image
+   * (12px / line-height 1.625).
+   */
+  annotation?: string;
+  /**
    * Optional compare carousel: each pair holds on green screen, wipes
    * right→left to the composite, then unlocks a scrubber. Prev/next + dots
    * move between pairs.
@@ -109,7 +114,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 29,
+  version: 32,
   chapters: [
     {
       id: "harvard",
@@ -251,8 +256,10 @@ export const biographyChaptersFallback: BiographyChaptersData = {
           type: "mediaText",
           figure: {
             imageObjectPath: "site/biography/chapter02/GarrickFilmPoster.png",
-            alt: "Garrick film poster — a film by Ricardo Curbelo Villalobos",
+            alt: "Poster for Garrick, a short film by Antonio Aranda Eggermont",
             captions: [],
+            annotation:
+              "Poster for Garrick, a short film by Antonio Aranda Eggermont.",
           },
           heading: "The Story Behind Garrick",
           paragraphs: [
@@ -274,6 +281,8 @@ export const biographyChaptersFallback: BiographyChaptersData = {
               "site/biography/chapter02/GarrickTimeLapseImage.png",
             alt: "Time-lapse of the Garrick film set with green screen and crew",
             captions: [],
+            annotation:
+              "Behind the scenes on the Garrick set — a green-screen stage with period set dressing, captured during a production time-lapse.",
             vimeo: {
               videoId: "1229728518",
               title: "Play Garrick on-set time-lapse",
@@ -296,6 +305,8 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             imageObjectPath: "site/biography/chapter02/GarrickShot-01.png",
             alt: "Garrick finished frames — live-action performance composited into digitally created environments",
             captions: [],
+            annotation:
+              "From set to screen — the finished scene from Garrick, combining live-action foreground with a computer-generated environment.",
             compareCarousel: {
               holdMs: 3000,
               durationMs: 1400,

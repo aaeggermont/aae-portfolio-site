@@ -32,6 +32,7 @@ export function BiographyChapterFigureBlock({
   const hasPublicationCaption = Boolean(
     figure.captionTitle?.length || figure.captionCredit,
   );
+  const hasAnnotation = Boolean(figure.annotation);
 
   return (
     <figure className={styles.biographyChaptersFigure}>
@@ -82,6 +83,11 @@ export function BiographyChapterFigureBlock({
               {figure.captionCredit}
             </span>
           ) : null}
+        </figcaption>
+      ) : null}
+      {hasAnnotation ? (
+        <figcaption className={styles.biographyChaptersFigureAnnotation}>
+          {figure.annotation}
         </figcaption>
       ) : null}
       {hasColumnCaptions ? (

@@ -70,6 +70,7 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     : [];
   const captionTitle = captionTitleRaw.map(asString).filter(Boolean);
   const captionCredit = asString(record.captionCredit);
+  const annotation = asString(record.annotation);
 
   let compareCarousel: BiographyChapterFigure["compareCarousel"] | undefined;
   const carouselRaw = record.compareCarousel;
@@ -133,6 +134,7 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     captions,
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
+    ...(annotation ? { annotation } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
     ...(vimeo ? { vimeo } : {}),
   };
