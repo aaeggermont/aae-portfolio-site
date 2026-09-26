@@ -114,7 +114,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 33,
+  version: 36,
   chapters: [
     {
       id: "harvard",
@@ -240,10 +240,19 @@ export const biographyChaptersFallback: BiographyChaptersData = {
         {
           type: "copy",
           paragraphs: [
-            "My work at Harvard had taken me beyond software engineering and into audiovisual production. Building the webcasting facility meant working not only with software, networks, and interfaces, but with video, audio, production equipment, and the workflows behind digital media.",
-            "That experience strengthened an interest I already had in multimedia and visual effects. I became increasingly curious about the creative side of the technologies I was working with—how images, sound, editing, and visual effects could be used not simply to deliver information, but to create experiences and tell stories.",
-            "That curiosity led me to Emerson College, where I pursued a Master of Arts in Media Arts and began exploring filmmaking and visual storytelling more deeply.",
+            "My work at Harvard had started with software and Internet technologies, but building the Distance Education platform also introduced me to audiovisual production. I became increasingly interested in multimedia, visual effects, and the creative process of filmmaking, which eventually led me to Emerson College and the M.A. in Media Arts program.",
           ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter02/EmersonOnSetIllustration.png",
+            alt: "Illustration of live-action production, green screen, CGI, and visual effects on set",
+            captions: [],
+            annotation:
+              "Discovering the Filmmaking Process. Bringing together live-action production, green screen, CGI, and visual effects on set.",
+          },
         },
         {
           type: "section",
