@@ -37,14 +37,17 @@ export function BiographyIntro({
             <TitleTypewriter title={data.title} />
           </h1>
           <BiographyIntroHeroImg variant="mobile" />
-          <p className={styles.biographyIntroSubtitle}>{data.subtitle}</p>
+          <p className={styles.biographyIntroSubtitleMobile}>{data.subtitle}</p>
           <div className={styles.biographyIntroBody}>
             {data.paragraphs.map((paragraph, index) => (
               <p key={`biography-intro-p-${index}`}>{paragraph}</p>
             ))}
           </div>
         </div>
-        <BiographyIntroHeroImg variant="desktop" />
+        <BiographyIntroHeroImg
+          variant="desktop"
+          subtitle={data.subtitle}
+        />
       </div>
     </section>
   );

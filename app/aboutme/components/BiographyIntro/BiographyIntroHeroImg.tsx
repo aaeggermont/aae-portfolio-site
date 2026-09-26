@@ -10,9 +10,14 @@ const HERO_IMAGE_OBJECT_PATH = 'site/biography/MyJourneyHero.png';
 
 type BiographyIntroHeroImgProps = {
   variant: 'mobile' | 'desktop';
+  /** Shown under the image on desktop/tablet only. */
+  subtitle?: string;
 };
 
-export function BiographyIntroHeroImg({ variant }: BiographyIntroHeroImgProps) {
+export function BiographyIntroHeroImg({
+  variant,
+  subtitle,
+}: BiographyIntroHeroImgProps) {
   const screen = useResponsive();
   const visible =
     variant === 'mobile' ? screen.isMobile : screen.isTabletUp;
@@ -40,6 +45,9 @@ export function BiographyIntroHeroImg({ variant }: BiographyIntroHeroImgProps) {
             unoptimized
           />
         </div>
+        {variant === 'desktop' && subtitle ? (
+          <p className={styles.biographyIntroSubtitleUnderHero}>{subtitle}</p>
+        ) : null}
       </div>
     </div>
   );
