@@ -114,7 +114,7 @@ export type BiographyChaptersData = {
 };
 
 export const biographyChaptersFallback: BiographyChaptersData = {
-  version: 32,
+  version: 33,
   chapters: [
     {
       id: "harvard",
@@ -126,8 +126,8 @@ export const biographyChaptersFallback: BiographyChaptersData = {
         {
           type: "copy",
           paragraphs: [
-            "While pursuing graduate studies in Computer Science at Harvard, I became fascinated by two areas that would shape much of my career: how the Internet worked and how people interacted with information through graphical interfaces.",
-            "A graduate project combining Internet architecture, web programming, video, and interactive content caught the attention of my mentor, Dr. Henry Leitner, who was developing an early Distance Education initiative at Harvard. What began as a research project soon became an opportunity to help turn that idea into a working platform for online learning.",
+            "During my graduate studies at Harvard, two final course projects—one for Communication Protocols and Internet Architectures and another for Web Programming—allowed me to explore complementary aspects of Internet technology, interactive media, and video. Bringing those ideas together led to a larger vision for a webcasting environment that could deliver lectures live and on demand through the web.",
+            "The two projects caught the attention of my mentor, Dr. Henry Leitner, who was developing an early Distance Education initiative at Harvard. What began as ideas I had explored in those two courses soon became an opportunity to help turn that vision into a working platform for online learning.",
             "What began as an interest in networks became something broader: an interest in how technology, media, and interfaces could come together to connect students from different backgrounds and geographic locations through new kinds of learning experiences.",
           ],
         },
