@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
-import Image from "next/image";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
 import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
 import styles from "./main-banner.module.scss";
 import Typewriter from "typewriter-effect";
-import { backgroundFloatImages } from "./background-float-images";
 import type { MainBannerData } from "./data/main-banner-data";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
 
@@ -46,17 +44,6 @@ function TypewriterComponent() {
   );
 }
 
-type FloaterConfig = {
-  img: any;
-  top: string;
-  left: string;
-  size: string;
-  delay: string;
-  duration: string;
-};
-
-const FLOAT_COUNT = 6;
-
 type MainBannerProps = {
   banner: MainBannerData;
 };
@@ -67,7 +54,6 @@ function MainBanner({ banner }: MainBannerProps) {
   const pathname = usePathname();
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
-  const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   useLayoutEffect(() => {
@@ -117,29 +103,6 @@ function MainBanner({ banner }: MainBannerProps) {
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
-  useEffect(() => {
-    // This runs ONLY in the browser, after hydration ✅
-    const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
-      () => {
-        const img =
-          backgroundFloatImages[
-            Math.floor(Math.random() * backgroundFloatImages.length)
-          ];
-
-        return {
-          img,
-          top: `${Math.random() * 90}%`,
-          left: `${Math.random() * 90}%`,
-          size: `${40 + Math.random() * 120}px`, // 40–160px
-          delay: `${Math.random() * 5}s`,
-          duration: `${10 + Math.random() * 10}s`,
-        };
-      }
-    );
-
-    setFloaters(generated);
-  }, []);
-
   const handleLinkedIn = () => {
     window.open(
       "https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/",
@@ -152,29 +115,6 @@ function MainBanner({ banner }: MainBannerProps) {
 
   return (
     <section className={styles.mainBanner}>
-      {/* Full-bleed behind orb + copy + portrait (see .floatLayer z-index) */}
-      <div className={styles.floatLayer} aria-hidden="true">
-        {floaters.map((f, i) => (
-          <Image
-            key={`float-${i}-${f.top}-${f.left}`}
-            src={f.img}
-            alt=""
-            aria-hidden="true"
-            className={styles.floatImg}
-            width={150}
-            height={150}
-            style={{
-              top: f.top,
-              left: f.left,
-              width: f.size,
-              height: "auto",
-              animationDelay: f.delay,
-              animationDuration: f.duration,
-            }}
-          />
-        ))}
-      </div>
-
       <div className={styles.bgGradientOrb}></div>
 
       <div className={styles.bannerContentCap}>

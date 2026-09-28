@@ -18,7 +18,7 @@
   opacity: 0.6;
   filter: blur(1px);
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   width: clamp(260px, 24vw, 385px);
   height: clamp(250px, 24vw, 378px);
   animation: fadeInOrb 1.8s ease-out forwards, greetingOrbFloatDynamic 30s ease-in-out infinite;
@@ -93,7 +93,6 @@
   box-sizing: border-box;
   position: relative;
   overflow: visible;
-  isolation: isolate;
   background-color: var(--page-canvas);
   padding-block: 2rem;
 
@@ -108,6 +107,8 @@
 
 .bannerContentCap {
   @include home.home-page-gutter;
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -329,32 +330,8 @@
   }
 }
 
-.floatLayer {
-  @include home.home-float-layer-bleed;
-}
-
-.floatImg {
-  position: absolute;
-  opacity: 0.42;
-  animation: mainBannerFloaterFloat 12s ease-in-out infinite alternate;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
-}
-
-@keyframes mainBannerFloaterFloat {
-  0% {
-    transform: translate(-10px, 24px) scale(0.92);
-  }
-  100% {
-    transform: translate(10px, -18px) scale(1.04);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .bgGradientOrb {
-    animation: none !important;
-  }
-
-  .floatImg {
     animation: none !important;
   }
 }

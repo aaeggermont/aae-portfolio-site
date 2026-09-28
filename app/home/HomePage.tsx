@@ -8,6 +8,7 @@ import MainBanner from "./main-banner";
 import MyBackground from "./my-background";
 import LatestProjects from "./latest-projects";
 import ContactMe from "./contact-me";
+import { LandingFloatLayer } from "./components/LandingFloatLayer";
 import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import { preloadLandingImages } from "@/lib/home/preloadLandingAssets";
 import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
@@ -57,6 +58,8 @@ export default function HomePage() {
         aria-hidden={isLocked}
         inert={isLocked ? true : undefined}
       >
+        <LandingFloatLayer />
+
         <section id="hero" className={styles.section}>
           <MainBanner banner={homePageData.mainBanner} />
         </section>

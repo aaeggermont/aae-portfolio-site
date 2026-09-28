@@ -1,9 +1,8 @@
 // app/home/latest-projects.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styles from "./latest-projects.module.scss";
-import Image from "next/image";
 import Link from "next/link";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
@@ -14,77 +13,18 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-import { backgroundFloatImages } from "./background-float-images";
 import LatestProjectCard from "./LatestProjectCard";
 import { latestProjectsItems } from "./data/latestprojects-data";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 import { selectedWorkLayoutStyle } from "./selectedWorkCardLayout";
 
-const FLOAT_COUNT = 6;
-
-type FloaterConfig = {
-  img: any;
-  top: string;
-  left: string;
-  size: string;
-  delay: string;
-  duration: string;
-};
-
 function LatestProjects() {
-  const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
-
-  useEffect(() => {
-    const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
-      () => {
-        const img =
-          backgroundFloatImages[
-            Math.floor(Math.random() * backgroundFloatImages.length)
-          ];
-
-        return {
-          img,
-          top: `${Math.random() * 90}%`,
-          left: `${Math.random() * 90}%`,
-          size: `${40 + Math.random() * 120}px`,
-          delay: `${Math.random() * 5}s`,
-          duration: `${10 + Math.random() * 10}s`,
-        };
-      }
-    );
-
-    setFloaters(generated);
-  }, []);
-
   return (
     <section
       className={styles.latestProjectsSection}
       id="latest-projects"
       style={selectedWorkLayoutStyle}
     >
-      {/* Decorative floating images */}
-      <div className={styles.floatLayer}>
-        {floaters.map((f, i) => (
-          <Image
-            key={`float-${i}-${f.top}-${f.left}`}
-            src={f.img}
-            alt=""
-            aria-hidden="true"
-            className={styles.floatImg}
-            width={150}
-            height={150}
-            style={{
-              top: f.top,
-              left: f.left,
-              width: f.size,
-              height: "auto",
-              animationDelay: f.delay,
-              animationDuration: f.duration,
-            }}
-          />
-        ))}
-      </div>
-
       <div className={styles.content}>
         <SectionTypewriterHeading
           text="Selected Work"

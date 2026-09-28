@@ -20,6 +20,8 @@
 
   .content {
     @include home.home-page-gutter;
+    position: relative;
+    z-index: 2;
     text-align: center;
     width: 100%;
   }
@@ -205,32 +207,5 @@
     transform: none !important;
     opacity: 1 !important;
     transition: none !important;
-  }
-}
-
-/* Floating background images (same pattern as MyBackground) */
-.floatLayer {
-  @include home.home-float-layer-bleed;
-}
-
-.floatImg {
-  position: absolute;
-  opacity: 1;
-  animation: slowFloat 12s ease-in-out infinite alternate;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-}
-
-@keyframes slowFloat {
-  0% {
-    transform: translate(-10px, 240px) scale(0.5);
-  }
-  100% {
-    transform: translate(10px, -28px) scale(1.06);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .floatImg {
-    animation: none !important;
   }
 }
