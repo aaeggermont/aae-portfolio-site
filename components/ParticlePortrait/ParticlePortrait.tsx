@@ -123,7 +123,8 @@ function drawImageCover(
   const scale = Math.max(dW / iw, dH / ih);
   const sw = dW / scale;
   const sh = dH / scale;
-  const sx = Math.max(0, Math.min(iw - sw, (iw - sw) * 0.5));
+  // Matches object-position: 88% in ParticlePortrait.module.scss.
+  const sx = Math.max(0, Math.min(iw - sw, (iw - sw) * 0.88));
   let sy = 0;
   if (anchorY === "center") sy = Math.max(0, (ih - sh) * 0.5);
   else if (anchorY === "bottom") sy = Math.max(0, ih - sh);
