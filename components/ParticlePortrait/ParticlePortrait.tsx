@@ -381,6 +381,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
             tx += node.outwardX * creep;
             ty += node.outwardY * creep;
           }
+          let spring = networkConfig.spring;
           if (usePointer) {
             const pdx = mx - node.x;
             const pdy = my - node.y;
@@ -389,11 +390,12 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
               const falloff = (1 - dist / pointerRadius) ** 2;
               tx += (pdx / dist) * pointerInfluence * falloff;
               ty += (pdy / dist) * pointerInfluence * falloff;
+              spring = networkConfig.pointerSpring;
             }
           }
 
-          const nvx = (sim.vx[i] + (tx - sim.x[i]) * networkConfig.spring) * networkConfig.damp;
-          const nvy = (sim.vy[i] + (ty - sim.y[i]) * networkConfig.spring) * networkConfig.damp;
+          const nvx = (sim.vx[i] + (tx - sim.x[i]) * spring) * networkConfig.damp;
+          const nvy = (sim.vy[i] + (ty - sim.y[i]) * spring) * networkConfig.damp;
           sim.vx[i] = nvx;
           sim.vy[i] = nvy;
           sim.x[i] += nvx;
@@ -413,14 +415,27 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       }
 
       const pulse = reduced ? null : pulseRef.current;
+      const hoverRadius = networkConfig.pointerRadius * unit;
+      const pointerOn = pointerRef.current && !reduced;
+      const mx = mouseRef.current.x;
+      const my = mouseRef.current.y;
+      const hoverFalloff = (x: number, y: number) => {
+        if (!pointerOn) return 0;
+        const dist = Math.hypot(mx - x, my - y);
+        if (dist >= hoverRadius) return 0;
+        return (1 - dist / hoverRadius) ** 2;
+      };
+
       for (let i = 0; i < n; i++) {
         const node = network.nodes[i];
+        const hover = hoverFalloff(node.x, node.y);
         let alpha = node.alpha;
         if (pulse && pulse.nodes.includes(i)) {
           const order = pulse.nodes.indexOf(i) / Math.max(1, pulse.nodes.length - 1);
           const u = (now - pulse.start) / networkConfig.pulseDurationMs;
           alpha = Math.min(1, alpha + Math.exp(-((u - order) ** 2) / 0.02) * 0.28);
         }
+        alpha = Math.min(1, alpha + hover * networkConfig.pointerBrighten);
         const o = i * 7;
         sim.pointData[o] = sim.x[i] + padL;
         sim.pointData[o + 1] = sim.y[i] + padT;
@@ -428,18 +443,22 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         sim.pointData[o + 3] = node.green;
         sim.pointData[o + 4] = node.blue;
         sim.pointData[o + 5] = alpha;
-        sim.pointData[o + 6] = node.radius;
+        sim.pointData[o + 6] = node.radius * (1 + hover * networkConfig.pointerRadiusScale);
       }
 
       const lineWidth = networkConfig.lineWidth * (0.85 + 0.15 * Math.min(unit, 1.2));
       for (let i = 0; i < network.links.length; i++) {
         const link = network.links[i];
+        const a = network.nodes[link.a];
+        const b = network.nodes[link.b];
+        const hover = Math.max(hoverFalloff(a.x, a.y), hoverFalloff(b.x, b.y));
         let alpha = link.alpha;
         if (!reduced && link.flickers) {
           const wave = 0.5 + 0.5 * Math.sin(now * networkConfig.linkFlickerSpeed + link.phase);
           alpha *= 0.18 + 0.82 * wave;
         }
         if (!reduced) alpha = Math.min(0.92, alpha + linkPulseBoost(link, pulse, now));
+        alpha = Math.min(0.95, alpha + hover * networkConfig.pointerLineBoost);
         writeLineQuad(
           sim.lineData,
           i * 6,
@@ -451,7 +470,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
           link.green,
           link.blue,
           alpha,
-          lineWidth,
+          lineWidth + hover * networkConfig.pointerLineWidth,
         );
       }
 

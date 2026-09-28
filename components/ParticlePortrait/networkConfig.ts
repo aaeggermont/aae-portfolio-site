@@ -80,8 +80,18 @@ export const networkConfig = {
 
   spring: 0.04,
   damp: 0.92,
-  pointerRadius: 64,
-  pointerInfluence: 2.2,
+  /** How far from the cursor the live mesh still responds, at the reference width. */
+  pointerRadius: 150,
+  /** Soft lean toward the cursor, in CSS pixels at the reference width. */
+  pointerInfluence: 12,
+  /** Spring used while a node is inside the pointer radius so the lean is visible. */
+  pointerSpring: 0.16,
+  /** Added opacity and size for nodes under the cursor. */
+  pointerBrighten: 0.5,
+  pointerRadiusScale: 0.45,
+  /** Added opacity and width for links under the cursor. */
+  pointerLineBoost: 0.42,
+  pointerLineWidth: 0.7,
 
   padLeft: 0.12,
   padRight: 0.02,
