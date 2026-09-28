@@ -108,7 +108,7 @@ void main() {
 }
 `;
 
-function drawImageCover(
+function drawImageContain(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   dx: number,
@@ -120,15 +120,14 @@ function drawImageCover(
   const iw = img.naturalWidth;
   const ih = img.naturalHeight;
   if (!iw || !ih) return;
-  const scale = Math.max(dW / iw, dH / ih);
-  const sw = dW / scale;
-  const sh = dH / scale;
-  // Matches object-position: 88% in ParticlePortrait.module.scss.
-  const sx = Math.max(0, Math.min(iw - sw, (iw - sw) * 0.88));
-  let sy = 0;
-  if (anchorY === "center") sy = Math.max(0, (ih - sh) * 0.5);
-  else if (anchorY === "bottom") sy = Math.max(0, ih - sh);
-  ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dW, dH);
+  const scale = Math.min(dW / iw, dH / ih);
+  const dw = iw * scale;
+  const dh = ih * scale;
+  const ox = dx + (dW - dw) * 0.5;
+  let oy = dy;
+  if (anchorY === "center") oy = dy + (dH - dh) * 0.5;
+  else if (anchorY === "bottom") oy = dy + (dH - dh);
+  ctx.drawImage(img, 0, 0, iw, ih, ox, oy, dw, dh);
 }
 
 function compileShader(gl: WebGLRenderingContext, type: number, source: string) {
@@ -564,7 +563,7 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       offscreen.height = photoH;
       const offCtx = offscreen.getContext("2d", { willReadFrequently: true });
       if (!offCtx) return;
-      drawImageCover(offCtx, image, 0, 0, photoW, photoH, coverAnchor());
+      drawImageContain(offCtx, image, 0, 0, photoW, photoH, coverAnchor());
       const pixels = offCtx.getImageData(0, 0, photoW, photoH).data;
       const network = buildNetwork(pixels, photoW, photoH, densityForViewport());
       const count = network.nodes.length;

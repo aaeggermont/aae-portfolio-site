@@ -151,7 +151,8 @@
     /* Sized vs the content band (%), not viewport, so it sits flush on the right */
     flex: 0 0 auto;
     width: clamp(230px, 38%, 460px);
-    aspect-ratio: 3 / 4;
+    /* Same proportions as HeroProfileBase.png, so both sleeves stay in frame. */
+    aspect-ratio: 456 / 522;
     height: auto;
     max-height: min(71.9vh, 689px);
     z-index: 2;
@@ -174,7 +175,7 @@
       );
       width: auto;
       max-width: min(73vw, 246px);
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 456 / 522;
       flex: 0 0 auto;
       /* ~10% of portrait height — margin avoids fighting GSAP transform on this node */
       margin: -1.875rem 0 0;
