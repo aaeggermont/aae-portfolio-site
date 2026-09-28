@@ -213,7 +213,7 @@ function MainBanner({ banner }: MainBannerProps) {
       {/* Photo side */}
       <div ref={photoRef} className={styles.bannerPhoto}>
         <ParticlePortrait
-          src="/images/ProfilePhoto.png"
+          src="/images/HeroProfileBase.png"
           className={styles.bannerPortrait}
         />
       </div>

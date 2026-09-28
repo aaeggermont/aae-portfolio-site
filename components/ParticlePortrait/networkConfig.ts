@@ -1,109 +1,93 @@
 /**
- * Art direction for the landing portrait network.
- * Distances are in CSS pixels at a portrait width of NETWORK_REF_WIDTH
- * and scale with the rendered photo width.
+ * Live extension of the baked hero artwork.
+ * The portrait image already contains the mesh. These values only grow a
+ * sparse continuation off its outer left edge.
+ *
+ * Distances are CSS pixels at NETWORK_REF_WIDTH and scale with the photo width.
  */
 
 export const NETWORK_REF_WIDTH = 400;
 
 export const networkConfig = {
-  alphaThreshold: 48,
-  /** Pixel step used when estimating the outward silhouette normal. */
+  /** Low enough to catch the soft outer fringe of the baked treatment. */
+  alphaThreshold: 26,
   gradientStep: 3,
 
   primary: {
-    nyMin: 0.4,
-    nyMax: 0.92,
-    nxMax: 0.48,
-    /** Outward normal x must be below this (pointing to the viewer's left). */
-    outwardXMax: -0.28,
-    seedSpacing: 13,
-    nodesPerSeed: 8,
-    maxReach: 78,
-    edgeOverlap: 16,
+    /** Shoulder through lower-left edge. The head and right side are excluded. */
+    nyMin: 0.38,
+    nyMax: 0.9,
+    nxMax: 0.46,
+    /** Outward normal must point toward the viewer's left. */
+    outwardXMax: -0.22,
+    /**
+     * Only the outermost alpha edge counts. Interior holes in the baked
+     * mesh are ignored so the live layer does not redraw it.
+     */
+    outerBand: 12,
+    seedSpacing: 36,
+    nodesPerSeed: 2,
+    maxReach: 58,
+    /** Pulls a few samples back onto the baked fringe. */
+    edgeOverlap: 9,
   },
 
-  secondary: {
-    nyMin: 0.44,
-    nyMax: 0.52,
-    nxMin: 0.62,
-    outwardXMin: 0.55,
-    seedSpacing: 16,
-    maxSeeds: 3,
-    nodesPerSeed: 4,
-    maxReach: 36,
-    edgeOverlap: 6,
-  },
+  /** Above 1 keeps more of the sparse samples against the artwork. */
+  distanceBias: 1.85,
+  spread: 0.72,
+  /** Only the nearest samples may connect. Everything past this is a particle. */
+  layerMesh: 0.06,
+  layerNode: 0.16,
+  layerIsolated: 0.3,
 
-  /** Exponents above 1 pack more samples against the silhouette. */
-  distanceBias: 1.55,
-  /** Angular scatter, in radians, at the outer end of a seed's reach. */
-  spread: 1.15,
-  layerMesh: 0.18,
-  layerNode: 0.42,
-  layerIsolated: 0.68,
-
-  connectionDistanceMesh: 32,
+  connectionDistanceMesh: 34,
   connectionDistanceNode: 22,
-  maxLinks: 3,
-  /** Nodes farther apart than this along the falloff do not connect. */
-  linkDistanceGap: 0.34,
-  /**
-   * Outside-to-outside links longer than this are dropped when their
-   * midpoint sits inside the body, so chords do not cross the torso.
-   */
-  crossBodyReject: 16,
+  maxLinks: 2,
+  linkDistanceGap: 0.24,
+  crossBodyReject: 14,
 
-  lineOpacity: 0.46,
-  nodeOpacity: 0.82,
-  particleOpacity: 0.42,
-  /** CSS pixels. Kept thin on purpose; not scaled fully with portrait size. */
-  lineWidth: 0.9,
+  lineOpacity: 0.32,
+  nodeOpacity: 0.62,
+  particleOpacity: 0.34,
+  /** How quickly marks fade as they leave the silhouette. 1 hides the outer end. */
+  opacityFalloff: 0.9,
+  lineWidth: 0.75,
 
-  teal: [7 / 255, 67 / 255, 95 / 255] as const,
-  /** Same hue, lifted so the few nodes that overlap the dark jacket stay visible. */
-  tealOnPortrait: [78 / 255, 140 / 255, 158 / 255] as const,
-  gold: [245 / 255, 159 / 255, 10 / 255] as const,
-  /** Share of non-particle nodes drawn in the gold accent. */
-  goldRatio: 0.13,
-  anchorChance: 0.07,
-  nodeRadius: 1.5,
-  anchorRadius: 3.2,
-  isolatedRadius: 1.15,
-  particleRadius: 0.8,
+  /** Sampled from the cyan nodes in the hero artwork. */
+  teal: [96 / 255, 178 / 255, 222 / 255] as const,
+  tealOnPortrait: [96 / 255, 178 / 255, 222 / 255] as const,
+  /** Sampled from the warm gold nodes in the hero artwork. */
+  gold: [244 / 255, 184 / 255, 84 / 255] as const,
+  goldRatio: 0.1,
+  anchorChance: 0.04,
+  nodeRadius: 1.25,
+  anchorRadius: 2.15,
+  isolatedRadius: 1.05,
+  particleRadius: 0.7,
 
-  /** Multiplier on seed count below the mobile breakpoint. */
-  mobileDensity: 0.62,
+  mobileDensity: 0.55,
   mobileMaxWidth: 767,
 
-  driftAmplitude: 1.15,
-  particleDrift: 3.4,
-  driftTimeScale: 0.00022,
-  /** Fraction of outer links that slowly fade in and out. */
-  linkFlickerPortion: 0.22,
-  linkFlickerSpeed: 0.00028,
-  pulseIntervalMs: 6800,
-  pulseDurationMs: 1700,
-  pulseBoost: 0.5,
-  pulseSteps: 5,
+  driftAmplitude: 0.65,
+  particleDrift: 2.1,
+  driftTimeScale: 0.00011,
+  linkFlickerPortion: 0.4,
+  linkFlickerSpeed: 0.00016,
+  pulseIntervalMs: 14000,
+  pulseDurationMs: 2200,
+  pulseBoost: 0.22,
+  pulseSteps: 3,
 
-  spring: 0.05,
-  damp: 0.9,
-  pointerRadius: 78,
-  /** Maximum lean toward the pointer, in CSS pixels at the reference width. */
-  pointerInfluence: 4.2,
+  spring: 0.04,
+  damp: 0.92,
+  pointerRadius: 64,
+  pointerInfluence: 2.2,
 
-  /** Extra canvas around the photo so the fringe is not clipped, as a fraction of photo size. */
-  padLeft: 0.1,
-  padRight: 0.06,
-  padTop: 0.04,
-  padBottom: 0.04,
+  padLeft: 0.12,
+  padRight: 0.02,
+  padTop: 0.02,
+  padBottom: 0.03,
 
-  /** Spawned samples above this normalized height are dropped so the face stays clear. */
-  faceNyMax: 0.38,
-  /** Primary samples cannot cross into the torso. */
-  primaryContainNx: 0.56,
-  secondaryContainNxMin: 0.55,
-  secondaryContainNyMin: 0.4,
-  secondaryContainNyMax: 0.6,
+  faceNyMax: 0.36,
+  primaryContainNx: 0.46,
 };

@@ -45,7 +45,6 @@ type Seed = {
   y: number;
   ox: number;
   oy: number;
-  zone: "primary" | "secondary";
 };
 
 function cellHash(gx: number, gy: number): number {
@@ -64,8 +63,9 @@ function bucketSeeds(list: Seed[], spacing: number): Seed[] {
 }
 
 /**
- * Sample selected alpha-boundary arcs and grow an asymmetric network
- * outward from those edges. The portrait interior is never filled.
+ * Continue the baked artwork's left-hand network a short way into empty space.
+ * Seeds are limited to the outer alpha fringe, so the live layer does not
+ * redraw the mesh already painted into the portrait.
  */
 export function buildNetwork(
   pixels: Uint8ClampedArray,
@@ -84,6 +84,18 @@ export function buildNetwork(
 
   const step = cfg.gradientStep;
   const threshold = cfg.alphaThreshold;
+  const outerBand = cfg.primary.outerBand * unit;
+  const leftEdge = new Int16Array(height);
+  leftEdge.fill(-1);
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      if (alphaAt(x, y) >= threshold) {
+        leftEdge[y] = x;
+        break;
+      }
+    }
+  }
+
   const raw: Seed[] = [];
 
   for (let y = step + 1; y < height - step - 1; y++) {
@@ -111,41 +123,22 @@ export function buildNetwork(
 
       const nx = x / width;
       const ny = y / height;
-      let zone: Seed["zone"] | null = null;
+      const rowEdge = leftEdge[y];
+      if (rowEdge < 0 || x > rowEdge + outerBand) continue;
+      if (alphaAt(x + ox * 8, y + oy * 8) > threshold) continue;
       if (
-        ny >= cfg.primary.nyMin &&
-        ny <= cfg.primary.nyMax &&
-        nx <= cfg.primary.nxMax &&
-        ox <= cfg.primary.outwardXMax
+        ny < cfg.primary.nyMin ||
+        ny > cfg.primary.nyMax ||
+        nx > cfg.primary.nxMax ||
+        ox > cfg.primary.outwardXMax
       ) {
-        zone = "primary";
-      } else if (
-        ny >= cfg.secondary.nyMin &&
-        ny <= cfg.secondary.nyMax &&
-        nx >= cfg.secondary.nxMin &&
-        ox >= cfg.secondary.outwardXMin
-      ) {
-        zone = "secondary";
+        continue;
       }
-      if (!zone) continue;
-      raw.push({ x, y, ox, oy, zone });
+      raw.push({ x, y, ox, oy });
     }
   }
 
-  const primarySeeds = bucketSeeds(
-    raw.filter((seed) => seed.zone === "primary"),
-    (cfg.primary.seedSpacing * unit) / density,
-  );
-  const secondaryBand = (cfg.secondary.nyMin + cfg.secondary.nyMax) / 2;
-  const secondarySeeds = bucketSeeds(
-    raw.filter((seed) => seed.zone === "secondary"),
-    (cfg.secondary.seedSpacing * unit) / density,
-  )
-    .sort(
-      (a, b) =>
-        Math.abs(a.y / height - secondaryBand) - Math.abs(b.y / height - secondaryBand),
-    )
-    .slice(0, cfg.secondary.maxSeeds);
+  const primarySeeds = bucketSeeds(raw, (cfg.primary.seedSpacing * unit) / density);
 
   const nodes: PortraitNode[] = [];
 
@@ -156,7 +149,7 @@ export function buildNetwork(
     edgeOverlap: number,
   ) => {
     seeds.forEach((seed, seedIndex) => {
-      const count = Math.max(2, Math.round(perSeed * density));
+      const count = Math.max(1, Math.round(perSeed * density));
       for (let i = 0; i < count; i++) {
         const along = cellHash(Math.round(seed.x) + i * 17, Math.round(seed.y) + seedIndex);
         const reachJitter = cellHash(Math.round(seed.x) + 3, Math.round(seed.y) + i * 11);
@@ -171,20 +164,12 @@ export function buildNetwork(
         if (x < -width * 0.2 || y < -height * 0.06 || x > width * 1.12 || y > height * 1.06) {
           continue;
         }
-        if (alphaAt(x, y) > threshold && dist > 1) continue;
+        if (alphaAt(x, y) > 180 && dist > 4 * unit) continue;
 
         const nx = x / width;
         const ny = y / height;
         if (ny < cfg.faceNyMax) continue;
-        if (seed.zone === "primary" && nx > cfg.primaryContainNx) continue;
-        if (
-          seed.zone === "secondary" &&
-          (nx < cfg.secondaryContainNxMin ||
-            ny < cfg.secondaryContainNyMin ||
-            ny > cfg.secondaryContainNyMax)
-        ) {
-          continue;
-        }
+        if (nx > cfg.primaryContainNx) continue;
 
         const role: PortraitNodeRole =
           distance < cfg.layerMesh
@@ -197,7 +182,7 @@ export function buildNetwork(
         const onPortrait = alphaAt(x, y) > threshold;
         const gold = role !== "particle" && cellHash(Math.round(x) + i, Math.round(y) + 4) < cfg.goldRatio;
         const anchor = role === "mesh" && cellHash(i + 9, seedIndex + 3) < cfg.anchorChance;
-        const fade = 1 - distance * 0.62;
+        const fade = Math.max(0.08, 1 - distance * cfg.opacityFalloff);
         const [tr, tg, tb] = gold ? cfg.gold : onPortrait ? cfg.tealOnPortrait : cfg.teal;
         const baseAlpha = role === "particle" ? cfg.particleOpacity : cfg.nodeOpacity;
         const radius =
@@ -225,19 +210,13 @@ export function buildNetwork(
           green: tg,
           blue: tb,
           alpha: baseAlpha * fade,
-          zone: seed.zone,
+          zone: "primary",
         });
       }
     });
   };
 
   spawn(primarySeeds, cfg.primary.nodesPerSeed, cfg.primary.maxReach, cfg.primary.edgeOverlap);
-  spawn(
-    secondarySeeds,
-    cfg.secondary.nodesPerSeed,
-    cfg.secondary.maxReach,
-    cfg.secondary.edgeOverlap,
-  );
 
   const linkable: number[] = [];
   nodes.forEach((node, index) => {
@@ -255,7 +234,6 @@ export function buildNetwork(
     for (let j = i + 1; j < linkable.length; j++) {
       const ib = linkable[j];
       const b = nodes[ib];
-      if (a.zone !== b.zone) continue;
       if (Math.abs(a.distance - b.distance) > cfg.linkDistanceGap) continue;
       const d = Math.hypot(a.x - b.x, a.y - b.y);
       if (d < 4 * unit || d > reach) continue;
@@ -285,7 +263,7 @@ export function buildNetwork(
       b: pair.b,
       phase: cellHash(Math.round(a.x) + pair.b, Math.round(b.y) + pair.a) * Math.PI * 2,
       flickers,
-      alpha: cfg.lineOpacity * (1 - avg * 0.72),
+      alpha: cfg.lineOpacity * Math.max(0.08, 1 - avg * cfg.opacityFalloff),
       red: lr,
       green: lg,
       blue: lb,
