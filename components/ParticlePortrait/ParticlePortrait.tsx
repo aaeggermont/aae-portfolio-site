@@ -1,94 +1,112 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { buildNetwork, type PortraitLink, type PortraitNetwork, type PortraitNode } from "./buildNetwork";
+import { NETWORK_REF_WIDTH, networkConfig } from "./networkConfig";
+import styles from "./ParticlePortrait.module.scss";
 
-/**
- * Stippled portrait with scatter → spring-back (e.g. https://tishukov.com/).
- * WebGL1 point sprites: GPU draws many points; physics stays CPU. ~2× density (gap 4 vs 5).
- */
 type ParticlePortraitProps = {
   src: string;
   className?: string;
 };
 
-function cellHash(gx: number, gy: number): number {
-  let n = gx * 374761393 + gy * 668265263;
-  n = (n ^ (n >>> 13)) * 1274126177;
-  return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
-}
-
-function clamp01(x: number): number {
-  return Math.max(0, Math.min(1, x));
-}
-
-/** Display-space Rec. 709 luma (fast; fine for stipple sampling). */
-function luma709(r: number, g: number, b: number): number {
-  return (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-}
-
-function contrastAroundPivot(L: number, pivot: number, strength: number): number {
-  return clamp01(pivot + (L - pivot) * strength);
-}
-
-/**
- * Turn sampled photo RGB into stipple color + alpha + semantic darkness.
- * Contrast lift on luma + hue-preserving shadow scaling (not flat gray).
- */
-function stippleToneFromPixel(r: number, g: number, b: number): {
-  fr: number;
-  fg: number;
-  fb: number;
-  ca: number;
-  darkness: number;
-} {
-  let L = luma709(r, g, b);
-  L = contrastAroundPivot(L, LUMA_CONTRAST_PIVOT, LUMA_CONTRAST_STRENGTH);
-  L = clamp01(Math.pow(L, LUMA_TONE_GAMMA));
-  const darkness = 1 - L;
-
-  const rn = r / 255;
-  const gn = g / 255;
-  const bn = b / 255;
-
-  const shadowCurve = Math.pow(darkness, SHADOW_DEPTH_EXP);
-  const luminanceScale = 0.05 + 0.95 * (1 - shadowCurve * 0.95);
-
-  let tr = rn * luminanceScale;
-  let tg = gn * luminanceScale;
-  let tb = bn * luminanceScale;
-
-  const m = COLOR_MIX;
-  tr = tr * m + 0.035 * (1 - m);
-  tg = tg * m + 0.035 * (1 - m);
-  tb = tb * m + 0.04 * (1 - m);
-
-  const deep = darkness * darkness;
-  const crush = deep * 0.36;
-  tr *= 1 - crush * 0.14;
-  tg *= 1 - crush * 0.16;
-  tb *= 1 - crush * 0.07;
-
-  /* Global darken — keeps hue from tone mapping */
-  const punch = 1.78;
-  tr *= punch;
-  tg *= punch;
-  tb *= punch;
-
-  /* Higher base alpha so stipple holds weight next to large headline copy */
-  const ca =
-    0.18 +
-    Math.min(0.94, darkness * 0.97 + (1 - darkness) * 0.09);
-
-  return {
-    fr: clamp01(tr),
-    fg: clamp01(tg),
-    fb: clamp01(tb),
-    ca,
-    darkness,
-  };
-}
-
 type CoverAnchorY = "top" | "center" | "bottom";
+
+type Sim = {
+  photoW: number;
+  photoH: number;
+  padL: number;
+  padT: number;
+  canvasW: number;
+  canvasH: number;
+  dpr: number;
+  network: PortraitNetwork;
+  x: Float32Array;
+  y: Float32Array;
+  vx: Float32Array;
+  vy: Float32Array;
+  pointData: Float32Array;
+  lineData: Float32Array;
+};
+
+type GlBundle = {
+  gl: WebGLRenderingContext;
+  pointProgram: WebGLProgram;
+  lineProgram: WebGLProgram;
+  pointPos: number;
+  pointColor: number;
+  pointSize: number;
+  linePos: number;
+  lineColor: number;
+  uPointResolution: WebGLUniformLocation | null;
+  uPointDpr: WebGLUniformLocation | null;
+  uPointMaxSize: WebGLUniformLocation | null;
+  uLineResolution: WebGLUniformLocation | null;
+  pointBuffer: WebGLBuffer;
+  lineBuffer: WebGLBuffer;
+  maxPointSize: number;
+};
+
+type Pulse = {
+  nodes: number[];
+  start: number;
+};
+
+const POINT_STRIDE = 28;
+const LINE_STRIDE = 24;
+
+const POINT_VS = `
+attribute vec2 a_position;
+attribute vec4 a_color;
+attribute float a_pointSize;
+uniform vec2 u_resolution;
+uniform float u_dpr;
+uniform float u_maxPointSize;
+varying vec4 v_color;
+
+void main() {
+  float ndcX = a_position.x / u_resolution.x * 2.0 - 1.0;
+  float ndcY = 1.0 - a_position.y / u_resolution.y * 2.0;
+  gl_Position = vec4(ndcX, ndcY, 0.0, 1.0);
+  gl_PointSize = clamp(max(a_pointSize * 2.0 * u_dpr, 1.0), 1.0, u_maxPointSize);
+  v_color = a_color;
+}
+`;
+
+const POINT_FS = `
+precision mediump float;
+varying vec4 v_color;
+
+void main() {
+  float d = length(gl_PointCoord - 0.5);
+  float edge = 1.0 - smoothstep(0.42, 0.5, d);
+  if (edge < 0.01) discard;
+  gl_FragColor = vec4(v_color.rgb, v_color.a * edge);
+}
+`;
+
+const LINE_VS = `
+attribute vec2 a_position;
+attribute vec4 a_color;
+uniform vec2 u_resolution;
+varying vec4 v_color;
+
+void main() {
+  float ndcX = a_position.x / u_resolution.x * 2.0 - 1.0;
+  float ndcY = 1.0 - a_position.y / u_resolution.y * 2.0;
+  gl_Position = vec4(ndcX, ndcY, 0.0, 1.0);
+  v_color = a_color;
+}
+`;
+
+const LINE_FS = `
+precision mediump float;
+varying vec4 v_color;
+
+void main() {
+  gl_FragColor = v_color;
+}
+`;
 
 function drawImageCover(
   ctx: CanvasRenderingContext2D,
@@ -107,246 +125,149 @@ function drawImageCover(
   const sh = dH / scale;
   const sx = Math.max(0, Math.min(iw - sw, (iw - sw) * 0.5));
   let sy = 0;
-  if (anchorY === "center") {
-    sy = Math.max(0, (ih - sh) * 0.5);
-  } else if (anchorY === "bottom") {
-    sy = Math.max(0, ih - sh);
-  }
+  if (anchorY === "center") sy = Math.max(0, (ih - sh) * 0.5);
+  else if (anchorY === "bottom") sy = Math.max(0, ih - sh);
   ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dW, dH);
 }
 
-/** Stronger spring / damping help dots hug their sampled pixels under alive motion (less smear). */
-const SPRING = 0.29;
-const DAMP = 0.88;
-const MOUSE_R = 155;
-const MOUSE_PUSH = 7.2;
-/** Higher = more color straight from the photo (stands up vs hero chrome/text). */
-const COLOR_MIX = 0.74;
-/**
- * Perpetual micro-motion — keep amplitude small vs stipple gap so color samples stay aligned with marks.
- * (Large offsets read as softness because positions drift from the pixels colors were taken from.)
- */
-const ALIVE_BASE_AMP = 1.05;
-const ALIVE_TIME_SCALE = 0.00105;
-const ALIVE_FREQ_X = 1.0;
-const ALIVE_FREQ_Y = 1.19;
-const ALIVE_BREATH_PERIOD_MS = 12800;
-const TAU = Math.PI * 2;
-
-/** Push mids/shadows away from pivot so the stipple reads less flat (photo-driven). */
-const LUMA_CONTRAST_PIVOT = 0.36;
-const LUMA_CONTRAST_STRENGTH = 2.02;
-/** >1 deepens mids/shadows after contrast (stronger separation vs page background). */
-const LUMA_TONE_GAMMA = 1.16;
-/** How aggressively darker regions pull RGB toward deep shades (hue preserved). */
-const SHADOW_DEPTH_EXP = 0.68;
-
-/** Grid step (px); smaller = finer stipple / smaller marks (density ∝ 1/gap²). */
-const SAMPLE_GAP = 2;
-/** Slightly fewer random drops so edges/high-frequency detail keep coverage. */
-const SKIP_THRESHOLD = 0.97;
-
-/** Stride: rgba (4) + pointSize + shapeKind + rotation + homeYNorm = 8 floats */
-const STATIC_STRIDE = 32;
-
-/** First-load sweep (top → bottom); shader uses normalized rest Y per particle */
-const REVEAL_DURATION_MS = 3150;
-/** Sweep line in normalized home Y [0 = top, 1 = bottom]; must stay within ~[-band, 1+band] for smooth edges */
-const REVEAL_FROM = 0;
-const REVEAL_TO = 1.12;
-
-const VS = `
-attribute vec2 a_position;
-attribute vec4 a_color;
-attribute float a_pointSize;
-attribute float a_shapeKind;
-attribute float a_rotation;
-attribute float a_homeYNorm;
-uniform vec2 u_resolution;
-uniform float u_dpr;
-uniform float u_maxPointSize;
-varying vec4 v_color;
-varying float v_shapeKind;
-varying float v_rotation;
-varying float v_homeYNorm;
-
-void main() {
-  float ndcX = a_position.x / u_resolution.x * 2.0 - 1.0;
-  float ndcY = 1.0 - a_position.y / u_resolution.y * 2.0;
-  gl_Position = vec4(ndcX, ndcY, 0.0, 1.0);
-  float ps = a_pointSize * 2.0 * u_dpr;
-  gl_PointSize = clamp(max(ps, 1.0), 1.0, u_maxPointSize);
-  v_color = a_color;
-  v_shapeKind = a_shapeKind;
-  v_rotation = a_rotation;
-  v_homeYNorm = a_homeYNorm;
-}
-`;
-
-const FS = `
-precision mediump float;
-varying vec4 v_color;
-varying float v_shapeKind;
-varying float v_rotation;
-varying float v_homeYNorm;
-uniform float u_reveal;
-uniform float u_revealActive;
-
-float sdfCircle(vec2 p, float r) {
-  return length(p) - r;
-}
-
-float sdfHex(vec2 p, float r) {
-  vec2 q = abs(p);
-  return max(q.x * 0.8660254 + q.y * 0.5, q.y) - r;
-}
-
-float sdfDiamond(vec2 p, float r) {
-  return abs(p.x) + abs(p.y) - r;
-}
-
-float sdfSquircle(vec2 p, float r) {
-  vec2 q = abs(p);
-  float rr = pow(r, 2.35);
-  return pow(q.x, 2.35) + pow(q.y, 2.35) - rr;
-}
-
-void main() {
-  vec2 uv = gl_PointCoord.xy - 0.5;
-  float c = cos(v_rotation);
-  float s = sin(v_rotation);
-  vec2 p = vec2(c * uv.x - s * uv.y, s * uv.x + c * uv.y);
-
-  float d;
-  if (v_shapeKind < 0.5) {
-    d = sdfCircle(p, 0.46);
-  } else if (v_shapeKind < 1.5) {
-    d = sdfHex(p, 0.41);
-  } else if (v_shapeKind < 2.5) {
-    d = sdfDiamond(p, 0.52);
-  } else {
-    d = sdfSquircle(p, 0.42);
-  }
-
-  /* Slightly wider AA band so tiles read a touch more merged / organic */
-  float edge = 1.0 - smoothstep(-0.052, 0.052, d);
-  if (edge < 0.004) discard;
-
-  vec3 col = v_color.rgb;
-  float len = length(p);
-
-  /* Stronger chroma vs gray — matches higher COLOR_MIX on CPU */
-  float lum = dot(col, vec3(0.299, 0.587, 0.114));
-  col = mix(vec3(lum), col, 1.24);
-  col = clamp(col, 0.0, 1.0);
-
-  /* Narrow highlight range — preserves modeling but stays darker on average */
-  float light = 0.67 + 0.11 * clamp(-p.y * 1.05 - p.x * 0.42 + 0.18, 0.0, 1.0);
-  col *= light;
-
-  float dome = 1.0 - smoothstep(0.0, 0.44, len);
-  col *= 0.75 + 0.11 * dome;
-
-  float rim = exp(-(d * d) / 0.00055);
-  col *= 1.0 - rim * 0.15;
-
-  float alpha = v_color.a * edge;
-  if (u_revealActive > 0.5) {
-    float revealBand = 0.09;
-    float sw = smoothstep(u_reveal - revealBand, u_reveal + revealBand, v_homeYNorm);
-    alpha *= (1.0 - sw);
-  }
-
-  gl_FragColor = vec4(col, alpha);
-}
-`;
-
 function compileShader(gl: WebGLRenderingContext, type: number, source: string) {
-  const sh = gl.createShader(type);
-  if (!sh) return null;
-  gl.shaderSource(sh, source);
-  gl.compileShader(sh);
-  if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
-    console.error("[ParticlePortrait] shader:", gl.getShaderInfoLog(sh));
-    gl.deleteShader(sh);
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error("[ParticlePortrait] shader:", gl.getShaderInfoLog(shader));
+    gl.deleteShader(shader);
     return null;
   }
-  return sh;
+  return shader;
 }
 
-function createPointProgram(gl: WebGLRenderingContext) {
-  const vs = compileShader(gl, gl.VERTEX_SHADER, VS);
-  const fs = compileShader(gl, gl.FRAGMENT_SHADER, FS);
+function createProgram(gl: WebGLRenderingContext, vsSource: string, fsSource: string) {
+  const vs = compileShader(gl, gl.VERTEX_SHADER, vsSource);
+  const fs = compileShader(gl, gl.FRAGMENT_SHADER, fsSource);
   if (!vs || !fs) return null;
-  const prog = gl.createProgram();
-  if (!prog) return null;
-  gl.attachShader(prog, vs);
-  gl.attachShader(prog, fs);
-  gl.linkProgram(prog);
+  const program = gl.createProgram();
+  if (!program) return null;
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
   gl.deleteShader(vs);
   gl.deleteShader(fs);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    console.error("[ParticlePortrait] program:", gl.getProgramInfoLog(prog));
-    gl.deleteProgram(prog);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error("[ParticlePortrait] program:", gl.getProgramInfoLog(program));
+    gl.deleteProgram(program);
     return null;
   }
-  return prog;
+  return program;
 }
-
-type Sim = {
-  w: number;
-  h: number;
-  dpr: number;
-  n: number;
-  hx: Float32Array;
-  hy: Float32Array;
-  x: Float32Array;
-  y: Float32Array;
-  vx: Float32Array;
-  vy: Float32Array;
-  rad: Float32Array;
-  cr: Float32Array;
-  cg: Float32Array;
-  cb: Float32Array;
-  ca: Float32Array;
-  posUpload: Float32Array;
-  staticInterleaved: Float32Array;
-  /** Per-particle phase & weight for `ALIVE_*` motion (radians / 0..1). */
-  phaseAx: Float32Array;
-  phaseAy: Float32Array;
-  aliveWeight: Float32Array;
-};
-
-type GlBundle = {
-  gl: WebGLRenderingContext;
-  program: WebGLProgram;
-  aPosition: number;
-  aColor: number;
-  aPointSize: number;
-  aShapeKind: number;
-  aRotation: number;
-  aHomeYNorm: number;
-  uResolution: WebGLUniformLocation | null;
-  uDpr: WebGLUniformLocation | null;
-  uMaxPointSize: WebGLUniformLocation | null;
-  uReveal: WebGLUniformLocation | null;
-  uRevealActive: WebGLUniformLocation | null;
-  bufPos: WebGLBuffer;
-  bufStatic: WebGLBuffer;
-  maxPointSize: number;
-};
 
 function getWebGL1Context(canvas: HTMLCanvasElement): WebGLRenderingContext | null {
   const opts: WebGLContextAttributes = {
     alpha: true,
     premultipliedAlpha: false,
-    antialias: false,
+    antialias: true,
     powerPreference: "high-performance",
   };
   return (
     (canvas.getContext("webgl", opts) as WebGLRenderingContext | null) ??
     (canvas.getContext("experimental-webgl", opts) as WebGLRenderingContext | null)
   );
+}
+
+function coverAnchor(): CoverAnchorY {
+  if (typeof window === "undefined") return "bottom";
+  return window.matchMedia(`(max-width: ${networkConfig.mobileMaxWidth}px)`).matches
+    ? "top"
+    : "bottom";
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function allowsPointer() {
+  return (
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !window.matchMedia(`(max-width: ${networkConfig.mobileMaxWidth}px)`).matches
+  );
+}
+
+function densityForViewport() {
+  return window.matchMedia(`(max-width: ${networkConfig.mobileMaxWidth}px)`).matches
+    ? networkConfig.mobileDensity
+    : 1;
+}
+
+function writeLineQuad(
+  data: Float32Array,
+  vertex: number,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  red: number,
+  green: number,
+  blue: number,
+  alpha: number,
+  width: number,
+) {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.hypot(dx, dy) || 1;
+  const px = (-dy / len) * (width * 0.5);
+  const py = (dx / len) * (width * 0.5);
+  const corners = [
+    [x1 + px, y1 + py],
+    [x1 - px, y1 - py],
+    [x2 - px, y2 - py],
+    [x1 + px, y1 + py],
+    [x2 - px, y2 - py],
+    [x2 + px, y2 + py],
+  ];
+  for (let i = 0; i < corners.length; i++) {
+    const o = (vertex + i) * 6;
+    data[o] = corners[i][0];
+    data[o + 1] = corners[i][1];
+    data[o + 2] = red;
+    data[o + 3] = green;
+    data[o + 4] = blue;
+    data[o + 5] = alpha;
+  }
+}
+
+function pickPulse(network: PortraitNetwork, now: number): Pulse | null {
+  const { nodes, neighbors } = network;
+  const starts: number[] = [];
+  for (let i = 0; i < nodes.length; i++) {
+    if ((nodes[i].role === "mesh" || nodes[i].role === "node") && neighbors[i].length > 0) {
+      starts.push(i);
+    }
+  }
+  if (!starts.length) return null;
+  let current = starts[Math.floor(Math.random() * starts.length)];
+  const path = [current];
+  const used = new Set([current]);
+  for (let step = 0; step < networkConfig.pulseSteps; step++) {
+    const next = neighbors[current].find((index) => !used.has(index));
+    if (next == null) break;
+    used.add(next);
+    path.push(next);
+    current = next;
+  }
+  if (path.length < 2) return null;
+  return { nodes: path, start: now };
+}
+
+function linkPulseBoost(link: PortraitLink, pulse: Pulse | null, now: number) {
+  if (!pulse) return 0;
+  const ia = pulse.nodes.indexOf(link.a);
+  const ib = pulse.nodes.indexOf(link.b);
+  if (ia < 0 || ib < 0 || Math.abs(ia - ib) !== 1) return 0;
+  const order = Math.min(ia, ib) / Math.max(1, pulse.nodes.length - 1);
+  const u = (now - pulse.start) / networkConfig.pulseDurationMs;
+  const hot = Math.exp(-((u - order) ** 2) / 0.018);
+  return hot * networkConfig.pulseBoost;
 }
 
 export default function ParticlePortrait({ src, className }: ParticlePortraitProps) {
@@ -356,24 +277,23 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
   const rafRef = useRef(0);
   const simRef = useRef<Sim | null>(null);
   const glBundleRef = useRef<GlBundle | null>(null);
-  const introRevealDoneRef = useRef(false);
-  const revealStartMsRef = useRef<number | null>(null);
-  const prevLayoutDimsRef = useRef<{ w: number; h: number } | null>(null);
+  const reducedRef = useRef(false);
+  const pointerRef = useRef(false);
+  const visibleRef = useRef(true);
+  const pulseRef = useRef<Pulse | null>(null);
+  const lastPulseRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const wrap = wrapRef.current ?? canvas?.parentElement;
     if (!canvas || !wrap) return;
 
-    prevLayoutDimsRef.current = null;
-    introRevealDoneRef.current = false;
-    revealStartMsRef.current = null;
-
     let disposed = false;
     const teardown: (() => void)[] = [];
+    reducedRef.current = prefersReducedMotion();
+    pointerRef.current = allowsPointer() && !reducedRef.current;
 
     const image = new Image();
-    image.src = src;
     image.crossOrigin = "anonymous";
 
     const stopLoop = () => {
@@ -384,12 +304,13 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
     };
 
     function releaseGl() {
-      const b = glBundleRef.current;
-      if (!b) return;
-      const { gl, program, bufPos, bufStatic } = b;
-      gl.deleteBuffer(bufPos);
-      gl.deleteBuffer(bufStatic);
-      gl.deleteProgram(program);
+      const bundle = glBundleRef.current;
+      if (!bundle) return;
+      const { gl, pointProgram, lineProgram, pointBuffer, lineBuffer } = bundle;
+      gl.deleteBuffer(pointBuffer);
+      gl.deleteBuffer(lineBuffer);
+      gl.deleteProgram(pointProgram);
+      gl.deleteProgram(lineProgram);
       glBundleRef.current = null;
     }
 
@@ -399,26 +320,15 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         console.error("[ParticlePortrait] WebGL unavailable");
         return null;
       }
-      const program = createPointProgram(gl);
-      if (!program) return null;
-
-      const aPosition = gl.getAttribLocation(program, "a_position");
-      const aColor = gl.getAttribLocation(program, "a_color");
-      const aPointSize = gl.getAttribLocation(program, "a_pointSize");
-      const aShapeKind = gl.getAttribLocation(program, "a_shapeKind");
-      const aRotation = gl.getAttribLocation(program, "a_rotation");
-      const aHomeYNorm = gl.getAttribLocation(program, "a_homeYNorm");
-      const uResolution = gl.getUniformLocation(program, "u_resolution");
-      const uDpr = gl.getUniformLocation(program, "u_dpr");
-      const uMaxPointSize = gl.getUniformLocation(program, "u_maxPointSize");
-      const uReveal = gl.getUniformLocation(program, "u_reveal");
-      const uRevealActive = gl.getUniformLocation(program, "u_revealActive");
+      const pointProgram = createProgram(gl, POINT_VS, POINT_FS);
+      const lineProgram = createProgram(gl, LINE_VS, LINE_FS);
+      if (!pointProgram || !lineProgram) return null;
 
       const range = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE) as Float32Array;
       const maxPointSize = Math.min(127, range[1] ?? 127);
-
-      const bufPos = gl.createBuffer()!;
-      const bufStatic = gl.createBuffer()!;
+      const pointBuffer = gl.createBuffer();
+      const lineBuffer = gl.createBuffer();
+      if (!pointBuffer || !lineBuffer) return null;
 
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -426,237 +336,157 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
 
       return {
         gl,
-        program,
-        aPosition,
-        aColor,
-        aPointSize,
-        aShapeKind,
-        aRotation,
-        aHomeYNorm,
-        uResolution,
-        uDpr,
-        uMaxPointSize,
-        uReveal,
-        uRevealActive,
-        bufPos,
-        bufStatic,
+        pointProgram,
+        lineProgram,
+        pointPos: gl.getAttribLocation(pointProgram, "a_position"),
+        pointColor: gl.getAttribLocation(pointProgram, "a_color"),
+        pointSize: gl.getAttribLocation(pointProgram, "a_pointSize"),
+        linePos: gl.getAttribLocation(lineProgram, "a_position"),
+        lineColor: gl.getAttribLocation(lineProgram, "a_color"),
+        uPointResolution: gl.getUniformLocation(pointProgram, "u_resolution"),
+        uPointDpr: gl.getUniformLocation(pointProgram, "u_dpr"),
+        uPointMaxSize: gl.getUniformLocation(pointProgram, "u_maxPointSize"),
+        uLineResolution: gl.getUniformLocation(lineProgram, "u_resolution"),
+        pointBuffer,
+        lineBuffer,
         maxPointSize,
       };
     }
 
-    function bindAttribsAndDraw(b: GlBundle, sim: Sim) {
-      const {
-        gl,
-        program,
-        aPosition,
-        aColor,
-        aPointSize,
-        aShapeKind,
-        aRotation,
-        aHomeYNorm,
-        uResolution,
-        uDpr,
-        uMaxPointSize,
-        uReveal,
-        uRevealActive,
-        bufPos,
-        bufStatic,
-      } = b;
-      const { w, h, dpr, n } = sim;
+    function uploadAndDraw(bundle: GlBundle, sim: Sim) {
+      const { gl } = bundle;
+      const { network, canvasW, canvasH, dpr, padL, padT } = sim;
+      const n = network.nodes.length;
+      const reduced = reducedRef.current;
+      const now = performance.now();
+      const unit = sim.photoW / NETWORK_REF_WIDTH;
+
+      if (!reduced && visibleRef.current) {
+        const driftT = now * networkConfig.driftTimeScale;
+        const mx = mouseRef.current.x;
+        const my = mouseRef.current.y;
+        const pointerRadius = networkConfig.pointerRadius * unit;
+        const pointerInfluence = networkConfig.pointerInfluence * unit;
+        const usePointer = pointerRef.current;
+
+        for (let i = 0; i < n; i++) {
+          const node = network.nodes[i];
+          const amp =
+            (node.role === "particle" ? networkConfig.driftAmplitude * 1.4 : networkConfig.driftAmplitude) *
+            unit;
+          let tx = node.x + amp * Math.sin(driftT + node.phase);
+          let ty = node.y + amp * Math.cos(driftT * 1.13 + node.phase);
+          if (node.role === "particle") {
+            const creep = (0.5 + 0.5 * Math.sin(driftT * 0.65 + node.phase)) * networkConfig.particleDrift * unit;
+            tx += node.outwardX * creep;
+            ty += node.outwardY * creep;
+          }
+          if (usePointer) {
+            const pdx = mx - node.x;
+            const pdy = my - node.y;
+            const dist = Math.hypot(pdx, pdy);
+            if (dist > 0.5 && dist < pointerRadius) {
+              const falloff = (1 - dist / pointerRadius) ** 2;
+              tx += (pdx / dist) * pointerInfluence * falloff;
+              ty += (pdy / dist) * pointerInfluence * falloff;
+            }
+          }
+
+          const nvx = (sim.vx[i] + (tx - sim.x[i]) * networkConfig.spring) * networkConfig.damp;
+          const nvy = (sim.vy[i] + (ty - sim.y[i]) * networkConfig.spring) * networkConfig.damp;
+          sim.vx[i] = nvx;
+          sim.vy[i] = nvy;
+          sim.x[i] += nvx;
+          sim.y[i] += nvy;
+        }
+
+        if (!pulseRef.current && now - lastPulseRef.current > networkConfig.pulseIntervalMs) {
+          pulseRef.current = pickPulse(network, now);
+          if (!pulseRef.current) lastPulseRef.current = now;
+        } else if (
+          pulseRef.current &&
+          now - pulseRef.current.start > networkConfig.pulseDurationMs
+        ) {
+          pulseRef.current = null;
+          lastPulseRef.current = now;
+        }
+      }
+
+      const pulse = reduced ? null : pulseRef.current;
+      for (let i = 0; i < n; i++) {
+        const node = network.nodes[i];
+        let alpha = node.alpha;
+        if (pulse && pulse.nodes.includes(i)) {
+          const order = pulse.nodes.indexOf(i) / Math.max(1, pulse.nodes.length - 1);
+          const u = (now - pulse.start) / networkConfig.pulseDurationMs;
+          alpha = Math.min(1, alpha + Math.exp(-((u - order) ** 2) / 0.02) * 0.28);
+        }
+        const o = i * 7;
+        sim.pointData[o] = sim.x[i] + padL;
+        sim.pointData[o + 1] = sim.y[i] + padT;
+        sim.pointData[o + 2] = node.red;
+        sim.pointData[o + 3] = node.green;
+        sim.pointData[o + 4] = node.blue;
+        sim.pointData[o + 5] = alpha;
+        sim.pointData[o + 6] = node.radius;
+      }
+
+      const lineWidth = networkConfig.lineWidth * (0.85 + 0.15 * Math.min(unit, 1.2));
+      for (let i = 0; i < network.links.length; i++) {
+        const link = network.links[i];
+        let alpha = link.alpha;
+        if (!reduced && link.flickers) {
+          const wave = 0.5 + 0.5 * Math.sin(now * networkConfig.linkFlickerSpeed + link.phase);
+          alpha *= 0.18 + 0.82 * wave;
+        }
+        if (!reduced) alpha = Math.min(0.92, alpha + linkPulseBoost(link, pulse, now));
+        writeLineQuad(
+          sim.lineData,
+          i * 6,
+          sim.x[link.a] + padL,
+          sim.y[link.a] + padT,
+          sim.x[link.b] + padL,
+          sim.y[link.b] + padT,
+          link.red,
+          link.green,
+          link.blue,
+          alpha,
+          lineWidth,
+        );
+      }
 
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
 
-      gl.useProgram(program);
-      gl.uniform2f(uResolution, w, h);
-      gl.uniform1f(uDpr, dpr);
-      gl.uniform1f(uMaxPointSize, b.maxPointSize);
-
-      let reveal = REVEAL_TO;
-      let revealActive = 0;
-      if (!introRevealDoneRef.current && revealStartMsRef.current != null && uReveal && uRevealActive) {
-        revealActive = 1;
-        const elapsed = performance.now() - revealStartMsRef.current;
-        const t = Math.min(1, elapsed / REVEAL_DURATION_MS);
-        const ease = 1 - (1 - t) ** 3;
-        reveal = REVEAL_FROM + (REVEAL_TO - REVEAL_FROM) * ease;
-        if (t >= 1) {
-          introRevealDoneRef.current = true;
-          revealActive = 0;
-        }
-      }
-      gl.uniform1f(uReveal, reveal);
-      gl.uniform1f(uRevealActive, revealActive);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, bufStatic);
-      gl.enableVertexAttribArray(aColor);
-      gl.vertexAttribPointer(aColor, 4, gl.FLOAT, false, STATIC_STRIDE, 0);
-      gl.enableVertexAttribArray(aPointSize);
-      gl.vertexAttribPointer(aPointSize, 1, gl.FLOAT, false, STATIC_STRIDE, 16);
-      gl.enableVertexAttribArray(aShapeKind);
-      gl.vertexAttribPointer(aShapeKind, 1, gl.FLOAT, false, STATIC_STRIDE, 20);
-      gl.enableVertexAttribArray(aRotation);
-      gl.vertexAttribPointer(aRotation, 1, gl.FLOAT, false, STATIC_STRIDE, 24);
-      gl.enableVertexAttribArray(aHomeYNorm);
-      gl.vertexAttribPointer(aHomeYNorm, 1, gl.FLOAT, false, STATIC_STRIDE, 28);
-
-      gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
-      gl.enableVertexAttribArray(aPosition);
-      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
-
-      gl.drawArrays(gl.POINTS, 0, n);
-    }
-
-    function uploadBuffersOnce(b: GlBundle, sim: Sim) {
-      const { gl, bufPos, bufStatic } = b;
-      gl.bindBuffer(gl.ARRAY_BUFFER, bufStatic);
-      gl.bufferData(gl.ARRAY_BUFFER, sim.staticInterleaved, gl.STATIC_DRAW);
-      gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
-      gl.bufferData(gl.ARRAY_BUFFER, sim.posUpload, gl.DYNAMIC_DRAW);
-    }
-
-    function uploadPositionsOnly(b: GlBundle, sim: Sim) {
-      const { gl, bufPos } = b;
-      gl.bindBuffer(gl.ARRAY_BUFFER, bufPos);
-      gl.bufferSubData(gl.ARRAY_BUFFER, 0, sim.posUpload);
-    }
-
-    const buildSim = (w: number, h: number, dpr: number, pixels: Uint8ClampedArray) => {
-      const gap = SAMPLE_GAP;
-      const jitter = gap * 0.15;
-
-      const hxList: number[] = [];
-      const hyList: number[] = [];
-      const radList: number[] = [];
-      const crList: number[] = [];
-      const cgList: number[] = [];
-      const cbList: number[] = [];
-      const caList: number[] = [];
-      const shapeKindList: number[] = [];
-      const rotationList: number[] = [];
-      const phaseAxList: number[] = [];
-      const phaseAyList: number[] = [];
-      const aliveWeightList: number[] = [];
-
-      let gy = 0;
-      for (let y = 0; y < h; y += gap, gy++) {
-        let gx = 0;
-        for (let x = 0; x < w; x += gap, gx++) {
-          if (cellHash(gx, gy) > SKIP_THRESHOLD) continue;
-
-          const jx = (cellHash(gx + 17, gy + 3) - 0.5) * jitter;
-          const jy = (cellHash(gx, gy + 9) - 0.5) * jitter;
-          const px = Math.min(w - 1, Math.max(0, Math.round(x + jx)));
-          const py = Math.min(h - 1, Math.max(0, Math.round(y + jy)));
-
-          const index = (py * w + px) * 4;
-          const r = pixels[index];
-          const g = pixels[index + 1];
-          const b = pixels[index + 2];
-          const alpha = pixels[index + 3];
-
-          if (alpha < 38) continue;
-
-          const tone = stippleToneFromPixel(r, g, b);
-          const { fr, fg, fb, ca, darkness } = tone;
-          if (darkness < 0.048) continue;
-
-          const breathe = 0.93 + cellHash(gx + 31, gy + 7) * 0.12;
-          /* Smaller gl_PointSize → more facial detail; caps stay within typical GPU point limits */
-          const rad = Math.min(
-            0.92,
-            Math.max(0.18, (0.07 + darkness * darkness * 1.68) * breathe),
-          );
-
-          const hShape = cellHash(gx + 101, gy + 47);
-          const shapeKind = hShape < 0.26 ? 0 : hShape < 0.52 ? 1 : hShape < 0.76 ? 2 : 3;
-          const rotation = cellHash(gx + 3, gy + 88) * Math.PI * 2;
-
-          hxList.push(px);
-          hyList.push(py);
-          radList.push(rad);
-          crList.push(fr);
-          cgList.push(fg);
-          cbList.push(fb);
-          caList.push(ca);
-          shapeKindList.push(shapeKind);
-          rotationList.push(rotation);
-          phaseAxList.push(cellHash(gx + 11, gy + 22) * TAU);
-          phaseAyList.push(cellHash(gx + 79, gy + 41) * TAU);
-          aliveWeightList.push(0.62 + cellHash(gx + 3, gy + 99) * 0.38);
-        }
+      if (network.links.length > 0) {
+        gl.useProgram(bundle.lineProgram);
+        gl.uniform2f(bundle.uLineResolution, canvasW, canvasH);
+        gl.bindBuffer(gl.ARRAY_BUFFER, bundle.lineBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, sim.lineData, gl.DYNAMIC_DRAW);
+        gl.enableVertexAttribArray(bundle.linePos);
+        gl.vertexAttribPointer(bundle.linePos, 2, gl.FLOAT, false, LINE_STRIDE, 0);
+        gl.enableVertexAttribArray(bundle.lineColor);
+        gl.vertexAttribPointer(bundle.lineColor, 4, gl.FLOAT, false, LINE_STRIDE, 8);
+        gl.drawArrays(gl.TRIANGLES, 0, network.links.length * 6);
       }
 
-      const n = hxList.length;
-      const hx = new Float32Array(n);
-      const hy = new Float32Array(n);
-      const x = new Float32Array(n);
-      const y = new Float32Array(n);
-      const vx = new Float32Array(n);
-      const vy = new Float32Array(n);
-      const rad = new Float32Array(n);
-      const cr = new Float32Array(n);
-      const cg = new Float32Array(n);
-      const cb = new Float32Array(n);
-      const ca = new Float32Array(n);
-      const invH = h > 1 ? 1 / (h - 1) : 1;
-      const staticInterleaved = new Float32Array(n * 8);
-      const posUpload = new Float32Array(n * 2);
-      const phaseAx = new Float32Array(n);
-      const phaseAy = new Float32Array(n);
-      const aliveWeight = new Float32Array(n);
-
-      for (let i = 0; i < n; i++) {
-        hx[i] = hxList[i];
-        hy[i] = hyList[i];
-        x[i] = hxList[i];
-        y[i] = hyList[i];
-        rad[i] = radList[i];
-        cr[i] = crList[i];
-        cg[i] = cgList[i];
-        cb[i] = cbList[i];
-        ca[i] = caList[i];
-        phaseAx[i] = phaseAxList[i];
-        phaseAy[i] = phaseAyList[i];
-        aliveWeight[i] = aliveWeightList[i];
-        const homeYNorm = hy[i] * invH;
-        const o = i * 8;
-        staticInterleaved[o] = cr[i];
-        staticInterleaved[o + 1] = cg[i];
-        staticInterleaved[o + 2] = cb[i];
-        staticInterleaved[o + 3] = ca[i];
-        staticInterleaved[o + 4] = rad[i];
-        staticInterleaved[o + 5] = shapeKindList[i];
-        staticInterleaved[o + 6] = rotationList[i];
-        staticInterleaved[o + 7] = homeYNorm;
-        posUpload[i * 2] = x[i];
-        posUpload[i * 2 + 1] = y[i];
+      if (n > 0) {
+        gl.useProgram(bundle.pointProgram);
+        gl.uniform2f(bundle.uPointResolution, canvasW, canvasH);
+        gl.uniform1f(bundle.uPointDpr, dpr);
+        gl.uniform1f(bundle.uPointMaxSize, bundle.maxPointSize);
+        gl.bindBuffer(gl.ARRAY_BUFFER, bundle.pointBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, sim.pointData, gl.DYNAMIC_DRAW);
+        gl.enableVertexAttribArray(bundle.pointPos);
+        gl.vertexAttribPointer(bundle.pointPos, 2, gl.FLOAT, false, POINT_STRIDE, 0);
+        gl.enableVertexAttribArray(bundle.pointColor);
+        gl.vertexAttribPointer(bundle.pointColor, 4, gl.FLOAT, false, POINT_STRIDE, 8);
+        gl.enableVertexAttribArray(bundle.pointSize);
+        gl.vertexAttribPointer(bundle.pointSize, 1, gl.FLOAT, false, POINT_STRIDE, 24);
+        gl.drawArrays(gl.POINTS, 0, n);
       }
-
-      simRef.current = {
-        w,
-        h,
-        dpr,
-        n,
-        hx,
-        hy,
-        x,
-        y,
-        vx,
-        vy,
-        rad,
-        cr,
-        cg,
-        cb,
-        ca,
-        posUpload,
-        staticInterleaved,
-        phaseAx,
-        phaseAy,
-        aliveWeight,
-      };
-    };
+    }
 
     const drawFrame = () => {
       if (disposed) {
@@ -664,127 +494,108 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
         return;
       }
       const sim = simRef.current;
-      const b = glBundleRef.current;
-      if (!sim || !b || !canvas) return;
-
-      const { n, hx, hy, x, y, vx, vy, posUpload, phaseAx, phaseAy, aliveWeight } = sim;
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-
-      const nowMs = performance.now();
-      const t = nowMs * ALIVE_TIME_SCALE;
-      const breath =
-        0.96 + 0.04 * Math.sin((nowMs / ALIVE_BREATH_PERIOD_MS) * TAU);
-
-      for (let i = 0; i < n; i++) {
-        const amp = ALIVE_BASE_AMP * aliveWeight[i] * breath;
-        const ox = amp * Math.sin(ALIVE_FREQ_X * t + phaseAx[i]);
-        const oy = amp * Math.cos(ALIVE_FREQ_Y * t + phaseAy[i]);
-        let fx = (hx[i] + ox - x[i]) * SPRING;
-        let fy = (hy[i] + oy - y[i]) * SPRING;
-
-        const dx = x[i] - mx;
-        const dy = y[i] - my;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist > 0.5 && dist < MOUSE_R) {
-          const falloff = 1 - dist / MOUSE_R;
-          const push = MOUSE_PUSH * falloff * falloff;
-          fx += (dx / dist) * push;
-          fy += (dy / dist) * push;
-        }
-
-        const nvx = (vx[i] + fx) * DAMP;
-        const nvy = (vy[i] + fy) * DAMP;
-        vx[i] = nvx;
-        vy[i] = nvy;
-        x[i] += nvx;
-        y[i] += nvy;
-
-        posUpload[i * 2] = x[i];
-        posUpload[i * 2 + 1] = y[i];
+      const bundle = glBundleRef.current;
+      if (!sim || !bundle) return;
+      uploadAndDraw(bundle, sim);
+      if (disposed || reducedRef.current || !visibleRef.current) {
+        stopLoop();
+        return;
       }
-
-      uploadPositionsOnly(b, sim);
-      bindAttribsAndDraw(b, sim);
-
-      if (disposed) return;
       rafRef.current = requestAnimationFrame(drawFrame);
     };
 
     const kickLoop = () => {
+      if (reducedRef.current || !visibleRef.current) {
+        const sim = simRef.current;
+        const bundle = glBundleRef.current;
+        if (sim && bundle) uploadAndDraw(bundle, sim);
+        return;
+      }
       if (rafRef.current) return;
       rafRef.current = requestAnimationFrame(drawFrame);
     };
 
     const layoutAndSeed = () => {
-      if (disposed) return;
-      const w = Math.max(1, Math.floor(wrap.clientWidth));
-      const h = Math.max(1, Math.floor(wrap.clientHeight));
-      const dpr = window.devicePixelRatio || 1;
-
-      const prev = prevLayoutDimsRef.current;
-      if (prev && (prev.w !== w || prev.h !== h)) {
-        introRevealDoneRef.current = true;
-      }
-      prevLayoutDimsRef.current = { w, h };
-
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-
-      const offscreen = document.createElement("canvas");
-      const offCtx = offscreen.getContext("2d");
-      if (!offCtx) return;
-
-      offscreen.width = w;
-      offscreen.height = h;
-      const isMobilePortrait = window.matchMedia("(max-width: 767px)").matches;
-      drawImageCover(
-        offCtx,
-        image,
-        0,
-        0,
-        w,
-        h,
-        isMobilePortrait ? "top" : "bottom",
-      );
-      const pixels = offCtx.getImageData(0, 0, w, h).data;
+      if (disposed || !image.complete || !image.naturalWidth) return;
+      const photoW = Math.floor(wrap.clientWidth);
+      const photoH = Math.floor(wrap.clientHeight);
+      if (photoW < 2 || photoH < 2) return;
 
       stopLoop();
       releaseGl();
 
+      const padL = photoW * networkConfig.padLeft;
+      const padR = photoW * networkConfig.padRight;
+      const padT = photoH * networkConfig.padTop;
+      const padB = photoH * networkConfig.padBottom;
+      const canvasW = photoW + padL + padR;
+      const canvasH = photoH + padT + padB;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.max(1, Math.floor(canvasW * dpr));
+      canvas.height = Math.max(1, Math.floor(canvasH * dpr));
+      canvas.style.width = `${canvasW}px`;
+      canvas.style.height = `${canvasH}px`;
+      canvas.style.left = `${-padL}px`;
+      canvas.style.top = `${-padT}px`;
+
+      const offscreen = document.createElement("canvas");
+      offscreen.width = photoW;
+      offscreen.height = photoH;
+      const offCtx = offscreen.getContext("2d", { willReadFrequently: true });
+      if (!offCtx) return;
+      drawImageCover(offCtx, image, 0, 0, photoW, photoH, coverAnchor());
+      const pixels = offCtx.getImageData(0, 0, photoW, photoH).data;
+      const network = buildNetwork(pixels, photoW, photoH, densityForViewport());
+      const count = network.nodes.length;
+
+      const x = new Float32Array(count);
+      const y = new Float32Array(count);
+      for (let i = 0; i < count; i++) {
+        x[i] = network.nodes[i].x;
+        y[i] = network.nodes[i].y;
+      }
+
+      simRef.current = {
+        photoW,
+        photoH,
+        padL,
+        padT,
+        canvasW,
+        canvasH,
+        dpr,
+        network,
+        x,
+        y,
+        vx: new Float32Array(count),
+        vy: new Float32Array(count),
+        pointData: new Float32Array(count * 7),
+        lineData: new Float32Array(Math.max(1, network.links.length) * 6 * 6),
+      };
+
       const bundle = initGl(canvas);
       if (!bundle) return;
       glBundleRef.current = bundle;
-
-      buildSim(w, h, dpr, pixels);
-      const sim = simRef.current;
-      if (!sim) return;
-      if (!introRevealDoneRef.current) {
-        revealStartMsRef.current = performance.now();
-      }
-      uploadBuffersOnce(bundle, sim);
-      bindAttribsAndDraw(bundle, sim);
-      if (typeof document === "undefined" || !document.hidden) {
-        kickLoop();
-      }
+      pulseRef.current = null;
+      lastPulseRef.current = performance.now();
+      kickLoop();
     };
 
-    const onContextLost = (e: Event) => {
-      e.preventDefault();
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
       stopLoop();
       releaseGl();
       simRef.current = null;
     };
 
     const onContextRestored = () => {
-      if (disposed) return;
-      layoutAndSeed();
+      if (!disposed) layoutAndSeed();
     };
 
-    image.onload = () => {
-      if (disposed) return;
+    let started = false;
+    const start = () => {
+      if (started || disposed) return;
+      started = true;
       canvas.addEventListener("webglcontextlost", onContextLost, false);
       canvas.addEventListener("webglcontextrestored", onContextRestored, false);
       teardown.push(() => {
@@ -800,46 +611,90 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
       document.addEventListener("visibilitychange", onVisibility);
       teardown.push(() => document.removeEventListener("visibilitychange", onVisibility));
 
-      layoutAndSeed();
-
-      const onResize = () => layoutAndSeed();
-
-      const onMove = (event: MouseEvent) => {
-        const rect = canvas.getBoundingClientRect();
-        mouseRef.current = {
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
-        };
-        kickLoop();
-      };
-
-      const onLeave = () => {
+      const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const onMotion = () => {
+        reducedRef.current = motionQuery.matches;
+        pointerRef.current = allowsPointer() && !reducedRef.current;
+        if (reducedRef.current) {
+          pulseRef.current = null;
+          const sim = simRef.current;
+          if (sim) {
+            for (let i = 0; i < sim.network.nodes.length; i++) {
+              sim.x[i] = sim.network.nodes[i].x;
+              sim.y[i] = sim.network.nodes[i].y;
+              sim.vx[i] = 0;
+              sim.vy[i] = 0;
+            }
+          }
+        }
         mouseRef.current = { x: -9999, y: -9999 };
         kickLoop();
       };
+      motionQuery.addEventListener("change", onMotion);
+      teardown.push(() => motionQuery.removeEventListener("change", onMotion));
 
-      window.addEventListener("resize", onResize);
-      canvas.addEventListener("mousemove", onMove);
-      canvas.addEventListener("mouseleave", onLeave);
+      const onMove = (event: MouseEvent) => {
+        if (!pointerRef.current) return;
+        const sim = simRef.current;
+        if (!sim) return;
+        const rect = canvas.getBoundingClientRect();
+        if (
+          event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom
+        ) {
+          mouseRef.current = { x: -9999, y: -9999 };
+          return;
+        }
+        const scaleX = rect.width > 0 ? sim.canvasW / rect.width : 1;
+        const scaleY = rect.height > 0 ? sim.canvasH / rect.height : 1;
+        mouseRef.current = {
+          x: (event.clientX - rect.left) * scaleX - sim.padL,
+          y: (event.clientY - rect.top) * scaleY - sim.padT,
+        };
+      };
+      window.addEventListener("mousemove", onMove);
+      teardown.push(() => window.removeEventListener("mousemove", onMove));
 
-      const ro =
-        typeof ResizeObserver !== "undefined"
-          ? new ResizeObserver(() => {
-              if (!disposed) layoutAndSeed();
-            })
-          : null;
+      let layoutRaf = 0;
+      const scheduleLayout = () => {
+        if (layoutRaf) return;
+        layoutRaf = requestAnimationFrame(() => {
+          layoutRaf = 0;
+          if (!disposed) layoutAndSeed();
+        });
+      };
+
+      layoutAndSeed();
+      window.addEventListener("resize", scheduleLayout);
+      const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(() => scheduleLayout()) : null;
       ro?.observe(wrap);
 
+      const io =
+        typeof IntersectionObserver !== "undefined"
+          ? new IntersectionObserver(([entry]) => {
+              visibleRef.current = entry.isIntersecting;
+              if (!entry.isIntersecting) stopLoop();
+              else kickLoop();
+            })
+          : null;
+      io?.observe(wrap);
+
       teardown.push(() => {
-        window.removeEventListener("resize", onResize);
-        canvas.removeEventListener("mousemove", onMove);
-        canvas.removeEventListener("mouseleave", onLeave);
+        window.removeEventListener("resize", scheduleLayout);
+        if (layoutRaf) cancelAnimationFrame(layoutRaf);
         ro?.disconnect();
+        io?.disconnect();
         stopLoop();
         releaseGl();
         simRef.current = null;
       });
     };
+
+    image.onload = start;
+    image.src = src;
+    if (image.complete && image.naturalWidth) start();
 
     return () => {
       disposed = true;
@@ -849,8 +704,9 @@ export default function ParticlePortrait({ src, className }: ParticlePortraitPro
   }, [src]);
 
   return (
-    <div ref={wrapRef} className={className}>
-      <canvas ref={canvasRef} />
+    <div ref={wrapRef} className={[styles.portrait, className].filter(Boolean).join(" ")}>
+      <img src={src} alt="Portrait of Antonio Aranda Eggermont" className={styles.photo} draggable={false} />
+      <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
     </div>
   );
 }

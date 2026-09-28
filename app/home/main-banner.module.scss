@@ -129,7 +129,7 @@
     width: auto;
     max-width: none;
     padding: 2.5rem 0;
-    z-index: 2;
+    z-index: 3;
 
     @media screen and (min-width: 1258px) {
       /* Prefer headline width, but keep a usable portrait size */
@@ -155,8 +155,7 @@
     height: auto;
     max-height: min(71.9vh, 689px);
     z-index: 2;
-    filter: drop-shadow(0 22px 48px rgba(15, 23, 42, 0.22))
-      drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
+    overflow: visible;
 
     @media screen and (min-width: 1258px) {
       flex: 0 0 auto;
@@ -179,7 +178,6 @@
       flex: 0 0 auto;
       /* ~10% of portrait height — margin avoids fighting GSAP transform on this node */
       margin: -1.875rem 0 0;
-      filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
 
       /* Wide mobile / large-phone edge (e.g. 767px): portrait was undersized vs full-width copy */
       @media (min-width: 600px) {
@@ -190,35 +188,9 @@
     }
   }
 
-  .blobMask {
-    position: relative;        // important for Image fill layout
+  .bannerPortrait {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    mask-image: url("/home/images/blob-mask.svg");
-    /* Slightly wider + lower than pure cover: softens the “round plate” at the bottom edge */
-    mask-size: 124% 108%;
-    mask-repeat: no-repeat;
-    mask-position: center 38%;
-    -webkit-mask-image: url("/home/images/blob-mask.svg");
-    -webkit-mask-size: 124% 108%;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center 38%;
-
-    @media screen and #{$mobile} {
-      mask-size: 118% 104%;
-      mask-position: center 44%;
-      -webkit-mask-size: 118% 104%;
-      -webkit-mask-position: center 44%;
-    }
-  }
-
-  .bannerPhotoImage {
-    width: 100%;
-    height: 100%;
-    display: block;
-    min-height: 0;
-    object-fit: cover;
   }
 
   .helloText {

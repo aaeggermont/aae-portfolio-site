@@ -7,7 +7,6 @@ import gsap from "gsap";
 import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
 import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
 import styles from "./main-banner.module.scss";
-import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from "typewriter-effect";
 import { backgroundFloatImages } from "./background-float-images";
 import type { MainBannerData } from "./data/main-banner-data";
@@ -212,26 +211,11 @@ function MainBanner({ banner }: MainBannerProps) {
       </div>
 
       {/* Photo side */}
-      <div
-        ref={photoRef}
-        className={styles.bannerPhoto}
-      >
-        <div className={styles.blobMask}>
+      <div ref={photoRef} className={styles.bannerPhoto}>
         <ParticlePortrait
           src="/images/ProfilePhoto.png"
-          className={styles.bannerPhotoImage}
-    />
-
-          {/* eslint-disable-next-line @next/next/no-img-element
-          <Image
-            src={AntonioBannerPhoto}
-            alt="Portrait of Antonio Aranda Eggermont"
-            fill
-            priority
-            className={styles.bannerPhotoImage}
-            sizes="(max-width: 767px) 70vw, (max-width: 1023px) 40vw, 26vw"
-          /> */}
-        </div>
+          className={styles.bannerPortrait}
+        />
       </div>
       </div>
     </section>
