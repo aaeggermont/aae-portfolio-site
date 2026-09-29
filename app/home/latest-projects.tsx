@@ -101,9 +101,13 @@ function LatestProjects() {
         </Swiper>
 
         <div className={styles.viewAllWorkContainer}>
-          <Link href="/mywork" className={styles.viewAllWorkButton}>
+          <Link href="/aboutme" className={`${styles.sectionLink} ${styles.sectionLinkAmber}`}>
+            <span>About me</span>
+            <ArrowForwardIcon aria-hidden className={styles.sectionLinkIcon} />
+          </Link>
+          <Link href="/mywork" className={`${styles.sectionLink} ${styles.sectionLinkNavy}`}>
             <span>View all work</span>
-            <ArrowForwardIcon aria-hidden className={styles.viewAllWorkIcon} />
+            <ArrowForwardIcon aria-hidden className={styles.sectionLinkIcon} />
           </Link>
         </div>
         </div>
