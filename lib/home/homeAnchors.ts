@@ -20,6 +20,11 @@ export function scrollToHomeSection(
   });
 }
 
+/** Instant jump to the top. Does not rewrite the `<html>` style attribute. */
+export function scrollHomeToTop() {
+  window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+}
+
 export type HomeNavKey = "home" | "about" | "work" | "contact";
 
 export function getHomeNavHref(pathname: string, key: HomeNavKey): string {

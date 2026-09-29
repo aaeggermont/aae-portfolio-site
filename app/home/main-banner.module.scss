@@ -1,6 +1,14 @@
 /* app/home/main-banner.module.scss */
 @use './home-layout' as home;
 
+/* Scroll lag for the orb. The orb keeps its own float animation inside this wrapper. */
+.orbParallax {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* Gradient orb from your MUI Box */
 .bgGradientOrb {
   position: absolute;
@@ -18,7 +26,7 @@
   opacity: 0.6;
   filter: blur(1px);
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   width: clamp(260px, 24vw, 385px);
   height: clamp(250px, 24vw, 378px);
   animation: fadeInOrb 1.8s ease-out forwards, greetingOrbFloatDynamic 30s ease-in-out infinite;
@@ -93,14 +101,22 @@
   box-sizing: border-box;
   position: relative;
   overflow: visible;
-  isolation: isolate;
   background-color: var(--page-canvas);
-  min-height: calc(100dvh - var(--header-height, 80px));
+  padding-block: 2rem;
+
+  @media screen and (min-width: $tablet-min) {
+    padding-block: 3rem;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    padding-block: 4rem;
+  }
 }
 
 .bannerContentCap {
   @include home.home-page-gutter;
-  min-height: calc(100dvh - var(--header-height, 80px));
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -111,10 +127,9 @@
   @media screen and #{$mobile} {
     flex-direction: column-reverse;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     text-align: center;
-    gap: clamp(0.5rem, 1.5vh, 0.875rem);
-    padding-block: clamp(0.25rem, 1vh, 0.75rem);
+    gap: 1.25rem;
     box-sizing: border-box;
   }
 
@@ -128,8 +143,8 @@
     min-width: 0;
     width: auto;
     max-width: none;
-    padding: 2.5rem 0;
-    z-index: 2;
+    padding: 0;
+    z-index: 3;
 
     @media screen and (min-width: 1258px) {
       /* Prefer headline width, but keep a usable portrait size */
@@ -151,12 +166,11 @@
     /* Sized vs the content band (%), not viewport, so it sits flush on the right */
     flex: 0 0 auto;
     width: clamp(230px, 38%, 460px);
-    aspect-ratio: 3 / 4;
+    /* Same proportions as HeroProfileBase.png, so both sleeves stay in frame. */
+    aspect-ratio: 456 / 522;
     height: auto;
-    max-height: min(71.9vh, 689px);
     z-index: 2;
-    filter: drop-shadow(0 22px 48px rgba(15, 23, 42, 0.22))
-      drop-shadow(0 8px 16px rgba(15, 23, 42, 0.12));
+    overflow: visible;
 
     @media screen and (min-width: 1258px) {
       flex: 0 0 auto;
@@ -167,58 +181,22 @@
     }
 
     @media screen and #{$mobile} {
-      /* ~10% larger than prior mobile cap; shifted up so the 3 intro lines stay in view */
-      height: clamp(
-        176px,
-        calc(100dvh - var(--header-height, 80px) - 7.5rem),
-        281px
-      );
-      width: auto;
-      max-width: min(73vw, 246px);
-      aspect-ratio: 3 / 4;
+      width: min(73vw, 246px);
+      height: auto;
+      max-width: none;
+      aspect-ratio: 456 / 522;
       flex: 0 0 auto;
-      /* ~10% of portrait height — margin avoids fighting GSAP transform on this node */
-      margin: -1.875rem 0 0;
-      filter: drop-shadow(0 16px 36px rgba(15, 23, 42, 0.2));
+      margin: 0;
 
-      /* Wide mobile / large-phone edge (e.g. 767px): portrait was undersized vs full-width copy */
       @media (min-width: 600px) {
-        height: clamp(255px, 47.6vh, 408px);
-        max-width: min(49.3vw, 374px);
-        margin: -1.25rem 0 0;
+        width: min(49.3vw, 320px);
       }
     }
   }
 
-  .blobMask {
-    position: relative;        // important for Image fill layout
+  .bannerPortrait {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    mask-image: url("/home/images/blob-mask.svg");
-    /* Slightly wider + lower than pure cover: softens the “round plate” at the bottom edge */
-    mask-size: 124% 108%;
-    mask-repeat: no-repeat;
-    mask-position: center 38%;
-    -webkit-mask-image: url("/home/images/blob-mask.svg");
-    -webkit-mask-size: 124% 108%;
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: center 38%;
-
-    @media screen and #{$mobile} {
-      mask-size: 118% 104%;
-      mask-position: center 44%;
-      -webkit-mask-size: 118% 104%;
-      -webkit-mask-position: center 44%;
-    }
-  }
-
-  .bannerPhotoImage {
-    width: 100%;
-    height: 100%;
-    display: block;
-    min-height: 0;
-    object-fit: cover;
   }
 
   .helloText {
@@ -360,32 +338,8 @@
   }
 }
 
-.floatLayer {
-  @include home.home-float-layer-bleed;
-}
-
-.floatImg {
-  position: absolute;
-  opacity: 0.42;
-  animation: mainBannerFloaterFloat 12s ease-in-out infinite alternate;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.06));
-}
-
-@keyframes mainBannerFloaterFloat {
-  0% {
-    transform: translate(-10px, 24px) scale(0.92);
-  }
-  100% {
-    transform: translate(10px, -18px) scale(1.04);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .bgGradientOrb {
-    animation: none !important;
-  }
-
-  .floatImg {
     animation: none !important;
   }
 }

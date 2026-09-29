@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
-import Image from "next/image";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import ParticlePortrait from "@/components/ParticlePortrait/ParticlePortrait";
 import { LinkedInProfileButton } from "@/components/LinkedInProfileButton/LinkedInProfileButton";
 import styles from "./main-banner.module.scss";
-import AntonioBannerPhoto from "./images/AntonioBannerPhoto.png";
 import Typewriter from "typewriter-effect";
-import { backgroundFloatImages } from "./background-float-images";
 import type { MainBannerData } from "./data/main-banner-data";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
+import { useBandParallax } from "@/app/projects/automatic-seater-assignments/components/useBandParallax";
 
 function splitBannerTitle(title: string): { lead: string; rest: string } | null {
   const sep = " · ";
@@ -47,17 +45,6 @@ function TypewriterComponent() {
   );
 }
 
-type FloaterConfig = {
-  img: any;
-  top: string;
-  left: string;
-  size: string;
-  delay: string;
-  duration: string;
-};
-
-const FLOAT_COUNT = 6;
-
 type MainBannerProps = {
   banner: MainBannerData;
 };
@@ -68,8 +55,15 @@ function MainBanner({ banner }: MainBannerProps) {
   const pathname = usePathname();
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
-  const [floaters, setFloaters] = useState<FloaterConfig[]>([]);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const contentParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.04,
+    maxPx: 24,
+  });
+  const orbParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.07,
+    maxPx: 40,
+  });
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
@@ -118,29 +112,6 @@ function MainBanner({ banner }: MainBannerProps) {
     return () => ctx.revert();
   }, [prefersReducedMotion]);
 
-  useEffect(() => {
-    // This runs ONLY in the browser, after hydration ✅
-    const generated: FloaterConfig[] = Array.from({ length: FLOAT_COUNT }).map(
-      () => {
-        const img =
-          backgroundFloatImages[
-            Math.floor(Math.random() * backgroundFloatImages.length)
-          ];
-
-        return {
-          img,
-          top: `${Math.random() * 90}%`,
-          left: `${Math.random() * 90}%`,
-          size: `${40 + Math.random() * 120}px`, // 40–160px
-          delay: `${Math.random() * 5}s`,
-          duration: `${10 + Math.random() * 10}s`,
-        };
-      }
-    );
-
-    setFloaters(generated);
-  }, []);
-
   const handleLinkedIn = () => {
     window.open(
       "https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/",
@@ -153,32 +124,11 @@ function MainBanner({ banner }: MainBannerProps) {
 
   return (
     <section className={styles.mainBanner}>
-      {/* Full-bleed behind orb + copy + portrait (see .floatLayer z-index) */}
-      <div className={styles.floatLayer} aria-hidden="true">
-        {floaters.map((f, i) => (
-          <Image
-            key={`float-${i}-${f.top}-${f.left}`}
-            src={f.img}
-            alt=""
-            aria-hidden="true"
-            className={styles.floatImg}
-            width={150}
-            height={150}
-            style={{
-              top: f.top,
-              left: f.left,
-              width: f.size,
-              height: "auto",
-              animationDelay: f.delay,
-              animationDuration: f.duration,
-            }}
-          />
-        ))}
+      <div ref={orbParallaxRef} className={styles.orbParallax}>
+        <div className={styles.bgGradientOrb}></div>
       </div>
 
-      <div className={styles.bgGradientOrb}></div>
-
-      <div className={styles.bannerContentCap}>
+      <div ref={contentParallaxRef} className={styles.bannerContentCap}>
       {/* Text side */}
       <div
         ref={textRef}
@@ -212,26 +162,11 @@ function MainBanner({ banner }: MainBannerProps) {
       </div>
 
       {/* Photo side */}
-      <div
-        ref={photoRef}
-        className={styles.bannerPhoto}
-      >
-        <div className={styles.blobMask}>
+      <div ref={photoRef} className={styles.bannerPhoto}>
         <ParticlePortrait
-          src="/images/ProfilePhoto.png"
-          className={styles.bannerPhotoImage}
-    />
-
-          {/* eslint-disable-next-line @next/next/no-img-element
-          <Image
-            src={AntonioBannerPhoto}
-            alt="Portrait of Antonio Aranda Eggermont"
-            fill
-            priority
-            className={styles.bannerPhotoImage}
-            sizes="(max-width: 767px) 70vw, (max-width: 1023px) 40vw, 26vw"
-          /> */}
-        </div>
+          src="/images/HeroProfileBase.png"
+          className={styles.bannerPortrait}
+        />
       </div>
       </div>
     </section>

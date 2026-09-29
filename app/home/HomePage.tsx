@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 
 import styles from "./home-page.module.scss";
 
@@ -8,6 +8,7 @@ import MainBanner from "./main-banner";
 import MyBackground from "./my-background";
 import LatestProjects from "./latest-projects";
 import ContactMe from "./contact-me";
+import { LandingFloatLayer } from "./components/LandingFloatLayer";
 import { LandingSplash } from "@/components/LandingSplash/LandingSplash";
 import { preloadLandingImages } from "@/lib/home/preloadLandingAssets";
 import { useLoadingSplash } from "@/lib/loadingSplash/useLoadingSplash";
@@ -16,7 +17,7 @@ import {
   type HomePageData,
 } from "@/app/home/lib/home-page-data";
 import { subscribeHomePageData } from "@/app/home/lib/main-page.firestore";
-import { isHomeSectionId, scrollToHomeSection } from "@/lib/home/homeAnchors";
+import { isHomeSectionId, scrollHomeToTop } from "@/lib/home/homeAnchors";
 import { useSetAtom } from "jotai";
 import { layoutState } from "@/app/(public)/layout-state";
 
@@ -26,6 +27,23 @@ export default function HomePage() {
   const { phase, isLocked, splashPhase, onFadeEnd } = useLoadingSplash({
     waitFor: preloadLandingImages,
   });
+  // Refresh should always open on the hero, not the last scroll position.
+  useLayoutEffect(() => {
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    const hash = window.location.hash.replace("#", "");
+    if (isHomeSectionId(hash)) {
+      window.history.replaceState(
+        window.history.state,
+        "",
+        `${window.location.pathname}${window.location.search}`,
+      );
+    }
+
+    scrollHomeToTop();
+  }, [phase]);
 
   useEffect(() => {
     setLayoutState({ isFullWidth: true });
@@ -40,13 +58,10 @@ export default function HomePage() {
 
   useEffect(() => {
     if (phase !== "done") return;
-
-    const hash = window.location.hash.replace("#", "");
-    if (!isHomeSectionId(hash)) return;
-
-    requestAnimationFrame(() => {
-      scrollToHomeSection(hash);
-    });
+    scrollHomeToTop();
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "auto";
+    }
   }, [phase]);
 
   return (
@@ -57,6 +72,8 @@ export default function HomePage() {
         aria-hidden={isLocked}
         inert={isLocked ? true : undefined}
       >
+        <LandingFloatLayer />
+
         <section id="hero" className={styles.section}>
           <MainBanner banner={homePageData.mainBanner} />
         </section>

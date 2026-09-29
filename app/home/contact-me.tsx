@@ -13,16 +13,21 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import styles from "./contact-me.module.scss";
 import SendMessage from "@/components/SendMessage/SendMessage";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
+import { useBandParallax } from "@/app/projects/automatic-seater-assignments/components/useBandParallax";
 
 const LINKEDIN_URL =
   "https://www.linkedin.com/in/antonio-aranda-eggermont-23aa7b8/";
 
 function ContactMe() {
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const cardParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.08,
+    maxPx: 28,
+  });
 
   return (
     <section className={styles.contactMeSection} id="contact-me">
-      <div className={styles.ctaCard}>
+      <div ref={cardParallaxRef} className={styles.ctaCard}>
         <SectionTypewriterHeading
           text="Let's build something"
           className={styles.heading}

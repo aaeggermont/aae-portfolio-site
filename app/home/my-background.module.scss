@@ -9,12 +9,10 @@
   max-width: none;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  background-color: #f9f7f2;
+  background-color: transparent;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  overflow-x: clip;
-  overflow-y: visible;
   padding-block: 2rem;
   /* Gutter aligns carousel first card with heading (mirrors Guest Needs) */
   --what-i-do-gutter: #{home.$home-layout-margin-mobile};
@@ -38,6 +36,8 @@
 
 .content {
   @include home.home-page-gutter;
+  position: relative;
+  z-index: 2;
   text-align: center;
   width: 100%;
 }
@@ -84,24 +84,13 @@
   padding-bottom: 2rem;
 }
 
-.floatLayer {
-  @include home.home-float-layer-bleed;
-}
-
-.floatImg {
+.myBackgroundSection::before {
+  content: "";
   position: absolute;
-  opacity: 1;
-  animation: slowFloat 12s ease-in-out infinite alternate;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
-}
-
-@keyframes slowFloat {
-  0% {
-    transform: translate(-10px, 240px) scale(0.5);
-  }
-  100% {
-    transform: translate(10px, -28px) scale(1.06);
-  }
+  inset: 0;
+  z-index: 0;
+  background-color: #f9f7f2;
+  pointer-events: none;
 }
 
 :global(.Typewriter__cursor) {
@@ -124,10 +113,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .floatImg {
-    animation: none !important;
-  }
-
   :global(.Typewriter__cursor) {
     animation: none !important;
   }
