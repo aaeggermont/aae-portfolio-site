@@ -164,7 +164,11 @@
     justify-content: center;
     align-items: center;
     gap: 16px;
-    margin-top: 1.5rem;
+    margin-top: 4rem;
+
+    @media screen and (min-width: $desktop-min) {
+      margin-top: 8rem;
+    }
   }
 
   .sectionLink {
@@ -181,14 +185,20 @@
     font-weight: 600;
     line-height: 1;
     text-decoration: none;
-    transition: opacity 0.2s ease;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
 
-    &:hover {
+    &:hover,
+    &:active {
       opacity: 0.9;
+      transform: translateY(-2px);
     }
 
     &:hover .sectionLinkIcon,
-    &:focus-visible .sectionLinkIcon {
+    &:focus-visible .sectionLinkIcon,
+    &:active .sectionLinkIcon {
       transform: translateX(4px);
     }
 
@@ -201,11 +211,21 @@
   .sectionLinkAmber {
     background-color: hsl(38 92% 50%);
     color: hsl(205 45% 22%);
+
+    &:hover,
+    &:active {
+      box-shadow: 0 10px 24px rgba(245, 159, 10, 0.35);
+    }
   }
 
   .sectionLinkNavy {
     background-color: hsl(205 45% 22%);
     color: #ffffff;
+
+    &:hover,
+    &:active {
+      box-shadow: 0 10px 24px rgba(31, 60, 81, 0.35);
+    }
   }
 
   .sectionLinkIcon {
@@ -228,8 +248,14 @@
     transition: none;
   }
 
+  .latestProjectsSection .sectionLink:hover,
+  .latestProjectsSection .sectionLink:active {
+    transform: none;
+  }
+
   .latestProjectsSection .sectionLink:hover .sectionLinkIcon,
-  .latestProjectsSection .sectionLink:focus-visible .sectionLinkIcon {
+  .latestProjectsSection .sectionLink:focus-visible .sectionLinkIcon,
+  .latestProjectsSection .sectionLink:active .sectionLinkIcon {
     transform: none;
   }
 }
