@@ -103,7 +103,7 @@ export function Footer() {
       <div className={styles['copyright-section']}>
         <div className={styles.copyright_text}>
           <span className={styles.copyright_name}>Antonio Aranda Eggermont</span>
-          <span className={styles.copyright_rights}>© All Rights Serserved</span>
+          <span className={styles.copyright_rights}>© 2026 All rights reserved.</span>
         </div>
       </div>
     );

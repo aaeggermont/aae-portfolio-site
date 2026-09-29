@@ -160,34 +160,46 @@
 
   .viewAllWorkContainer {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    margin-top: 1.5rem;
+    align-items: center;
+    gap: 16px;
+    margin-top: 4rem;
+
+    @media screen and (min-width: $desktop-min) {
+      margin-top: 8rem;
+    }
   }
 
-  .viewAllWorkButton {
+  .sectionLink {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    min-height: 44px;
-    padding: 0.7rem 1.25rem;
+    gap: 8px;
+    box-sizing: border-box;
+    min-width: 180px;
+    padding: 12px 20px;
     border-radius: 8px;
-    background-color: #074c5f;
-    color: #ffffff;
     font-family: var(--font-poppins);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1;
     text-decoration: none;
     transition:
+      opacity 0.2s ease,
       transform 0.2s ease,
-      background-color 0.2s ease,
       box-shadow 0.2s ease;
 
-    &:hover {
+    &:hover,
+    &:active {
+      opacity: 0.9;
       transform: translateY(-2px);
-      background-color: #0a6280;
-      box-shadow: 0 8px 18px rgba(7, 76, 95, 0.2);
+    }
+
+    &:hover .sectionLinkIcon,
+    &:focus-visible .sectionLinkIcon,
+    &:active .sectionLinkIcon {
+      transform: translateX(4px);
     }
 
     &:focus-visible {
@@ -196,8 +208,31 @@
     }
   }
 
-  .viewAllWorkIcon {
-    font-size: 1rem;
+  .sectionLinkAmber {
+    background-color: hsl(38 92% 50%);
+    color: hsl(205 45% 22%);
+
+    &:hover,
+    &:active {
+      box-shadow: 0 10px 24px rgba(245, 159, 10, 0.35);
+    }
+  }
+
+  .sectionLinkNavy {
+    background-color: hsl(205 45% 22%);
+    color: #ffffff;
+
+    &:hover,
+    &:active {
+      box-shadow: 0 10px 24px rgba(31, 60, 81, 0.35);
+    }
+  }
+
+  .sectionLinkIcon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    transition: transform 0.2s ease;
   }
 }
 
@@ -207,5 +242,20 @@
     transform: none !important;
     opacity: 1 !important;
     transition: none !important;
+  }
+
+  .latestProjectsSection .sectionLinkIcon {
+    transition: none;
+  }
+
+  .latestProjectsSection .sectionLink:hover,
+  .latestProjectsSection .sectionLink:active {
+    transform: none;
+  }
+
+  .latestProjectsSection .sectionLink:hover .sectionLinkIcon,
+  .latestProjectsSection .sectionLink:focus-visible .sectionLinkIcon,
+  .latestProjectsSection .sectionLink:active .sectionLinkIcon {
+    transform: none;
   }
 }

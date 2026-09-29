@@ -39,11 +39,9 @@ function LatestProjects() {
 
         <div className={styles.summarySection}>
           <span className={styles.summarySectionText}>
-            A selection of recent work across AR experiences, revenue
-            management modernization, and intelligent operational tools—
-            projects that blend UX design, frontend engineering, and
-            AI-driven thinking, used by millions of guests and internal
-            operators.
+            A selection of projects across immersive experiences, revenue
+            management, and operational tools, combining UX design, software
+            engineering, data, and emerging technologies.
           </span>
         </div>
 
@@ -103,9 +101,13 @@ function LatestProjects() {
         </Swiper>
 
         <div className={styles.viewAllWorkContainer}>
-          <Link href="/mywork" className={styles.viewAllWorkButton}>
+          <Link href="/aboutme" className={`${styles.sectionLink} ${styles.sectionLinkAmber}`}>
+            <span>About me</span>
+            <ArrowForwardIcon aria-hidden className={styles.sectionLinkIcon} />
+          </Link>
+          <Link href="/mywork" className={`${styles.sectionLink} ${styles.sectionLinkNavy}`}>
             <span>View all work</span>
-            <ArrowForwardIcon aria-hidden className={styles.viewAllWorkIcon} />
+            <ArrowForwardIcon aria-hidden className={styles.sectionLinkIcon} />
           </Link>
         </div>
         </div>

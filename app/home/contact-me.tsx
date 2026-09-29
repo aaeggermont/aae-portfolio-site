@@ -28,10 +28,13 @@ function ContactMe() {
   return (
     <section className={styles.contactMeSection} id="contact-me">
       <div ref={cardParallaxRef} className={styles.ctaCard}>
-        <SectionTypewriterHeading
-          text="Let's build something"
-          className={styles.heading}
-        />
+        <div className={styles.titleBlock}>
+          <p className={styles.eyebrow}>Contact</p>
+          <SectionTypewriterHeading
+            text="Let's build something"
+            className={styles.heading}
+          />
+        </div>
         <p className={styles.summary}>
           Have a project in mind, or just want to say hello? I&apos;m always
           open to talking through ideas and opportunities.
