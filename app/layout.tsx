@@ -129,6 +129,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <Aos/>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){if(location.pathname!=="/")return;if("scrollRestoration"in history)history.scrollRestoration="manual";var hash=location.hash.slice(1);if(hash==="hero"||hash==="about"||hash==="work"||hash==="contact")history.replaceState(history.state,"",location.pathname+location.search);window.scrollTo({top:0,left:0,behavior:"instant"});})();`,
+          }}
+        />
         <AppRouterCacheProvider options={{ key: "mui" }}>
           <AppProviders>
             <div className="app-shell">
