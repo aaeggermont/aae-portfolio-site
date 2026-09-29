@@ -27,12 +27,11 @@ export const FOOTER_LOGO = {
  *
  * | Role | Size | Weight |
  * |------|------|--------|
- * | Nav links (Home, About Me, …) | 16px fixed | 400 (700 active) |
- * | “Navigation” title | responsive + 18px mobile | 600 |
- * | Copyright lines | responsive | 500 |
+ * | Nav links (Home, About Me, …) | 14px, styled in footer.module.scss | 400 |
+ * | “Navigation” title | 12px uppercase, styled in footer.module.scss | 700 |
+ * | Name + copyright | 16px Sora / 14px Inter, styled in footer.module.scss | 600 / 400 |
  *
- * Responsive tiers for title + copyright mirror header `.main_menu a`
- * (17px mobile → 15px tablet → fluid 16–18px desktop).
+ * Name, copyright, and navigation type are set in `footer.module.scss`.
  */
 export const FOOTER_TYPOGRAPHY = {
   fontFamily: "var(--font-poppins), sans-serif",
