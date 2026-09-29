@@ -17,8 +17,14 @@ import LatestProjectCard from "./LatestProjectCard";
 import { latestProjectsItems } from "./data/latestprojects-data";
 import { SectionTypewriterHeading } from "./components/SectionTypewriterHeading";
 import { selectedWorkLayoutStyle } from "./selectedWorkCardLayout";
+import { useBandParallax } from "@/app/projects/automatic-seater-assignments/components/useBandParallax";
 
 function LatestProjects() {
+  const workParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.045,
+    maxPx: 32,
+  });
+
   return (
     <section
       className={styles.latestProjectsSection}
@@ -41,6 +47,7 @@ function LatestProjects() {
           </span>
         </div>
 
+        <div ref={workParallaxRef}>
         {/* Desktop — equal grid when all 3 cards fit (≥1024px) */}
         <div className={styles.projectsGrid}>
           {latestProjectsItems.map((item) => (
@@ -100,6 +107,7 @@ function LatestProjects() {
             <span>View all work</span>
             <ArrowForwardIcon aria-hidden className={styles.viewAllWorkIcon} />
           </Link>
+        </div>
         </div>
       </div>
     </section>

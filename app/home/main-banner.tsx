@@ -9,6 +9,7 @@ import styles from "./main-banner.module.scss";
 import Typewriter from "typewriter-effect";
 import type { MainBannerData } from "./data/main-banner-data";
 import { usePrefersReducedMotion } from "@/lib/hooks/usePrefersReducedMotion";
+import { useBandParallax } from "@/app/projects/automatic-seater-assignments/components/useBandParallax";
 
 function splitBannerTitle(title: string): { lead: string; rest: string } | null {
   const sep = " · ";
@@ -55,6 +56,14 @@ function MainBanner({ banner }: MainBannerProps) {
   const [typewriterKey, setTypewriterKey] = useState(() => 0);
   const prevPathRef = useRef<string | null>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const contentParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.04,
+    maxPx: 24,
+  });
+  const orbParallaxRef = useBandParallax<HTMLDivElement>({
+    factor: 0.07,
+    maxPx: 40,
+  });
 
   useLayoutEffect(() => {
     if (pathname === "/" && prevPathRef.current !== null && prevPathRef.current !== "/") {
@@ -115,9 +124,11 @@ function MainBanner({ banner }: MainBannerProps) {
 
   return (
     <section className={styles.mainBanner}>
-      <div className={styles.bgGradientOrb}></div>
+      <div ref={orbParallaxRef} className={styles.orbParallax}>
+        <div className={styles.bgGradientOrb}></div>
+      </div>
 
-      <div className={styles.bannerContentCap}>
+      <div ref={contentParallaxRef} className={styles.bannerContentCap}>
       {/* Text side */}
       <div
         ref={textRef}

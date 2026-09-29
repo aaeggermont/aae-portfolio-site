@@ -1,6 +1,14 @@
 /* app/home/main-banner.module.scss */
 @use './home-layout' as home;
 
+/* Scroll lag for the orb. The orb keeps its own float animation inside this wrapper. */
+.orbParallax {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* Gradient orb from your MUI Box */
 .bgGradientOrb {
   position: absolute;
