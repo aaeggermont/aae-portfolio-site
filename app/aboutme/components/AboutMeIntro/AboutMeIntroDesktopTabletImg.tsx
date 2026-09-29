@@ -1,7 +1,6 @@
 import { useResponsive } from '@/lib/responsive/ResponsiveQueryProvider';
+import ParticlePortrait from '@/components/ParticlePortrait/ParticlePortrait';
 import styles from './aboutme_intro.module.scss';
-import { AboutMeData } from '../../data/aboutme-data';
-import Image from 'next/image';
 
 export function AboutMeDesktopTabletImg() {
   const screen = useResponsive();
@@ -11,12 +10,9 @@ export function AboutMeDesktopTabletImg() {
       screen.isTabletUp && (
         <div className={styles.aboutmeIntroImg}>
           <div className={styles.aboutmeIntroBannerPhoto}>
-            <Image
-              src={AboutMeData.profilePhoto}
-              alt="Portrait of Antonio Aranda Eggermont"
-              fill
-              priority
-              className={styles.aboutmeIntroProfilePhoto}
+            <ParticlePortrait
+              src="/images/HeroProfileBase.png"
+              className={styles.aboutmeIntroPortrait}
             />
           </div>
         </div>

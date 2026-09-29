@@ -1,4 +1,3 @@
-import AAEPhoto from '../images/AAEPhoto.png';
 import { aboutIntroFallback } from './about-intro-data';
 import { experienceTrainingFallback } from './experience-training-data';
 import {
@@ -8,7 +7,6 @@ import {
 
 export const AboutMeData  =  {
   pageTitle: aboutIntroFallback.pageTitle,
-  profilePhoto: AAEPhoto,
   pageParagraphs: aboutIntroFallback.pageParagraphs,
   skills: {
     design: [

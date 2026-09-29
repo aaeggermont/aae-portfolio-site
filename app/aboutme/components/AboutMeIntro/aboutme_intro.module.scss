@@ -115,18 +115,20 @@
     &BannerPhoto {
         position: relative;
         width: clamp(240px, 20vw, 280px);
-        aspect-ratio: 3 / 4; // portrait ratio
+        /* Same proportions as HeroProfileBase.png, so both sleeves stay in frame. */
+        aspect-ratio: 456 / 522;
+        height: auto;
         z-index: 2;
-
+        overflow: visible;
 
         @media screen and #{$tablet} {
           width: clamp(140px, 30vw, 240px);
         }
     }
 
-    &ProfilePhoto {
-      object-fit: cover;      // crop nicely, no stretching
-      border-radius: 18px;    // optional: soften corners
+    &Portrait {
+      width: 100%;
+      height: 100%;
     }
   }
 }
