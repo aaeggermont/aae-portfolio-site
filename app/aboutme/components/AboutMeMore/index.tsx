@@ -6,7 +6,8 @@ import { AboutMeMoreProfesionalExperience } from './AboutMeMoreProfesionalExperi
 import { AboutMeMoreCardType } from './AboutMeMoreCard';
 import { AboutMeMoreEducation } from './AboutMeMoreEducation';
 import { AboutMeMoreCertifications } from './AboutMeMoreCertifications';
-import { AboutMeMorePersonalTime } from './AboutMeMorePersonalTime';
+// Revisit later: fourth panel, "When I am not working..."
+// import { AboutMeMorePersonalTime } from './AboutMeMorePersonalTime';
 import { AboutMeMoreCarousel } from './AboutMeMoreCarousel';
 import { ExperienceTrainingContext } from './ExperienceTrainingContext';
 import {
@@ -27,11 +28,15 @@ export function AboutMeMore() {
     return subscribeExperienceTrainingData(setData);
   }, []);
 
-  const availableCards = data.topicCards.map((card) => ({
-    type: card.id as AboutMeMoreCardType,
-    title: card.title,
-    ...(card.description ? { description: card.description } : {}),
-  }));
+  // Revisit later: keep "When I am not working..." out of the carousel,
+  // including when Firestore still sends the personal topic card.
+  const availableCards = data.topicCards
+    .filter((card) => card.id !== "personal")
+    .map((card) => ({
+      type: card.id as AboutMeMoreCardType,
+      title: card.title,
+      ...(card.description ? { description: card.description } : {}),
+    }));
 
   const sections: Record<AboutMeMoreCardType, ReactNode> = {
     professional_experience: (
@@ -39,7 +44,9 @@ export function AboutMeMore() {
     ),
     education: <AboutMeMoreEducation key="education" />,
     certifications: <AboutMeMoreCertifications key="certifications" />,
-    personal: <AboutMeMorePersonalTime key="personal" />,
+    // Revisit later: fourth panel, "When I am not working..."
+    // personal: <AboutMeMorePersonalTime key="personal" />,
+    personal: null,
   };
 
   return (

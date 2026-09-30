@@ -84,10 +84,11 @@ export const experienceTrainingFallback: ExperienceTrainingData = {
       description:
         "Continuous learning in cloud, AI product design, and modern frontend frameworks.",
     },
-    {
-      id: "personal",
-      title: "When I am not working...",
-    },
+    // Revisit later: fourth panel, "When I am not working..."
+    // {
+    //   id: "personal",
+    //   title: "When I am not working...",
+    // },
   ],
   experience: [
     {
