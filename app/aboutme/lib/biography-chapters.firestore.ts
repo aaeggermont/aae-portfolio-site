@@ -49,7 +49,10 @@ function parseCaptionColumn(
   const linesRaw = Array.isArray(record.lines) ? record.lines : [];
   const lines = linesRaw.map(asString).filter(Boolean);
   if (lines.length === 0) return null;
-  return { lines };
+  return {
+    lines,
+    ...(record.boldFirstLine === true ? { boldFirstLine: true } : {}),
+  };
 }
 
 function parseFigure(raw: unknown): BiographyChapterFigure | null {
@@ -71,6 +74,26 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
   const captionTitle = captionTitleRaw.map(asString).filter(Boolean);
   const captionCredit = asString(record.captionCredit);
   const annotation = asString(record.annotation);
+
+  let shotCarousel: BiographyChapterFigure["shotCarousel"] | undefined;
+  const shotRaw = record.shotCarousel;
+  if (shotRaw && typeof shotRaw === "object") {
+    const shotRecord = shotRaw as Record<string, unknown>;
+    const slidesRaw = Array.isArray(shotRecord.slides) ? shotRecord.slides : [];
+    const slides = slidesRaw
+      .map((slideRaw) => {
+        if (!slideRaw || typeof slideRaw !== "object") return null;
+        const slide = slideRaw as Record<string, unknown>;
+        const slidePath = asString(slide.imageObjectPath);
+        const slideAlt = asString(slide.alt);
+        if (!slidePath || !slideAlt) return null;
+        return { imageObjectPath: slidePath, alt: slideAlt };
+      })
+      .filter((slide): slide is NonNullable<typeof slide> => slide !== null);
+    if (slides.length > 0) {
+      shotCarousel = { slides };
+    }
+  }
 
   let compareCarousel: BiographyChapterFigure["compareCarousel"] | undefined;
   const carouselRaw = record.compareCarousel;
@@ -135,6 +158,7 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
     ...(annotation ? { annotation } : {}),
+    ...(shotCarousel ? { shotCarousel } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
     ...(vimeo ? { vimeo } : {}),
   };
@@ -158,6 +182,15 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
     const figure = parseFigure(record.figure);
     if (!figure) return null;
     return { type: "figure", figure };
+  }
+
+  if (type === "figureRow") {
+    const figuresRaw = Array.isArray(record.figures) ? record.figures : [];
+    const figures = figuresRaw
+      .map(parseFigure)
+      .filter((figure): figure is BiographyChapterFigure => figure !== null);
+    if (figures.length < 2) return null;
+    return { type: "figureRow", figures };
   }
 
   if (type === "section") {

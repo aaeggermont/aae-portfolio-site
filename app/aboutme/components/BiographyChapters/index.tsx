@@ -369,6 +369,23 @@ export function BiographyChapters() {
                         );
                       }
 
+                      if (block.type === "figureRow") {
+                        return (
+                          <div
+                            key={`${chapter.id}-figure-row-${blockIndex}`}
+                            className={styles.biographyChaptersFigureRow}
+                          >
+                            {block.figures.map((figure, figureIndex) => (
+                              <BiographyChapterFigureBlock
+                                key={`${chapter.id}-figure-row-${blockIndex}-${figureIndex}`}
+                                figure={figure}
+                                lightboxId={`${chapter.id}-figure-row-${blockIndex}-${figureIndex}`}
+                              />
+                            ))}
+                          </div>
+                        );
+                      }
+
                       if (block.type === "mediaText") {
                         return (
                           <div
