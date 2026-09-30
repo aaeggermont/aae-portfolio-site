@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Typewriter from 'typewriter-effect'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import { ArrowRight, BookOpen } from 'lucide-react'
 import styles from './aboutme_intro.module.scss'
 import { aboutIntroFallback, type AboutIntroData } from '../../data/about-intro-data'
 import { subscribeAboutIntroData } from '../../lib/about-intro.firestore'
@@ -50,16 +50,20 @@ export function AboutMeIntro() {
               >{ paragraph }</p>
             )}
           </div>
-          <Link
-            href="/aboutme/biography"
-            className={styles.aboutmeIntroBiographyLink}
-          >
-            <span>Read full biography</span>
-            <ArrowForwardIcon
-              aria-hidden
-              className={styles.aboutmeIntroBiographyIcon}
-            />
-          </Link>
+          <div className={styles.aboutmeIntroBiographyPill}>
+            <BookOpen aria-hidden className={styles.aboutmeIntroBiographyIcon} />
+            <span className={styles.aboutmeIntroBiographyTeaser}>
+              My journey through technology, design & storytelling
+            </span>
+            <span className={styles.aboutmeIntroBiographyDivider} aria-hidden />
+            <Link
+              href="/aboutme/biography"
+              className={styles.aboutmeIntroBiographyLink}
+            >
+              Explore my journey
+              <ArrowRight aria-hidden className={styles.aboutmeIntroBiographyLinkIcon} />
+            </Link>
+          </div>
         </div>
         <AboutMeDesktopTabletImg />
       </div>

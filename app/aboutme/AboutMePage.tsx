@@ -13,6 +13,8 @@ import { AboutMeIntro } from './components/AboutMeIntro';
 // import { AboutMeLocation } from './components/AboutMeLocation';
 import { CapabilityMap } from './components/CapabilityMap';
 import { AboutMeMore } from './components/AboutMeMore';
+import ContactMe from '@/app/home/contact-me';
+import { SectionActionLink } from '@/components/SectionActionLink/SectionActionLink';
 
 export default function AboutMePage() {
   const setLayoutState = useSetAtom(layoutState);
@@ -31,6 +33,10 @@ export default function AboutMePage() {
         <CapabilityMap />
         <AboutMeMore />
       </section>
+      <div className={styles.viewAllWorkRow}>
+        <SectionActionLink href="/mywork" label="View all work" tone="navy" />
+      </div>
     </div>
+    <ContactMe />
   </>
 }

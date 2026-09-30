@@ -29,3 +29,18 @@
     }
   }
 }
+
+.viewAllWorkRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 3rem;
+
+  @media screen and (min-width: $tablet-min) {
+    margin-top: 4rem;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    margin-top: 5rem;
+  }
+}

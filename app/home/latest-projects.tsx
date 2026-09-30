@@ -3,8 +3,7 @@
 
 import React from "react";
 import styles from "./latest-projects.module.scss";
-import Link from "next/link";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { SectionActionLink } from "@/components/SectionActionLink/SectionActionLink";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -101,14 +100,8 @@ function LatestProjects() {
         </Swiper>
 
         <div className={styles.viewAllWorkContainer}>
-          <Link href="/aboutme" className={`${styles.sectionLink} ${styles.sectionLinkAmber}`}>
-            <span>About me</span>
-            <ArrowForwardIcon aria-hidden className={styles.sectionLinkIcon} />
-          </Link>
-          <Link href="/mywork" className={`${styles.sectionLink} ${styles.sectionLinkNavy}`}>
-            <span>View all work</span>
-            <ArrowForwardIcon aria-hidden className={styles.sectionLinkIcon} />
-          </Link>
+          <SectionActionLink href="/aboutme" label="About me" tone="amber" />
+          <SectionActionLink href="/mywork" label="View all work" tone="navy" />
         </div>
         </div>
       </div>
