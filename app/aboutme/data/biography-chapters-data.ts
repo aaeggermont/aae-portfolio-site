@@ -21,6 +21,14 @@ export type BiographyChapterIcon =
 
 export type BiographyChapterCaptionColumn = {
   lines: string[];
+  /** When true, the first line is the caption title and renders in bold. */
+  boldFirstLine?: boolean;
+};
+
+/** One still in a shot carousel (previous, next, and dot pagination). */
+export type BiographyChapterShot = {
+  imageObjectPath: string;
+  alt: string;
 };
 
 /** One green-screen / composite pair for the compare carousel. */
@@ -45,6 +53,13 @@ export type BiographyChapterFigure = {
    * (12px / line-height 1.625).
    */
   annotation?: string;
+  /**
+   * Optional stills carousel: previous, next, and dot pagination, using the
+   * same controls as the compare carousel.
+   */
+  shotCarousel?: {
+    slides: BiographyChapterShot[];
+  };
   /**
    * Optional compare carousel: each pair holds on green screen, wipes
    * right→left to the composite, then unlocks a scrubber. Prev/next + dots
@@ -83,6 +98,10 @@ export type BiographyChapterBlock =
       figure: BiographyChapterFigure;
     }
   | {
+      type: "figureRow";
+      figures: BiographyChapterFigure[];
+    }
+  | {
       type: "section";
       heading: string;
       paragraphs?: string[];
@@ -118,8 +137,8 @@ export const biographyChaptersFallback: BiographyChaptersData = {
   chapters: [
     {
       id: "harvard",
-      tocLabel: "Chapter 1 — Harvard: Foundations",
-      eyebrow: "01 · Harvard",
+      tocLabel: "01 · Harvard University",
+      eyebrow: "01 · Harvard University",
       title: "Foundations · Internet + Interactive Media",
       icon: "menuBook",
       blocks: [
@@ -232,7 +251,7 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "emerson",
-      tocLabel: "Chapter 2 — Emerson: Storytelling",
+      tocLabel: "02 · Emerson College",
       eyebrow: "02 · Emerson College",
       title: "Storytelling · Media Arts + Visual Effects",
       icon: "school",
@@ -441,24 +460,157 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "disney-animation",
-      tocLabel: "Chapter 3 — Disney Animation: Creative Tech",
-      eyebrow: "Chapter 3",
+      tocLabel: "03 · Disney Animation - IMD",
+      eyebrow: "03 · Disney Animation - IMD",
       title: "Disney Animation: Creative Technology Engineering + Filmmaking",
       icon: "lightbulb",
       blocks: [
         {
           type: "copy",
           paragraphs: [
-            "Placeholder: creative technology engineering and filmmaking work at Disney Animation.",
+            "After completing my graduate work at Emerson, the technical and creative sides of my career came together professionally at ImageMovers Digital, a Disney animation studio led by filmmaker Robert Zemeckis and created around the exploration of CGI and performance-capture filmmaking.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter03/DisneyIMDCrew.png",
+            alt: "Disney ImageMovers Digital Art Department with the Art and Matte Painting team",
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Disney ImageMovers Digital Art Department",
+                  "With the Art and Matte Painting team during my time at the studio.",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "I joined the Art and Matte Painting Department as a Technical Director and Applications Developer, working within the team led by Doug Chiang. Before environments became fully realized digital sets were built through low-fidelity miniature sets and previsualization to understand composition, scale, and how the worlds of the films might look and feel.",
+            "It was an unusual place for a software engineer to work. I was surrounded by artists, helping build miniature sets while also developing software that supported their digital work. That experience gave me a very different perspective on the relationship between engineering and the creative process.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "A New Kind of Filmmaking",
+          paragraphs: [
+            "ImageMovers Digital was built around performance-capture filmmaking. Actors performed on a capture stage surrounded by cameras and sensors, with their performances becoming the foundation for the digital characters created for the film.",
+            "Working in this environment gave me a close look at how filmmaking, animation, software, and emerging technologies were beginning to come together in completely new ways.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter03/DisneyIMDMotionCaptureSet.png",
+            alt: "Motion capture set for A Christmas Carol, directed by Robert Zemeckis",
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Motion Capture Set",
+                  "A Christmas Carol directed by Robert Zemeckis",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "section",
+          heading: "Behind the Films",
+          paragraphs: [
+            "The work was highly collaborative. Production meetings brought together people from across the studio to review ideas and follow the films as they developed. For me, these meetings were an opportunity to see firsthand how creative and technical decisions evolved together throughout production.",
+          ],
+        },
+        {
+          type: "figureRow",
+          figures: [
+            {
+              imageObjectPath:
+                "site/biography/chapter03/DisneyIMDProductionMeeting1.png",
+              alt: "Doug Chiang meeting with the production team at ImageMovers Digital",
+              captions: [
+                {
+                  boldFirstLine: true,
+                  lines: [
+                    "Production Meeting · Doug Chiang",
+                    "Doug Chiang meeting with the production team.",
+                  ],
+                },
+              ],
+            },
+            {
+              imageObjectPath:
+                "site/biography/chapter03/DisneyIMDProductionMeeting2.png",
+              alt: "Robert Zemeckis meeting with the production team at ImageMovers Digital",
+              captions: [
+                {
+                  boldFirstLine: true,
+                  lines: [
+                    "Production Meeting · Robert Zemeckis",
+                    "Robert Zemeckis meeting with the production team.",
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "section",
+          heading: "From Artwork to Digital Worlds",
+          paragraphs: [
+            "My work in the Art and Matte Painting Department moved between physical and digital production. I helped build the low-fidelity miniature sets we used to explore environments and compositions, while also developing software tools that helped artists bring their work into the 3D environment.",
+            "On the digital side, I developed tools that supported the mapping of image-based artwork onto CGI geometry, helping transform two-dimensional imagery into the virtual environments created for the films. I also worked on tools for the stereoscopic rendering pipeline, helping optimize the construction and rendering of large, complex frames that required significant computing time.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter03/SampleComposite01.png",
+            alt: "Sample composite 01",
+            captions: [],
+            annotation:
+              "An example of the digital environments produced by the Art and Matte Painting Department at ImageMovers Digital. Film imagery © Disney. Shown here to document my professional work as a member of the ImageMovers Digital production team.",
+            shotCarousel: {
+              slides: [
+                "01",
+                "02",
+                "03",
+                "04",
+                "05",
+                "06",
+                "07",
+                "08",
+                "09",
+                "10",
+              ].map((shot) => ({
+                imageObjectPath: `site/biography/chapter03/SampleComposite${shot}.png`,
+                alt: `Sample composite ${shot}`,
+              })),
+            },
+          },
+        },
+        {
+          type: "section",
+          heading: "With Gratitude · Jonathan Egstad",
+          paragraphs: [
+            "Jonathan Egstad became an important mentor from the beginning of my time at ImageMovers Digital. He helped me navigate an industry that was still relatively new to me and remained a source of guidance throughout my time at the studio.",
+            "That guidance became especially important in 2010, when Disney announced that ImageMovers Digital would be closing. The country was still emerging from the Great Recession, unemployment in California was exceptionally high, and opportunities across the film and visual effects industry were difficult to find. I had entered the industry hoping to build a career in filmmaking and visual effects, and suddenly I had to reconsider a path I had worked hard to pursue.",
+            "Jonathan encouraged me to look beyond the film industry and recognize that my background in software engineering, web technologies, and digital media gave me other directions I could pursue. Changing direction wasn't what I had planned, but his advice helped me see that the different parts of my background could become a strength rather than separate career paths.",
           ],
         },
       ],
     },
     {
       id: "disney-emerging",
-      tocLabel: "Chapter 4 — Disney Emerging Tech",
-      eyebrow: "Chapter 4",
-      title: "Disney Emerging Tech · Immersive Experiences",
+      tocLabel: "04 · CBS Interactive - TV.com",
+      eyebrow: "04 · CBS Interactive - TV.com",
+      title: "Digital Media · Web Development + Video Publishing",
       icon: "devices",
       blocks: [
         {
@@ -471,8 +623,9 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "beyond-work",
-      tocLabel: "Beyond Work",
-      title: "Beyond Work",
+      tocLabel: "05 · Disney Parks, Experiences & Resorts",
+      eyebrow: "05 · Disney Parks, Experiences & Resorts",
+      title: "Emerging Technology · Human-Centered Design + Immersive Experiences",
       icon: "air",
       blocks: [
         {

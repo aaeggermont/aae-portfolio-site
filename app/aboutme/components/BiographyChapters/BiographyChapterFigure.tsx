@@ -9,6 +9,7 @@ import {
 import { buildPublicStorageUrl } from '@/lib/firebase/publicStorageUrl';
 import type { BiographyChapterFigure } from '../../data/biography-chapters-data';
 import { BiographyChapterCompareMedia } from './BiographyChapterCompareMedia';
+import { BiographyChapterShotCarousel } from './BiographyChapterShotCarousel';
 import { BiographyChapterVimeoPoster } from './BiographyChapterVimeoPoster';
 import styles from './biographyChapters.module.scss';
 
@@ -25,6 +26,7 @@ export function BiographyChapterFigureBlock({
   const src = buildPublicStorageUrl(figure.imageObjectPath);
   const carousel = figure.compareCarousel;
   const pairs = carousel?.pairs ?? [];
+  const slides = figure.shotCarousel?.slides ?? [];
   const hasVimeo = Boolean(figure.vimeo?.videoId);
 
   const modalBg = PROJECT_IMAGE_LIGHTBOX_MODAL_BG_WHITE;
@@ -42,6 +44,8 @@ export function BiographyChapterFigureBlock({
           holdMs={carousel.holdMs ?? 3000}
           durationMs={carousel.durationMs ?? 1400}
         />
+      ) : slides.length > 0 ? (
+        <BiographyChapterShotCarousel slides={slides} lightboxId={lightboxId} />
       ) : hasVimeo ? (
         <BiographyChapterVimeoPoster figure={figure} />
       ) : (
@@ -95,10 +99,21 @@ export function BiographyChapterFigureBlock({
           {figure.captions.map((column, columnIndex) => (
             <div
               key={`caption-col-${columnIndex}`}
-              className={styles.biographyChaptersFigureCaptionColumn}
+              className={
+                column.boldFirstLine
+                  ? `${styles.biographyChaptersFigureCaptionColumn} ${styles.biographyChaptersFigureCaptionAnnotationSize}`
+                  : styles.biographyChaptersFigureCaptionColumn
+              }
             >
               {column.lines.map((line, lineIndex) => (
-                <span key={`caption-line-${columnIndex}-${lineIndex}`}>
+                <span
+                  key={`caption-line-${columnIndex}-${lineIndex}`}
+                  className={
+                    column.boldFirstLine && lineIndex === 0
+                      ? styles.biographyChaptersFigureCaptionLead
+                      : undefined
+                  }
+                >
                   {line}
                 </span>
               ))}
