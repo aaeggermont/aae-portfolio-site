@@ -1,5 +1,11 @@
 @use '../home/home-layout' as home;
 
+.aboutMeShell {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+}
+
 .aboutMePage {
   @include home.home-page-gutter;
   width: 100%;
@@ -27,5 +33,20 @@
       margin-top: 4.5rem;
       padding-bottom: 1rem;
     }
+  }
+}
+
+.viewAllWorkRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 3rem;
+
+  @media screen and (min-width: $tablet-min) {
+    margin-top: 4rem;
+  }
+
+  @media screen and (min-width: $desktop-min) {
+    margin-top: 5rem;
   }
 }

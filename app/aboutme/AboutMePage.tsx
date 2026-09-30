@@ -13,6 +13,9 @@ import { AboutMeIntro } from './components/AboutMeIntro';
 // import { AboutMeLocation } from './components/AboutMeLocation';
 import { CapabilityMap } from './components/CapabilityMap';
 import { AboutMeMore } from './components/AboutMeMore';
+import ContactMe from '@/app/home/contact-me';
+import { LandingFloatLayer } from '@/app/home/components/LandingFloatLayer';
+import { SectionActionLink } from '@/components/SectionActionLink/SectionActionLink';
 
 export default function AboutMePage() {
   const setLayoutState = useSetAtom(layoutState);
@@ -22,7 +25,8 @@ export default function AboutMePage() {
     return () => setLayoutState({ isFullWidth: false });
   }, [setLayoutState]);
 
-  return <>
+  return <div className={styles.aboutMeShell}>
+    <LandingFloatLayer />
     <div className={styles.aboutMePage}>
       <section className={styles.aboutMePageContent}>
         <AboutMeIntro />
@@ -31,6 +35,10 @@ export default function AboutMePage() {
         <CapabilityMap />
         <AboutMeMore />
       </section>
+      <div className={styles.viewAllWorkRow}>
+        <SectionActionLink href="/mywork" label="View all work" tone="navy" />
+      </div>
     </div>
-  </>
+    <ContactMe />
+  </div>
 }

@@ -1,0 +1,80 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  min-width: 180px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-family: var(--font-poppins);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover,
+  &:active {
+    opacity: 0.9;
+    transform: translateY(-2px);
+  }
+
+  &:hover .icon,
+  &:focus-visible .icon,
+  &:active .icon {
+    transform: translateX(4px);
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(245, 159, 10, 0.55);
+    outline-offset: 3px;
+  }
+}
+
+.amber {
+  background-color: hsl(38 92% 50%);
+  color: hsl(205 45% 22%);
+
+  &:hover,
+  &:active {
+    box-shadow: 0 10px 24px rgba(245, 159, 10, 0.35);
+  }
+}
+
+.navy {
+  background-color: hsl(205 45% 22%);
+  color: #ffffff;
+
+  &:hover,
+  &:active {
+    box-shadow: 0 10px 24px rgba(31, 60, 81, 0.35);
+  }
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  transition: transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon {
+    transition: none;
+  }
+
+  .link:hover,
+  .link:active {
+    transform: none;
+  }
+
+  .link:hover .icon,
+  .link:focus-visible .icon,
+  .link:active .icon {
+    transform: none;
+  }
+}
