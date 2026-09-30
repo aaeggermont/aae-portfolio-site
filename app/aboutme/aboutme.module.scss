@@ -1,5 +1,11 @@
 @use '../home/home-layout' as home;
 
+.aboutMeShell {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+}
+
 .aboutMePage {
   @include home.home-page-gutter;
   width: 100%;
