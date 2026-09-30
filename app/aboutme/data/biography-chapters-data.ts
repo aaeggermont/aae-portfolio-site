@@ -118,8 +118,8 @@ export const biographyChaptersFallback: BiographyChaptersData = {
   chapters: [
     {
       id: "harvard",
-      tocLabel: "Chapter 1 — Harvard: Foundations",
-      eyebrow: "01 · Harvard",
+      tocLabel: "01 · Harvard University",
+      eyebrow: "01 · Harvard University",
       title: "Foundations · Internet + Interactive Media",
       icon: "menuBook",
       blocks: [
@@ -232,7 +232,7 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "emerson",
-      tocLabel: "Chapter 2 — Emerson: Storytelling",
+      tocLabel: "02 · Emerson College",
       eyebrow: "02 · Emerson College",
       title: "Storytelling · Media Arts + Visual Effects",
       icon: "school",
@@ -441,8 +441,8 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "disney-animation",
-      tocLabel: "Chapter 3 — Disney Animation: Creative Tech",
-      eyebrow: "Chapter 3",
+      tocLabel: "03 · Disney Animation - IMD",
+      eyebrow: "03 · Disney Animation - IMD",
       title: "Disney Animation: Creative Technology Engineering + Filmmaking",
       icon: "lightbulb",
       blocks: [
@@ -456,9 +456,9 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "disney-emerging",
-      tocLabel: "Chapter 4 — Disney Emerging Tech",
-      eyebrow: "Chapter 4",
-      title: "Disney Emerging Tech · Immersive Experiences",
+      tocLabel: "04 · CBS Interactive - TV.com",
+      eyebrow: "04 · CBS Interactive - TV.com",
+      title: "Digital Media · Web Development + Video Publishing",
       icon: "devices",
       blocks: [
         {
@@ -471,8 +471,9 @@ export const biographyChaptersFallback: BiographyChaptersData = {
     },
     {
       id: "beyond-work",
-      tocLabel: "Beyond Work",
-      title: "Beyond Work",
+      tocLabel: "05 · Disney Parks, Experiences & Resorts",
+      eyebrow: "05 · Disney Parks, Experiences & Resorts",
+      title: "Emerging Technology · Human-Centered Design + Immersive Experiences",
       icon: "air",
       blocks: [
         {
