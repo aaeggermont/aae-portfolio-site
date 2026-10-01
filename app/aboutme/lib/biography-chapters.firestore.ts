@@ -75,6 +75,13 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
   const captionCredit = asString(record.captionCredit);
   const annotation = asString(record.annotation);
 
+  let fullPagePreview: BiographyChapterFigure["fullPagePreview"] | undefined;
+  const previewRaw = record.fullPagePreview;
+  if (previewRaw && typeof previewRaw === "object") {
+    const label = asString((previewRaw as Record<string, unknown>).label);
+    if (label) fullPagePreview = { label };
+  }
+
   let shotCarousel: BiographyChapterFigure["shotCarousel"] | undefined;
   const shotRaw = record.shotCarousel;
   if (shotRaw && typeof shotRaw === "object") {
@@ -158,6 +165,7 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
     ...(annotation ? { annotation } : {}),
+    ...(fullPagePreview ? { fullPagePreview } : {}),
     ...(shotCarousel ? { shotCarousel } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
     ...(vimeo ? { vimeo } : {}),

@@ -1,5 +1,6 @@
 'use client';
 
+import { useCallback, useRef, useState, type MouseEvent } from 'react';
 import { SlideshowLightbox } from 'lightbox.js-react';
 
 import {
@@ -9,6 +10,7 @@ import {
 import { buildPublicStorageUrl } from '@/lib/firebase/publicStorageUrl';
 import type { BiographyChapterFigure } from '../../data/biography-chapters-data';
 import { BiographyChapterCompareMedia } from './BiographyChapterCompareMedia';
+import { BiographyChapterFullPageDialog } from './BiographyChapterFullPageDialog';
 import { BiographyChapterShotCarousel } from './BiographyChapterShotCarousel';
 import { BiographyChapterVimeoPoster } from './BiographyChapterVimeoPoster';
 import styles from './biographyChapters.module.scss';
@@ -35,6 +37,19 @@ export function BiographyChapterFigureBlock({
     figure.captionTitle?.length || figure.captionCredit,
   );
   const hasAnnotation = Boolean(figure.annotation);
+  const fullPagePreview = figure.fullPagePreview;
+  const [fullPageOpen, setFullPageOpen] = useState(false);
+  const openerRef = useRef<HTMLElement | null>(null);
+
+  const openFullPage = (event: MouseEvent<HTMLElement>) => {
+    openerRef.current = event.currentTarget;
+    setFullPageOpen(true);
+  };
+
+  const closeFullPage = useCallback(() => {
+    setFullPageOpen(false);
+    openerRef.current?.focus();
+  }, []);
 
   return (
     <figure className={styles.biographyChaptersFigure}>
@@ -48,6 +63,23 @@ export function BiographyChapterFigureBlock({
         <BiographyChapterShotCarousel slides={slides} lightboxId={lightboxId} />
       ) : hasVimeo ? (
         <BiographyChapterVimeoPoster figure={figure} />
+      ) : fullPagePreview ? (
+        <div className={styles.biographyChaptersFigureMedia}>
+          <button
+            type="button"
+            className={styles.biographyChaptersFigurePreview}
+            aria-haspopup="dialog"
+            onClick={openFullPage}
+          >
+            <img
+              src={src}
+              alt={figure.alt}
+              width={1600}
+              height={900}
+              className={styles.biographyChaptersFigureImage}
+            />
+          </button>
+        </div>
       ) : (
         <div className={styles.biographyChaptersFigureMedia}>
           <SlideshowLightbox
@@ -120,6 +152,24 @@ export function BiographyChapterFigureBlock({
             </div>
           ))}
         </figcaption>
+      ) : null}
+      {fullPagePreview ? (
+        <button
+          type="button"
+          className={styles.biographyChaptersExplorePage}
+          aria-haspopup="dialog"
+          onClick={openFullPage}
+        >
+          {fullPagePreview.label}
+        </button>
+      ) : null}
+      {fullPagePreview ? (
+        <BiographyChapterFullPageDialog
+          open={fullPageOpen}
+          src={src}
+          alt={figure.alt}
+          onClose={closeFullPage}
+        />
       ) : null}
     </figure>
   );
