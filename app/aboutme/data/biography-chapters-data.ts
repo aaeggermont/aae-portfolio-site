@@ -624,7 +624,7 @@ export const biographyChaptersFallback: BiographyChaptersData = {
           type: "copy",
           paragraphs: [
             "After ImageMovers Digital closed, I moved from the film industry back into web development, joining CBS Interactive as an engineer working on TV.com. It was an unexpected change in direction, but one that brought me back to some of the technologies I had worked with earlier in my career.",
-            "At TV.com, my work focused on the systems behind online video publishing. I developed web applications for content management, integrated front-end applications with back-end services, and worked with APIs and external publishing platforms to support video ingestion and distribution.",
+            "TV.com was an online destination for television, bringing together show and episode guides, news and editorial content, fan communities, and online video in one experience.",
           ],
         },
         {
@@ -646,6 +646,12 @@ export const biographyChaptersFallback: BiographyChaptersData = {
               label: "Explore full page →",
             },
           },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "At TV.com, my work focused on the systems behind online video publishing. I developed web applications for content management, integrated front-end applications with back-end services, and worked with APIs and external publishing platforms to support video ingestion and distribution.",
+          ],
         },
         {
           type: "section",
@@ -674,6 +680,13 @@ export const biographyChaptersFallback: BiographyChaptersData = {
               label: "Explore full page →",
             },
           },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "My time at CBS Interactive brought me back to web development while allowing me to apply what I had learned from working with media and production. It also expanded my experience with large-scale digital platforms, content systems, and the workflows behind publishing media online.",
+            "My earlier experience at Disney had left a lasting impression on me, and when the opportunity came to return to the company, I was excited to return, this time from a very different professional direction. I joined Disney as a Business Intelligence Engineer, developing web applications for data visualization and working with large-scale data—beginning another new chapter in my career.",
+          ],
         },
       ],
     },
