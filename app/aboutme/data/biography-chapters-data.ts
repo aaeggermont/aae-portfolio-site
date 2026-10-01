@@ -54,6 +54,13 @@ export type BiographyChapterFigure = {
    */
   annotation?: string;
   /**
+   * When set, the figure shows only the top of a tall image. Clicking the
+   * image or the labeled control opens the full image in a scrollable page.
+   */
+  fullPagePreview?: {
+    label: string;
+  };
+  /**
    * Optional stills carousel: previous, next, and dot pagination, using the
    * same controls as the compare carousel.
    */
@@ -616,8 +623,57 @@ export const biographyChaptersFallback: BiographyChaptersData = {
         {
           type: "copy",
           paragraphs: [
-            "Placeholder: emerging technology and immersive experience work across Disney.",
+            "After ImageMovers Digital closed, I moved from the film industry back into web development, joining CBS Interactive as an engineer working on TV.com. It was an unexpected change in direction, but one that brought me back to some of the technologies I had worked with earlier in my career.",
+            "At TV.com, my work focused on the systems behind online video publishing. I developed web applications for content management, integrated front-end applications with back-end services, and worked with APIs and external publishing platforms to support video ingestion and distribution.",
           ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter04/TV.COMPage.png",
+            alt: "The TV.com homepage during Antonio Aranda Eggermont's time at CBS Interactive",
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "TV.com · CBS Interactive",
+                  "The TV.com experience during my time at CBS Interactive.",
+                  "Source: TV.com / CBS Interactive, archived via the Internet Archive Wayback Machine.",
+                ],
+              },
+            ],
+            fullPagePreview: {
+              label: "Explore full page →",
+            },
+          },
+        },
+        {
+          type: "section",
+          heading: "Behind the Publishing Experience",
+          paragraphs: [
+            "Much of my work at TV.com focused on the applications and services behind the site's video publishing experience. I developed front-end applications for content management and integrated them with REST APIs and back-end services used to ingest, manage, and publish video across the site.",
+            "I also developed automated workflows for acquiring content and data from television partners through RSS feeds and integrating it with ThePlatform, an external content management system used for video publishing on TV.com. Together, these systems helped move media and its associated data from external sources through the publishing workflow and into the experiences available to TV.com users.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter04/TV.COMVideosPage.png",
+            alt: "The TV.com videos page during Antonio Aranda Eggermont's time at CBS Interactive",
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Video Publishing · TV.com",
+                  "TV.com's dedicated video experience brought together full episodes, clips, previews, and video content published across the platform.",
+                  "Source: TV.com / CBS Interactive, archived via the Internet Archive Wayback Machine.",
+                ],
+              },
+            ],
+            fullPagePreview: {
+              label: "Explore full page →",
+            },
+          },
         },
       ],
     },
