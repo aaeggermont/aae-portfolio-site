@@ -387,33 +387,44 @@ export function BiographyChapters() {
                       }
 
                       if (block.type === "mediaText") {
+                        const figureAtEnd = block.figurePosition === "end";
+                        const figure = (
+                          <BiographyChapterFigureBlock
+                            figure={block.figure}
+                            lightboxId={`${chapter.id}-mediaText-${blockIndex}`}
+                          />
+                        );
+                        const copy = (
+                          <div className={styles.biographyChaptersMediaTextCopy}>
+                            {block.heading ? (
+                              <h3
+                                className={
+                                  styles.biographyChaptersMediaTextHeading
+                                }
+                              >
+                                {block.heading}
+                              </h3>
+                            ) : null}
+                            {block.paragraphs.map((paragraph, index) => (
+                              <p
+                                key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
+                              >
+                                {paragraph}
+                              </p>
+                            ))}
+                          </div>
+                        );
                         return (
                           <div
                             key={`${chapter.id}-mediaText-${blockIndex}`}
-                            className={styles.biographyChaptersMediaText}
+                            className={`${styles.biographyChaptersMediaText}${
+                              figureAtEnd
+                                ? ` ${styles.biographyChaptersMediaTextFigureEnd}`
+                                : ""
+                            }`}
                           >
-                            <BiographyChapterFigureBlock
-                              figure={block.figure}
-                              lightboxId={`${chapter.id}-mediaText-${blockIndex}`}
-                            />
-                            <div className={styles.biographyChaptersMediaTextCopy}>
-                              {block.heading ? (
-                                <h3
-                                  className={
-                                    styles.biographyChaptersMediaTextHeading
-                                  }
-                                >
-                                  {block.heading}
-                                </h3>
-                              ) : null}
-                              {block.paragraphs.map((paragraph, index) => (
-                                <p
-                                  key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
-                                >
-                                  {paragraph}
-                                </p>
-                              ))}
-                            </div>
+                            {figure}
+                            {copy}
                           </div>
                         );
                       }
@@ -426,6 +437,11 @@ export function BiographyChapters() {
                           <h3 className={styles.biographyChaptersSectionHeading}>
                             {block.heading}
                           </h3>
+                          {block.subheading ? (
+                            <p className={styles.biographyChaptersSectionSubheading}>
+                              {block.subheading}
+                            </p>
+                          ) : null}
                           {block.paragraphs?.length ? (
                             <div className={styles.biographyChaptersSectionBody}>
                               {block.paragraphs.map((paragraph, index) => (

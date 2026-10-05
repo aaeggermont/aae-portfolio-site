@@ -208,9 +208,11 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
       ? record.paragraphs
       : [];
     const paragraphs = paragraphsRaw.map(asString).filter(Boolean);
+    const subheading = asString(record.subheading);
     return {
       type: "section",
       heading,
+      ...(subheading ? { subheading } : {}),
       ...(paragraphs.length > 0 ? { paragraphs } : {}),
     };
   }
@@ -223,11 +225,13 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
     const paragraphs = paragraphsRaw.map(asString).filter(Boolean);
     if (!figure || paragraphs.length === 0) return null;
     const heading = asString(record.heading);
+    const figurePosition = asString(record.figurePosition);
     return {
       type: "mediaText",
       figure,
       paragraphs,
       ...(heading ? { heading } : {}),
+      ...(figurePosition === "end" ? { figurePosition: "end" as const } : {}),
     };
   }
 
