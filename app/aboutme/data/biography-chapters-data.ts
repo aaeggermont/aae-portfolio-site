@@ -105,6 +105,12 @@ export type BiographyChapterFigure = {
    */
   stackedScale?: number;
   /**
+   * Show only the top of the file, in source pixels. Used when the bottom
+   * of the asset is transparent and would reveal the figure placeholder.
+   * The lightbox still opens the full file.
+   */
+  visibleHeight?: number;
+  /**
    * Optional Vimeo playback: keep `imageObjectPath` as the poster and start
    * the embed only after the user presses play.
    */
@@ -994,6 +1000,65 @@ export const biographyChaptersFallback: BiographyChaptersData = {
           paragraphs: [
             "The original challenge came from Disney, while the project became the focus of my academic research at UW under the guidance of my faculty advisor. Using human-centered design methods, I explored the experience from the Guest's perspective and developed a concept that used the attraction environment itself as part of a self-guided augmented reality story.",
             "AR Magic Tours became one of the clearest examples of how my work in software, emerging technology, storytelling, and human-centered design were beginning to converge. It also reinforced something that had become increasingly important to me: technology was most interesting when it began with an understanding of the people and experiences it was intended to support.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Disney Cruise Line · Human-Centered Design",
+          subheading: "Designing for Complex Decision-Making",
+          paragraphs: [
+            "My work eventually brought me to the Disney Cruise Line Revenue Management System (DCL RMS), a large enterprise application supporting the teams responsible for planning voyages and managing pricing, promotions, and stateroom inventory across Disney Cruise Line's ships.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter05/DCLRMSInformationArchitecture.png",
+            alt: "Information architecture diagram of the DCL RMS landing page, branching into Admin, Science Admin, Configuration, and Sailing workflows",
+            pixelWidth: 1100,
+            pixelHeight: 837,
+            visibleHeight: 785,
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "DCL RMS · Information Architecture",
+                  "Mapping the major workflows and capabilities across a large-scale revenue management platform.",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "As Lead Software Engineer, my role brought together many of the disciplines that had shaped my career. I worked across software engineering, front-end architecture, user experience, and data visualization while helping modernize a legacy application that needed to remain operational throughout the transition.",
+            "Human-centered design and design thinking became an important part of that work. Through interviews, journey mapping, and analysis of existing workflows, I worked to understand how Revenue Managers made decisions, identify pain points and opportunities, and explore where the application could better support their work. Those insights helped shape the organization of the experience and the design of data-intensive interfaces used throughout the system.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter05/DCLRMSJourneyMAP.png",
+            alt: "Journey map of a Disney Cruise Line revenue manager across UI features, application performance, and science and data, marking gains, pain points, and opportunities",
+            pixelWidth: 913,
+            pixelHeight: 452,
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "DCL RMS · Revenue Manager Journey Map",
+                  "Mapping user gains, pain points, and opportunities across UI features, application performance, and science and data.",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "The scale of DCL RMS made understanding the Revenue Manager experience particularly important. Using human-centered design and design thinking, I analyzed the application from the user's perspective, looking across UI features, performance, and the science and data used to support revenue decisions. The journey map helped surface existing strengths, pain points, and opportunities for improving both the interface and the decision-making experience.",
           ],
         },
       ],

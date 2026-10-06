@@ -42,6 +42,9 @@ export function BiographyChapterFigureBlock({
   const previewHeight = Boolean(figure.previewHeight);
   const previewMaxWidth = Boolean(figure.previewMaxWidth);
   const stackedScale = Boolean(figure.stackedScale);
+  const visibleHeight = Boolean(
+    figure.visibleHeight && figure.pixelWidth && figure.visibleHeight > 0,
+  );
   const imageWidth = figure.pixelWidth ?? 1600;
   const imageHeight = figure.pixelHeight ?? 900;
   const [fullPageOpen, setFullPageOpen] = useState(false);
@@ -63,9 +66,9 @@ export function BiographyChapterFigureBlock({
         contained ? ` ${styles.biographyChaptersFigureContained}` : ""
       }${previewHeight ? ` ${styles.biographyChaptersFigurePreviewHeight}` : ""}${
         stackedScale ? ` ${styles.biographyChaptersFigureStackedScale}` : ""
-      }`}
+      }${visibleHeight ? ` ${styles.biographyChaptersFigureVisibleHeight}` : ""}`}
       style={
-        contained || previewHeight || previewMaxWidth || stackedScale
+        contained || previewHeight || previewMaxWidth || stackedScale || visibleHeight
           ? ({
               ...(contained
                 ? {
@@ -85,6 +88,11 @@ export function BiographyChapterFigureBlock({
               ...(stackedScale
                 ? {
                     "--biography-figure-stacked-scale": `${figure.stackedScale}`,
+                  }
+                : {}),
+              ...(visibleHeight
+                ? {
+                    "--biography-figure-visible-aspect": `${figure.pixelWidth} / ${figure.visibleHeight}`,
                   }
                 : {}),
               ...(figure.pixelWidth && figure.pixelHeight

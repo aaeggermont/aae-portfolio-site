@@ -197,6 +197,9 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(stackedScale(record.stackedScale)
       ? { stackedScale: stackedScale(record.stackedScale) }
       : {}),
+    ...(positivePx(record.visibleHeight)
+      ? { visibleHeight: positivePx(record.visibleHeight) }
+      : {}),
     ...(fullPagePreview ? { fullPagePreview } : {}),
     ...(shotCarousel ? { shotCarousel } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
