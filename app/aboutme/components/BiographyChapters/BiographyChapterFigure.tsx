@@ -39,6 +39,9 @@ export function BiographyChapterFigureBlock({
   const hasAnnotation = Boolean(figure.annotation);
   const fullPagePreview = figure.fullPagePreview;
   const contained = Boolean(figure.previewWidth);
+  const previewHeight = Boolean(figure.previewHeight);
+  const previewMaxWidth = Boolean(figure.previewMaxWidth);
+  const stackedScale = Boolean(figure.stackedScale);
   const imageWidth = figure.pixelWidth ?? 1600;
   const imageHeight = figure.pixelHeight ?? 900;
   const [fullPageOpen, setFullPageOpen] = useState(false);
@@ -58,11 +61,37 @@ export function BiographyChapterFigureBlock({
     <figure
       className={`${styles.biographyChaptersFigure}${
         contained ? ` ${styles.biographyChaptersFigureContained}` : ""
+      }${previewHeight ? ` ${styles.biographyChaptersFigurePreviewHeight}` : ""}${
+        stackedScale ? ` ${styles.biographyChaptersFigureStackedScale}` : ""
       }`}
       style={
-        contained
+        contained || previewHeight || previewMaxWidth || stackedScale
           ? ({
-              "--biography-figure-preview-width": `${figure.previewWidth}px`,
+              ...(contained
+                ? {
+                    "--biography-figure-preview-width": `${figure.previewWidth}px`,
+                  }
+                : {}),
+              ...(previewHeight
+                ? {
+                    "--biography-figure-preview-height": `${figure.previewHeight}px`,
+                  }
+                : {}),
+              ...(previewMaxWidth
+                ? {
+                    "--biography-figure-preview-max-width": `${figure.previewMaxWidth}px`,
+                  }
+                : {}),
+              ...(stackedScale
+                ? {
+                    "--biography-figure-stacked-scale": `${figure.stackedScale}`,
+                  }
+                : {}),
+              ...(figure.pixelWidth && figure.pixelHeight
+                ? {
+                    "--biography-figure-aspect": `${figure.pixelWidth / figure.pixelHeight}`,
+                  }
+                : {}),
             } as CSSProperties)
           : undefined
       }

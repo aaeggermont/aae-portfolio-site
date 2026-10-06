@@ -92,6 +92,19 @@ export type BiographyChapterFigure = {
    */
   previewWidth?: number;
   /**
+   * Desktop image height in pixels. Width stays proportional, and the image
+   * still opens in the lightbox. Inside a two-column row, this image instead
+   * matches its neighbor's height until `previewMaxWidth` is reached.
+   */
+  previewHeight?: number;
+  /** Largest rendered width in pixels. Height stays proportional. */
+  previewMaxWidth?: number;
+  /**
+   * When a figure row stacks to one column, render this image at this
+   * fraction of the column width. `0.7` is thirty percent smaller.
+   */
+  stackedScale?: number;
+  /**
    * Optional Vimeo playback: keep `imageObjectPath` as the poster and start
    * the embed only after the user presses play.
    */
@@ -119,6 +132,11 @@ export type BiographyChapterBlock =
   | {
       type: "figureRow";
       figures: BiographyChapterFigure[];
+      /**
+       * When the row stacks to one column, show the last figure first.
+       * Side-by-side order stays as written.
+       */
+      stackOrder?: "reverse";
     }
   | {
       type: "section";
@@ -921,6 +939,61 @@ export const biographyChaptersFallback: BiographyChaptersData = {
           type: "copy",
           paragraphs: [
             "What began as an emergency response to pandemic operating conditions eventually evolved into a production tool, used both for Cast Member training and to support seating operations at the attraction.",
+          ],
+        },
+        {
+          type: "section",
+          heading: "Immersive Experiences · Human-Centered Design",
+          subheading: "Bringing Research and Practice Together",
+          paragraphs: [
+            "As my work at Disney continued alongside my master's studies at the University of Washington, I had an opportunity to bring the two worlds together through AR Magic Tours, a research project exploring how augmented reality could transform the time Guests spend waiting for an attraction into an interactive storytelling experience.",
+          ],
+        },
+        {
+          type: "figureRow",
+          figures: [
+            {
+              imageObjectPath:
+                "site/biography/chapter05/LongLineofPeopleWaitingInLine.png",
+              alt: "Guests waiting in a long line outside the Tower of Terror attraction",
+              pixelWidth: 512,
+              pixelHeight: 516,
+              stackedScale: 0.7,
+              captions: [
+                {
+                  boldFirstLine: true,
+                  lines: [
+                    "Designing for the Wait Experience",
+                    "Exploring how the attraction environment and time spent in line could become part of the Guest experience.",
+                  ],
+                },
+              ],
+            },
+            {
+              imageObjectPath:
+                "site/biography/chapter05/ARDicoveringStoryDetails.png",
+              alt: "AR Magic Tours phone screen revealing a story detail about the Tower of Terror attraction",
+              pixelWidth: 259,
+              pixelHeight: 527,
+              previewHeight: 337,
+              previewMaxWidth: 224,
+              captions: [
+                {
+                  boldFirstLine: true,
+                  lines: [
+                    "AR Magic Tours · Augmented Reality Experience",
+                    "An interactive story designed to reveal hidden narratives throughout the attraction environment.",
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "The original challenge came from Disney, while the project became the focus of my academic research at UW under the guidance of my faculty advisor. Using human-centered design methods, I explored the experience from the Guest's perspective and developed a concept that used the attraction environment itself as part of a self-guided augmented reality story.",
+            "AR Magic Tours became one of the clearest examples of how my work in software, emerging technology, storytelling, and human-centered design were beginning to converge. It also reinforced something that had become increasingly important to me: technology was most interesting when it began with an understanding of the people and experiences it was intended to support.",
           ],
         },
       ],

@@ -1,6 +1,13 @@
 'use client';
 
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -383,10 +390,49 @@ export function BiographyChapters() {
                       }
 
                       if (block.type === "figureRow") {
+                        const peer = block.figures.find(
+                          (figure) =>
+                            !figure.previewHeight &&
+                            figure.pixelWidth &&
+                            figure.pixelHeight,
+                        );
+                        const peerRatio =
+                          peer?.pixelWidth && peer?.pixelHeight
+                            ? peer.pixelHeight / peer.pixelWidth
+                            : undefined;
+                        const stackedScale = block.figures.find(
+                          (figure) => figure.stackedScale,
+                        )?.stackedScale;
                         return (
                           <div
                             key={`${chapter.id}-figure-row-${blockIndex}`}
-                            className={styles.biographyChaptersFigureRow}
+                            className={`${styles.biographyChaptersFigureRow}${
+                              peerRatio
+                                ? ` ${styles.biographyChaptersFigureRowMatched}`
+                                : ""
+                            }${
+                              block.stackOrder === "reverse"
+                                ? ` ${styles.biographyChaptersFigureRowStackReverse}`
+                                : ""
+                            }`}
+                            style={
+                              peerRatio || stackedScale
+                                ? ({
+                                    ...(peerRatio
+                                      ? {
+                                          "--biography-figure-row-peer-ratio":
+                                            String(peerRatio),
+                                        }
+                                      : {}),
+                                    ...(stackedScale
+                                      ? {
+                                          "--biography-figure-row-stacked-scale":
+                                            String(stackedScale),
+                                        }
+                                      : {}),
+                                  } as CSSProperties)
+                                : undefined
+                            }
                           >
                             {block.figures.map((figure, figureIndex) => (
                               <BiographyChapterFigureBlock

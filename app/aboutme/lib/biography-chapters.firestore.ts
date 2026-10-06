@@ -47,6 +47,16 @@ function positivePx(value: unknown): number {
     : 0;
 }
 
+/** Fraction of the column width used when a figure row stacks. */
+function stackedScale(value: unknown): number {
+  return typeof value === "number" &&
+    Number.isFinite(value) &&
+    value > 0 &&
+    value < 1
+    ? value
+    : 0;
+}
+
 function parseCaptionColumn(
   raw: unknown,
 ): BiographyChapterCaptionColumn | null {
@@ -182,6 +192,11 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(positivePx(record.pixelWidth) ? { pixelWidth: positivePx(record.pixelWidth) } : {}),
     ...(positivePx(record.pixelHeight) ? { pixelHeight: positivePx(record.pixelHeight) } : {}),
     ...(positivePx(record.previewWidth) ? { previewWidth: positivePx(record.previewWidth) } : {}),
+    ...(positivePx(record.previewHeight) ? { previewHeight: positivePx(record.previewHeight) } : {}),
+    ...(positivePx(record.previewMaxWidth) ? { previewMaxWidth: positivePx(record.previewMaxWidth) } : {}),
+    ...(stackedScale(record.stackedScale)
+      ? { stackedScale: stackedScale(record.stackedScale) }
+      : {}),
     ...(fullPagePreview ? { fullPagePreview } : {}),
     ...(shotCarousel ? { shotCarousel } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
@@ -215,7 +230,12 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
       .map(parseFigure)
       .filter((figure): figure is BiographyChapterFigure => figure !== null);
     if (figures.length < 2) return null;
-    return { type: "figureRow", figures };
+    const stackOrder = asString(record.stackOrder);
+    return {
+      type: "figureRow",
+      figures,
+      ...(stackOrder === "reverse" ? { stackOrder: "reverse" as const } : {}),
+    };
   }
 
   if (type === "section") {
