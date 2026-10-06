@@ -785,6 +785,14 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             "The work was much more experimental, ranging from computer vision and machine learning to new tools for supporting Cast Members and interactive experiences for guests.",
           ],
         },
+        {
+          type: "section",
+          heading: "AI + Computer Vision · 2019 Datathon",
+          subheading: "Finding Nemo: Shark Scenes",
+          paragraphs: [
+            "One of the early experiences that shaped this direction came through Disney's 2019 Datathon. Our team explored how artificial intelligence and computer vision could be used to identify potential safety incidents in the parks, developing a prototype that detected and tracked people entering restricted areas and surfaced potential incidents for review.",
+          ],
+        },
       ],
     },
     {

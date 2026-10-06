@@ -910,6 +910,13 @@ $toc-muted: #6b7c85;
   @media screen and (min-width: $tablet-min) {
     padding-left: 3.3rem;
   }
+
+  // A subtitle with no paragraphs of its own sits above the next block.
+  // Cancel the extra block gap so that subtitle sits as close to the next
+  // paragraph as a subtitle with its paragraphs inside the section.
+  &:has(.biographyChaptersSectionSubheading):not(:has(.biographyChaptersSectionBody)) {
+    margin-bottom: calc(0.65rem - 1.35rem);
+  }
 }
 
 .biographyChaptersSectionHeading {
@@ -928,7 +935,7 @@ $toc-muted: #6b7c85;
 }
 
 .biographyChaptersSectionSubheading {
-  margin: 0 0 0.65rem;
+  margin: 0;
   font-family: var(--font-montserrat);
   font-size: clamp(1.05rem, 2vw, 1.25rem);
   font-weight: 600;
@@ -937,6 +944,7 @@ $toc-muted: #6b7c85;
 }
 
 .biographyChaptersSectionBody {
+  margin-top: 0.65rem;
   p {
     margin: 0;
     font-family: var(--font-poppins);
