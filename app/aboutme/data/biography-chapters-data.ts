@@ -829,6 +829,15 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             "The project won first place, but for me its longer-term impact was realizing how interested I had become in the intersection of artificial intelligence, machine learning, and human-computer interaction.",
           ],
         },
+        {
+          type: "section",
+          heading: "Human-Centered Design & Engineering",
+          subheading: "Understanding the People Behind the Technology",
+          paragraphs: [
+            "The Datathon helped clarify a direction I was becoming increasingly excited about. I could see the potential for artificial intelligence and machine learning to create entirely new kinds of systems, but I was equally interested in how people would understand, interact with, and ultimately use those technologies.",
+            "That intersection between technology and human experience became an important part of what I wanted to explore through the master's program in Human Centered Design & Engineering at the University of Washington. The program gave me a more formal foundation in human-computer interaction, user research, and human-centered design methods that I could begin applying directly to my work at Disney.",
+          ],
+        },
       ],
     },
     {
