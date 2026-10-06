@@ -838,6 +838,58 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             "That intersection between technology and human experience became an important part of what I wanted to explore through the master's program in Human Centered Design & Engineering at the University of Washington. The program gave me a more formal foundation in human-computer interaction, user research, and human-centered design methods that I could begin applying directly to my work at Disney.",
           ],
         },
+        {
+          type: "section",
+          heading: "Human-Centered Operations · Computer Vision",
+          subheading: "Rethinking Attraction Track Walks",
+          paragraphs: [
+            "Track Walk was one of the projects where I began applying this human-centered perspective directly to an operational problem. The project explored how computer vision and automation could support the procedures Cast Members use to inspect attractions before opening and during periods of downtime.",
+            "I analyzed the existing Track Walk experience from the user's perspective, mapping the procedures Cast Members followed and identifying pain points around repetitive inspections, checklists, communication, and notifications. That analysis helped identify opportunities for a more intelligent workflow that could combine automated monitoring with better information and communication for the people responsible for operating the attraction.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter05/ExperienceJourneyMapTrackWalkProcedures.png",
+            alt: "Experience journey map of Track Walk procedures, showing Cast Member gains and pain points across pre-opening procedures and monitoring",
+            pixelWidth: 1100,
+            pixelHeight: 460,
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Experience Journey Map · Track Walk Procedures",
+                  "Mapping Cast Member workflows, pain points, and opportunities across pre-opening procedures, monitoring, and communication.",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "The technical proof of concept explored how computer vision and sensing could help validate track conditions, identify potential obstructions, monitor safety equipment and signage, and create digital records of attraction conditions. The goal was to investigate where automation could reduce repetitive work and support safer, more efficient operational procedures.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter05/CVInfraredTrackWalk.png",
+            alt: "Infrared computer vision sample from an early Track Walk prototype for automated attraction monitoring",
+            pixelWidth: 1091,
+            pixelHeight: 404,
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Computer Vision · Track Walk Sample",
+                  "Exploring infrared imaging and computer vision as part of an early prototype for automated attraction monitoring.",
+                ],
+              },
+            ],
+          },
+        },
       ],
     },
     {
