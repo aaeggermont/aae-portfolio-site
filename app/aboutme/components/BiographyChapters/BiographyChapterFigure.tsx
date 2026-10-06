@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { SlideshowLightbox } from 'lightbox.js-react';
 
 import {
@@ -38,6 +38,9 @@ export function BiographyChapterFigureBlock({
   );
   const hasAnnotation = Boolean(figure.annotation);
   const fullPagePreview = figure.fullPagePreview;
+  const contained = Boolean(figure.previewWidth);
+  const imageWidth = figure.pixelWidth ?? 1600;
+  const imageHeight = figure.pixelHeight ?? 900;
   const [fullPageOpen, setFullPageOpen] = useState(false);
   const openerRef = useRef<HTMLElement | null>(null);
 
@@ -52,7 +55,18 @@ export function BiographyChapterFigureBlock({
   }, []);
 
   return (
-    <figure className={styles.biographyChaptersFigure}>
+    <figure
+      className={`${styles.biographyChaptersFigure}${
+        contained ? ` ${styles.biographyChaptersFigureContained}` : ""
+      }`}
+      style={
+        contained
+          ? ({
+              "--biography-figure-preview-width": `${figure.previewWidth}px`,
+            } as CSSProperties)
+          : undefined
+      }
+    >
       {pairs.length > 0 && carousel ? (
         <BiographyChapterCompareMedia
           pairs={pairs}
@@ -97,8 +111,8 @@ export function BiographyChapterFigureBlock({
               src={src}
               alt={figure.alt}
               data-lightboxjs={lightboxId}
-              width={1600}
-              height={900}
+              width={imageWidth}
+              height={imageHeight}
               className={styles.biographyChaptersFigureImage}
             />
           </SlideshowLightbox>

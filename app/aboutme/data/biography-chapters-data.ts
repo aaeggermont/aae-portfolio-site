@@ -82,6 +82,16 @@ export type BiographyChapterFigure = {
     durationMs?: number;
   };
   /**
+   * Intrinsic pixel size of the file. Used so a portrait screenshot is not
+   * framed as 16:9.
+   */
+  pixelWidth?: number;
+  pixelHeight?: number;
+  /**
+   * Centered preview width in pixels. The image still opens in the lightbox.
+   */
+  previewWidth?: number;
+  /**
    * Optional Vimeo playback: keep `imageObjectPath` as the poster and start
    * the embed only after the user presses play.
    */
@@ -791,6 +801,32 @@ export const biographyChaptersFallback: BiographyChaptersData = {
           subheading: "Finding Nemo: Shark Scenes",
           paragraphs: [
             "One of the early experiences that shaped this direction came through Disney's 2019 Datathon. Our team explored how artificial intelligence and computer vision could be used to identify potential safety incidents in the parks, developing a prototype that detected and tracked people entering restricted areas and surfaced potential incidents for review.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath: "site/biography/chapter05/ParkWatchIncidentMobile.png",
+            alt: "Incident summary for a possible unauthorized entry during the Finding Nemo shark scenes prototype",
+            pixelWidth: 171,
+            pixelHeight: 372,
+            previewWidth: 224,
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Finding Nemo · Incident Summary",
+                  "Bringing together camera evidence and incident context to help Cast Members review potential safety events.",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "My growing background in human-computer interaction gave me another perspective to bring to the project: not only what the technology could detect, but how people might interact with and make sense of the information it produced.",
+            "The project won first place, but for me its longer-term impact was realizing how interested I had become in the intersection of artificial intelligence, machine learning, and human-computer interaction.",
           ],
         },
       ],

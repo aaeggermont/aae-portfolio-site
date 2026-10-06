@@ -220,6 +220,16 @@ $toc-muted: #6b7c85;
   }
 }
 
+.biographyChaptersFigureContained {
+  .biographyChaptersFigureMedia,
+  .biographyChaptersFigureCaptions {
+    width: var(--biography-figure-preview-width);
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
 .biographyChaptersFigureRow {
   display: grid;
   grid-template-columns: 1fr;

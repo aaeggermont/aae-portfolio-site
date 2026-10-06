@@ -41,6 +41,12 @@ function asNumber(value: unknown, fallback = 0): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
+function positivePx(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) && value > 0
+    ? value
+    : 0;
+}
+
 function parseCaptionColumn(
   raw: unknown,
 ): BiographyChapterCaptionColumn | null {
@@ -173,6 +179,9 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
     ...(annotation ? { annotation } : {}),
+    ...(positivePx(record.pixelWidth) ? { pixelWidth: positivePx(record.pixelWidth) } : {}),
+    ...(positivePx(record.pixelHeight) ? { pixelHeight: positivePx(record.pixelHeight) } : {}),
+    ...(positivePx(record.previewWidth) ? { previewWidth: positivePx(record.previewWidth) } : {}),
     ...(fullPagePreview ? { fullPagePreview } : {}),
     ...(shotCarousel ? { shotCarousel } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
