@@ -94,7 +94,15 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
         const slidePath = asString(slide.imageObjectPath);
         const slideAlt = asString(slide.alt);
         if (!slidePath || !slideAlt) return null;
-        return { imageObjectPath: slidePath, alt: slideAlt };
+        const captionLinesRaw = Array.isArray(slide.captionLines)
+          ? slide.captionLines
+          : [];
+        const captionLines = captionLinesRaw.map(asString).filter(Boolean);
+        return {
+          imageObjectPath: slidePath,
+          alt: slideAlt,
+          ...(captionLines.length > 0 ? { captionLines } : {}),
+        };
       })
       .filter((slide): slide is NonNullable<typeof slide> => slide !== null);
     if (slides.length > 0) {

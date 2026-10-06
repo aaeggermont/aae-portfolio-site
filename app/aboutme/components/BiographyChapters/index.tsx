@@ -394,25 +394,21 @@ export function BiographyChapters() {
                             lightboxId={`${chapter.id}-mediaText-${blockIndex}`}
                           />
                         );
-                        const copy = (
-                          <div className={styles.biographyChaptersMediaTextCopy}>
-                            {block.heading ? (
-                              <h3
-                                className={
-                                  styles.biographyChaptersMediaTextHeading
-                                }
-                              >
-                                {block.heading}
-                              </h3>
-                            ) : null}
-                            {block.paragraphs.map((paragraph, index) => (
-                              <p
-                                key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
-                              >
-                                {paragraph}
-                              </p>
-                            ))}
-                          </div>
+                        const heading = block.heading ? (
+                          <h3
+                            className={styles.biographyChaptersMediaTextHeading}
+                          >
+                            {block.heading}
+                          </h3>
+                        ) : null;
+                        const paragraphs = block.paragraphs.map(
+                          (paragraph, index) => (
+                            <p
+                              key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
+                            >
+                              {paragraph}
+                            </p>
+                          ),
                         );
                         return (
                           <div
@@ -423,8 +419,23 @@ export function BiographyChapters() {
                                 : ""
                             }`}
                           >
-                            {figure}
-                            {copy}
+                            {figureAtEnd ? (
+                              <>
+                                {figure}
+                                {heading}
+                                {paragraphs}
+                              </>
+                            ) : (
+                              <>
+                                {figure}
+                                <div
+                                  className={styles.biographyChaptersMediaTextCopy}
+                                >
+                                  {heading}
+                                  {paragraphs}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       }

@@ -619,6 +619,16 @@ $toc-muted: #6b7c85;
   position: relative;
 }
 
+.biographyChaptersShotCarouselCompact {
+  .biographyChaptersFigureMedia,
+  .biographyChaptersFigureCaptions {
+    width: 295px;
+    max-width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
 .biographyChaptersCompareCarouselFooter {
   display: flex;
   flex-direction: column;
@@ -806,10 +816,31 @@ $toc-muted: #6b7c85;
       display: block;
       clear: both;
     }
+
+    > p + p {
+      margin-top: 0.85rem;
+    }
   }
 
-  .biographyChaptersMediaTextCopy {
+  > p {
+    margin: 0;
+    font-family: var(--font-poppins);
+    @include fluid-type(15px, 16px, 18px);
+    font-weight: 400;
+    line-height: 1.55;
+    color: $toc-muted;
+  }
+
+  > p:first-of-type {
     order: 1;
+  }
+
+  > .biographyChaptersFigure {
+    order: 2;
+  }
+
+  > p:not(:first-of-type) {
+    order: 3;
   }
 
   .biographyChaptersFigureMedia {

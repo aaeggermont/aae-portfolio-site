@@ -48,6 +48,7 @@ export function BiographyChapterShotCarousel({
   const src = buildPublicStorageUrl(slide.imageObjectPath);
   const shotLabel = String(index + 1).padStart(2, '0');
   const totalLabel = String(total).padStart(2, '0');
+  const compactDesktop = slides.some((item) => item.captionLines?.length);
 
   const goTo = (nextIndex: number) => {
     if (nextIndex < 0 || nextIndex >= total || nextIndex === index) return;
@@ -55,7 +56,11 @@ export function BiographyChapterShotCarousel({
   };
 
   return (
-    <div className={styles.biographyChaptersCompareCarousel}>
+    <div
+      className={`${styles.biographyChaptersCompareCarousel} ${
+        compactDesktop ? styles.biographyChaptersShotCarouselCompact : ''
+      }`}
+    >
       <div className={styles.biographyChaptersFigureMedia}>
         <SlideshowLightbox
           framework="next"
@@ -79,6 +84,26 @@ export function BiographyChapterShotCarousel({
           />
         </SlideshowLightbox>
       </div>
+      {slide.captionLines?.length ? (
+        <div className={styles.biographyChaptersFigureCaptions}>
+          <div
+            className={`${styles.biographyChaptersFigureCaptionColumn} ${styles.biographyChaptersFigureCaptionAnnotationSize}`}
+          >
+            {slide.captionLines.map((line, lineIndex) => (
+              <span
+                key={`${slide.imageObjectPath}-caption-${lineIndex}`}
+                className={
+                  lineIndex === 0
+                    ? styles.biographyChaptersFigureCaptionLead
+                    : undefined
+                }
+              >
+                {line}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {total > 1 ? (
         <div className={styles.biographyChaptersCompareCarouselFooter}>
