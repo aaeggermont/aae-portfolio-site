@@ -776,6 +776,15 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             "I also developed a Django-based data access system that provided a common interface for working with data from Vertica, MySQL, and Google BigQuery. The system maintained a repository of queries certified by data scientists, allowing teams to run trusted queries on demand or access their results through an API. A caching layer stored the results of computationally expensive queries so they could be reused throughout the day without repeatedly querying the underlying data sources.",
           ],
         },
+        {
+          type: "section",
+          heading: "Emerging Technology",
+          subheading: "Exploring New Forms of Interaction",
+          paragraphs: [
+            "My work at Disney eventually led me into the Emerging Technology group within Disney Parks, Experiences and Resorts, where I began exploring how new technologies could be applied to guest experiences and operational challenges across Disney's parks and resorts.",
+            "The work was much more experimental, ranging from computer vision and machine learning to new tools for supporting Cast Members and interactive experiences for guests.",
+          ],
+        },
       ],
     },
     {
