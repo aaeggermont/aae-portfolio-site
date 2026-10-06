@@ -191,6 +191,10 @@ $toc-muted: #6b7c85;
   display: flex;
   flex-direction: column;
   gap: 1.35rem;
+
+  strong {
+    font-weight: 700;
+  }
 }
 
 .biographyChaptersCopy {

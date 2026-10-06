@@ -37,6 +37,19 @@ const CHAPTER_SCROLL_GAP_PX = 8;
 
 const COLLAPSE_TIMEOUT = { enter: 280, exit: 180 } as const;
 
+/** `**phrase**` in biography copy renders as bold. */
+function renderBiographyInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  if (parts.length === 1) return text;
+  return parts.map((part, index) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={index}>{part.slice(2, -2)}</strong>
+    ) : (
+      part
+    ),
+  );
+}
+
 /** Gentler than native `behavior: 'smooth'` — ease-out scroll for first open. */
 const CHAPTER_SCROLL_DURATION_MS = 700;
 
@@ -352,7 +365,7 @@ export function BiographyChapters() {
                           >
                             {block.paragraphs.map((paragraph, index) => (
                               <p key={`${chapter.id}-p-${blockIndex}-${index}`}>
-                                {paragraph}
+                                {renderBiographyInline(paragraph)}
                               </p>
                             ))}
                           </div>
@@ -406,7 +419,7 @@ export function BiographyChapters() {
                             <p
                               key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
                             >
-                              {paragraph}
+                              {renderBiographyInline(paragraph)}
                             </p>
                           ),
                         );
@@ -459,7 +472,7 @@ export function BiographyChapters() {
                                 <p
                                   key={`${chapter.id}-section-p-${blockIndex}-${index}`}
                                 >
-                                  {paragraph}
+                                  {renderBiographyInline(paragraph)}
                                 </p>
                               ))}
                             </div>

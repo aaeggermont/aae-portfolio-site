@@ -890,6 +890,39 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             ],
           },
         },
+        {
+          type: "section",
+          heading: "Human-Centered Operations",
+          subheading: "Reducing Complexity During the COVID Pandemic",
+          paragraphs: [
+            "During the COVID-19 pandemic, new physical-distancing requirements created an unexpected operational challenge for attraction Cast Members. Seating Guests now required considerably more mental calculation as Cast Members had to determine how parties of different sizes could be distributed across available seating while following the new distancing rules.",
+            "**Automatic Seating Assignments** was developed in response to that problem. The goal was to move much of that computational burden away from the Cast Member, allowing the application to calculate seating assignments while presenting the result through an interface that could be understood and acted on quickly in a fast-moving operational environment.",
+          ],
+        },
+        {
+          type: "figure",
+          figure: {
+            imageObjectPath:
+              "site/biography/chapter05/CoDeisgnWorkshopIllustration.png",
+            alt: "Progression from a physical seating chart, through an early digital seating screen, to automatic seating assignments",
+            pixelWidth: 740,
+            pixelHeight: 435,
+            captions: [
+              {
+                boldFirstLine: true,
+                lines: [
+                  "Physical Seating Process → Early Digital Exploration → Automatic Seating Assignments",
+                ],
+              },
+            ],
+          },
+        },
+        {
+          type: "copy",
+          paragraphs: [
+            "What began as an emergency response to pandemic operating conditions eventually evolved into a production tool, used both for Cast Member training and to support seating operations at the attraction.",
+          ],
+        },
       ],
     },
     {
