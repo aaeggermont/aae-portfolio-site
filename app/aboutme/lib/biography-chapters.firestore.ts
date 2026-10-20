@@ -41,6 +41,22 @@ function asNumber(value: unknown, fallback = 0): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
+function positivePx(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) && value > 0
+    ? value
+    : 0;
+}
+
+/** Fraction of the column width used when a figure row stacks. */
+function stackedScale(value: unknown): number {
+  return typeof value === "number" &&
+    Number.isFinite(value) &&
+    value > 0 &&
+    value < 1
+    ? value
+    : 0;
+}
+
 function parseCaptionColumn(
   raw: unknown,
 ): BiographyChapterCaptionColumn | null {
@@ -94,7 +110,15 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
         const slidePath = asString(slide.imageObjectPath);
         const slideAlt = asString(slide.alt);
         if (!slidePath || !slideAlt) return null;
-        return { imageObjectPath: slidePath, alt: slideAlt };
+        const captionLinesRaw = Array.isArray(slide.captionLines)
+          ? slide.captionLines
+          : [];
+        const captionLines = captionLinesRaw.map(asString).filter(Boolean);
+        return {
+          imageObjectPath: slidePath,
+          alt: slideAlt,
+          ...(captionLines.length > 0 ? { captionLines } : {}),
+        };
       })
       .filter((slide): slide is NonNullable<typeof slide> => slide !== null);
     if (slides.length > 0) {
@@ -165,6 +189,17 @@ function parseFigure(raw: unknown): BiographyChapterFigure | null {
     ...(captionTitle.length > 0 ? { captionTitle } : {}),
     ...(captionCredit ? { captionCredit } : {}),
     ...(annotation ? { annotation } : {}),
+    ...(positivePx(record.pixelWidth) ? { pixelWidth: positivePx(record.pixelWidth) } : {}),
+    ...(positivePx(record.pixelHeight) ? { pixelHeight: positivePx(record.pixelHeight) } : {}),
+    ...(positivePx(record.previewWidth) ? { previewWidth: positivePx(record.previewWidth) } : {}),
+    ...(positivePx(record.previewHeight) ? { previewHeight: positivePx(record.previewHeight) } : {}),
+    ...(positivePx(record.previewMaxWidth) ? { previewMaxWidth: positivePx(record.previewMaxWidth) } : {}),
+    ...(stackedScale(record.stackedScale)
+      ? { stackedScale: stackedScale(record.stackedScale) }
+      : {}),
+    ...(positivePx(record.visibleHeight)
+      ? { visibleHeight: positivePx(record.visibleHeight) }
+      : {}),
     ...(fullPagePreview ? { fullPagePreview } : {}),
     ...(shotCarousel ? { shotCarousel } : {}),
     ...(compareCarousel ? { compareCarousel } : {}),
@@ -198,7 +233,12 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
       .map(parseFigure)
       .filter((figure): figure is BiographyChapterFigure => figure !== null);
     if (figures.length < 2) return null;
-    return { type: "figureRow", figures };
+    const stackOrder = asString(record.stackOrder);
+    return {
+      type: "figureRow",
+      figures,
+      ...(stackOrder === "reverse" ? { stackOrder: "reverse" as const } : {}),
+    };
   }
 
   if (type === "section") {
@@ -208,9 +248,11 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
       ? record.paragraphs
       : [];
     const paragraphs = paragraphsRaw.map(asString).filter(Boolean);
+    const subheading = asString(record.subheading);
     return {
       type: "section",
       heading,
+      ...(subheading ? { subheading } : {}),
       ...(paragraphs.length > 0 ? { paragraphs } : {}),
     };
   }
@@ -223,11 +265,13 @@ function parseBlock(raw: unknown): BiographyChapterBlock | null {
     const paragraphs = paragraphsRaw.map(asString).filter(Boolean);
     if (!figure || paragraphs.length === 0) return null;
     const heading = asString(record.heading);
+    const figurePosition = asString(record.figurePosition);
     return {
       type: "mediaText",
       figure,
       paragraphs,
       ...(heading ? { heading } : {}),
+      ...(figurePosition === "end" ? { figurePosition: "end" as const } : {}),
     };
   }
 

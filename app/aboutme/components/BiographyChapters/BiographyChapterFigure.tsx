@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState, type MouseEvent } from 'react';
+import { useCallback, useRef, useState, type CSSProperties, type MouseEvent } from 'react';
 import { SlideshowLightbox } from 'lightbox.js-react';
 
 import {
@@ -38,6 +38,15 @@ export function BiographyChapterFigureBlock({
   );
   const hasAnnotation = Boolean(figure.annotation);
   const fullPagePreview = figure.fullPagePreview;
+  const contained = Boolean(figure.previewWidth);
+  const previewHeight = Boolean(figure.previewHeight);
+  const previewMaxWidth = Boolean(figure.previewMaxWidth);
+  const stackedScale = Boolean(figure.stackedScale);
+  const visibleHeight = Boolean(
+    figure.visibleHeight && figure.pixelWidth && figure.visibleHeight > 0,
+  );
+  const imageWidth = figure.pixelWidth ?? 1600;
+  const imageHeight = figure.pixelHeight ?? 900;
   const [fullPageOpen, setFullPageOpen] = useState(false);
   const openerRef = useRef<HTMLElement | null>(null);
 
@@ -52,7 +61,49 @@ export function BiographyChapterFigureBlock({
   }, []);
 
   return (
-    <figure className={styles.biographyChaptersFigure}>
+    <figure
+      className={`${styles.biographyChaptersFigure}${
+        contained ? ` ${styles.biographyChaptersFigureContained}` : ""
+      }${previewHeight ? ` ${styles.biographyChaptersFigurePreviewHeight}` : ""}${
+        stackedScale ? ` ${styles.biographyChaptersFigureStackedScale}` : ""
+      }${visibleHeight ? ` ${styles.biographyChaptersFigureVisibleHeight}` : ""}`}
+      style={
+        contained || previewHeight || previewMaxWidth || stackedScale || visibleHeight
+          ? ({
+              ...(contained
+                ? {
+                    "--biography-figure-preview-width": `${figure.previewWidth}px`,
+                  }
+                : {}),
+              ...(previewHeight
+                ? {
+                    "--biography-figure-preview-height": `${figure.previewHeight}px`,
+                  }
+                : {}),
+              ...(previewMaxWidth
+                ? {
+                    "--biography-figure-preview-max-width": `${figure.previewMaxWidth}px`,
+                  }
+                : {}),
+              ...(stackedScale
+                ? {
+                    "--biography-figure-stacked-scale": `${figure.stackedScale}`,
+                  }
+                : {}),
+              ...(visibleHeight
+                ? {
+                    "--biography-figure-visible-aspect": `${figure.pixelWidth} / ${figure.visibleHeight}`,
+                  }
+                : {}),
+              ...(figure.pixelWidth && figure.pixelHeight
+                ? {
+                    "--biography-figure-aspect": `${figure.pixelWidth / figure.pixelHeight}`,
+                  }
+                : {}),
+            } as CSSProperties)
+          : undefined
+      }
+    >
       {pairs.length > 0 && carousel ? (
         <BiographyChapterCompareMedia
           pairs={pairs}
@@ -97,8 +148,8 @@ export function BiographyChapterFigureBlock({
               src={src}
               alt={figure.alt}
               data-lightboxjs={lightboxId}
-              width={1600}
-              height={900}
+              width={imageWidth}
+              height={imageHeight}
               className={styles.biographyChaptersFigureImage}
             />
           </SlideshowLightbox>

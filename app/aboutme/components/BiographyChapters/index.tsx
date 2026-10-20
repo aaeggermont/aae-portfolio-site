@@ -1,6 +1,13 @@
 'use client';
 
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react';
 import AirOutlinedIcon from '@mui/icons-material/AirOutlined';
 import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -36,6 +43,19 @@ const CHAPTER_SCROLL_OFFSET_FALLBACK_PX = 104;
 const CHAPTER_SCROLL_GAP_PX = 8;
 
 const COLLAPSE_TIMEOUT = { enter: 280, exit: 180 } as const;
+
+/** `**phrase**` in biography copy renders as bold. */
+function renderBiographyInline(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  if (parts.length === 1) return text;
+  return parts.map((part, index) =>
+    part.startsWith("**") && part.endsWith("**") ? (
+      <strong key={index}>{part.slice(2, -2)}</strong>
+    ) : (
+      part
+    ),
+  );
+}
 
 /** Gentler than native `behavior: 'smooth'` — ease-out scroll for first open. */
 const CHAPTER_SCROLL_DURATION_MS = 700;
@@ -352,7 +372,7 @@ export function BiographyChapters() {
                           >
                             {block.paragraphs.map((paragraph, index) => (
                               <p key={`${chapter.id}-p-${blockIndex}-${index}`}>
-                                {paragraph}
+                                {renderBiographyInline(paragraph)}
                               </p>
                             ))}
                           </div>
@@ -370,10 +390,49 @@ export function BiographyChapters() {
                       }
 
                       if (block.type === "figureRow") {
+                        const peer = block.figures.find(
+                          (figure) =>
+                            !figure.previewHeight &&
+                            figure.pixelWidth &&
+                            figure.pixelHeight,
+                        );
+                        const peerRatio =
+                          peer?.pixelWidth && peer?.pixelHeight
+                            ? peer.pixelHeight / peer.pixelWidth
+                            : undefined;
+                        const stackedScale = block.figures.find(
+                          (figure) => figure.stackedScale,
+                        )?.stackedScale;
                         return (
                           <div
                             key={`${chapter.id}-figure-row-${blockIndex}`}
-                            className={styles.biographyChaptersFigureRow}
+                            className={`${styles.biographyChaptersFigureRow}${
+                              peerRatio
+                                ? ` ${styles.biographyChaptersFigureRowMatched}`
+                                : ""
+                            }${
+                              block.stackOrder === "reverse"
+                                ? ` ${styles.biographyChaptersFigureRowStackReverse}`
+                                : ""
+                            }`}
+                            style={
+                              peerRatio || stackedScale
+                                ? ({
+                                    ...(peerRatio
+                                      ? {
+                                          "--biography-figure-row-peer-ratio":
+                                            String(peerRatio),
+                                        }
+                                      : {}),
+                                    ...(stackedScale
+                                      ? {
+                                          "--biography-figure-row-stacked-scale":
+                                            String(stackedScale),
+                                        }
+                                      : {}),
+                                  } as CSSProperties)
+                                : undefined
+                            }
                           >
                             {block.figures.map((figure, figureIndex) => (
                               <BiographyChapterFigureBlock
@@ -387,33 +446,55 @@ export function BiographyChapters() {
                       }
 
                       if (block.type === "mediaText") {
+                        const figureAtEnd = block.figurePosition === "end";
+                        const figure = (
+                          <BiographyChapterFigureBlock
+                            figure={block.figure}
+                            lightboxId={`${chapter.id}-mediaText-${blockIndex}`}
+                          />
+                        );
+                        const heading = block.heading ? (
+                          <h3
+                            className={styles.biographyChaptersMediaTextHeading}
+                          >
+                            {block.heading}
+                          </h3>
+                        ) : null;
+                        const paragraphs = block.paragraphs.map(
+                          (paragraph, index) => (
+                            <p
+                              key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
+                            >
+                              {renderBiographyInline(paragraph)}
+                            </p>
+                          ),
+                        );
                         return (
                           <div
                             key={`${chapter.id}-mediaText-${blockIndex}`}
-                            className={styles.biographyChaptersMediaText}
+                            className={`${styles.biographyChaptersMediaText}${
+                              figureAtEnd
+                                ? ` ${styles.biographyChaptersMediaTextFigureEnd}`
+                                : ""
+                            }`}
                           >
-                            <BiographyChapterFigureBlock
-                              figure={block.figure}
-                              lightboxId={`${chapter.id}-mediaText-${blockIndex}`}
-                            />
-                            <div className={styles.biographyChaptersMediaTextCopy}>
-                              {block.heading ? (
-                                <h3
-                                  className={
-                                    styles.biographyChaptersMediaTextHeading
-                                  }
+                            {figureAtEnd ? (
+                              <>
+                                {figure}
+                                {heading}
+                                {paragraphs}
+                              </>
+                            ) : (
+                              <>
+                                {figure}
+                                <div
+                                  className={styles.biographyChaptersMediaTextCopy}
                                 >
-                                  {block.heading}
-                                </h3>
-                              ) : null}
-                              {block.paragraphs.map((paragraph, index) => (
-                                <p
-                                  key={`${chapter.id}-mediaText-p-${blockIndex}-${index}`}
-                                >
-                                  {paragraph}
-                                </p>
-                              ))}
-                            </div>
+                                  {heading}
+                                  {paragraphs}
+                                </div>
+                              </>
+                            )}
                           </div>
                         );
                       }
@@ -426,13 +507,18 @@ export function BiographyChapters() {
                           <h3 className={styles.biographyChaptersSectionHeading}>
                             {block.heading}
                           </h3>
+                          {block.subheading ? (
+                            <p className={styles.biographyChaptersSectionSubheading}>
+                              {block.subheading}
+                            </p>
+                          ) : null}
                           {block.paragraphs?.length ? (
                             <div className={styles.biographyChaptersSectionBody}>
                               {block.paragraphs.map((paragraph, index) => (
                                 <p
                                   key={`${chapter.id}-section-p-${blockIndex}-${index}`}
                                 >
-                                  {paragraph}
+                                  {renderBiographyInline(paragraph)}
                                 </p>
                               ))}
                             </div>
