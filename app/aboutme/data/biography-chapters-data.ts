@@ -1061,6 +1061,15 @@ export const biographyChaptersFallback: BiographyChaptersData = {
             "The scale of DCL RMS made understanding the Revenue Manager experience particularly important. Using human-centered design and design thinking, I analyzed the application from the user's perspective, looking across UI features, performance, and the science and data used to support revenue decisions. The journey map helped surface existing strengths, pain points, and opportunities for improving both the interface and the decision-making experience.",
           ],
         },
+        {
+          type: "section",
+          heading: "With Gratitude",
+          subheading:
+            "Ravi Parsula, Kalika Keklar, Brendan Vaughn, Ting Wang, Nina Sanchez, Teresa Tuttle & Amber Paulsen.",
+          paragraphs: [
+            "For their mentorship, trust, and encouragement throughout thirteen years at Disney. At different moments along the way, each of them gave me opportunities to grow, explore new directions, and see my work differently. Their guidance helped me navigate some of the biggest transitions in my career, moving across very different organizations, technologies, and challenges while continuing to grow along the way. Their support has been an important part of my journey and of the work represented in this chapter.",
+          ],
+        },
       ],
     },
     {
